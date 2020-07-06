@@ -17,4 +17,9 @@ public interface BusinessType {
         String INCOMING_REPORT = "IncomingReport";
         String OTHER_REPORT = "OtherReport";
     }
+
+    interface Sample{
+        String SAMPLE_COLLECTION = "SampleCollection";
+        String SAMPLING = "Sampling";
+    }
 }

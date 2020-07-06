@@ -12,5 +12,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {SurveyReportListEntity.class})
 public interface SurveyReportApi {
-    void getSurveyReportList(String type, int pageNo, Map<String, Object> params);
+    void getSurveyReportList(String type, boolean isAll, int pageNo, Map<String, Object> params);
 }

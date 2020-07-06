@@ -4,6 +4,7 @@ import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_lims.ui.adapter.SampleInquiryAdapter;
 import com.supcon.mes.module_sample.R;
 
 /**
@@ -14,9 +15,11 @@ import com.supcon.mes.module_sample.R;
 
 @Router(Constant.AppCode.LIMS_CollectSample)
 public class CollectSampleActivity extends BaseRefreshRecyclerActivity {
+    private SampleInquiryAdapter adapter;
     @Override
     protected IListAdapter createAdapter() {
-        return null;
+        adapter = new SampleInquiryAdapter(context);
+        return adapter;
     }
 
     @Override

@@ -12,5 +12,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {InspectionApplicationListEntity.class})
 public interface InspectionApplicationApi {
-    void getInspectionApplicationList(String type, int pageNo, Map<String, Object> params);
+    void getInspectionApplicationList(String type, boolean isAll, int pageNo, Map<String, Object> params);
 }

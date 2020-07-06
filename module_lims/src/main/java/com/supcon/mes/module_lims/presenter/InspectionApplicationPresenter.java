@@ -23,30 +23,52 @@ import io.reactivex.functions.Function;
  */
 public class InspectionApplicationPresenter extends InspectionApplicationApi.Presenter {
     @Override
-    public void getInspectionApplicationList(String type, int pageNo, Map<String, Object> params) {
+    public void getInspectionApplicationList(String type, boolean isAll, int pageNo, Map<String, Object> params) {
         String query = "";
         String viewCode = "";
         String joinInfo = "BASESET_MATERIALS,ID,QCS_INSPECTS,PROD_ID";
         String modelAlias = "inspect";
         if (type.equals(BusinessType.PleaseCheck.PRODUCT_PLEASE_CHECK)){
-            query = "manuInspectList-query";
+            if (isAll){
+                query = "manuInspectList-query";
+            }else {
+                query = "manuInspectList-pending";
+            }
+
             viewCode = "QCS_5.0.0.0_inspect_manuInspectList";
         }else if (type.equals(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK)){
-            query = "purchInspectList-query";
+            if (isAll){
+                query = "purchInspectList-query";
+            }else {
+                query = "purchInspectList-pending";
+            }
+
             viewCode = "QCS_5.0.0.0_inspect_purchInspectList";
         }else if (type.equals(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK)){
-            query = "otherInspectList-query";
+            if (isAll){
+                query = "otherInspectList-query";
+            }else {
+                query = "otherInspectList-pending";
+            }
+
             viewCode = "QCS_5.0.0.0_inspect_otherInspectList";
         }
 
         Map<String, Object> codeParam = new HashMap();
-        //从外层传进的集合中取出 检索条件 CODE | NAME
+        //从外层传进的集合中取出 检索条件 CODE | NAME | BATCH_CODE | TABLE_NO
         if (params.containsKey(Constant.BAPQuery.CODE)) {
             codeParam.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
         }
         if (params.containsKey(Constant.BAPQuery.NAME)) {
             codeParam.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
         }
+        if (params.containsKey(Constant.BAPQuery.BATCH_CODE)){
+            codeParam.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
+        }
+        if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
+            codeParam.put(Constant.BAPQuery.TABLE_NO, params.get(Constant.BAPQuery.TABLE_NO));
+        }
+
 
         //创建一个空的实体类
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());

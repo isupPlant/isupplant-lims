@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lims_backlog">Backlog</string>
+    <string name="lims_goods">Goods</string>
+    <string name="lims_batch_number">Batch_number</string>
+    <string name="lims_examiner">Examiner</string>
+    <string name="lims_inspection_department">Inspection_department</string>
+    <string name="lims_time">Please_check_the_time</string>
+    <string name="lims_materiel_name">Materiel_name</string>
+    <string name="lims_materiel_code">Materiel_code</string>
+    <string name="lims_document_number">Document_number</string>
+    <string name="lims_product_inspection_application">Product_inspection_application</string>
+    <string name="lims_incoming_inspection_application">Incoming_inspection_application</string>
+    <string name="lims_other_inspection_application">Other_inspection_application</string>
+    <string name="lims_inspection_request_no">Inspection_request_no</string>
+    <string name="lims_creator">Creator</string>
+    <string name="lims_test_conclusion">Test_conclusion</string>
+    <string name="lims_product_inspection_report">Product_inspection_report</string>
+    <string name="lims_incoming_inspection_report">Incoming_inspection_report</string>
+    <string name="lims_other_inspection_report">ther_inspection_report</string>
+
+
+    <string name="lims_request_no">Request_no</string>
+    <string name="lims_sample">Sample</string>
+    <string name="lims_materiel">Materiel</string>
+    <string name="lims_registration_time">Registration_time</string>
+    <string name="lims_sampling_point">Sampling_point</string>
+
+</resources>

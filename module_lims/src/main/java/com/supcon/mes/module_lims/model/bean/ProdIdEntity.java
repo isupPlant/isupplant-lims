@@ -1,6 +1,7 @@
 package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public class ProdIdEntity extends BaseEntity {
     private String code;
     private Long id;
     private String name;
+    private BaseIntIdNameEntity sampleUnit;
 
 
     public Map getAttrMap() {
@@ -46,5 +48,13 @@ public class ProdIdEntity extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BaseIntIdNameEntity getSampleUnit() {
+        return sampleUnit;
+    }
+
+    public void setSampleUnit(BaseIntIdNameEntity sampleUnit) {
+        this.sampleUnit = sampleUnit;
     }
 }

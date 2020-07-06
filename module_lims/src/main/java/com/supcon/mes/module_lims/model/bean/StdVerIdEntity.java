@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class StdVerIdEntity extends BaseEntity {
     private Map attrMap;
+    private String name;
     private BaseIntIdNameEntity stdId;
 
     public Map getAttrMap() {
@@ -20,6 +21,14 @@ public class StdVerIdEntity extends BaseEntity {
 
     public void setAttrMap(Map attrMap) {
         this.attrMap = attrMap;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BaseIntIdNameEntity getStdId() {
