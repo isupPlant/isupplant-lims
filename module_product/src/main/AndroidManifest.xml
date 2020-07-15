@@ -7,10 +7,16 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".ui.ProductInspectionApplicationActivity"
+            android:name=".ui.inspection.ProductInspectionApplicationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
+        <activity android:name=".ui.inspection.ProductInspectionApplicationDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
 
         <activity android:name=".ui.ProductSurveyReportActivity"
             android:screenOrientation="portrait"

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -46,6 +47,12 @@ public class InspectionApplicationController extends BaseViewController {
 
     @BindByTag("filterBacklog")
     RadioButton filterBacklog;
+
+    @BindByTag("tvAllLine")
+    TextView tvAllLine;
+
+    @BindByTag("tvBacklogLine")
+    TextView tvBacklogLine;
 
     @BindByTag("searchTitle")
     SearchTitleBar searchTitle;
@@ -149,6 +156,7 @@ public class InspectionApplicationController extends BaseViewController {
                     @Override
                     public void accept(Object o) throws Exception {
                         if (null != mOnTabClickListener) {
+                            setVisibilityLine(true);
                             mOnTabClickListener.onTabClick(true);
                         }
                     }
@@ -160,6 +168,7 @@ public class InspectionApplicationController extends BaseViewController {
                     @Override
                     public void accept(Object o) throws Exception {
                         if (null != mOnTabClickListener) {
+                            setVisibilityLine(false);
                             mOnTabClickListener.onTabClick(false);
                         }
                     }
@@ -190,6 +199,12 @@ public class InspectionApplicationController extends BaseViewController {
                     params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
                     break;
             }
+            if (null != mOnSearchOverListener) {
+                mOnSearchOverListener.onSearchOverClick(params);
+            }
+        }else if (result.getEventId() == EventInfo.searchKeyClear){
+            cleanParams();
+            searchTitle.hideSearchBtn();
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);
             }
@@ -228,6 +243,16 @@ public class InspectionApplicationController extends BaseViewController {
     }
 
 
+    private void setVisibilityLine(boolean showAll){
+        if (showAll){
+            tvAllLine.setVisibility(View.VISIBLE);
+            tvBacklogLine.setVisibility(View.GONE);
+        }else {
+            tvAllLine.setVisibility(View.GONE);
+            tvBacklogLine.setVisibility(View.VISIBLE);
+        }
+
+    }
 
 
 }

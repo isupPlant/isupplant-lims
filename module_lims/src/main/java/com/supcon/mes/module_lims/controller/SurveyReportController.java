@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -44,6 +45,12 @@ public class SurveyReportController extends BaseViewController {
 
     @BindByTag("filterBacklog")
     RadioButton filterBacklog;
+
+    @BindByTag("tvAllLine")
+    TextView tvAllLine;
+
+    @BindByTag("tvBacklogLine")
+    TextView tvBacklogLine;
 
     @BindByTag("searchTitle")
     SearchTitleBar searchTitle;
@@ -149,6 +156,7 @@ public class SurveyReportController extends BaseViewController {
                     @Override
                     public void accept(Object o) throws Exception {
                         if (null != mOnTabClickListener) {
+                            setVisibilityLine(true);
                             mOnTabClickListener.onTabClick(true);
                         }
                     }
@@ -160,6 +168,7 @@ public class SurveyReportController extends BaseViewController {
                     @Override
                     public void accept(Object o) throws Exception {
                         if (null != mOnTabClickListener) {
+                            setVisibilityLine(false);
                             mOnTabClickListener.onTabClick(false);
                         }
                     }
@@ -192,6 +201,12 @@ public class SurveyReportController extends BaseViewController {
                     break;
 
             }
+            if (null != mOnSearchOverListener) {
+                mOnSearchOverListener.onSearchOverClick(params);
+            }
+        }else if (result.getEventId() == EventInfo.searchKeyClear){
+            cleanParams();
+            searchTitle.hideSearchBtn();
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);
             }
@@ -229,6 +244,16 @@ public class SurveyReportController extends BaseViewController {
         this.mOnSearchOverListener = mOnSearchOverListener;
     }
 
+    private void setVisibilityLine(boolean showAll){
+        if (showAll){
+            tvAllLine.setVisibility(View.VISIBLE);
+            tvBacklogLine.setVisibility(View.GONE);
+        }else {
+            tvAllLine.setVisibility(View.GONE);
+            tvBacklogLine.setVisibility(View.VISIBLE);
+        }
+
+    }
 
 
 }

@@ -22,4 +22,9 @@ public interface BusinessType {
         String SAMPLE_COLLECTION = "SampleCollection";
         String SAMPLING = "Sampling";
     }
+
+    interface WorkType{
+        String PURCH_INSPECT_EDIT = "purchInspectEdit";
+        String PURCH_INSPECT_VIEW = "purchInspectView";
+    }
 }

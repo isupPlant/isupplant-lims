@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lims_backlog">Backlog</string>
+    <string name="lims_all">All_list</string>
     <string name="lims_goods">Goods</string>
     <string name="lims_batch_number">Batch_number</string>
     <string name="lims_examiner">Examiner</string>
@@ -18,12 +19,21 @@
     <string name="lims_product_inspection_report">Product_inspection_report</string>
     <string name="lims_incoming_inspection_report">Incoming_inspection_report</string>
     <string name="lims_other_inspection_report">ther_inspection_report</string>
-
-
     <string name="lims_request_no">Request_no</string>
     <string name="lims_sample">Sample</string>
     <string name="lims_materiel">Materiel</string>
     <string name="lims_registration_time">Registration_time</string>
     <string name="lims_sampling_point">Sampling_point</string>
-
+    <string name="lims_sample_code">Sample_code</string>
+    <string name="lims_sampling">Sampling</string>
+    <string name="lims_sample_collection">Sample_collection</string>
+    <string name="lims_sample_inspection_report">Sample_inspection_report</string>
+    <string name="lims_material_name">Material_name</string>
+    <string name="lims_material_reference">Material_reference</string>
+    <string name="lims_quality_standard">Quality_standard</string>
+    <string name="lims_version_number">Version_number</string>
+    <string name="lims_executive_standards">Executive_standards</string>
+    <string name="lims_application_scheme">Application_scheme</string>
+    <string name="lims_quality_standard_reference">Quality_standard_reference</string>
+    <string name="lims_sampling_point_reference">ampling_point_reference</string>
 </resources>

@@ -13,6 +13,8 @@ import java.util.Map;
 public class StdVerIdEntity extends BaseEntity {
     private Map attrMap;
     private String name;
+    private Long id;
+    private String busiVersion;
     private BaseIntIdNameEntity stdId;
 
     public Map getAttrMap() {
@@ -29,6 +31,22 @@ public class StdVerIdEntity extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getBusiVersion() {
+        return busiVersion;
+    }
+
+    public void setBusiVersion(String busiVersion) {
+        this.busiVersion = busiVersion;
     }
 
     public BaseIntIdNameEntity getStdId() {

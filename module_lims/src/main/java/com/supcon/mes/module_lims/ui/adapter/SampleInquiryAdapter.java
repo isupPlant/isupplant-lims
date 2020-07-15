@@ -1,8 +1,10 @@
 package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -29,7 +31,8 @@ public class SampleInquiryAdapter extends BaseListDataRecyclerViewAdapter<Sample
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<SampleInquiryEntity>{
-
+        @BindByTag("ll_item")
+        LinearLayout ll_item;
         @BindByTag("tvSample")
         CustomTextView tvSample;
         @BindByTag("tvBatchNumber")
@@ -40,6 +43,8 @@ public class SampleInquiryAdapter extends BaseListDataRecyclerViewAdapter<Sample
         CustomTextView tvRegistrationTime;
         @BindByTag("iv_select")
         ImageView iv_select;
+        @BindByTag("rl_select")
+        RelativeLayout rl_select;
 
         public ViewHolder(Context context) {
             super(context);
@@ -51,9 +56,39 @@ public class SampleInquiryAdapter extends BaseListDataRecyclerViewAdapter<Sample
         }
 
         @Override
+        protected void initListener() {
+            super.initListener();
+            ll_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemChildViewClick(v,1);
+                }
+            });
+            rl_select.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemChildViewClick(v,0);
+                }
+            });
+
+        }
+
+        @Override
         protected void update(SampleInquiryEntity data) {
             //样品
-            tvSample.setContent(StringUtil.isEmpty(data.getCode()) ? "--" : data.getCode());
+            if (!StringUtil.isEmpty(data.getName()) && !StringUtil.isEmpty(data.getCode())){
+                tvSample.setContent(data.getName()+"("+data.getCode()+")");
+            }else {
+                if (StringUtil.isEmpty(data.getName()) && StringUtil.isEmpty(data.getCode())){
+                    tvSample.setContent("--");
+                }else {
+                    if (StringUtil.isEmpty(data.getName())){
+                        tvSample.setContent(data.getCode());
+                    }else {
+                        tvSample.setContent(data.getName());
+                    }
+                }
+            }
 
             //批号
             tvBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "--" : data.getBatchCode());

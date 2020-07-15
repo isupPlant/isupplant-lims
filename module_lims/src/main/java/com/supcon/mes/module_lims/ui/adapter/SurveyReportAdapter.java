@@ -1,6 +1,9 @@
 package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -47,6 +50,8 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
         CustomTextView tvTime;
         @BindByTag("tvTestConclusion")
         CustomTextView tvTestConclusion;
+        @BindByTag("ivIsQualified")
+        ImageView ivIsQualified;
 
 
         public ViewHolder(Context context) {
@@ -102,7 +107,31 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
             }
 
             //检验结论
+            if (StringUtil.isEmpty(data.getCheckResult())){
+                ivIsQualified.setVisibility(View.GONE);
+            }else {
+                ivIsQualified.setVisibility(View.VISIBLE);
+                if (data.getCheckResult().equals("合格")){
+                    ivIsQualified.setImageResource(R.drawable.ic_qualified);
+                }else if (data.getCheckResult().equals("不合格")){
+                    ivIsQualified.setImageResource(R.drawable.ic_un_qualified);
+                }else {
+                    ivIsQualified.setVisibility(View.GONE);
+                }
+            }
             tvTestConclusion.setContent(StringUtil.isEmpty(data.getCheckResult()) ? "--" : data.getCheckResult());
+
+            //单据状态
+            if (null == data.getPending()){
+                tvEdit.setText("--");
+            }else {
+                tvEdit.setText(StringUtil.isEmpty(data.getPending().taskDescription) ? "--" : data.getPending().taskDescription);
+            }
+            if (tvEdit.getText().equals("编辑")){
+                tvEdit.setTextColor(Color.parseColor("#1E82D2"));
+            }else {
+                tvEdit.setTextColor(Color.parseColor("#46B479"));
+            }
         }
     }
 }

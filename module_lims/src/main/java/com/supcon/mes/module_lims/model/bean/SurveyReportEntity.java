@@ -3,6 +3,7 @@ package com.supcon.mes.module_lims.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public class SurveyReportEntity extends BaseEntity {
     private BaseIntIdNameEntity createStaff;
     private Long createTime;
     private Long id;
+    private PendingEntity pending;
+    private SampleIdEntity sampleId;
     private InspectIdEntity inspectId;
     private ProdIdEntity prodId;
     private Integer status;
@@ -30,6 +33,7 @@ public class SurveyReportEntity extends BaseEntity {
     private Long tableInfoId;
     private String tableNo;
     private Boolean unQlfDealFlag;
+    private String testResult;
     private Boolean valid;
     private Integer version;
 
@@ -121,6 +125,22 @@ public class SurveyReportEntity extends BaseEntity {
         this.id = id;
     }
 
+    public PendingEntity getPending() {
+        return pending;
+    }
+
+    public void setPending(PendingEntity pending) {
+        this.pending = pending;
+    }
+
+    public SampleIdEntity getSampleId() {
+        return sampleId;
+    }
+
+    public void setSampleId(SampleIdEntity sampleId) {
+        this.sampleId = sampleId;
+    }
+
     public InspectIdEntity getInspectId() {
         return inspectId;
     }
@@ -183,6 +203,14 @@ public class SurveyReportEntity extends BaseEntity {
 
     public void setValid(Boolean valid) {
         this.valid = valid;
+    }
+
+    public String getTestResult() {
+        return testResult;
+    }
+
+    public void setTestResult(String testResult) {
+        this.testResult = testResult;
     }
 
     public Integer getVersion() {

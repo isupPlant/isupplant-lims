@@ -1,6 +1,9 @@
 package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -43,6 +46,8 @@ public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapte
         CustomTextView tvInspectionDepartment;
         @BindByTag("tvTime")
         CustomTextView tvTime;
+        @BindByTag("item")
+        LinearLayout item;
 
         public ViewHolder(Context context) {
             super(context);
@@ -51,6 +56,17 @@ public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapte
         @Override
         protected int layoutId() {
             return R.layout.item_inspection_application;
+        }
+
+        @Override
+        protected void initListener() {
+            super.initListener();
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemChildViewClick(item,0);
+                }
+            });
         }
 
         @Override
@@ -93,6 +109,18 @@ public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapte
                 tvTime.setContent("--");
             }else {
                 tvTime.setContent(DateUtil.dateFormat(data.getApplyTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+
+            //单据状态
+            if (null == data.getPending()){
+                tvEdit.setText("--");
+            }else {
+                tvEdit.setText(StringUtil.isEmpty(data.getPending().taskDescription) ? "--" : data.getPending().taskDescription);
+            }
+            if (tvEdit.getText().equals("编辑")){
+                tvEdit.setTextColor(Color.parseColor("#1E82D2"));
+            }else {
+                tvEdit.setTextColor(Color.parseColor("#46B479"));
             }
         }
     }

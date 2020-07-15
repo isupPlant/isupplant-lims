@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="lims_backlog">待办</string>
+    <string name="lims_backlog">待办列表</string>
+    <string name="lims_all">全部列表</string>
     <string name="lims_goods">物品</string>
     <string name="lims_batch_number">批号</string>
     <string name="lims_examiner">请检人</string>
@@ -19,13 +20,23 @@
     <string name="lims_product_inspection_report">产品检验报告</string>
     <string name="lims_incoming_inspection_report">来料检验报告</string>
     <string name="lims_other_inspection_report">其他检验报告</string>
-
-
-
     <string name="lims_sample">样品</string>
     <string name="lims_materiel">物料</string>
     <string name="lims_registration_time">登记时间</string>
     <string name="lims_sampling_point">采样点</string>
+    <string name="lims_sample_code">样品编码</string>
+    <string name="lims_sampling">取样</string>
+    <string name="lims_sample_collection">收样</string>
+    <string name="lims_sample_inspection_report">样品检验报告</string>
+    <string name="lims_material_name">物料名称</string>
+    <string name="lims_material_reference">物料参照</string>
+    <string name="lims_quality_standard">质量标准</string>
+    <string name="lims_version_number">版本号</string>
+    <string name="lims_executive_standards">执行标准</string>
+    <string name="lims_application_scheme">请检方案</string>
+    <string name="lims_quality_standard_reference">质量标准参照</string>
+    <string name="lims_sampling_point_reference">采样点参照</string>
+
 
     
     

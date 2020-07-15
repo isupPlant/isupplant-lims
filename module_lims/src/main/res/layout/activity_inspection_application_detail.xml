@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:core_ptr="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff9f9f9"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.supcon.mes.module_search.ui.view.SearchTitleBar
+        android:id="@+id/searchTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitle" />
+
+    <com.supcon.common.view.ptr.PtrFrameLayout
+        android:id="@+id/refreshFrameLayout"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="refreshFrameLayout"
+        core_ptr:ptr_keep_header_when_refresh="true"
+        core_ptr:ptr_pull_to_fresh="false"
+        core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        core_ptr:ptr_resistance="1.7">
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/ns_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:tag="ns_scroll">
+
+
+            <include layout="@layout/ly_inspection_application_detail" />
+
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+
+
+    <com.supcon.mes.mbap.view.CustomWorkFlowView
+        android:id="@+id/customWorkFlowView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_alignParentBottom= "true"
+        android:tag="customWorkFlowView"
+        app:commentable="false" />
+
+</RelativeLayout>

@@ -121,6 +121,8 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_select"
+        android:tag="rl_select"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/dp_10"

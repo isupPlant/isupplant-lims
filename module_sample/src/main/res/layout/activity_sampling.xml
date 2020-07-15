@@ -13,7 +13,6 @@
 
 
         <include
-
             layout="@layout/ly_recyclerview_with_scrollbar"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -55,6 +54,8 @@
 
 
             <TextView
+                android:id="@+id/btn_sampling"
+                android:tag="btn_sampling"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp_35"

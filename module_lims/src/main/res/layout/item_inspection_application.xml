@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item"
+    android:tag="item"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/dp_15"
-    android:paddingRight="@dimen/dp_15"
     android:background="@color/white">
 
 
@@ -15,34 +15,43 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_35"
             android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
             android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_home_app"
-                />
 
             <TextView
                 android:id="@+id/tvOddNumbers"
                 android:tag="tvOddNumbers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_15"
                 android:ellipsize="end"
                 android:maxEms="13"
                 android:singleLine="true"
+                android:textStyle="bold"
                 tools:text="chanpinqingjiajndan_20200606_2477777"
-                android:textColor="@color/blue"
-                android:textSize="14sp"/>
+                android:textColor="@color/fontBlack333"
+                android:textSize="15sp"/>
 
-            <TextView
-                android:id="@+id/tvEdit"
-                android:tag="tvEdit"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:text="编辑"/>
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/tvEdit"
+                    android:tag="tvEdit"
+                    android:paddingTop="@dimen/dp_3"
+                    android:paddingBottom="@dimen/dp_3"
+                    android:paddingLeft="@dimen/dp_8"
+                    android:paddingRight="@dimen/dp_8"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/shape_document_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/fontSize_14sp"
+                    android:text="编辑"/>
+
+
+            </RelativeLayout>
 
 
         </LinearLayout>
@@ -56,12 +65,14 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_35"
             android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_goods"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -69,10 +80,13 @@
                 android:tag="tvGoods"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_15"
                 app:key="@string/lims_goods"
-                app:key_color="@color/black_text"
-                app:gravity="right|center_vertical"/>
+                android:layout_marginLeft="@dimen/dp_9"
+                app:key_size="13"
+                app:key_color="@color/c_scan_666"
+                app:content_color="@color/fontBlack333"
+                app:content_size="15"
+                app:gravity="center|center_vertical"/>
 
 
         </LinearLayout>
@@ -80,13 +94,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_35"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_batch_number"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -94,10 +110,13 @@
                 android:tag="tvBatchNumber"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginLeft="@dimen/dp_9"
                 app:key="@string/lims_batch_number"
-                app:key_color="@color/black_text"
-                app:gravity="right|center_vertical"/>
+                app:key_size="13"
+                app:key_color="@color/c_scan_666"
+                app:content_color="@color/fontBlack333"
+                app:content_size="15"
+                app:gravity="center|center_vertical"/>
 
 
         </LinearLayout>
@@ -105,13 +124,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_35"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_examiner"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -119,10 +140,13 @@
                 android:tag="tvExaminer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginLeft="@dimen/dp_9"
                 app:key="@string/lims_examiner"
-                app:key_color="@color/black_text"
-                app:gravity="right|center_vertical"/>
+                app:key_size="13"
+                app:key_color="@color/c_scan_666"
+                app:content_color="@color/fontBlack333"
+                app:content_size="15"
+                app:gravity="center|center_vertical"/>
 
 
         </LinearLayout>
@@ -130,13 +154,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_35"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_inspection_department"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -144,10 +170,13 @@
                 android:tag="tvInspectionDepartment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginLeft="@dimen/dp_9"
                 app:key="@string/lims_inspection_department"
-                app:key_color="@color/black_text"
-                app:gravity="right|center_vertical"/>
+                app:key_size="13"
+                app:key_color="@color/c_scan_666"
+                app:content_color="@color/fontBlack333"
+                app:content_size="15"
+                app:gravity="center|center_vertical"/>
 
 
         </LinearLayout>
@@ -155,24 +184,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_35"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
-                />
+                android:src="@drawable/ic_check_time" />
 
             <com.supcon.mes.mbap.view.CustomTextView
                 android:id="@+id/tvTime"
                 android:tag="tvTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginLeft="@dimen/dp_9"
                 app:key="@string/lims_time"
-                app:key_color="@color/black_text"
-                app:gravity="right|center_vertical"/>
+                app:key_size="13"
+                app:key_color="@color/c_scan_666"
+                app:content_color="@color/fontBlack333"
+                app:content_size="15"
+                app:gravity="center|center_vertical"/>
 
 
         </LinearLayout>

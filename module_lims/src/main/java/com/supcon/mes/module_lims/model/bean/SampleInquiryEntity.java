@@ -17,7 +17,6 @@ public class SampleInquiryEntity extends BaseEntity {
     private Long cid;
     private String code;
     private BaseIntIdNameEntity collectStaffId;
-    private Long collectTime;
     private Long createTime;
     private Long id;
     private String name;
@@ -25,7 +24,9 @@ public class SampleInquiryEntity extends BaseEntity {
     private BaseIntIdNameEntity psId;
     private Long registerTime;
     private BaseIdValueEntity sampleType;
+    private BaseIdValueEntity speraType;
     private StdVerIdEntity stdVerId;
+    private BaseIdValueEntity useMethod;
     private Boolean valid;
     private Integer version;
     private boolean isSelect = false;
@@ -70,13 +71,7 @@ public class SampleInquiryEntity extends BaseEntity {
         this.collectStaffId = collectStaffId;
     }
 
-    public Long getCollectTime() {
-        return collectTime;
-    }
 
-    public void setCollectTime(Long collectTime) {
-        this.collectTime = collectTime;
-    }
 
     public Long getCreateTime() {
         return createTime;
@@ -156,6 +151,22 @@ public class SampleInquiryEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public BaseIdValueEntity getSperaType() {
+        return speraType;
+    }
+
+    public void setSperaType(BaseIdValueEntity speraType) {
+        this.speraType = speraType;
+    }
+
+    public BaseIdValueEntity getUseMethod() {
+        return useMethod;
+    }
+
+    public void setUseMethod(BaseIdValueEntity useMethod) {
+        this.useMethod = useMethod;
     }
 
     public boolean isSelect() {

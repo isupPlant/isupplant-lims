@@ -3,6 +3,7 @@ package com.supcon.mes.module_lims.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class InspectionApplicationEntity extends BaseEntity {
     private Boolean closed;
     private Long id;
     private Boolean needLab;
+    private PendingEntity pending;
     private ProdIdEntity prodId;
     private Integer status;
     private Long tableInfoId;
@@ -116,6 +118,14 @@ public class InspectionApplicationEntity extends BaseEntity {
 
     public void setNeedLab(Boolean needLab) {
         this.needLab = needLab;
+    }
+
+    public PendingEntity getPending() {
+        return pending;
+    }
+
+    public void setPending(PendingEntity pending) {
+        this.pending = pending;
     }
 
     public ProdIdEntity getProdId() {
