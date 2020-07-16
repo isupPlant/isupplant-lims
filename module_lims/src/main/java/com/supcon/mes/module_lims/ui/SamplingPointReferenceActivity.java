@@ -17,7 +17,8 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
-import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
@@ -29,6 +30,8 @@ import com.supcon.mes.module_lims.model.contract.SamplingPointApi;
 import com.supcon.mes.module_lims.presenter.SamplingPointReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.SamplingPointReferenceAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +41,7 @@ import java.util.Map;
  * class name
  */
 
-@Router(value = "LIMS_PickSiteRefPart")
+@Router(value = Constant.AppCode.LIMS_PickSiteRefPart)
 @Presenter(value = {SamplingPointReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
 public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<SamplingPointEntity> implements SamplingPointApi.View {
@@ -49,6 +52,8 @@ public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<
     TextView titleText;
 
     private SamplingPointReferenceAdapter adapter;
+
+    private String selectTag;
 
     private Map<String, Object> params = new HashMap<>();
 
@@ -67,6 +72,8 @@ public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<
     protected void onInit() {
         super.onInit();
         getController(ReferenceController.class).setSearchTypeList("采样点");
+
+        selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
 
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -103,7 +110,15 @@ public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
-                    ToastUtils.show(context, "记得把值回传回去哦");
+                    for (int i = 0; i < adapter.getList().size(); i++) {
+                        adapter.getList().get(i).setSelect(false);
+                    }
+                    adapter.getList().get(position).setSelect(true);
+                    adapter.notifyDataSetChanged();
+
+
+                    EventBus.getDefault().post(new SelectDataEvent<>(adapter.getList().get(position),selectTag));
+                    finish();
                 }
             }
         });

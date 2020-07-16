@@ -11,8 +11,8 @@ import com.supcon.mes.middleware.model.bean.StaffEntity;
  * class name
  */
 public class PsIdEntity extends BaseSystemBackEntity {
-    private StaffEntity createStaff;
-    private StaffEntity modifyStaff;
+//    private StaffEntity createStaff;
+//    private StaffEntity modifyStaff;
     private Long cid;
     private String layRec;
     private Integer layNo;
@@ -29,7 +29,7 @@ public class PsIdEntity extends BaseSystemBackEntity {
     private Long ownerStaffId;
     private Long ownerPositionId;
     private Long ownerDepartmentId;
-    private StaffEntity ownerStaff;
+//    private StaffEntity ownerStaff;
     private DepartmentEntity ownerDepartment;
     private PositionEntity ownerPosition;
     private PositionEntity createPosition;
@@ -40,21 +40,21 @@ public class PsIdEntity extends BaseSystemBackEntity {
     private Boolean root;
 
 
-    public StaffEntity getCreateStaff() {
-        return createStaff;
-    }
-
-    public void setCreateStaff(StaffEntity createStaff) {
-        this.createStaff = createStaff;
-    }
-
-    public StaffEntity getModifyStaff() {
-        return modifyStaff;
-    }
-
-    public void setModifyStaff(StaffEntity modifyStaff) {
-        this.modifyStaff = modifyStaff;
-    }
+//    public StaffEntity getCreateStaff() {
+//        return createStaff;
+//    }
+//
+//    public void setCreateStaff(StaffEntity createStaff) {
+//        this.createStaff = createStaff;
+//    }
+//
+//    public StaffEntity getModifyStaff() {
+//        return modifyStaff;
+//    }
+//
+//    public void setModifyStaff(StaffEntity modifyStaff) {
+//        this.modifyStaff = modifyStaff;
+//    }
 
     public Long getCid() {
         return cid;
@@ -184,13 +184,13 @@ public class PsIdEntity extends BaseSystemBackEntity {
         this.ownerDepartmentId = ownerDepartmentId;
     }
 
-    public StaffEntity getOwnerStaff() {
-        return ownerStaff;
-    }
-
-    public void setOwnerStaff(StaffEntity ownerStaff) {
-        this.ownerStaff = ownerStaff;
-    }
+//    public StaffEntity getOwnerStaff() {
+//        return ownerStaff;
+//    }
+//
+//    public void setOwnerStaff(StaffEntity ownerStaff) {
+//        this.ownerStaff = ownerStaff;
+//    }
 
     public DepartmentEntity getOwnerDepartment() {
         return ownerDepartment;

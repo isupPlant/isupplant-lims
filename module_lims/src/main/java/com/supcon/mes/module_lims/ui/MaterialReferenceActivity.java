@@ -20,18 +20,25 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
+import com.supcon.mes.module_lims.event.MaterialDateEvent;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
 import com.supcon.mes.module_lims.model.contract.MaterialReferenceApi;
 import com.supcon.mes.module_lims.presenter.MaterialReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.MaterialReferenceAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -60,11 +67,19 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
     @BindByTag("titleText")
     TextView titleText;
 
+    @BindByTag("llIsRadio")
+    LinearLayout llIsRadio;
+
+    @BindByTag("btn_confirm")
+    TextView btn_confirm;
+
     private MaterialReferenceAdapter adapter;
 
     private Map<String, Object> params = new HashMap<>();
+    private List<MaterialReferenceEntity> list = new ArrayList<>();
 
     private boolean isSelectAll = false;
+    private boolean radio = false; //是否为单选
 
 
     @Override
@@ -83,6 +98,9 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
         super.onInit();
         getController(ReferenceController.class).setSearchTypeList("物料名称","物料编码","规格","型号");
 
+        radio = getIntent().getBooleanExtra("radio",false);
+
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -93,6 +111,7 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_material_reference));
+        setIsRadio();
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -119,19 +138,35 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
-                    adapter.getItem(position).setSelect(!adapter.getItem(position).isSelect());
-                    adapter.notifyDataSetChanged();
-                    int a = 0;
-                    for (int i = 0; i < adapter.getList().size(); i++) {
-                        if (adapter.getList().get(i).isSelect()) { //集合中存在勾选状态的 数据的话
-                            a++;
+                    if (radio){ //表示单选
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            adapter.getList().get(i).setSelect(false);
+                        }
+                        adapter.getList().get(position).setSelect(true);
+                        adapter.notifyDataSetChanged();
+
+                        //单选的直接回传数据
+                        MaterialDateEvent event = new MaterialDateEvent();
+                        event.setData(adapter.getItem(position));
+                        event.setRadio(radio);
+                        EventBus.getDefault().post(event);
+                        finish();
+                    }else { //表示多选
+                        adapter.getItem(position).setSelect(!adapter.getItem(position).isSelect());
+                        adapter.notifyDataSetChanged();
+                        int a = 0;
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            if (adapter.getList().get(i).isSelect()) { //集合中存在勾选状态的 数据的话
+                                a++;
+                            }
+                        }
+                        if (a == adapter.getList().size()) {
+                            setSelectAllStyle(true);
+                        } else {
+                            setSelectAllStyle(false);
                         }
                     }
-                    if (a == adapter.getList().size()) {
-                        setSelectAllStyle(true);
-                    } else {
-                        setSelectAllStyle(false);
-                    }
+
                 }
             }
         });
@@ -153,6 +188,29 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
                         isSelectAll = !isSelectAll;
                         setSelectAllStyle(isSelectAll);
                         adapter.notifyDataSetChanged();
+                    }
+                });
+
+        RxView.clicks(btn_confirm)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        list.clear();
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            if (adapter.getList().get(i).isSelect()){
+                                list.add(adapter.getList().get(i));
+                            }
+                        }
+                        if (list.size() > 0){
+                            MaterialDateEvent event = new MaterialDateEvent();
+                            event.setList(list);
+                            event.setRadio(radio);
+                            EventBus.getDefault().post(event);
+                            finish();
+                        }else {
+                            ToastUtils.show(context,"请至少选择一项");
+                        }
                     }
                 });
 
@@ -196,6 +254,14 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
             iv_select.setImageResource(R.drawable.ic_check_yes);
         } else {
             iv_select.setImageResource(R.drawable.ic_check_no);
+        }
+    }
+
+    private void setIsRadio(){
+        if (radio){ //单选
+            llIsRadio.setVisibility(View.GONE);
+        }else {
+            llIsRadio.setVisibility(View.VISIBLE);
         }
     }
 }

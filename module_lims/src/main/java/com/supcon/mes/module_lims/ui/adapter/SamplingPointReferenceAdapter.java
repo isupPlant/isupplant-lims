@@ -1,7 +1,9 @@
 package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +28,7 @@ public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapt
 
     @Override
     protected BaseRecyclerViewHolder<SamplingPointEntity> getViewHolder(int viewType) {
-        return new ViewHolder(context);
+        return new ViewHolder(context,parent);
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<SamplingPointEntity>{
@@ -36,8 +38,8 @@ public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapt
         @BindByTag("item")
         LinearLayout item;
 
-        public ViewHolder(Context context) {
-            super(context);
+        public ViewHolder(Context context, ViewGroup parent) {
+            super(context,parent);
         }
 
         @Override
@@ -59,6 +61,12 @@ public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapt
         @Override
         protected void update(SamplingPointEntity data) {
             tvName.setText(StringUtil.isEmpty(data.getName()) ? "--" : data.getName());
+
+            if (data.isSelect()){
+                item.setBackgroundColor(Color.parseColor("#666666"));
+            }else {
+                item.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            }
         }
     }
 }

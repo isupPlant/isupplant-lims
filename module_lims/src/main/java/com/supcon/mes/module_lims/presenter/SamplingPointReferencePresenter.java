@@ -1,5 +1,6 @@
 package com.supcon.mes.module_lims.presenter;
 
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
 import com.supcon.mes.module_lims.model.contract.SamplingPointApi;
@@ -22,20 +23,28 @@ public class SamplingPointReferencePresenter extends SamplingPointApi.Presenter 
     public void getSamplingPointList(int pageNo, Map<String, Object> params) {
         String viewCode = "LIMSBasic_1.0.0_pickSite_pickSiteRefLayout";
         String modelAlias = "pickSite";
+        FastQueryCondEntity fastQuery = null;
+        boolean isName = false;
+        Map<String, Object> codeParam = new HashMap();
+        if (params.containsKey(Constant.BAPQuery.NAME)) {
+            codeParam.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
+            isName = true;
+        }
+        if (isName){
+            fastQuery = BAPQueryHelper.createSingleFastQueryCond(codeParam);
+            fastQuery.viewCode = viewCode;
+            fastQuery.modelAlias = modelAlias;
+        }
+        
+        Map<String, Object> map = new HashMap();
+        if (isName){
+            map.put("fastQueryCond",fastQuery.toString());
+        }
+        map.put("pageNo",pageNo);
+        map.put("paging",true);
+        map.put("pageSize",10);
 
-        FastQueryCondEntity fastQuery = BAPQueryHelper.createSingleFastQueryCond(params);
-        fastQuery.viewCode = viewCode;
-        fastQuery.modelAlias = modelAlias;
-
-//        if (params.size() > 0){
-//            params.put("fastQueryCond",fastQuery);
-//        }
-        params.put("fastQueryCond",fastQuery);
-        params.put("pageNo",pageNo);
-        params.put("paging",true);
-        params.put("pageSize",10);
-
-        mCompositeSubscription.add(BaseLimsHttpClient.getSamplingPointList(params).onErrorReturn(new Function<Throwable, SamplingPointListEntity>() {
+        mCompositeSubscription.add(BaseLimsHttpClient.getSamplingPointList(map).onErrorReturn(new Function<Throwable, SamplingPointListEntity>() {
             @Override
             public SamplingPointListEntity apply(Throwable throwable) throws Exception {
                 SamplingPointListEntity entity = new SamplingPointListEntity();

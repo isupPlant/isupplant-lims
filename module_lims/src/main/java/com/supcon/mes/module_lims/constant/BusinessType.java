@@ -24,7 +24,13 @@ public interface BusinessType {
     }
 
     interface WorkType{
-        String PURCH_INSPECT_EDIT = "purchInspectEdit";
-        String PURCH_INSPECT_VIEW = "purchInspectView";
+        String PRODUCT_INSPECT_EDIT = "manuInspectEdit";
+        String PRODUCT_INSPECT_VIEW = "manuInspectView";
+
+        //otherInspectEdit
+        //otherInspectView
+        //purchInspectEdit
+        //purchInspectView
+
     }
 }

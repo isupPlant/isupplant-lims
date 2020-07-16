@@ -4,6 +4,7 @@ import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
+import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
@@ -110,7 +111,7 @@ public interface ApiService {
      */
     @GET("/msService/QCS/inspect/inspect/data/{id}")
     Flowable<BAP5CommonEntity<InspectionApplicationDetailHeaderEntity>> getInspectionDetailHeaderData(@Path("id") String id,
-                                                                                                      @Query("paddingId") String paddingId);
+                                                                                                      @Query("pendingId") String paddingId);
 
 
     /**
@@ -124,4 +125,12 @@ public interface ApiService {
     Flowable<InspectionDetailPtListEntity> getInspectionDetailPtData(@Path("dg") String dg,
                                                                   @Query("datagridCode") String datagridCode,
                                                                   @Query("id") String id);
+
+    /**
+     * 查看是否上载
+     * @param moduleCode
+     * @return
+     */
+    @GET("/msService/LIMSBasic/utils/utils/judgeModuleExistsByCode")
+    Flowable<BAP5CommonEntity<IfUploadEntity>> getIfUpload(@Query("moduleCode")String moduleCode);
 }

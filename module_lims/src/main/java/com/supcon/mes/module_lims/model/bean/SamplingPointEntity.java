@@ -20,6 +20,7 @@ public class SamplingPointEntity extends BaseEntity {
     private Long parentId;
     private Long sort;
     private Integer version;
+    private boolean isSelect = false;
 
     public String get_code() {
         return _code;
@@ -115,5 +116,13 @@ public class SamplingPointEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

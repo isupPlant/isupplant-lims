@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class ProdIdEntity extends BaseSystemBackEntity {
     private BaseIntIdNameEntity sampleUnit;
+    private BaseSystemBackEntity mainUnit;
 
     public BaseIntIdNameEntity getSampleUnit() {
         return sampleUnit;
@@ -19,5 +20,13 @@ public class ProdIdEntity extends BaseSystemBackEntity {
 
     public void setSampleUnit(BaseIntIdNameEntity sampleUnit) {
         this.sampleUnit = sampleUnit;
+    }
+
+    public BaseSystemBackEntity getMainUnit() {
+        return mainUnit;
+    }
+
+    public void setMainUnit(BaseSystemBackEntity mainUnit) {
+        this.mainUnit = mainUnit;
     }
 }

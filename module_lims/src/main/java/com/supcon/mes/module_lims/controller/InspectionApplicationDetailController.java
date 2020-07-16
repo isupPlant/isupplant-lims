@@ -1,5 +1,6 @@
 package com.supcon.mes.module_lims.controller;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
@@ -32,10 +34,13 @@ import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.event.MaterialDateEvent;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
+import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
+import com.supcon.mes.module_lims.model.bean.SamplingPointEntity;
 import com.supcon.mes.module_lims.model.contract.BusinessTypeApi;
 import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailApi;
 import com.supcon.mes.module_lims.presenter.BusinessTypeReferencePresenter;
@@ -50,6 +55,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 
 /**
@@ -87,11 +95,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
     @BindByTag("ctSupplier")
     CustomTextView ctSupplier;
 
-    @BindByTag("ctMaterielCode")
-    CustomTextView ctMaterielCode;
+    @BindByTag("ctMateriel")
+    CustomTextView ctMateriel;
 
-    @BindByTag("ctMaterielName")
-    CustomTextView ctMaterielName;
 
     @BindByTag("ctMaterielUnit")
     CustomTextView ctMaterielUnit;
@@ -123,6 +129,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
     private String pendingId;
     private String type;
 
+    private InspectionApplicationDetailHeaderEntity mHeadEntity;
+
+
     private SinglePickController<String> mBusinessTypeController;
     private DatePickController datePickController;
 
@@ -137,12 +146,20 @@ public class InspectionApplicationDetailController extends BaseViewController im
     public void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
+        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getIfUpload();
     }
 
     @Override
     public void initView() {
         super.initView();
         searchTitle.showScan(false);
+
+        if (type.equals(BusinessType.PleaseCheck.PRODUCT_PLEASE_CHECK) || (type.equals(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK))){
+            ctSupplier.setVisibility(View.GONE);
+        }else {
+            ctSupplier.setVisibility(View.VISIBLE);
+        }
+
 
         mBusinessTypeController = new SinglePickController<>((Activity)context);
         mBusinessTypeController.textSize(18);
@@ -160,6 +177,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(id,pendingId);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void initListener() {
         super.initListener();
@@ -200,7 +218,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                     bundle.putBoolean(Constant.IntentKey.IS_SELECT, true);
-                    bundle.putString(Constant.IntentKey.SELECT_TAG, "selectPeople");
+                    bundle.putString(Constant.IntentKey.SELECT_TAG, ctCheckPeople.getTag()+"");
                     IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }else {
                     ctCheckPeople.setValue("");
@@ -214,7 +232,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.IntentKey.SELECT_TAG,ctCheckDepartment.getTag()+"");
-                IntentRouter.go(context, Constant.Router.DEPART_SELECT);
+                IntentRouter.go(context, Constant.Router.DEPART_SELECT,bundle);
             }
         });
 
@@ -222,27 +240,48 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctSamplingPoint.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(context,Constant.AppCode.LIMS_PickSiteRefPart);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.IntentKey.SELECT_TAG,ctSamplingPoint.getTag()+"");
+                IntentRouter.go(context,Constant.AppCode.LIMS_PickSiteRefPart,bundle);
             }
         });
 
-        //（点击物料编码）物料信息参照监听
-        ctMaterielCode.setOnChildViewClickListener(new OnChildViewClickListener() {
+        //（点击物料）物料信息参照监听
+        ctMateriel.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(context,Constant.AppCode.LIMS_MaterialRef);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("radio",true);
+                IntentRouter.go(context,Constant.AppCode.LIMS_MaterialRef,bundle);
             }
         });
+
+        // 是否需要实验室 监听
+        RxView.clicks(rlNeedLaboratory)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        mHeadEntity.setNeedLab(!mHeadEntity.getNeedLab());
+                        setNeedLaboratory();
+                    }
+                });
+//        if (StringUtil.isEmpty(ctMateriel.getValue().trim())){
+//            ToastUtils.show(context,"请先选择物料选项");
+//        }
+//        RxView.clicks(ceMaterielBatchNumber.editText())
+
 
     }
 
     @Override
     public void getInspectionDetailHeaderDataSuccess(InspectionApplicationDetailHeaderEntity entity) {
         if (null != entity){
+            mHeadEntity = entity;
             if (null != entity.getPending() && null != entity.getPending().openUrl){
-                if (entity.getPending().openUrl.contains(BusinessType.WorkType.PURCH_INSPECT_EDIT)){
+                if (entity.getPending().openUrl.contains(BusinessType.WorkType.PRODUCT_INSPECT_EDIT)){
                     setCanEdit();
-                }else if (entity.getPending().openUrl.contains(BusinessType.WorkType.PURCH_INSPECT_VIEW)){ //表示不可编辑
+                }else if (entity.getPending().openUrl.contains(BusinessType.WorkType.PRODUCT_INSPECT_VIEW)){ //表示不可编辑
                     setCannotEdit();
                 }
             }else {
@@ -267,6 +306,23 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     }
 
+    @Override
+    public void getIfUploadSuccess(IfUploadEntity entity) {
+        if (null != entity){
+            if (!entity.getDealSuccessFlag()){
+                rlNeedLaboratory.setVisibility(View.GONE);
+            }else {
+                rlNeedLaboratory.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
+
+    @Override
+    public void getIfUploadFailed(String errorMsg) {
+
+    }
+
     public void setId(String id){
         this.id = id;
     }
@@ -286,9 +342,10 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctSamplingPoint.setEditable(false);
         ctBusinessType.setEditable(false);
         ctSupplier.setEditable(false);
-        ctMaterielCode.setEditable(false);
+        ctMateriel.setEditable(false);
         ceMaterielNum.setEditable(false);
         ceMaterielBatchNumber.setEditable(false);
+        rlNeedLaboratory.setOnClickListener(null);
     }
 
     private void setCanEdit(){
@@ -298,7 +355,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctSamplingPoint.setEditable(true);
         ctBusinessType.setEditable(true);
         ctSupplier.setEditable(true);
-        ctMaterielCode.setEditable(true);
+        ctMateriel.setEditable(true);
         ceMaterielNum.setEditable(true);
         ceMaterielBatchNumber.setEditable(true);
     }
@@ -306,7 +363,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
     private void setMakingRules(InspectionApplicationDetailHeaderEntity entity){
         if (null != entity){
             if (null != entity.getTableTypeId()){ //单据来源类型不为空时，表头物料编码、批号不可编辑
-                ctMaterielCode.setEditable(false);
+                ctMateriel.setEditable(false);
                 ceMaterielBatchNumber.setEditable(false);
             }
             //请检时间
@@ -337,17 +394,29 @@ public class InspectionApplicationDetailController extends BaseViewController im
             }
             //物料编码 名称 计量单位
             if (null != entity.getProdId()){
-                ctMaterielCode.setContent(StringUtil.isEmpty(entity.getProdId().getCode()) ? "--" : entity.getProdId().getCode());
-                ctMaterielName.setContent(StringUtil.isEmpty(entity.getProdId().getName()) ? "--" : entity.getProdId().getName());
+                if (!StringUtil.isEmpty(entity.getProdId().getCode()) && !StringUtil.isEmpty(entity.getProdId().getName())){
+                    ctMateriel.setContent(entity.getProdId().getName()+"("+entity.getProdId().getCode()+")");
+                }else {
+                    if (StringUtil.isEmpty(entity.getProdId().getName()) && StringUtil.isEmpty(entity.getProdId().getCode())){
+                        ctMateriel.setContent("--");
+                    }else {
+                        if (!StringUtil.isEmpty(entity.getProdId().getName())){
+                            ctMateriel.setContent(entity.getProdId().getName());
+                        }else if (!StringUtil.isEmpty(entity.getProdId().getCode())){
+                            ctMateriel.setContent(entity.getProdId().getCode());
+                        }
+                    }
+
+                }
+
                 if (null != entity.getProdId().getSampleUnit()){
-                    ctMaterielUnit.setContent(StringUtil.isEmpty(entity.getProdId().getSampleUnit().getName()) ? "--" : entity.getProdId().getSampleUnit().getName());
+                    ctMaterielUnit.setContent(StringUtil.isEmpty(entity.getProdId().getMainUnit().getName()) ? "--" : entity.getProdId().getMainUnit().getName());
                 }else {
                     ctMaterielUnit.setContent("--");
                 }
 
             }else {
-                ctMaterielCode.setContent("--");
-                ctMaterielName.setContent("--");
+                ctMateriel.setContent("--");
                 ctMaterielUnit.setContent("--");
             }
 
@@ -358,13 +427,17 @@ public class InspectionApplicationDetailController extends BaseViewController im
             //供应商
 
             //是否实验室检验
-            if (entity.getNeedLab()){
-                ivNeedLaboratory.setImageResource(R.drawable.ic_check_yes);
-            }else {
-                ivNeedLaboratory.setImageResource(R.drawable.ic_check_no);
-            }
+            setNeedLaboratory();
 
 
+        }
+    }
+
+    private void setNeedLaboratory(){
+        if (mHeadEntity.getNeedLab()){
+            ivNeedLaboratory.setBackgroundResource(R.drawable.ic_check_yes);
+        }else {
+            ivNeedLaboratory.setBackgroundResource(R.drawable.ic_check_no);
         }
     }
 
@@ -421,24 +494,58 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ToastUtils.show(context,"getBusinessTypeListFailed"+errorMsg);
     }
 
+
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventSelectData(SelectDataEvent selectDataEvent) {
-        if (selectDataEvent != null) {
-            if ("selectPeople".equals(selectDataEvent.getSelectTag())) {
-                ContactEntity contactEntity = (ContactEntity) selectDataEvent.getEntity();
-                ctCheckPeople.setValue(contactEntity.name);
+    public void selectDataEvent(SelectDataEvent selectDataEvent){  //部门选择 eventBus 回调
+        if (selectDataEvent.getEntity() instanceof DepartmentEntity){
+            DepartmentEntity departmentEntity = (DepartmentEntity) selectDataEvent.getEntity();
+            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())){
+                if (selectDataEvent.getSelectTag().equals(ctCheckDepartment.getTag()+"")){
+                    ctCheckDepartment.setValue(departmentEntity.getName());
+                }
+            }
+        } else if (selectDataEvent.getEntity() instanceof SamplingPointEntity){  //采样点 eventBus 回调
+            SamplingPointEntity samplingPointEntity =  (SamplingPointEntity)selectDataEvent.getEntity();
+            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())){
+                if (selectDataEvent.getSelectTag().equals(ctSamplingPoint.getTag()+"")){
+                    ctSamplingPoint.setValue(samplingPointEntity.getName());
+                }
+            }
+        } else if (selectDataEvent.getEntity() instanceof ContactEntity){  //请检人 eventBus 回调
+            ContactEntity contactEntity = (ContactEntity) selectDataEvent.getEntity();
+            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())){
+                if (selectDataEvent.getSelectTag().equals(ctCheckPeople.getTag()+"")){
+                    ctCheckPeople.setValue(contactEntity.name);
+                }
             }
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fireApplyStaff(SelectDataEvent selectDataEvent){
-        if (selectDataEvent.getEntity() instanceof DepartmentEntity){
-            DepartmentEntity departmentEntity = (DepartmentEntity) selectDataEvent.getEntity();
-            if (TextUtils.isEmpty(selectDataEvent.getSelectTag())){
-                if (selectDataEvent.getSelectTag().equals(ctCheckDepartment.getTag()+"")){
-                    ctCheckDepartment.setValue(departmentEntity.getName());
+    public void selectMaterial(MaterialDateEvent event){
+        if (event.isRadio()){
+            if (null != event.getData()){
+                if (!StringUtil.isEmpty(event.getData().getCode()) && !StringUtil.isEmpty(event.getData().getName())){
+                    ctMateriel.setContent(event.getData().getName()+"("+event.getData().getCode()+")");
+                }else {
+                    if (StringUtil.isEmpty(event.getData().getName()) && StringUtil.isEmpty(event.getData().getCode())){
+                        ctMateriel.setContent("--");
+                    }else {
+                        if (!StringUtil.isEmpty(event.getData().getName())){
+                            ctMateriel.setContent(event.getData().getName());
+                        }else if (!StringUtil.isEmpty(event.getData().getCode())){
+                            ctMateriel.setContent(event.getData().getCode());
+                        }
+                    }
+
                 }
+                if (null != event.getData().getMainUnit()){
+                    ctMaterielUnit.setContent(StringUtil.isEmpty(event.getData().getMainUnit().getName()) ? "--" : event.getData().getMainUnit().getName());
+                }else {
+                    ctMaterielUnit.setContent("--");
+                }
+
             }
         }
     }
