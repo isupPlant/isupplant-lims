@@ -18,6 +18,7 @@ public class SurveyReportEntity extends BaseEntity {
     private BaseIntIdNameEntity busiTypeId;
     private BaseIntIdNameEntity checkDeptId;
     private BaseIdValueEntity checkResOption;
+    public BaseIntIdNameEntity checkStaffId;
     private String checkResult;
     private Long checkTime;
     private Long cid;

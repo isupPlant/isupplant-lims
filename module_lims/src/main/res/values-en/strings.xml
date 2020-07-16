@@ -36,4 +36,15 @@
     <string name="lims_application_scheme">Application_scheme</string>
     <string name="lims_quality_standard_reference">Quality_standard_reference</string>
     <string name="lims_sampling_point_reference">ampling_point_reference</string>
+    <string name="lims_busitype">Business type</string>
+    <string name="lims_inspect_quantity">Inspection_quantity</string>
+    <string name="lims_material_unit">Material_unit</string>
+    <string name="lims_check_staff">Check_staff</string>
+    <string name="lims_check_dept">Check_dept</string>
+    <string name="lims_check_time">Check_time</string>
+    <string name="lims_vendor">Vendor</string>
+    <string name="lims_report_name">Report_name</string>
+    <string name="lims_dispvalue">Disp_value</string>
+    <string name="lims_check_result">Check_result</string>
+    <string name="lims_range">Range</string>
 </resources>

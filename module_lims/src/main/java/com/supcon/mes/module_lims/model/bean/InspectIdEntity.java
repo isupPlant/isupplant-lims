@@ -2,6 +2,7 @@ package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
+import com.supcon.mes.middleware.model.bean.DepartmentEntity;
 
 /**
  * author huodongsheng
@@ -12,6 +13,9 @@ public class InspectIdEntity extends BaseEntity {
     private BaseIntIdNameEntity applyDeptId;
     private Long id;
     private String tableNo;
+    public Float quantity;
+    public BaseIntIdNameEntity checkStaffId;//检验人
+    public BaseIntIdNameEntity checkDeptId;//检验部门
 
     public BaseIntIdNameEntity getApplyDeptId() {
         return applyDeptId;

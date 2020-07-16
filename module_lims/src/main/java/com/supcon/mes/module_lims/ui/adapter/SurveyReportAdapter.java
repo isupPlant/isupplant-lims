@@ -2,18 +2,24 @@ package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.module_lims.IntentRouter;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * author huodongsheng
@@ -61,6 +67,21 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
         @Override
         protected int layoutId() {
             return R.layout.item_survey_report;
+        }
+
+        @Override
+        protected void initListener() {
+            super.initListener();
+            RxView.clicks(itemView)
+                    .throttleFirst(2000, TimeUnit.MICROSECONDS)
+                    .subscribe(o -> {
+                        Bundle bundle=new Bundle();
+                        SurveyReportEntity entity=getItem(getAdapterPosition());
+                        bundle.putSerializable("resportEntity",entity);
+                        if (entity.getTableNo().startsWith("manuReport_")){
+                            IntentRouter.go(context, Constant.Router.PRODUCT_INSPREPORT_VIEW,bundle);
+                        }
+                    });
         }
 
         @Override

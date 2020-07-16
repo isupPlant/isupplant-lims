@@ -5,6 +5,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
+import com.supcon.mes.module_lims.model.bean.InspectReportDetailListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
@@ -22,6 +23,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * author huodongsheng
@@ -133,4 +135,7 @@ public interface ApiService {
      */
     @GET("/msService/LIMSBasic/utils/utils/judgeModuleExistsByCode")
     Flowable<BAP5CommonEntity<IfUploadEntity>> getIfUpload(@Query("moduleCode")String moduleCode);
+
+    @POST
+    Flowable<InspectReportDetailListEntity>  getInspectReportDetails(@Url String url, @Body Map<String,Object> params);
 }
