@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:tag="inspectNoTv"
-                        android:text="1111111"
+                        android:text=""
                         android:textColor="#333333"
                         android:textSize="@dimen/fontSize_14sp" />
 

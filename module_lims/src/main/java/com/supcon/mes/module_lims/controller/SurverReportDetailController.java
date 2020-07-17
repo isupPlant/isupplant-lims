@@ -20,13 +20,22 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
+import com.supcon.mes.module_lims.model.api.StdJudgeSpecAPI;
+import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportDetailListEntity;
+import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
+import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.contract.InspectReportDetailContract;
+import com.supcon.mes.module_lims.model.contract.StdJudgeSpecContract;
 import com.supcon.mes.module_lims.presenter.InspectReportDetailPresenter;
+import com.supcon.mes.module_lims.presenter.StdJudgeSpecPresenter;
 import com.supcon.mes.module_lims.ui.adapter.InspectReportDetailAdapter;
 import com.supcon.mes.module_lims.utils.Util;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,9 +44,10 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Presenter(value = {
-        InspectReportDetailPresenter.class
+        InspectReportDetailPresenter.class,
+        StdJudgeSpecPresenter.class
 })
-public class SurverReportDetailController extends BaseViewController implements InspectReportDetailContract.View {
+public class SurverReportDetailController extends BaseViewController implements InspectReportDetailContract.View, StdJudgeSpecContract.View {
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -52,6 +62,9 @@ public class SurverReportDetailController extends BaseViewController implements 
 
     @BindByTag("inspectMaterielTv")
     CustomTextView inspectMaterielTv;
+
+    @BindByTag("inspectUnitTv")
+    CustomTextView inspectUnitTv;
 
 
     @BindByTag("inspectBatchTv")
@@ -113,32 +126,54 @@ public class SurverReportDetailController extends BaseViewController implements 
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(false);
     }
+
     int type=-1;//产品、来料、其他用1，2，3来表示
     public void setReportHead(int type,SurveyReportEntity entity){
         this.type=type;
-        inspectNoTv.setText(entity.getTableNo());
-        inspectbusiTypeTv.setValue(entity.getBusiTypeId()!=null?entity.getBusiTypeId().getName():"");
-//        inspectPsTv.setValue(entity.getInspectId()!=null?entity.getInspectId().);
-        if (entity.getProdId()!=null){
-            inspectMaterielTv.setValue(String.format("%s(%s)",entity.getProdId().getName(),entity.getProdId().getCode()));
-        }
-        inspectBatchTv.setValue(entity.getBatchCode());
-        inspectQuantityTv.setValue(entity.getInspectId()!=null && entity.getInspectId().quantity!=null? Util.big2(entity.getInspectId().quantity):"");
-        inspectDeptTv.setValue(entity.getInspectId()!=null && entity.getInspectId().getApplyDeptId()!=null?entity.getInspectId().getApplyDeptId().getName():"");
-        inspectCheckStaffTv.setValue(entity.checkStaffId!=null ?entity.checkStaffId.getName():"");
-        inspectCheckDeptTv.setValue(entity.getCheckDeptId()!=null ?entity.getCheckDeptId().getName():"");
-        inspectCheckTimeTv.setValue(entity.getCheckTime()!=null? DateUtil.dateTimeFormat(entity.getCheckTime()):"");
-        inspectQualityStdTv.setValue(entity.getStdVerId()!=null && entity.getStdVerId().getStdId()!=null?entity.getStdVerId().getStdId().getName():"");
-        inspectCheckResultTv.setValue(entity.getCheckResult());
-
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(false);
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(InspectReportDetailAPI.class).getInspectReportDetails(type,entity.getId());
+                presenterRouter.create(InspectReportDetailAPI.class).getInspectHeadReport(entity.getId());
             }
         });
+    }
+
+
+    private void setInspectHead(InspectHeadReportEntity entity){
+        inspectNoTv.setText(entity.inspectId!=null?entity.inspectId.getTableNo():"");
+        inspectbusiTypeTv.setValue(entity.busiTypeId!=null?entity.busiTypeId.getName():"");
+        inspectPsTv.setValue(entity.inspectId!=null && entity.inspectId.psId!=null?entity.inspectId.psId.getName():"");
+        if (entity.prodId!=null){
+            inspectMaterielTv.setValue(String.format("%s(%s)",entity.prodId.getName(),entity.prodId.getCode()));
+            inspectUnitTv.setValue(entity.prodId.getMainUnit()!=null?entity.prodId.getMainUnit().getName():"");
+        }
+        inspectBatchTv.setValue(entity.batchCode);
+        inspectQuantityTv.setValue(entity.inspectId!=null && entity.inspectId.quantity!=null? Util.big2(entity.inspectId.quantity):"");
+        inspectDeptTv.setValue(entity.inspectId!=null && entity.inspectId.getApplyDeptId()!=null?entity.inspectId.getApplyDeptId().getName():"");
+        inspectCheckStaffTv.setValue(entity.checkStaffId!=null ?entity.checkStaffId.getName():"");
+        inspectCheckDeptTv.setValue(entity.checkDeptId!=null ?entity.checkDeptId.getName():"");
+        inspectCheckTimeTv.setValue(entity.checkTime!=null? DateUtil.dateTimeFormat(entity.checkTime):"");
+        inspectQualityStdTv.setValue(entity.stdVerId!=null ?entity.stdVerId.getName():"");
+        inspectCheckResultTv.setValue(entity.checkResult);
+    }
+    @Override
+    public void getInspectHeadReportSuccess(InspectHeadReportEntity entity) {
+        if (entity!=null){
+            setInspectHead(entity);
+            presenterRouter.create(InspectReportDetailAPI.class).getInspectReportDetails(type,entity.id);
+            Map<String,Object> params=new HashMap<>();
+            params.put("inspectReportId",entity.id);
+            params.put("pageNo",1);
+            params.put("pageSize",65535);
+            presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(params);
+        }
+    }
+
+    @Override
+    public void getInspectHeadReportFailed(String errorMsg) {
+        refreshController.refreshComplete();
     }
 
 
@@ -156,4 +191,16 @@ public class SurverReportDetailController extends BaseViewController implements 
         refreshController.refreshComplete();
         ToastUtils.show(context,errorMsg);
     }
+
+    @Override
+    public void getReportComListSuccess(StdJudgeSpecListEntity entity) {
+        if (entity.data!=null)
+            adapter.setStdJudgeSpecEntities(entity.data.result);
+    }
+
+    @Override
+    public void getReportComListFailed(String errorMsg) {
+        ToastUtils.show(context,errorMsg);
+    }
+
 }

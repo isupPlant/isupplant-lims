@@ -7,7 +7,7 @@ import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
  * Created by wanghaidong on 2020/7/16
  * Email:wanghaidong1@supcon.com
  */
-public class InspectResportDetailEntity extends BaseEntity {
+public class InspectReportDetailEntity extends BaseEntity {
     public Long id;
     public String checkResult;
     public String dispValue;
@@ -15,4 +15,10 @@ public class InspectResportDetailEntity extends BaseEntity {
     public String reportName;
     public String unitName;
     public int version;
+
+    public int getTypeView(){
+        return 1;
+    }
+    public int position=-1;
+
 }

@@ -2,9 +2,10 @@ package com.supcon.mes.module_lims.model.network;
 
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
-import com.supcon.mes.middleware.model.bean.CommonEntity;
+import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
+import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportDetailListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
@@ -13,6 +14,8 @@ import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
+import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
+import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 
 import java.util.Map;
@@ -138,4 +141,10 @@ public interface ApiService {
 
     @POST
     Flowable<InspectReportDetailListEntity>  getInspectReportDetails(@Url String url, @Body Map<String,Object> params);
+
+    @GET("/msService/QCS/inspectReport/inspectReport/data/{id}")
+    Flowable<BAP5CommonEntity<InspectHeadReportEntity>> getInspectHeadReport(@Path("id") Long id);
+
+    @POST("/msService/QCS/inspectReport/inspectReport/getReportComList")
+    Flowable<StdJudgeSpecListEntity> getReportComList(@Body Map<String,Object> params);
 }

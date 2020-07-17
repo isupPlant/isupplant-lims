@@ -14,8 +14,9 @@ public class InspectIdEntity extends BaseEntity {
     private Long id;
     private String tableNo;
     public Float quantity;
-    public BaseIntIdNameEntity checkStaffId;//检验人
+    public BaseIntIdNameEntity checkStaffId;//请检人
     public BaseIntIdNameEntity checkDeptId;//检验部门
+    public BaseIntIdNameEntity psId;//采样点
 
     public BaseIntIdNameEntity getApplyDeptId() {
         return applyDeptId;
