@@ -80,6 +80,10 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
                         bundle.putSerializable("resportEntity",entity);
                         if (entity.getTableNo().startsWith("manuReport_")){
                             IntentRouter.go(context, Constant.Router.PRODUCT_INSPREPORT_VIEW,bundle);
+                        }else if(entity.getTableNo().startsWith("purchReport_")){
+                            IntentRouter.go(context, Constant.Router.PURCH_INSPREPORT_VIEW,bundle);
+                        } else if (entity.getTableNo().startsWith("otherReport_")){
+                            IntentRouter.go(context, Constant.Router.OTHER_INSPREPORT_VIEW,bundle);
                         }
                     });
         }

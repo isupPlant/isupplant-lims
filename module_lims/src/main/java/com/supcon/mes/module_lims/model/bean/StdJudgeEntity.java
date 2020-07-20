@@ -3,6 +3,8 @@ package com.supcon.mes.module_lims.model.bean;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
+import java.util.Objects;
+
 /**
  * Created by wanghaidong on 2020/7/17
  * Email:wanghaidong1@supcon.com
@@ -20,5 +22,18 @@ public class StdJudgeEntity extends InspectReportDetailEntity {
     @Override
     public int getTypeView() {
         return 2;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof StdJudgeEntity) ) return false;
+        StdJudgeEntity that = (StdJudgeEntity) o;
+        return id.longValue()==that.id.longValue();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(judgeCond, maxValue, minValue, resultValue, standardGrade, stdVerComId);
     }
 }

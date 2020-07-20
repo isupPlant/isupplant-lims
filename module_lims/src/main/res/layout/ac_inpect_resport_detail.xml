@@ -274,6 +274,7 @@
         android:layout_height="@dimen/dp_50"
         android:layout_alignParentBottom="true"
         android:tag="customWorkFlowView"
-        app:commentable="false" />
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

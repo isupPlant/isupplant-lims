@@ -25,7 +25,7 @@ public class SurveyReportEntity extends BaseEntity {
     private BaseIntIdNameEntity createStaff;
     private Long createTime;
     private Long id;
-    private PendingEntity pending;
+    public PendingEntity pending;
     private SampleIdEntity sampleId;
     private InspectIdEntity inspectId;
     private ProdIdEntity prodId;

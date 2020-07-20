@@ -1,15 +1,22 @@
 package com.supcon.mes.module_lims.presenter;
 
+import android.text.TextUtils;
+
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.contract.SurveyReportApi;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
@@ -93,13 +100,25 @@ public class SurveyReportPresenter extends SurveyReportApi.Presenter {
             @Override
             public void accept(SurveyReportListEntity entity) throws Exception {
                 if (entity.success){
+                    if (entity.data!=null) {
+                        entity.data.result=filterSurveyReports(entity.data.result);
+                    }
                     getView().getSurveyReportListSuccess(entity);
                 }else {
                     getView().getSurveyReportListFailed(entity.msg);
                 }
             }
         }));
-
-
+    }
+    private List<SurveyReportEntity> filterSurveyReports(List<SurveyReportEntity> entities){
+        List<SurveyReportEntity> list=new ArrayList<>();
+        if (!entities.isEmpty()) {
+            for (SurveyReportEntity entity : entities) {
+                if (TextUtils.isEmpty(entity.pending.openUrl) || entity.pending.openUrl.contains("ReportView")) {
+                    list.add(entity);
+                }
+            }
+        }
+        return list;
     }
 }

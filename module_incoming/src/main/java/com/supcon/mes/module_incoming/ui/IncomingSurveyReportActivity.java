@@ -18,6 +18,7 @@ import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_incoming.R;
@@ -30,6 +31,10 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.contract.SurveyReportApi;
 import com.supcon.mes.module_lims.presenter.SurveyReportPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SurveyReportAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +75,8 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -96,7 +103,10 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
         });
         goRefresh();
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RefreshEvent event) {
+        refreshListController.refreshBegin();
+    }
     @Override
     protected void initListener() {
         super.initListener();
@@ -137,5 +147,12 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
     public void getSurveyReportListFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+
     }
 }

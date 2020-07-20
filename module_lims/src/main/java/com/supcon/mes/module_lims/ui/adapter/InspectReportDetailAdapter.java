@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.model.bean.InspectReportDetailEntity;
@@ -47,7 +48,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
         return super.getItemViewType(position, o);
     }
 
-    class InsportReportDetailViewHolder extends BaseRecyclerViewHolder<InspectReportDetailEntity>{
+    class InsportReportDetailViewHolder extends BaseRecyclerViewHolder<StdJudgeSpecEntity>{
 
         @BindByTag("reportNameTv")
         CustomTextView reportNameTv;
@@ -58,8 +59,6 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
         @BindByTag("rangeImg")
         ImageView rangeImg;
         private boolean isExpand;
-
-
         public InsportReportDetailViewHolder(Context context) {
             super(context);
         }
@@ -68,58 +67,52 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
         protected int layoutId() {
             return R.layout.item_inspect_project;
         }
+
         @Override
         protected void initView() {
             super.initView();
-            if (isExpand){
-                rangeImg.setImageResource(R.drawable.ic_inspect_down_arrow);
-            }else {
-                rangeImg.setImageResource(R.drawable.ic_inspect_up_arrow);
-            }
+
         }
+
         @Override
         protected void initListener() {
             super.initListener();
             RxView.clicks(rangeImg)
                     .throttleFirst(1000, TimeUnit.MICROSECONDS)
                     .subscribe(o->{
-                        Object data=getItem(getAdapterPosition());
-                        if (data instanceof InspectReportDetailEntity) {
-                            InspectReportDetailEntity detailEntity = (InspectReportDetailEntity) data;
-                            if (stdJudgeSpecEntities != null && detailEntity != null && stdJudgeSpecEntities.size() > detailEntity.position) {
-                                StdJudgeSpecEntity judgeSpecEntity = stdJudgeSpecEntities.get(detailEntity.position);
-                                if (judgeSpecEntity != null) {
-                                    List<StdJudgeEntity> stdJudgeEntityList = judgeSpecEntity.getSpec();
-                                    int size = stdJudgeEntityList!=null?stdJudgeEntityList.size():0;
+                        int position=getAdapterPosition();
+                        StdJudgeSpecEntity detailEntity= (StdJudgeSpecEntity) getItem(position);
+                        if (detailEntity.getTypeView()==1) {
+                            List<StdJudgeEntity> stdJudgeSpecEntities=detailEntity.getSpec();
+                            if (stdJudgeSpecEntities != null &&!stdJudgeSpecEntities.isEmpty()) {
+                                    int size = stdJudgeSpecEntities.size();
                                     if (size>0) {
-                                        if (!isExpand) {
+                                        if (!detailEntity.isExpand) {
                                             for (int i = 0; i <size ; i++) {
-                                                getList().add(getAdapterPosition()+i+1,stdJudgeEntityList.get(i));
+                                                getList().add(position+i+1,stdJudgeSpecEntities.get(i));
                                             }
-                                            notifyItemRangeInserted(getAdapterPosition()+1,size);
                                         }else {
-                                            getList().removeAll(stdJudgeEntityList);
-                                            notifyItemRangeRemoved(getAdapterPosition()+1,size);
+                                            getList().removeAll(stdJudgeSpecEntities);
                                         }
-                                        isExpand=!isExpand;
-                                        notifyItemRangeChanged(getAdapterPosition(),size);
-
+                                        detailEntity.isExpand=!detailEntity.isExpand;
+                                        notifyDataSetChanged();
                                     } else {
                                         ToastUtils.show(context, "没有更多展开的内容了！");
                                     }
                                 }
                             }
-                        }
                     });
         }
 
         @Override
-        protected void update(InspectReportDetailEntity data) {
+        protected void update(StdJudgeSpecEntity data) {
             reportNameTv.setValue(data.reportName);
             dispvalueTv.setValue(data.dispValue);
             checkResultTv.setValue(data.checkResult);
-            if (data.position==-1){
-                data.position=getAdapterPosition();
+            if (data.isExpand){
+                rangeImg.setImageResource(R.drawable.ic_inspect_down_arrow);
+            }else {
+                rangeImg.setImageResource(R.drawable.ic_inspect_up_arrow);
             }
         }
     }
@@ -143,11 +136,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
             judgeRangeTv.setValue(data.dispValue);
         }
     }
-    List<StdJudgeSpecEntity> stdJudgeSpecEntities;
 
-    public void setStdJudgeSpecEntities(List<StdJudgeSpecEntity> stdJudgeSpecEntities) {
-        this.stdJudgeSpecEntities = stdJudgeSpecEntities;
-    }
 
 
 }

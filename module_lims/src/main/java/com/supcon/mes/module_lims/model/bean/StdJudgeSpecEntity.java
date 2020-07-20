@@ -18,6 +18,7 @@ import java.util.Map;
 public class StdJudgeSpecEntity extends InspectReportDetailEntity {
     public Map<String,Object> dispMap;
     public String specLimitListStr;
+    public boolean isExpand=false;
 
     public List<StdJudgeEntity> getSpec(){
         List<StdJudgeEntity> list=new ArrayList<>();

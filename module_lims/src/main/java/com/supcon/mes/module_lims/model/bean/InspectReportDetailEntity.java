@@ -19,6 +19,7 @@ public class InspectReportDetailEntity extends BaseEntity {
     public int getTypeView(){
         return 1;
     }
-    public int position=-1;
+
+
 
 }
