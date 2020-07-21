@@ -1,62 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/dp_15"
-    android:paddingRight="@dimen/dp_15"
-    android:background="@color/white">
-
+    android:paddingRight="@dimen/dp_15">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_35"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_home_app"
-            />
 
         <TextView
             android:id="@+id/tvOddNumbers"
-            android:tag="tvOddNumbers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_15"
             android:ellipsize="end"
             android:maxEms="13"
             android:singleLine="true"
-            tools:text="chanpinqingjiajndan_20200606_2477777"
-            android:textColor="@color/blue"
-            android:textSize="14sp"/>
+            android:tag="tvOddNumbers"
+            android:textColor="@color/fontBlack333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="chanpinqingjiajndan_20200606_2477777" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical">
+
             <TextView
                 android:id="@+id/tvEdit"
-                android:tag="tvEdit"
-                android:paddingTop="@dimen/dp_3"
-                android:paddingBottom="@dimen/dp_3"
-                android:paddingLeft="@dimen/dp_5"
-                android:paddingRight="@dimen/dp_5"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/shape_document_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="编辑"/>
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shape_document_status"
+                android:paddingLeft="@dimen/dp_5"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingRight="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_3"
+                android:tag="tvEdit"
+                android:text="编辑" />
 
 
         </RelativeLayout>
-
-
 
 
     </LinearLayout>
@@ -64,7 +57,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/bgGray2"/>
+        android:background="@color/bgGray2" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,18 +68,17 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new"
-            />
+            android:src="@drawable/ic_sample" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/tvSample"
-            android:tag="tvSample"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
+           android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvSample"
+            app:gravity="center|center_vertical"
             app:key="@string/lims_sample"
-            app:key_color="@color/black_text"
-            app:gravity="right|center_vertical"/>
+            app:key_color="@color/black_text" />
 
 
     </LinearLayout>
@@ -100,18 +92,17 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new"
-            />
+            android:src="@drawable/ic_goods" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/tvMateriel"
-            android:tag="tvMateriel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
+           android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvMateriel"
+            app:gravity="center|center_vertical"
             app:key="@string/lims_materiel"
-            app:key_color="@color/black_text"
-            app:gravity="right|center_vertical"/>
+            app:key_color="@color/black_text" />
 
 
     </LinearLayout>
@@ -125,22 +116,101 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new"
-            />
+            android:src="@drawable/ic_batch_number" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/tvBatchNumber"
-            android:tag="tvBatchNumber"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
+           android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvBatchNumber"
+            app:gravity="center|center_vertical"
             app:key="@string/lims_batch_number"
-            app:key_color="@color/black_text"
-            app:gravity="right|center_vertical"/>
+            app:key_color="@color/black_text" />
 
 
     </LinearLayout>
 
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_picksite" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvSamplingPoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                   android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvSamplingPoint"
+                    app:gravity="center|center_vertical"
+                    app:key="@string/lims_sampling_point"
+                    app:key_color="@color/black_text" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_examiner" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvCreator"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                   android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvCreator"
+                    app:gravity="center|center_vertical"
+                    app:key="@string/lims_creator"
+                    app:key_color="@color/black_text" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="@dimen/dp_20">
+
+            <ImageView
+                android:id="@+id/ivIsQualified"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_36"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_un_qualified"
+                android:tag="ivIsQualified" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_35"
@@ -150,100 +220,17 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new"
-            />
+            android:src="@drawable/ic_check_time" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/tvRegistrationTime"
             android:tag="tvRegistrationTime"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
+           android:layout_marginLeft="@dimen/dp_9"
             app:key="@string/lims_registration_time"
             app:key_color="@color/black_text"
-            app:gravity="right|center_vertical"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new"
-            />
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/tvCreator"
-            android:tag="tvCreator"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
-            app:key="@string/lims_creator"
-            app:key_color="@color/black_text"
-            app:gravity="right|center_vertical"/>
-
+            app:gravity="center|center_vertical"/>
 
     </LinearLayout>
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new"
-            />
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/tvSamplingPoint"
-            android:tag="tvSamplingPoint"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
-            app:key="@string/lims_sampling_point"
-            app:key_color="@color/black_text"
-            app:gravity="right|center_vertical"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new"
-            />
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/tvTestConclusion"
-            android:tag="tvTestConclusion"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
-            app:key="@string/lims_test_conclusion"
-            app:key_color="@color/black_text"
-            app:gravity="right|center_vertical"/>
-
-
-    </LinearLayout>
-
-
-
-
 </LinearLayout>

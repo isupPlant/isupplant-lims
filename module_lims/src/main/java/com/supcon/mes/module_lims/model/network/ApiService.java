@@ -187,4 +187,5 @@ public interface ApiService {
      */
     @POST("/msService/QCS/inspectReport/inspectReport/{inspReportView}/submit")
     Flowable<SubmitResultEntity> submitInspectReport(@Path("inspReportView") String path, @QueryMap Map<String,Object> params, @Body InspectReportSubmitEntity reportSubmitEntity);
+
 }

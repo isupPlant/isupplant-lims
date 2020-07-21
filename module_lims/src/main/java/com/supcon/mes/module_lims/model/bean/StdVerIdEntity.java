@@ -15,7 +15,9 @@ public class StdVerIdEntity extends BaseEntity {
     private String name;
     private Long id;
     private String busiVersion;
-    private BaseIntIdNameEntity stdId;
+    private StdIdEntity stdId;
+
+
 
     public Map getAttrMap() {
         return attrMap;
@@ -49,11 +51,11 @@ public class StdVerIdEntity extends BaseEntity {
         this.busiVersion = busiVersion;
     }
 
-    public BaseIntIdNameEntity getStdId() {
+    public StdIdEntity getStdId() {
         return stdId;
     }
 
-    public void setStdId(BaseIntIdNameEntity stdId) {
+    public void setStdId(StdIdEntity stdId) {
         this.stdId = stdId;
     }
 }

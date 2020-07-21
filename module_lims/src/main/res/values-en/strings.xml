@@ -24,6 +24,7 @@
     <string name="lims_materiel">Materiel</string>
     <string name="lims_registration_time">Registration_time</string>
     <string name="lims_sampling_point">Sampling_point</string>
+    <string name="lims_sample_name">Sample_name</string>
     <string name="lims_sample_code">Sample_code</string>
     <string name="lims_sampling">Sampling</string>
     <string name="lims_sample_collection">Sample_collection</string>
@@ -46,5 +47,7 @@
     <string name="lims_report_name">Report_name</string>
     <string name="lims_dispvalue">Disp_value</string>
     <string name="lims_check_result">Check_result</string>
+    <string name="lims_test_result">Check_result</string>
     <string name="lims_range">Range</string>
+    <string name="lims_sample_com">SampleComId</string>
 </resources>

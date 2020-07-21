@@ -1,14 +1,19 @@
 package com.supcon.mes.module_sample.presenter;
 
+import android.text.TextUtils;
+
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
+import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_sample.model.contract.SampleSurveyReportApi;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
@@ -32,28 +37,39 @@ public class SampleSurveyReportPresenter extends SampleSurveyReportApi.Presenter
             query = "sampleReportList-pending";
         }
 
-        Map<String, Object> codeParam = new HashMap();
+        Map<String, Object> firstParams = new HashMap();
+        Map<String,Object> secondParams=new HashMap<>();
+
         //从外层传进的集合中取出 检索条件 CODE | NAME | BATCH_CODE | TABLE_NO
+        if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
+            firstParams.put(Constant.BAPQuery.TABLE_NO, params.get(Constant.BAPQuery.TABLE_NO));
+        }
+        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(firstParams);
         if (params.containsKey(Constant.BAPQuery.CODE)) {
-            codeParam.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
+            secondParams.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
         }
         if (params.containsKey(Constant.BAPQuery.NAME)) {
-            codeParam.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
+            secondParams.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
         }
         if (params.containsKey(Constant.BAPQuery.BATCH_CODE)){
-            codeParam.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
+            secondParams.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
         }
-        if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
-            codeParam.put(Constant.BAPQuery.TABLE_NO, params.get(Constant.BAPQuery.TABLE_NO));
+        fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(secondParams,joinInfo));
+        if (params.containsKey(Constant.BAPQuery.PICKSITE)){
+            Map<String,Object> thirdParams=new HashMap<>();
+            thirdParams.put(Constant.BAPQuery.PICKSITE,params.get(Constant.BAPQuery.PICKSITE));
+            JoinSubcondEntity subcondEntity = new JoinSubcondEntity();
+            subcondEntity.subconds=new ArrayList<>();
+            subcondEntity.type = "2";
+            subcondEntity.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(thirdParams,"LIMSBA_PICKSITE,ID,LIMSSA_SAMPLE_INFOS,PS_ID"));
+            fastQuery.subconds.add(subcondEntity);
         }
 
         //创建一个空的实体类
-        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
+
         fastQuery.modelAlias = modelAlias;
         fastQuery.viewCode = viewCode;
         //创建fastQuery.subconds内部该有的属性并且赋值
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(codeParam, joinInfo);
-        fastQuery.subconds.add(joinSubcondEntity);
 
         Map<String, Object> map = new HashMap<>();
         map.put("fastQueryCond", fastQuery.toString());
@@ -73,11 +89,25 @@ public class SampleSurveyReportPresenter extends SampleSurveyReportApi.Presenter
             @Override
             public void accept(SurveyReportListEntity entity) throws Exception {
                 if (entity.success){
+                    if (entity.data!=null) {
+                        entity.data.result=filterSurveyReports(entity.data.result);
+                    }
                     getView().getSampleSurveyReportListSuccess(entity);
                 }else {
                     getView().getSampleSurveyReportListFailed(entity.msg);
                 }
             }
         }));
+    }
+    private List<SurveyReportEntity> filterSurveyReports(List<SurveyReportEntity> entities){
+        List<SurveyReportEntity> list=new ArrayList<>();
+        if (!entities.isEmpty()) {
+            for (SurveyReportEntity entity : entities) {
+                if (TextUtils.isEmpty(entity.pending.openUrl) || entity.pending.openUrl.contains("ReportView")) {
+                    list.add(entity);
+                }
+            }
+        }
+        return list;
     }
 }

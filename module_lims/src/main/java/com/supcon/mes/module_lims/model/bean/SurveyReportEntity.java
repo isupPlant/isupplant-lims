@@ -37,7 +37,7 @@ public class SurveyReportEntity extends BaseEntity {
     private String testResult;
     private Boolean valid;
     private Integer version;
-
+    public String memoField;
     public Map getAttrMap() {
         return attrMap;
     }

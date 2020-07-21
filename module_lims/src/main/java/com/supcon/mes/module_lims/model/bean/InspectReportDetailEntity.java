@@ -15,6 +15,7 @@ public class InspectReportDetailEntity extends BaseEntity {
     public String reportName;
     public String unitName;
     public int version;
+    public String testResult;
 
     public int getTypeView(){
         return 1;

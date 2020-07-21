@@ -24,6 +24,7 @@
     <string name="lims_materiel">物料</string>
     <string name="lims_registration_time">登记时间</string>
     <string name="lims_sampling_point">采样点</string>
+    <string name="lims_sample_name">样品名称</string>
     <string name="lims_sample_code">样品编码</string>
     <string name="lims_sampling">取样</string>
     <string name="lims_sample_collection">收样</string>
@@ -46,5 +47,7 @@
     <string name="lims_report_name">检验项目</string>
     <string name="lims_dispvalue">报出值</string>
     <string name="lims_check_result">结论</string>
+    <string name="lims_test_result">检验结论</string>
     <string name="lims_range">范围</string>
+    <string name="lims_sample_com">检测分项</string>
 </resources>

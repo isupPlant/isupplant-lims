@@ -2,16 +2,25 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.middleware.util.UrlUtil;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
+import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * author huodongsheng
@@ -46,8 +55,8 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
         CustomTextView tvCreator;
         @BindByTag("tvSamplingPoint")
         CustomTextView tvSamplingPoint;
-        @BindByTag("tvTestConclusion")
-        CustomTextView tvTestConclusion;
+        @BindByTag("ivIsQualified")
+        ImageView ivIsQualified;
 
         public ViewHolder(Context context) {
             super(context);
@@ -59,10 +68,37 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
         }
 
         @Override
+        protected void initListener() {
+            super.initListener();
+            RxView.clicks(itemView)
+                    .throttleFirst(1000, TimeUnit.MICROSECONDS)
+                    .subscribe(o -> {
+                        Bundle bundle=new Bundle();
+                        SurveyReportEntity entity=getItem(getAdapterPosition());
+                        bundle.putSerializable("reportEntity",entity);
+                        IntentRouter.go(context, Constant.Router.SAMPLE_REPORT_VIEW, bundle);
+                    });
+
+        }
+
+        @Override
         protected void update(SurveyReportEntity data) {
             //单据编号
             tvOddNumbers.setText(StringUtil.isEmpty(data.getTableNo()) ? "--" : data.getTableNo());
 
+            //检验结论
+            if (StringUtil.isEmpty(data.getTestResult())){
+                ivIsQualified.setVisibility(View.GONE);
+            }else {
+                ivIsQualified.setVisibility(View.VISIBLE);
+                if (data.getTestResult().equals("合格")){
+                    ivIsQualified.setImageResource(R.drawable.ic_qualified);
+                }else if (data.getTestResult().equals("不合格")){
+                    ivIsQualified.setImageResource(R.drawable.ic_un_qualified);
+                }else {
+                    ivIsQualified.setVisibility(View.GONE);
+                }
+            }
             //样品名称 && 批号 && 登记时间
             if (null == data.getSampleId()){
                 tvSample.setContent("--");
@@ -94,10 +130,6 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
             }else {
                 tvCreator.setContent(StringUtil.isEmpty(data.getCreateStaff().getName()) ? "--" : data.getCreateStaff().getName());
             }
-
-
-            //检验结论
-            tvTestConclusion.setContent(StringUtil.isEmpty(data.getTestResult()) ? "--" : data.getTestResult());
 
             //单据状态
             if (null == data.getPending()){

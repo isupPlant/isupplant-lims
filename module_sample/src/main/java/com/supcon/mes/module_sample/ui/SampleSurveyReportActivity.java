@@ -17,17 +17,22 @@ import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.module_lims.controller.SurveyReportController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.controller.SampleReportController;
 import com.supcon.mes.module_sample.model.contract.SampleSurveyReportApi;
 import com.supcon.mes.module_sample.presenter.SampleSurveyReportPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleSurveyReportAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +44,7 @@ import java.util.Map;
  */
 @Router(Constant.AppCode.LIMS_SampleSurveyReport)
 @Presenter(value = {SampleSurveyReportPresenter.class})
-@Controller(value = {SurveyReportController.class})
+@Controller(value = {SampleReportController.class})
 public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<SurveyReportEntity> implements SampleSurveyReportApi.View {
 
     @BindByTag("titleText")
@@ -68,6 +73,7 @@ public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<Surv
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -98,7 +104,7 @@ public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<Surv
     @Override
     protected void initListener() {
         super.initListener();
-        getController(SurveyReportController.class).setTabClickListener(new OnTabClickListener() {
+        getController(SampleReportController.class).setTabClickListener(new OnTabClickListener() {
             @Override
             public void onTabClick(boolean isAll) {
                 isWhole = isAll;
@@ -106,7 +112,7 @@ public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<Surv
             }
         });
 
-        getController(SurveyReportController.class).setSearchOverListener(new OnSearchOverListener() {
+        getController(SampleReportController.class).setSearchOverListener(new OnSearchOverListener() {
             @Override
             public void onSearchOverClick(Map<String, Object> map) {
                 params.clear();
@@ -126,6 +132,11 @@ public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<Surv
         refreshListController.refreshBegin();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RefreshEvent event) {
+        refreshListController.refreshBegin();
+    }
+
     @Override
     public void getSampleSurveyReportListSuccess(SurveyReportListEntity entity) {
         refreshListController.refreshComplete(entity.data.result);
@@ -135,5 +146,11 @@ public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<Surv
     public void getSampleSurveyReportListFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
