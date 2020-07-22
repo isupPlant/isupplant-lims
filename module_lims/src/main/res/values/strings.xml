@@ -2,7 +2,7 @@
     <string name="app_name">My Application</string>
     <string name="lims_backlog">待办列表</string>
     <string name="lims_all">全部列表</string>
-    <string name="lims_goods">物品</string>
+    <string name="lims_goods">物料</string>
     <string name="lims_batch_number">批号</string>
     <string name="lims_examiner">请检人</string>
     <string name="lims_inspection_department">请检部门</string>
@@ -10,7 +10,7 @@
     <string name="lims_materiel_name">物料名称</string>
     <string name="lims_materiel_code">物料编码</string>
     <string name="lims_document_number">单据编号</string>
-    <string name="lims_request_no">申请单号</string>
+    <string name="lims_request_no">检验申请单号</string>
     <string name="lims_product_inspection_application">产品检验申请</string>
     <string name="lims_incoming_inspection_application">来料检验申请</string>
     <string name="lims_other_inspection_application">其他检验申请</string>
@@ -24,6 +24,7 @@
     <string name="lims_materiel">物料</string>
     <string name="lims_registration_time">登记时间</string>
     <string name="lims_sampling_point">采样点</string>
+    <string name="lims_sample_name">样品名称</string>
     <string name="lims_sample_code">样品编码</string>
     <string name="lims_sampling">取样</string>
     <string name="lims_sample_collection">收样</string>
@@ -38,8 +39,18 @@
     <string name="lims_sampling_point_reference">采样点参照</string>
     <string name="lims_supplier_reference">供应商参照</string>
     <string name="lims_inspection_items">检验项目</string>
+    <string name="lims_busitype">业务类型</string>
+    <string name="lims_inspect_quantity">请检数量</string>
+    <string name="lims_material_unit">计量单位</string>
+    <string name="lims_check_staff">检验人</string>
+    <string name="lims_check_dept">检验部门</string>
+    <string name="lims_check_time">检验时间</string>
+    <string name="lims_vendor">供应商</string>
+    <string name="lims_report_name">检验项目</string>
+    <string name="lims_dispvalue">报出值</string>
+    <string name="lims_check_result">结论</string>
+    <string name="lims_test_result">检验结论</string>
+    <string name="lims_range">范围</string>
+    <string name="lims_sample_com">检测分项</string>
 
-
-    
-    
 </resources>

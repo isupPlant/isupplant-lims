@@ -19,6 +19,8 @@ public class SampleIdEntity extends BaseEntity {
     private ProdIdEntity productId;
     private BaseIntIdNameEntity psId;
     private Long registerTime;
+    public Long testTime;
+
 
     public Map getAttrMap() {
         return attrMap;

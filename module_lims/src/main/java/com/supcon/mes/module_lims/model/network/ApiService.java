@@ -6,8 +6,16 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
+
+import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
+import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
+
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
+import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
+import com.supcon.mes.module_lims.model.bean.InspectReportDetailListEntity;
+import com.supcon.mes.module_lims.model.bean.InspectReportEntity;
+import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
@@ -17,9 +25,14 @@ import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeListEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
+
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
+
+import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
+import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
+
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 
@@ -32,6 +45,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+
+
+import retrofit2.http.Url;
+
 
 /**
  * author huodongsheng
@@ -178,6 +195,7 @@ public interface ApiService {
     Flowable<BAP5CommonEntity<IfUploadEntity>> getIfUpload(@Query("moduleCode")String moduleCode);
 
 
+
     @POST("/msService/LIMSBasic/analySample/analyProdStd/getAvailableStdVersByProductId")
     Flowable<BAP5CommonEntity<AvailableStdEntity>> getAvailableStdId(@QueryMap Map<String ,Object> map);
 
@@ -197,4 +215,49 @@ public interface ApiService {
      */
     @GET("/msService/LIMSBasic/qualityStd/stdVerCom/getStdVerComsByStdVerId")
     Flowable<StdVerComIdListEntity> getDefaultItems(@Query("stdVerId") String stdVerId);
+
+    /**
+     * 获取质量检验中检验报告单pt数据
+     * @param url
+     * @param params
+     * @return
+     */
+    @POST
+    Flowable<InspectReportDetailListEntity>  getInspectReportDetails(@Url String url, @Body Map<String,Object> params);
+
+    /**
+     * 通过id获取质量检验中检验报告单详情数据
+     * @param id
+     * @return
+     */
+    @GET("/msService/QCS/inspectReport/inspectReport/data/{id}")
+    Flowable<BAP5CommonEntity<InspectHeadReportEntity>> getInspectHeadReport(@Path("id") Long id);
+
+    /**
+     * 获取质量检验中检验报告单pt的质量标准
+     * @param params
+     * @return
+     */
+    @POST("/msService/QCS/inspectReport/inspectReport/getReportComList")
+    Flowable<StdJudgeSpecListEntity> getReportComList(@Body Map<String,Object> params);
+
+    /**
+     * 通过待办获取质量检验中检验报告单详情数据
+     * @param moduleId
+     * @param pendingId
+     * @return
+     */
+    @GET("/msService/QCS/inspectReport/inspectReport/data/{moduleId}")
+    Flowable<InspectReportEntity> getInspectReportByPending(@Path("moduleId") long moduleId,@Query("pendingId") Long pendingId);
+
+    /**
+     * 提交质量检验中工作流
+     * @param path
+     * @param params
+     * @param reportSubmitEntity
+     * @return
+     */
+    @POST("/msService/QCS/inspectReport/inspectReport/{inspReportView}/submit")
+    Flowable<SubmitResultEntity> submitInspectReport(@Path("inspReportView") String path, @QueryMap Map<String,Object> params, @Body InspectReportSubmitEntity reportSubmitEntity);
+
 }

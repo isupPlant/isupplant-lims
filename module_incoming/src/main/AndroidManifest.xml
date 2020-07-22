@@ -15,6 +15,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity android:name=".ui.PurchSurveyReportDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
         <activity android:name=".ui.inspection.IncomingInspectionApplicationDetailActivity"
             android:screenOrientation="portrait"

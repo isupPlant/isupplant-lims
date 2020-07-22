@@ -18,13 +18,14 @@ public class SurveyReportEntity extends BaseEntity {
     private BaseIntIdNameEntity busiTypeId;
     private BaseIntIdNameEntity checkDeptId;
     private BaseIdValueEntity checkResOption;
+    public BaseIntIdNameEntity checkStaffId;
     private String checkResult;
     private Long checkTime;
     private Long cid;
     private BaseIntIdNameEntity createStaff;
     private Long createTime;
     private Long id;
-    private PendingEntity pending;
+    public PendingEntity pending;
     private SampleIdEntity sampleId;
     private InspectIdEntity inspectId;
     private ProdIdEntity prodId;
@@ -36,7 +37,7 @@ public class SurveyReportEntity extends BaseEntity {
     private String testResult;
     private Boolean valid;
     private Integer version;
-
+    public String memoField;
     public Map getAttrMap() {
         return attrMap;
     }
