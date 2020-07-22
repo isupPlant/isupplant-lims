@@ -62,11 +62,6 @@ public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapt
         protected void update(SamplingPointEntity data) {
             tvName.setText(StringUtil.isEmpty(data.getName()) ? "--" : data.getName());
 
-            if (data.isSelect()){
-                item.setBackgroundColor(Color.parseColor("#666666"));
-            }else {
-                item.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            }
         }
     }
 }

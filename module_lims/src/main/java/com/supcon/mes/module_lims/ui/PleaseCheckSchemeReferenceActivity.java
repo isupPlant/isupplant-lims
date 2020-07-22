@@ -110,12 +110,6 @@ public class PleaseCheckSchemeReferenceActivity extends BaseRefreshRecyclerActiv
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
-                    for (int i = 0; i < adapter.getList().size(); i++) {
-                        adapter.getList().get(i).setSelect(false);
-                    }
-                    adapter.getList().get(position).setSelect(true);
-                    adapter.notifyDataSetChanged();
-
                     EventBus.getDefault().post(new SelectDataEvent<>(adapter.getList().get(position),selectTag));
                     finish();
                 }

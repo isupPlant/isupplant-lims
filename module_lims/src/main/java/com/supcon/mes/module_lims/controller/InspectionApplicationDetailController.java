@@ -379,6 +379,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ptList.clear();
         adapter = new QualityStandardAdapter(context, ptList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {

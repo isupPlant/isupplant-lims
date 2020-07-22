@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -33,7 +34,7 @@ public class PleaseCheckSchemeAdapter extends BaseListDataRecyclerViewAdapter<Pl
         @BindByTag("tvName")
         TextView tvName;
         @BindByTag("item")
-        LinearLayout item;
+        RelativeLayout item;
 
         public ViewHolder(Context context, ViewGroup parent) {
             super(context,parent);
@@ -61,11 +62,6 @@ public class PleaseCheckSchemeAdapter extends BaseListDataRecyclerViewAdapter<Pl
         protected void update(PleaseCheckSchemeEntity data) {
             tvName.setText(StringUtil.isEmpty(data.getName()) ? "--" : data.getName());
 
-            if (data.isSelect()){
-                item.setBackgroundColor(Color.parseColor("#666666"));
-            }else {
-                item.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            }
         }
     }
 }
