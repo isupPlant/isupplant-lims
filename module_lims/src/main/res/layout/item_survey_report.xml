@@ -154,7 +154,7 @@
         <ImageView
             android:layout_width="@dimen/dp_14"
             android:layout_height="@dimen/dp_14"
-            android:src="@drawable/ic_check_result" />
+            android:src="@drawable/ic_check_result2" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/checkResultTv"

@@ -65,9 +65,11 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_sample" />
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:src="@drawable/ic_sample"
+            android:scaleType="centerInside"
+            />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/tvSample"
@@ -148,7 +150,9 @@
         <ImageView
             android:layout_width="@dimen/dp_14"
             android:layout_height="@dimen/dp_14"
-            android:src="@drawable/ic_check_result" />
+            android:src="@drawable/ic_check_result2"
+            android:scaleType="centerInside"
+            />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/checkResultTv"
@@ -185,9 +189,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_picksite" />
+                    android:layout_width="@dimen/dp_12"
+                    android:layout_height="@dimen/dp_12"
+                    android:src="@drawable/ic_picksite"
+                    android:scaleType="centerInside"
+                    />
 
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/tvSamplingPoint"
