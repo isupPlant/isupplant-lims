@@ -81,7 +81,7 @@
             app:content_color="@color/fontBlack333"
             app:content_size="15"
             app:gravity="center|center_vertical"
-            app:key="@string/lims_inspection_request_no"
+            app:key="@string/lims_request_no"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
 

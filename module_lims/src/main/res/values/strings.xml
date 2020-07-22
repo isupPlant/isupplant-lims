@@ -2,7 +2,7 @@
     <string name="app_name">My Application</string>
     <string name="lims_backlog">待办列表</string>
     <string name="lims_all">全部列表</string>
-    <string name="lims_goods">物品</string>
+    <string name="lims_goods">物料</string>
     <string name="lims_batch_number">批号</string>
     <string name="lims_examiner">请检人</string>
     <string name="lims_inspection_department">请检部门</string>
