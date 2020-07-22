@@ -74,8 +74,9 @@ public class SampleSurveyReportPresenter extends SampleSurveyReportApi.Presenter
         Map<String, Object> map = new HashMap<>();
         map.put("fastQueryCond", fastQuery.toString());
         map.put("pageNo", pageNo);
-        map.put("pageSize", 10);
+        map.put("pageSize", 20);
         map.put("paging", true);
+        map.put("permissionCode",viewCode);
 
         mCompositeSubscription.add(SampleHttpClient.getSampleSurveyReportList(query,map).onErrorReturn(new Function<Throwable, SurveyReportListEntity>() {
             @Override

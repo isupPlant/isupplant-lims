@@ -57,6 +57,8 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
         CustomTextView tvSamplingPoint;
         @BindByTag("ivIsQualified")
         ImageView ivIsQualified;
+        @BindByTag("checkResultTv")
+        CustomTextView checkResultTv;
 
         public ViewHolder(Context context) {
             super(context);
@@ -87,18 +89,24 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
             tvOddNumbers.setText(StringUtil.isEmpty(data.getTableNo()) ? "--" : data.getTableNo());
 
             //检验结论
-            if (StringUtil.isEmpty(data.getTestResult())){
-                ivIsQualified.setVisibility(View.GONE);
+//            if (StringUtil.isEmpty(data.getTestResult())){
+//                ivIsQualified.setVisibility(View.GONE);
+//            }else {
+//                ivIsQualified.setVisibility(View.VISIBLE);
+//                if (data.getTestResult().equals("合格")){
+//                    ivIsQualified.setImageResource(R.drawable.ic_qualified);
+//                }else if (data.getTestResult().equals("不合格")){
+//                    ivIsQualified.setImageResource(R.drawable.ic_un_qualified);
+//                }else {
+//                    ivIsQualified.setVisibility(View.GONE);
+//                }
+//            }
+            if ("不合格".equals(data.getTestResult())){
+                checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
-                ivIsQualified.setVisibility(View.VISIBLE);
-                if (data.getTestResult().equals("合格")){
-                    ivIsQualified.setImageResource(R.drawable.ic_qualified);
-                }else if (data.getTestResult().equals("不合格")){
-                    ivIsQualified.setImageResource(R.drawable.ic_un_qualified);
-                }else {
-                    ivIsQualified.setVisibility(View.GONE);
-                }
+                checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
             }
+            checkResultTv.setValue(data.getTestResult());
             //样品名称 && 批号 && 登记时间
             if (null == data.getSampleId()){
                 tvSample.setContent("--");
@@ -138,9 +146,9 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
                 tvEdit.setText(StringUtil.isEmpty(data.getPending().taskDescription) ? "--" : data.getPending().taskDescription);
             }
             if (tvEdit.getText().equals("编辑")){
-                tvEdit.setTextColor(Color.parseColor("#ff1e82d2"));
+                tvEdit.setTextColor(context.getResources().getColor(R.color.status_green));
             }else {
-                tvEdit.setTextColor(Color.parseColor("#03DAC5"));
+                tvEdit.setTextColor(context.getResources().getColor(R.color.status_blue));
             }
 
 

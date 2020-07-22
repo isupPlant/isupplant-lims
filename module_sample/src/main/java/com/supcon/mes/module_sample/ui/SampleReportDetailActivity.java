@@ -259,7 +259,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
             onLoading("样品检验报告单驳回中...");
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         } else {
-            onLoadFailed("样品检验报告单提交中");
+            onLoading("样品检验报告单提交中");
         }
         entity.operateType = Constant.Transition.SUBMIT;
         entity.workFlowVar = jsonObject;

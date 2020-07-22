@@ -24,9 +24,8 @@
             android:maxEms="13"
             android:singleLine="true"
             android:tag="tvOddNumbers"
-            android:textColor="@color/fontBlack333"
+            android:textColor="@color/blue"
             android:textSize="15sp"
-            android:textStyle="bold"
             tools:text="chanpinqingjiajndan_20200606_2477777" />
 
         <RelativeLayout
@@ -80,7 +79,7 @@
             android:tag="tvInspectionRequestNo"
             app:content_color="@color/fontBlack333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_request_no"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
@@ -109,11 +108,10 @@
             android:tag="tvGoods"
             app:content_color="@color/fontBlack333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_goods"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
-
 
     </LinearLayout>
 
@@ -138,13 +136,42 @@
             android:tag="tvBatchNumber"
             app:content_color="@color/fontBlack333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_batch_number"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
 
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12">
+
+        <ImageView
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:src="@drawable/ic_check_result" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/checkResultTv"
+            android:tag="checkResultTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/lims_test_conclusion"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -178,7 +205,7 @@
                     android:tag="tvCreator"
                     app:content_color="@color/fontBlack333"
                     app:content_size="15"
-                    app:gravity="center|center_vertical"
+                    app:gravity="right|center_vertical"
                     app:key="@string/lims_creator"
                     app:key_color="@color/c_scan_666"
                     app:key_size="13" />
@@ -207,7 +234,7 @@
                     android:tag="tvInspectionDepartment"
                     app:content_color="@color/fontBlack333"
                     app:content_size="15"
-                    app:gravity="center|center_vertical"
+                    app:gravity="right|center_vertical"
                     app:key="@string/lims_inspection_department"
                     app:key_color="@color/c_scan_666"
                     app:key_size="13" />
@@ -219,6 +246,7 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="15dp"
@@ -259,7 +287,7 @@
             android:tag="tvTime"
             app:content_color="@color/fontBlack333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_time"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
@@ -267,35 +295,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_new" />
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/tvTestConclusion"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_9"
-            android:tag="tvTestConclusion"
-            app:content_color="@color/fontBlack333"
-            app:content_size="15"
-            app:gravity="center|center_vertical"
-            app:key="@string/lims_test_conclusion"
-            app:key_color="@color/c_scan_666"
-            app:key_size="13" />
-
-
-    </LinearLayout>
 
 
 </LinearLayout>

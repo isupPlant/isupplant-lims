@@ -25,9 +25,8 @@
             android:maxEms="13"
             android:singleLine="true"
             android:tag="tvOddNumbers"
-            android:textColor="@color/fontBlack333"
+            android:textColor="@color/blue"
             android:textSize="15sp"
-            android:textStyle="bold"
             tools:text="chanpinqingjiajndan_20200606_2477777" />
 
         <RelativeLayout
@@ -74,11 +73,14 @@
             android:id="@+id/tvSample"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-           android:layout_marginLeft="@dimen/dp_9"
+            android:layout_marginLeft="@dimen/dp_9"
             android:tag="tvSample"
-            app:gravity="center|center_vertical"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_sample"
-            app:key_color="@color/black_text" />
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
 
 
     </LinearLayout>
@@ -98,11 +100,14 @@
             android:id="@+id/tvMateriel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-           android:layout_marginLeft="@dimen/dp_9"
+            android:layout_marginLeft="@dimen/dp_9"
             android:tag="tvMateriel"
-            app:gravity="center|center_vertical"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_materiel"
-            app:key_color="@color/black_text" />
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
 
 
     </LinearLayout>
@@ -122,15 +127,44 @@
             android:id="@+id/tvBatchNumber"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-           android:layout_marginLeft="@dimen/dp_9"
+            android:layout_marginLeft="@dimen/dp_9"
             android:tag="tvBatchNumber"
-            app:gravity="center|center_vertical"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_batch_number"
-            app:key_color="@color/black_text" />
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
 
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:src="@drawable/ic_check_result" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/checkResultTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="checkResultTv"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/lims_test_conclusion"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
 
 
     <LinearLayout
@@ -159,11 +193,14 @@
                     android:id="@+id/tvSamplingPoint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                   android:layout_marginLeft="@dimen/dp_9"
+                    android:layout_marginLeft="@dimen/dp_9"
                     android:tag="tvSamplingPoint"
-                    app:gravity="center|center_vertical"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
                     app:key="@string/lims_sampling_point"
-                    app:key_color="@color/black_text" />
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
 
 
             </LinearLayout>
@@ -183,11 +220,14 @@
                     android:id="@+id/tvCreator"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                   android:layout_marginLeft="@dimen/dp_9"
+                    android:layout_marginLeft="@dimen/dp_9"
                     android:tag="tvCreator"
-                    app:gravity="center|center_vertical"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
                     app:key="@string/lims_creator"
-                    app:key_color="@color/black_text" />
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
 
 
             </LinearLayout>
@@ -198,7 +238,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="15dp"
-            android:paddingRight="@dimen/dp_20">
+            android:paddingRight="@dimen/dp_20"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/ivIsQualified"
@@ -211,6 +252,7 @@
 
         </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_35"
@@ -224,13 +266,16 @@
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/tvRegistrationTime"
-            android:tag="tvRegistrationTime"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-           android:layout_marginLeft="@dimen/dp_9"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvRegistrationTime"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_registration_time"
-            app:key_color="@color/black_text"
-            app:gravity="center|center_vertical"/>
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
 
     </LinearLayout>
 </LinearLayout>

@@ -406,7 +406,7 @@ public class SurverReportDetailController extends BaseViewController implements 
             baseActivity.onLoading(view+"驳回中...");
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         } else {
-            baseActivity.onLoadFailed(view+"提交中");
+            baseActivity.onLoading(view+"提交中");
         }
         entity.operateType = Constant.Transition.SUBMIT;
         entity.workFlowVar = jsonObject;
