@@ -196,10 +196,11 @@ public class SurveyReportController extends BaseViewController {
                     params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
                     break;
                 case "单据编号":
-                case "申请单号":
                     params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
                     break;
-
+                case "检验申请":
+                    params.put("INSPECT_TABLE_NO", resultEntity.result);
+                    break;
             }
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);
@@ -218,6 +219,7 @@ public class SurveyReportController extends BaseViewController {
         params.remove(Constant.BAPQuery.CODE);
         params.remove(Constant.BAPQuery.BATCH_CODE);
         params.remove(Constant.BAPQuery.TABLE_NO);
+        params.remove("INSPECT_TABLE_NO");
 
     }
 

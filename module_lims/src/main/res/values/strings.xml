@@ -10,7 +10,7 @@
     <string name="lims_materiel_name">物料名称</string>
     <string name="lims_materiel_code">物料编码</string>
     <string name="lims_document_number">单据编号</string>
-    <string name="lims_request_no">申请单号</string>
+    <string name="lims_request_no">检验申请单号</string>
     <string name="lims_product_inspection_application">产品检验申请</string>
     <string name="lims_incoming_inspection_application">来料检验申请</string>
     <string name="lims_other_inspection_application">其他检验申请</string>

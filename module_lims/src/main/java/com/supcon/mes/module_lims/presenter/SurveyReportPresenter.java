@@ -54,34 +54,38 @@ public class SurveyReportPresenter extends SurveyReportApi.Presenter {
             }else {
                 query = "otherInspReportList-pending";
             }
-
             viewCode = "QCS_5.0.0.0_inspectReport_otherInspReportList";
         }
 
-        Map<String, Object> codeParam = new HashMap();
+        Map<String, Object> firstParams = new HashMap();
+        Map<String,Object> secondParams=new HashMap<>();
+
         //从外层传进的集合中取出 检索条件 CODE | NAME | BATCH_CODE | TABLE_NO
-        if (params.containsKey(Constant.BAPQuery.CODE)) {
-            codeParam.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
-        }
-        if (params.containsKey(Constant.BAPQuery.NAME)) {
-            codeParam.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
+        if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
+            firstParams.put(Constant.BAPQuery.TABLE_NO, params.get(Constant.BAPQuery.TABLE_NO));
         }
         if (params.containsKey(Constant.BAPQuery.BATCH_CODE)){
-            codeParam.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
+            firstParams.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
         }
-        if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
-            codeParam.put(Constant.BAPQuery.TABLE_NO, params.get(Constant.BAPQuery.TABLE_NO));
+        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(firstParams);
+        if (params.containsKey(Constant.BAPQuery.CODE)) {
+            secondParams.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
+            fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(secondParams,"BASESET_MATERIALS,ID,QCS_INSPECT_REPORTS,PROD_ID"));
+        }
+        if (params.containsKey(Constant.BAPQuery.NAME)) {
+            secondParams.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
+            fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(secondParams,"BASESET_MATERIALS,ID,QCS_INSPECT_REPORTS,PROD_ID"));
         }
 
+        if (params.containsKey("INSPECT_TABLE_NO")){
+            secondParams.put(Constant.BAPQuery.TABLE_NO, params.get("INSPECT_TABLE_NO"));
+            fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(secondParams,joinInfo));
+        }
 
         //创建一个空的实体类
-        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
+
         fastQuery.modelAlias = modelAlias;
         fastQuery.viewCode = viewCode;
-        //创建fastQuery.subconds内部该有的属性并且赋值
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(codeParam, joinInfo);
-        fastQuery.subconds.add(joinSubcondEntity);
-
         Map<String, Object> map = new HashMap<>();
         map.put("fastQueryCond", fastQuery.toString());
         map.put("pageNo", pageNo);

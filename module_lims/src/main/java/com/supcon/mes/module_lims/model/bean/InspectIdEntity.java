@@ -17,6 +17,7 @@ public class InspectIdEntity extends BaseEntity {
     public BaseIntIdNameEntity checkStaffId;//请检人
     public BaseIntIdNameEntity checkDeptId;//检验部门
     public BaseIntIdNameEntity psId;//采样点
+    public BaseIntIdNameEntity vendorId;//供应商
 
     public BaseIntIdNameEntity getApplyDeptId() {
         return applyDeptId;

@@ -252,9 +252,8 @@
                     android:layout_height="wrap_content"
                     android:background="#fff8f8f8"
                     android:paddingStart="11dp"
-                    android:paddingTop="9dp"
                     android:paddingEnd="12dp"
-                    android:paddingBottom="13dp">
+                    >
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/contentView"

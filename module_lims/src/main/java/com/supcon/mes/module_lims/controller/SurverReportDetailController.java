@@ -110,6 +110,9 @@ public class SurverReportDetailController extends BaseViewController implements 
     @BindByTag("inspectCheckResultTv")
     CustomTextView inspectCheckResultTv;
 
+    @BindByTag("inspectVendorTv")
+    CustomTextView inspectVendorTv;
+
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -233,6 +236,10 @@ public class SurverReportDetailController extends BaseViewController implements 
             inspectMaterielTv.setValue(String.format("%s(%s)",entity.prodId.getName(),entity.prodId.getCode()));
             inspectUnitTv.setValue(entity.prodId.getMainUnit()!=null?entity.prodId.getMainUnit().getName():"");
         }
+        if (type==2){
+            inspectVendorTv.setVisibility(View.VISIBLE);
+            inspectVendorTv.setValue(entity.inspectId!=null && entity.inspectId.vendorId!=null?entity.inspectId.vendorId.getName():"");
+        }
         inspectBatchTv.setValue(entity.batchCode);
         inspectQuantityTv.setValue(entity.inspectId!=null && entity.inspectId.quantity!=null? Util.big2(entity.inspectId.quantity):"");
         inspectDeptTv.setValue(entity.inspectId!=null && entity.inspectId.getApplyDeptId()!=null?entity.inspectId.getApplyDeptId().getName():"");
@@ -255,7 +262,7 @@ public class SurverReportDetailController extends BaseViewController implements 
             params.put("inspectReportId",entity.id);
             params.put("pageNo",1);
             presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(params);
-            presenterRouter.create(InspectReportDetailAPI.class).getInspectReportDetails(type,entity.id);
+//            presenterRouter.create(InspectReportDetailAPI.class).getInspectReportDetails(type,entity.id);
         }
     }
 

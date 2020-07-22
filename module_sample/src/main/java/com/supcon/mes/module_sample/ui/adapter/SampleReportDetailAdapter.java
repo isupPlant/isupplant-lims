@@ -29,9 +29,9 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
 
     @Override
     protected BaseRecyclerViewHolder getViewHolder(int viewType) {
-        if (viewType==1){
+        if (viewType == 1) {
             return new InsportReportDetailViewHolder(context);
-        }else if (viewType==2){
+        } else if (viewType == 2) {
             return new StdJudgeSpecViewHolder(context);
         }
         return null;
@@ -40,14 +40,14 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
 
     @Override
     public int getItemViewType(int position, Object o) {
-        if (o instanceof InspectReportDetailEntity){
-            InspectReportDetailEntity  entity= (InspectReportDetailEntity) o;
+        if (o instanceof InspectReportDetailEntity) {
+            InspectReportDetailEntity entity = (InspectReportDetailEntity) o;
             return entity.getTypeView();
         }
         return super.getItemViewType(position, o);
     }
 
-    class InsportReportDetailViewHolder extends BaseRecyclerViewHolder<StdJudgeSpecEntity>{
+    class InsportReportDetailViewHolder extends BaseRecyclerViewHolder<StdJudgeSpecEntity> {
 
         @BindByTag("reportNameTv")
         CustomTextView reportNameTv;
@@ -60,6 +60,7 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
         @BindByTag("rangeImg")
         ImageView rangeImg;
         private boolean isExpand;
+
         public InsportReportDetailViewHolder(Context context) {
             super(context);
         }
@@ -80,26 +81,24 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
             super.initListener();
             RxView.clicks(rangeImg)
                     .throttleFirst(1000, TimeUnit.MICROSECONDS)
-                    .subscribe(o->{
-                        int position=getAdapterPosition();
-                        StdJudgeSpecEntity detailEntity= (StdJudgeSpecEntity) getItem(position);
-                        if (detailEntity.getTypeView()==1) {
-                            List<StdJudgeEntity> stdJudgeSpecEntities=detailEntity.getSpec();
-                            if (stdJudgeSpecEntities != null &&!stdJudgeSpecEntities.isEmpty()) {
+                    .subscribe(o -> {
+                        int position = getAdapterPosition();
+                        StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity) getItem(position);
+                        if (detailEntity.getTypeView() == 1) {
+                            List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getSpec();
+                            if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()) {
                                 int size = stdJudgeSpecEntities.size();
-                                if (size>0) {
-                                    if (!detailEntity.isExpand) {
-                                        for (int i = 0; i <size ; i++) {
-                                            getList().add(position+i+1,stdJudgeSpecEntities.get(i));
-                                        }
-                                    }else {
-                                        getList().removeAll(stdJudgeSpecEntities);
+                                if (!detailEntity.isExpand) {
+                                    for (int i = 0; i < size; i++) {
+                                        getList().add(position + i + 1, stdJudgeSpecEntities.get(i));
                                     }
-                                    detailEntity.isExpand=!detailEntity.isExpand;
-                                    notifyDataSetChanged();
                                 } else {
-                                    ToastUtils.show(context, "没有更多展开的内容了！");
+                                    getList().removeAll(stdJudgeSpecEntities);
                                 }
+                                detailEntity.isExpand = !detailEntity.isExpand;
+                                notifyDataSetChanged();
+                            }else {
+                                ToastUtils.show(context, "没有更多展开的内容了！");
                             }
                         }
                     });
@@ -108,22 +107,23 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
         @Override
         protected void update(StdJudgeSpecEntity data) {
 
-            reportNameTv.setValue(data.sampleComId!=null && data.sampleComId.testId!=null?data.sampleComId.testId.getName():"");
+            reportNameTv.setValue(data.sampleComId != null && data.sampleComId.testId != null ? data.sampleComId.testId.getName() : "");
             sampleComTv.setValue(data.reportName);
-            dispvalueTv.setValue(data.sampleComId!=null?data.sampleComId.dispValue:"");
+            dispvalueTv.setValue(data.sampleComId != null ? data.sampleComId.dispValue : "");
             checkResultTv.setValue(data.testResult);
-            if (data.isExpand){
+            if (data.isExpand) {
                 rangeImg.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_inspect_down_arrow);
-            }else {
+            } else {
                 rangeImg.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_inspect_up_arrow);
             }
         }
     }
 
-    class StdJudgeSpecViewHolder extends BaseRecyclerViewHolder<StdJudgeEntity>{
+    class StdJudgeSpecViewHolder extends BaseRecyclerViewHolder<StdJudgeEntity> {
 
         @BindByTag("judgeRangeTv")
         CustomTextView judgeRangeTv;
+
         public StdJudgeSpecViewHolder(Context context) {
             super(context);
         }
@@ -135,7 +135,7 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
 
         @Override
         protected void update(StdJudgeEntity data) {
-            judgeRangeTv.setKey(data.resultValue+"范围");
+            judgeRangeTv.setKey(data.resultValue + "范围");
             judgeRangeTv.setValue(data.dispValue);
         }
     }

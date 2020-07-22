@@ -7,9 +7,9 @@
     android:background="#FFF0F4FC"
     android:orientation="vertical"
     android:paddingStart="@dimen/dp_10"
-    android:paddingTop="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_5"
     android:paddingEnd="@dimen/dp_15"
-    android:paddingBottom="@dimen/dp_10">
+    android:paddingBottom="@dimen/dp_5">
 
     <com.supcon.mes.mbap.view.CustomTextView
         android:id="@+id/judgeRangeTv"
