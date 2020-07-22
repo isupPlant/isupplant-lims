@@ -45,28 +45,32 @@ public class InspectionApplicationDetailPresenter extends InspectionApplicationD
     }
 
     @Override
-    public void getInspectionDetailPtData(String type, String level, String id) {
+    public void getInspectionDetailPtData(String type, boolean isEdit, String id) {
         String dg = "";
         String datagridCode = "";
         if (type.equals(BusinessType.PleaseCheck.PRODUCT_PLEASE_CHECK)){
-            if (level.equals("one")){
+            if (isEdit){
                 dg = "data-dg1591080786501";
                 datagridCode = "QCS_5.0.0.0_inspect_manuInspectEditdg1591080786501";
-            }else if (level.equals("two")){
-                dg = "data-dg1591080792032";
-                datagridCode = "QCS_5.0.0.0_inspect_manuInspectEditdg1591080792032";
+            }else{
+                dg = "data-dg1591080031851";
+                datagridCode = "QCS_5.0.0.0_inspect_manuInspectViewdg1591080031851";
             }
         }else if (type.equals(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK)){
-            if (level.equals("one")){
-
-            }else if (level.equals("two")){
-
+            if (isEdit){
+                dg = "data-dg1587627206280";
+                datagridCode = "QCS_5.0.0.0_inspect_purchInspectEditdg1587627206280";
+            }else {
+                dg = "data-dg1588124680273";
+                datagridCode = "QCS_5.0.0.0_inspect_purchInspectViewdg1588124680273";
             }
         }else if (type.equals(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK)){
-            if (level.equals("one")){
-
-            }else if (level.equals("two")){
-
+            if (isEdit){
+                dg = "data-dg1591595570526";
+                datagridCode = "QCS_5.0.0.0_inspect_otherInspectEditdg1591595570526";
+            }else {
+                dg = "data-dg1591596373455";
+                datagridCode = "QCS_5.0.0.0_inspect_otherInspectViewdg1591596373455";
             }
         }
 
@@ -90,25 +94,5 @@ public class InspectionApplicationDetailPresenter extends InspectionApplicationD
         }));
     }
 
-    @Override
-    public void getIfUpload() {
-        mCompositeSubscription.add(BaseLimsHttpClient.getIfUpload("LIMSSample").onErrorReturn(new Function<Throwable, BAP5CommonEntity<IfUploadEntity>>() {
-            @Override
-            public BAP5CommonEntity<IfUploadEntity> apply(Throwable throwable) throws Exception {
-                BAP5CommonEntity entity = new BAP5CommonEntity();
-                entity.msg = throwable.getMessage();
-                entity.success = false;
-                return entity;
-            }
-        }).subscribe(new Consumer<BAP5CommonEntity<IfUploadEntity>>() {
-            @Override
-            public void accept(BAP5CommonEntity<IfUploadEntity> entity) throws Exception {
-                if (entity.success){
-                    getView().getIfUploadSuccess(entity.data);
-                }else {
-                    getView().getIfUploadFailed(entity.msg);
-                }
-            }
-        }));
-    }
+
 }

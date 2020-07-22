@@ -7,7 +7,7 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".ui.OtherInspectionApplicationActivity"
+            android:name=".ui.inspection.OtherInspectionApplicationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
@@ -16,6 +16,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
+        <activity android:name=".ui.inspection.OtherInspectionApplicationDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
 
 
     </application>

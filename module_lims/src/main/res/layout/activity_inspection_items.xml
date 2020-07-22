@@ -19,6 +19,8 @@
         android:background="@color/wts_bg_color" />
 
     <LinearLayout
+        android:id="@+id/llEdit"
+        android:tag="llEdit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
         android:paddingLeft="@dimen/dp_15"

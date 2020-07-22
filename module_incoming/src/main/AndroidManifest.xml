@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:supportsRtl="true">
 
-        <activity android:name=".ui.IncomingInspectionApplicationActivity"
+        <activity android:name=".ui.inspection.IncomingInspectionApplicationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
@@ -15,6 +15,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
+        <activity android:name=".ui.inspection.IncomingInspectionApplicationDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
 
     </application>
 

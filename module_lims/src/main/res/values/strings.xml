@@ -36,6 +36,8 @@
     <string name="lims_application_scheme">请检方案</string>
     <string name="lims_quality_standard_reference">质量标准参照</string>
     <string name="lims_sampling_point_reference">采样点参照</string>
+    <string name="lims_supplier_reference">供应商参照</string>
+    <string name="lims_inspection_items">检验项目</string>
 
 
     

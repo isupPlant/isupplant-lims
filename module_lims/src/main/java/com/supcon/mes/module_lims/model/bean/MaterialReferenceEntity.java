@@ -18,7 +18,7 @@ public class MaterialReferenceEntity extends BaseEntity {
     private Long id;
     private BaseIdValueEntity isBatch;
     private Boolean isValidityManage;
-    private BaseIntIdNameEntity mainUnit;
+    private BaseSystemBackEntity mainUnit;
     private BaseIntIdNameEntity materialClass;
     private String model;
     private String name;
@@ -80,11 +80,11 @@ public class MaterialReferenceEntity extends BaseEntity {
         isValidityManage = validityManage;
     }
 
-    public BaseIntIdNameEntity getMainUnit() {
+    public BaseSystemBackEntity getMainUnit() {
         return mainUnit;
     }
 
-    public void setMainUnit(BaseIntIdNameEntity mainUnit) {
+    public void setMainUnit(BaseSystemBackEntity mainUnit) {
         this.mainUnit = mainUnit;
     }
 

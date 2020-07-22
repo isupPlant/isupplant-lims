@@ -24,8 +24,9 @@ public interface BusinessType {
     }
 
     interface WorkType{
-        String PRODUCT_INSPECT_EDIT = "manuInspectEdit";
-        String PRODUCT_INSPECT_VIEW = "manuInspectView";
+        String PRODUCT_INSPECT_EDIT = "InspectEdit";
+        String PRODUCT_INSPECT_VIEW = "InspectView";
+
 
         //otherInspectEdit
         //otherInspectView

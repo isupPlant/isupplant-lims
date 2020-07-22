@@ -20,6 +20,7 @@ public class QualityStandardReferenceEntity extends BaseEntity {
     private Boolean valid;
     private Integer version;
     private boolean isSelect;
+    private boolean needRemove;
 
     public Map getAttrMap() {
         return attrMap;
@@ -99,5 +100,13 @@ public class QualityStandardReferenceEntity extends BaseEntity {
 
     public void setSelect(boolean select) {
         isSelect = select;
+    }
+
+    public boolean isNeedRemove() {
+        return needRemove;
+    }
+
+    public void setNeedRemove(boolean needRemove) {
+        this.needRemove = needRemove;
     }
 }

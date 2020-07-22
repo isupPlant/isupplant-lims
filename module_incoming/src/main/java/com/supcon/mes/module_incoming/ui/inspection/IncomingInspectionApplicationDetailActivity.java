@@ -1,4 +1,4 @@
-package com.supcon.mes.module_product.ui.inspection;
+package com.supcon.mes.module_incoming.ui.inspection;
 
 import android.view.View;
 import android.widget.TextView;
@@ -9,27 +9,26 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_incoming.R;
 import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailApi;
 import com.supcon.mes.module_lims.presenter.InspectionApplicationDetailPresenter;
-import com.supcon.mes.module_product.R;
 
 /**
  * author huodongsheng
- * on 2020/7/13
- * class name 产品检验申请详情
+ * on 2020/7/21
+ * class name
  */
-@Router(value = Constant.AppCode.LIMS_ProductApplicationInspectionDetail)
+@Router(value = Constant.AppCode.LIMS_IncomingApplicationInspectionDetail)
 @Presenter(value = {InspectionApplicationDetailPresenter.class})
 @Controller(value = {InspectionApplicationDetailController.class})
-public class ProductInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailApi.View{
+public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailApi.View{
     private String id;
     private String pendingId;
 
@@ -37,8 +36,6 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
     TextView titleText;
     @BindByTag("ctSupplier")
     CustomTextView ctSupplier;
-
-
 
     @Override
     protected int getLayoutID() {
@@ -56,8 +53,8 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_product_inspection_application));
-        ctSupplier.setVisibility(View.GONE);
+        titleText.setText(getString(R.string.lims_incoming_inspection_application));
+        ctSupplier.setVisibility(View.VISIBLE);
 
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
@@ -87,7 +84,7 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
             @Override
             public void requestPtClick(boolean isEdit) {
                 //请求pt
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailPtData(BusinessType.PleaseCheck.PRODUCT_PLEASE_CHECK,isEdit,id);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailPtData(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK,isEdit,id);
             }
         });
     }
@@ -107,5 +104,4 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
     public void getInspectionDetailPtDataFailed(String errorMsg) {
         refreshController.refreshComplete();
     }
-
 }

@@ -1,7 +1,9 @@
 package com.supcon.mes.module_lims.presenter;
 
+import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
-import com.supcon.mes.module_lims.model.contract.BusinessTypeApi;
+import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
+import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyApi;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import java.util.HashMap;
@@ -15,7 +17,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/14
  * class name  业务类型参照 Presenter
  */
-public class BusinessTypeReferencePresenter extends BusinessTypeApi.Presenter {
+public class InspectionDetailReadyPresenter extends InspectionDetailReadyApi.Presenter {
 
     @Override
     public void getBusinessTypeList() {
@@ -40,6 +42,28 @@ public class BusinessTypeReferencePresenter extends BusinessTypeApi.Presenter {
                     getView().getBusinessTypeListSuccess(entity);
                 }else {
                     getView().getBusinessTypeListFailed(entity.msg);
+                }
+            }
+        }));
+    }
+
+    @Override
+    public void getIfUpload() {
+        mCompositeSubscription.add(BaseLimsHttpClient.getIfUpload("LIMSSample").onErrorReturn(new Function<Throwable, BAP5CommonEntity<IfUploadEntity>>() {
+            @Override
+            public BAP5CommonEntity<IfUploadEntity> apply(Throwable throwable) throws Exception {
+                BAP5CommonEntity entity = new BAP5CommonEntity();
+                entity.msg = throwable.getMessage();
+                entity.success = false;
+                return entity;
+            }
+        }).subscribe(new Consumer<BAP5CommonEntity<IfUploadEntity>>() {
+            @Override
+            public void accept(BAP5CommonEntity<IfUploadEntity> entity) throws Exception {
+                if (entity.success){
+                    getView().getIfUploadSuccess(entity.data);
+                }else {
+                    getView().getIfUploadFailed(entity.msg);
                 }
             }
         }));
