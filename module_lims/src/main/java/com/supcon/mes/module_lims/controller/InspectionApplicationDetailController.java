@@ -668,7 +668,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 }
             }
 
-        } else if (selectDataEvent.getEntity() instanceof PleaseCheckSchemeEntity) {
+        } else if (selectDataEvent.getEntity() instanceof PleaseCheckSchemeEntity) {  //请检方案
             PleaseCheckSchemeEntity pleaseCheckSchemeEntity = (PleaseCheckSchemeEntity) selectDataEvent.getEntity();
             if (selectDataEvent.getSelectTag().equals("pleaseCheckScheme")) {
                 BaseLongIdNameEntity entity = new BaseLongIdNameEntity();
