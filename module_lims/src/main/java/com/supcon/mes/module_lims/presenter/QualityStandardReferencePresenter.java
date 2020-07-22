@@ -58,7 +58,9 @@ public class QualityStandardReferencePresenter extends QualityStandardReferenceA
         if (params.size()>0){
             map.put("fastQueryCond",fastQuery.toString());
         }
-        map.put("customCondition",new HashMap<String,Object>().put("analySampleId",id));
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("analySampleId",id);
+        map.put("customCondition",conditionMap);
         map.put("pageNo",pageNo);
         map.put("paging",true);
         map.put("pageSize",10);

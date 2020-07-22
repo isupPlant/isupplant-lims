@@ -1,9 +1,15 @@
 package com.supcon.mes.module_lims.model.network;
 
 import com.app.annotation.apt.ApiFactory;
+import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
+import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
+
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
+
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
@@ -13,13 +19,22 @@ import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionItemsListEntity;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
+import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeListEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
+
+import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
+import com.supcon.mes.module_lims.model.bean.SupplierReferenceEntity;
+import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
+
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
+
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
+import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 
 import java.util.Map;
 
@@ -30,7 +45,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+
+
 import retrofit2.http.Url;
+
 
 /**
  * author huodongsheng
@@ -113,6 +131,39 @@ public interface ApiService {
 
 
     /**
+     * 请检方案参照列表接口
+     * @param map
+     * @return
+     */
+    @POST("/msService/LIMSBasic/inspectProj/inspectProj/inspectProjRef-query")
+    Flowable<PleaseCheckSchemeListEntity> getPleaseCheckSchemeList(@Body Map<String, Object> map);
+
+
+    /**
+     * 供应商参照列表接口
+     * @param map
+     * @return
+     */
+    @POST("/msService/BaseSet/cooperate/cooperate/cmcPartRef-query")
+    Flowable<SupplierReferenceListEntity> getSupplierReferenceList(@Body Map<String, Object> map);
+
+    /**
+     * 质量标准所对应检验项目接口(编辑)
+     * @param map
+     * @return
+     */
+    @POST("/msService/QCS/inspect/inspectCom/getInspectComDataByStdVerId")
+    Flowable<InspectionItemsListEntity> getInspectionItemsList(@Body Map<String, Object> map);
+
+    /**
+     * 质量标准所对应检验项目接口(查看)
+     * @param map
+     * @return
+     */
+    @POST("/msService/QCS/inspect/inspectCom/getInspectComDataByInspectStdId")
+    Flowable<InspectionItemsListEntity> getInspectComDataByInspectStdId(@Body Map<String, Object> map);
+
+    /**
      * 检验申请详情 获取表头数据
      * @param id
      * @param paddingId
@@ -143,6 +194,27 @@ public interface ApiService {
     @GET("/msService/LIMSBasic/utils/utils/judgeModuleExistsByCode")
     Flowable<BAP5CommonEntity<IfUploadEntity>> getIfUpload(@Query("moduleCode")String moduleCode);
 
+
+
+    @POST("/msService/LIMSBasic/analySample/analyProdStd/getAvailableStdVersByProductId")
+    Flowable<BAP5CommonEntity<AvailableStdEntity>> getAvailableStdId(@QueryMap Map<String ,Object> map);
+
+
+    /**
+     * 通过物料id查询默认质量标准
+     * @param map
+     * @return
+     */
+    @POST("/msService/LIMSBasic/analySample/analySample/getDefaultPropertyByProductId")
+    Flowable<BAP5CommonEntity<TemporaryQualityStandardEntity>> getDefaultStandardById(@Body Map<String, Object> map);
+
+    /**
+     * 根据质量标准id 获取对应的检验项目
+     * @param stdVerId
+     * @return
+     */
+    @GET("/msService/LIMSBasic/qualityStd/stdVerCom/getStdVerComsByStdVerId")
+    Flowable<StdVerComIdListEntity> getDefaultItems(@Query("stdVerId") String stdVerId);
 
     /**
      * 获取质量检验中检验报告单pt数据

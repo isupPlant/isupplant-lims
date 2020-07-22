@@ -19,7 +19,6 @@
         android:background="@color/wts_bg_color" />
 
     <LinearLayout
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
         android:paddingLeft="@dimen/dp_15"

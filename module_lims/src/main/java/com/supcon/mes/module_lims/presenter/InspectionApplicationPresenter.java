@@ -1,5 +1,6 @@
 package com.supcon.mes.module_lims.presenter;
 
+import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;

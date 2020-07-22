@@ -37,6 +37,8 @@
     <string name="lims_application_scheme">请检方案</string>
     <string name="lims_quality_standard_reference">质量标准参照</string>
     <string name="lims_sampling_point_reference">采样点参照</string>
+    <string name="lims_supplier_reference">供应商参照</string>
+    <string name="lims_inspection_items">检验项目</string>
     <string name="lims_busitype">业务类型</string>
     <string name="lims_inspect_quantity">请检数量</string>
     <string name="lims_material_unit">计量单位</string>
@@ -50,4 +52,5 @@
     <string name="lims_test_result">检验结论</string>
     <string name="lims_range">范围</string>
     <string name="lims_sample_com">检测分项</string>
+
 </resources>

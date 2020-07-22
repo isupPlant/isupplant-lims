@@ -1,6 +1,7 @@
 package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 
 /**
  * author huodongsheng
@@ -11,11 +12,13 @@ public class InspectionDetailPtEntity extends BaseEntity {
     private Long id;
     private String inspStdVerCom;
     private InspectIdEntity inspectId;
+    private BaseLongIdNameEntity inspectProjId;
     private Integer sort;
     private StdVerIdEntity stdVerId;
-    private InspectIdEntity inspectStdId;
-    private StdVerComIdEntity stdVerComId;
+//    private InspectIdEntity inspectStdId;
+//    private StdVerComIdEntity stdVerComId;
     private Integer version;
+    private boolean isSelect = false;
 
     public Long getId() {
         return id;
@@ -41,6 +44,14 @@ public class InspectionDetailPtEntity extends BaseEntity {
         this.inspectId = inspectId;
     }
 
+    public BaseLongIdNameEntity getInspectProjId() {
+        return inspectProjId;
+    }
+
+    public void setInspectProjId(BaseLongIdNameEntity inspectProjId) {
+        this.inspectProjId = inspectProjId;
+    }
+
     public Integer getSort() {
         return sort;
     }
@@ -57,21 +68,21 @@ public class InspectionDetailPtEntity extends BaseEntity {
         this.stdVerId = stdVerId;
     }
 
-    public InspectIdEntity getInspectStdId() {
-        return inspectStdId;
-    }
-
-    public void setInspectStdId(InspectIdEntity inspectStdId) {
-        this.inspectStdId = inspectStdId;
-    }
-
-    public StdVerComIdEntity getStdVerComId() {
-        return stdVerComId;
-    }
-
-    public void setStdVerComId(StdVerComIdEntity stdVerComId) {
-        this.stdVerComId = stdVerComId;
-    }
+//    public InspectIdEntity getInspectStdId() {
+//        return inspectStdId;
+//    }
+//
+//    public void setInspectStdId(InspectIdEntity inspectStdId) {
+//        this.inspectStdId = inspectStdId;
+//    }
+//
+//    public StdVerComIdEntity getStdVerComId() {
+//        return stdVerComId;
+//    }
+//
+//    public void setStdVerComId(StdVerComIdEntity stdVerComId) {
+//        this.stdVerComId = stdVerComId;
+//    }
 
     public Integer getVersion() {
         return version;
@@ -79,5 +90,13 @@ public class InspectionDetailPtEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

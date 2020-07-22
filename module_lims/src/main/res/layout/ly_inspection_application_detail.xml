@@ -203,7 +203,7 @@
         android:id="@+id/ceMaterielNum"
         style="@style/yh_custom_view_horizontal_style"
         android:tag="ceMaterielNum"
-        app:content_color="@color/font_333333"
+        app:text_color="@color/font_333333"
         app:key="数量"
         app:edit_hint="请输入数量"
         app:edit_hint_color="#A9A9A9"
@@ -327,7 +327,9 @@
         android:background="#fff8f8f8">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/contentView"
+            android:id="@+id/recyclerView"
+            android:tag="recyclerView"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -1,6 +1,7 @@
-package com.supcon.mes.module_incoming.ui;
+package com.supcon.mes.module_other.ui.inspection;
 
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +14,14 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.module_incoming.R;
 import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.controller.InspectionApplicationController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
@@ -29,6 +31,7 @@ import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionApplicationApi;
 import com.supcon.mes.module_lims.presenter.InspectionApplicationPresenter;
 import com.supcon.mes.module_lims.ui.adapter.InspectionApplicationAdapter;
+import com.supcon.mes.module_other.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,13 +39,14 @@ import java.util.Map;
 /**
  * author huodongsheng
  * on 2020/7/2
- * class name 来料检验申请列表
+ * class name 其他检验申请列表
  */
 
-@Router(Constant.AppCode.LIMS_IncomingApplicationInspection)
+@Router(Constant.AppCode.LIMS_OtherApplicationInspection)
 @Presenter(value = {InspectionApplicationPresenter.class})
 @Controller(value = {InspectionApplicationController.class})
-public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationApi.View {
+public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationApi.View {
+
     private InspectionApplicationAdapter adapter;
     private boolean isWhole = true;
     private Map<String, Object> params = new HashMap<>();
@@ -55,7 +59,7 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
 
     @Override
     protected int getLayoutID() {
-        return R.layout.activity_incoming_inspection_application;
+        return R.layout.activity_other_inspection_application;
     }
 
     @Override
@@ -63,7 +67,6 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
         adapter = new InspectionApplicationAdapter(context);
         return adapter;
     }
-
 
     @Override
     protected void onInit() {
@@ -78,7 +81,7 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_incoming_inspection_application));
+        titleText.setText(getString(R.string.lims_other_inspection_application));
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -118,7 +121,19 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationApi.class).getInspectionApplicationList(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK, isWhole, pageIndex, params);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationApi.class).getInspectionApplicationList(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK, isWhole, pageIndex, params);
+            }
+        });
+
+        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+            @Override
+            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                if (action == 0){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id",adapter.getItem(position).getId()+"");
+                    bundle.putString("pendingId",adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id+"");
+                    IntentRouter.go(context,Constant.AppCode.LIMS_OtherApplicationInspectionDetail,bundle);
+                }
             }
         });
     }

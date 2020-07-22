@@ -17,6 +17,7 @@
     <com.supcon.common.view.ptr.PtrFrameLayout
         android:id="@+id/refreshFrameLayout"
         android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginBottom="@dimen/dp_50"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:tag="refreshFrameLayout"
@@ -25,7 +26,7 @@
         core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
         core_ptr:ptr_resistance="1.7">
 
-        <android.support.v4.widget.NestedScrollView
+        <ScrollView
             android:id="@+id/ns_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +38,7 @@
             <include layout="@layout/ly_inspection_application_detail" />
 
 
-        </android.support.v4.widget.NestedScrollView>
+        </ScrollView>
 
     </com.supcon.common.view.ptr.PtrFrameLayout>
 

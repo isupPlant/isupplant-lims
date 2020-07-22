@@ -5,6 +5,7 @@ import com.supcon.mes.middleware.model.bean.DepartmentEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.PositionEntity;
 import com.supcon.mes.middleware.model.bean.StaffEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
 import java.math.BigDecimal;
 
@@ -45,6 +46,7 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
     private BusiTypeIdEntity busiTypeId;
     private CheckStateEntity checkState;
     private TableTypeIdEntity tableTypeId;
+    private VendorIdEntity vendorId;
     private ProdIdEntity prodId;
     private PsIdEntity psId;
     private BigDecimal quantity;
@@ -56,6 +58,7 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
     private Long applyTime;
     private PendingEntity pending;
     private CompanyEntity company;
+    private SystemCodeEntity sourceType;
 
 
     public String getBapSearchId() {
@@ -306,6 +309,14 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
         this.tableTypeId = tableTypeId;
     }
 
+    public VendorIdEntity getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(VendorIdEntity vendorId) {
+        this.vendorId = vendorId;
+    }
+
     public ProdIdEntity getProdId() {
         return prodId;
     }
@@ -392,5 +403,13 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public SystemCodeEntity getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(SystemCodeEntity sourceType) {
+        this.sourceType = sourceType;
     }
 }

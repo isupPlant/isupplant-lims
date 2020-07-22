@@ -17,8 +17,6 @@ public class StdVerIdEntity extends BaseEntity {
     private String busiVersion;
     private StdIdEntity stdId;
 
-
-
     public Map getAttrMap() {
         return attrMap;
     }

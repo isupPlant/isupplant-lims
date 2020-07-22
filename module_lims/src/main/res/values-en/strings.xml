@@ -36,7 +36,9 @@
     <string name="lims_executive_standards">Executive_standards</string>
     <string name="lims_application_scheme">Application_scheme</string>
     <string name="lims_quality_standard_reference">Quality_standard_reference</string>
-    <string name="lims_sampling_point_reference">ampling_point_reference</string>
+    <string name="lims_sampling_point_reference">Sampling_point_reference</string>
+    <string name="lims_supplier_reference">Supplier_reference</string>
+    <string name="lims_inspection_items">Inspection_items</string>
     <string name="lims_busitype">Business type</string>
     <string name="lims_inspect_quantity">Inspection_quantity</string>
     <string name="lims_material_unit">Material_unit</string>

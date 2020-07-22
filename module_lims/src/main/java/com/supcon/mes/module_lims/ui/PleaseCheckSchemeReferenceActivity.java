@@ -1,4 +1,4 @@
-package com.supcon.mes.module_other.ui;
+package com.supcon.mes.module_lims.ui;
 
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
@@ -13,61 +13,67 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.module_lims.constant.BusinessType;
-import com.supcon.mes.module_lims.controller.InspectionApplicationController;
+import com.supcon.mes.module_lims.R;
+import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
-import com.supcon.mes.module_lims.listener.OnTabClickListener;
-import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
-import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionApplicationApi;
-import com.supcon.mes.module_lims.presenter.InspectionApplicationPresenter;
-import com.supcon.mes.module_lims.ui.adapter.InspectionApplicationAdapter;
-import com.supcon.mes.module_other.R;
+import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeEntity;
+import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeListEntity;
+import com.supcon.mes.module_lims.model.contract.PleaseCheckSchemeReferenceApi;
+import com.supcon.mes.module_lims.presenter.PleaseCheckSchemeReferencePresenter;
+import com.supcon.mes.module_lims.ui.adapter.PleaseCheckSchemeAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * author huodongsheng
- * on 2020/7/2
- * class name 其他检验申请列表
+ * on 2020/7/20
+ * class name  请检方案参照页面
  */
-
-@Router(Constant.AppCode.LIMS_OtherApplicationInspection)
-@Presenter(value = {InspectionApplicationPresenter.class})
-@Controller(value = {InspectionApplicationController.class})
-public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationApi.View {
-
-    private InspectionApplicationAdapter adapter;
-    private boolean isWhole = true;
-    private Map<String, Object> params = new HashMap<>();
-
-    @BindByTag("titleText")
-    TextView titleText;
-
+@Router(value = Constant.AppCode.LIMS_InspectProjRef)
+@Controller(value = {ReferenceController.class})
+@Presenter(value = {PleaseCheckSchemeReferencePresenter.class})
+public class PleaseCheckSchemeReferenceActivity extends BaseRefreshRecyclerActivity<PleaseCheckSchemeEntity> implements PleaseCheckSchemeReferenceApi.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
+    @BindByTag("titleText")
+
+    TextView titleText;
+    private PleaseCheckSchemeAdapter adapter;
+
+    private String selectTag;
+    private String id;
+
+    private Map<String, Object> params = new HashMap<>();
     @Override
-    protected int getLayoutID() {
-        return R.layout.activity_other_inspection_application;
+    protected IListAdapter<PleaseCheckSchemeEntity> createAdapter() {
+        adapter = new PleaseCheckSchemeAdapter(context);
+        return adapter;
     }
 
     @Override
-    protected IListAdapter createAdapter() {
-        adapter = new InspectionApplicationAdapter(context);
-        return adapter;
+    protected int getLayoutID() {
+        return R.layout.activity_please_check_scheme_reference;
     }
 
     @Override
     protected void onInit() {
         super.onInit();
+        getController(ReferenceController.class).setSearchTypeList("请检方案");
+
+        selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
+        id = getIntent().getStringExtra("id");
 
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -78,7 +84,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_other_inspection_application));
+        titleText.setText(getString(R.string.lims_application_scheme));
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -96,18 +102,21 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
         goRefresh();
     }
 
+
     @Override
     protected void initListener() {
         super.initListener();
-        getController(InspectionApplicationController.class).setTabClickListener(new OnTabClickListener() {
+        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
-            public void onTabClick(boolean isAll) {
-                isWhole = isAll;
-                goRefresh();
+            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                if (action == 0){
+                    EventBus.getDefault().post(new SelectDataEvent<>(adapter.getList().get(position),selectTag));
+                    finish();
+                }
             }
         });
 
-        getController(InspectionApplicationController.class).setSearchOverListener(new OnSearchOverListener() {
+        getController(ReferenceController.class).setSearchOverListener(new OnSearchOverListener() {
             @Override
             public void onSearchOverClick(Map<String, Object> map) {
                 params.clear();
@@ -115,27 +124,27 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
                 goRefresh();
             }
         });
+
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationApi.class).getInspectionApplicationList(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK, isWhole, pageIndex, params);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.PleaseCheckSchemeReferenceApi.class).getPleaseCheckSchemeList(pageIndex,id,params);
             }
         });
     }
 
-    private void goRefresh() {
-        refreshListController.refreshBegin();
-    }
-
-
     @Override
-    public void getInspectionApplicationListSuccess(InspectionApplicationListEntity entity) {
+    public void getPleaseCheckSchemeListSuccess(PleaseCheckSchemeListEntity entity) {
         refreshListController.refreshComplete(entity.data.result);
     }
 
     @Override
-    public void getInspectionApplicationListFailed(String errorMsg) {
+    public void getPleaseCheckSchemeListFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    private void goRefresh() {
+        refreshListController.refreshBegin();
     }
 }

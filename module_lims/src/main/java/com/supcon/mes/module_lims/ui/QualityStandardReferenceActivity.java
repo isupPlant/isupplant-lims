@@ -21,18 +21,27 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
+import com.supcon.mes.module_lims.event.QualityStandardEvent;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
 import com.supcon.mes.module_lims.model.contract.QualityStandardReferenceApi;
 import com.supcon.mes.module_lims.presenter.QualityStandardReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.QualityStandardReferenceAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +52,7 @@ import io.reactivex.functions.Consumer;
  * on 2020/7/10
  * class name 质量标准参照页面
  */
-@Router(value = "LIMS_QualityStdVerRef")
+@Router(value = Constant.AppCode.LIMS_QualityStdVerRef)
 @Presenter(value = {QualityStandardReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
 public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivity<QualityStandardReferenceEntity> implements QualityStandardReferenceApi.View {
@@ -60,12 +69,19 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
     @BindByTag("titleText")
     TextView titleText;
 
+    @BindByTag("btn_confirm")
+    TextView btn_confirm;
+
     private QualityStandardReferenceAdapter adapter;
 
     private Map<String, Object> params = new HashMap<>();
+    private List<InspectionDetailPtEntity> list;
+    private List<QualityStandardReferenceEntity> transmitValueList = new ArrayList<>();
+    private List<QualityStandardReferenceEntity> submitList = new ArrayList<>();
 
     private boolean isSelectAll = false;
     private String id = "";
+    private String selectTag = "";
 
     @Override
     protected IListAdapter<QualityStandardReferenceEntity> createAdapter() {
@@ -93,8 +109,9 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_quality_standard_reference));
-
+        list = (List<InspectionDetailPtEntity>) getIntent().getSerializableExtra("existItem");
         id = getIntent().getStringExtra("id");
+        selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -167,6 +184,51 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
             }
         });
 
+        //点击确定
+        RxView.clicks(btn_confirm)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        transmitValueList.clear();
+                        List<QualityStandardReferenceEntity> myList = adapter.getList();
+                        for (int i = 0; i < myList.size(); i++) {
+                            if (myList.get(i).isSelect()){
+                                transmitValueList.add(myList.get(i));
+                            }
+                        }
+
+                        if (transmitValueList.size() > 0){
+                            int k = 0;
+                            for (int i = 0; i < transmitValueList.size(); i++) {
+                                for (int j = 0; j < list.size(); j++) {
+                                    if (transmitValueList.get(i).getId().equals(list.get(j).getStdVerId().getId())){
+                                        transmitValueList.get(i).setNeedRemove(true);
+                                        k++;
+                                    }
+                                }
+                            }
+                            if (k > 0){
+                                ToastUtils.show(context,"添加成功!已过滤重复数据");
+                            }else {
+                                ToastUtils.show(context,"添加成功!");
+                            }
+                            submitList.clear();
+                            for (int i = 0; i < transmitValueList.size(); i++) {
+                                if (!transmitValueList.get(i).isNeedRemove()){
+                                    submitList.add(transmitValueList.get(i));
+                                }
+                            }
+                            EventBus.getDefault().post(new SelectDataEvent<>(new QualityStandardEvent(submitList),selectTag));
+                            finish();
+                        }else {
+                            ToastUtils.show(context,"请至少选择一条数据!");
+                        }
+
+
+                    }
+                });
+
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
@@ -183,6 +245,15 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
     public void getQualityStandardReferenceListSuccess(QualityStandardReferenceListEntity entity) {
         if (entity.data.result.size() > 0){
             setSelectAllStyle(false);
+        }
+        if (null != list && list.size() > 0){
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = 0; j < entity.data.result.size(); j++) {
+                    if (list.get(i).getStdVerId().getId().equals(entity.data.result.get(j).getId())){
+                        entity.data.result.get(j).setSelect(true);
+                    }
+                }
+            }
         }
         refreshListController.refreshComplete(entity.data.result);
     }
