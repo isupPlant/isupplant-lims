@@ -1,6 +1,7 @@
 package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -108,6 +109,11 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
             reportNameTv.setValue(data.reportName);
             dispvalueTv.setValue(data.dispValue);
             checkResultTv.setValue(data.checkResult);
+            if ("不合格".equals(data.checkResult)){
+                checkResultTv.setValueColor(Color.parseColor("#F70606"));
+            }else {
+                checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+            }
             if (data.isExpand) {
                 rangeImg.setImageResource(R.drawable.ic_inspect_down_arrow);
             } else {

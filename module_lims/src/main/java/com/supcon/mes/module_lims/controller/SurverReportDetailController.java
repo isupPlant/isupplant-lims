@@ -1,12 +1,15 @@
 package com.supcon.mes.module_lims.controller;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -35,6 +38,7 @@ import com.supcon.mes.middleware.controller.WorkFlowViewController;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
 import com.supcon.mes.module_lims.model.api.StdJudgeSpecAPI;
 import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
@@ -71,8 +75,8 @@ public class SurverReportDetailController extends BaseViewController implements 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
 
-    @BindByTag("inspectNoTv")
-    TextView inspectNoTv;
+    @BindByTag("inspectRequestNo")
+    CustomTextView inspectRequestNo;
     @BindByTag("inspectbusiTypeTv")
     CustomTextView inspectbusiTypeTv;
 
@@ -119,6 +123,14 @@ public class SurverReportDetailController extends BaseViewController implements 
     @BindByTag("customWorkFlowView")
     CustomWorkFlowView customWorkFlowView;
 
+    @BindByTag("imageUpDown")
+    ImageView imageUpDown;
+    @BindByTag("expandTv")
+    TextView expandTv;
+
+    @BindByTag("ll_other_info")
+    LinearLayout ll_other_info;
+
     InspectReportDetailAdapter adapter;
     GetPowerCodeController powerCodeController;
     WorkFlowViewController workFlowViewController;
@@ -150,6 +162,7 @@ public class SurverReportDetailController extends BaseViewController implements 
     }
 
     private int operate=-1;
+    private boolean expand=false;
     @Override
     public void initListener() {
         super.initListener();
@@ -159,6 +172,21 @@ public class SurverReportDetailController extends BaseViewController implements 
                     baseActivity.back();
                 });
 
+
+        RxView.clicks(imageUpDown)
+                .throttleFirst(1000,TimeUnit.MICROSECONDS)
+                .subscribe(o->{
+                    expand=!expand;
+                    if (expand){
+                        expandTv.setText("收起全部");
+                        ll_other_info.setVisibility(View.VISIBLE);
+                        imageUpDown.setImageResource(R.drawable.ic_drop_up);
+                    }else {
+                        ll_other_info.setVisibility(View.GONE);
+                        imageUpDown.setImageResource(R.drawable.ic_drop_down);
+                        expandTv.setText("展开全部");
+                    }
+                });
         customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
@@ -229,7 +257,7 @@ public class SurverReportDetailController extends BaseViewController implements 
      */
     private void setInspectHead(InspectHeadReportEntity entity){
         this.reportEntity=entity;
-        inspectNoTv.setText(entity.inspectId!=null?entity.inspectId.getTableNo():"");
+        inspectRequestNo.setValue(entity.inspectId!=null?entity.inspectId.getTableNo():"");
         inspectbusiTypeTv.setValue(entity.busiTypeId!=null?entity.busiTypeId.getName():"");
         inspectPsTv.setValue(entity.inspectId!=null && entity.inspectId.psId!=null?entity.inspectId.psId.getName():"");
         if (entity.prodId!=null){
@@ -248,6 +276,11 @@ public class SurverReportDetailController extends BaseViewController implements 
         inspectCheckTimeTv.setValue(entity.checkTime!=null? DateUtil.dateTimeFormat(entity.checkTime):"");
         inspectQualityStdTv.setValue(entity.stdVerId!=null ?entity.stdVerId.getName():"");
         inspectCheckResultTv.setValue(entity.checkResult);
+        if ("不合格".equals(entity.checkResult)){
+            inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
+        }else {
+            inspectCheckResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+        }
     }
 
     /**

@@ -1,12 +1,15 @@
 package com.supcon.mes.module_sample.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -19,6 +22,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
+import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
@@ -71,7 +75,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     @BindByTag("titleText")
     TextView titleText;
     @BindByTag("sampleTv")
-    TextView sampleTv;
+    CustomTextView sampleTv;
     @BindByTag("inspectPsTv")
     CustomTextView inspectPsTv;
     @BindByTag("qualityStdTv")
@@ -93,7 +97,13 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
 
     @BindByTag("contentView")
     RecyclerView contentView;
+    @BindByTag("imageUpDown")
+    ImageView imageUpDown;
+    @BindByTag("expandTv")
+    TextView expandTv;
 
+    @BindByTag("ll_other_info")
+    LinearLayout ll_other_info;
     @BindByTag("customWorkFlowView")
     CustomWorkFlowView customWorkFlowView;
     SurveyReportEntity reportEntity;
@@ -119,6 +129,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     @Override
     protected void initView() {
         super.initView();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("样品检验报告单");
         contentView.setLayoutManager(new LinearLayoutManager(context));
 //        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
@@ -126,7 +137,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         adapter=new SampleReportDetailAdapter(context);
         contentView.setAdapter(adapter);
     }
-
+    private boolean expand=false;
     @Override
     protected void initListener() {
         super.initListener();
@@ -140,6 +151,21 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         }else {
             getSampleReportByPending();
         }
+        RxView.clicks(imageUpDown)
+                .throttleFirst(1000,TimeUnit.MICROSECONDS)
+                .subscribe(o->{
+                    expand=!expand;
+                    if (expand){
+                        expandTv.setText("收起全部");
+                        ll_other_info.setVisibility(View.VISIBLE);
+                        imageUpDown.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_drop_up);
+                    }else {
+                        ll_other_info.setVisibility(View.GONE);
+                        imageUpDown.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_drop_down);
+                        expandTv.setText("展开全部");
+                    }
+                });
+
 
         customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
@@ -195,7 +221,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
 
     private void setSampleReport(SurveyReportEntity sampleReport){
         if (sampleReport.getSampleId()!=null){
-            sampleTv.setText(String.format("%s(%s)",sampleReport.getSampleId().getName(),sampleReport.getSampleId().getCode()));
+            sampleTv.setValue(String.format("%s(%s)",sampleReport.getSampleId().getName(),sampleReport.getSampleId().getCode()));
             inspectPsTv.setValue(sampleReport.getSampleId().getPsId()!=null?sampleReport.getSampleId().getPsId().getName():"");
             registerTimeTv.setValue(sampleReport.getSampleId().getRegisterTime()!=null? DateUtil.dateTimeFormat(sampleReport.getSampleId().getRegisterTime()):"");
             checkTimeTv.setValue(sampleReport.getSampleId().testTime!=null?DateUtil.dateTimeFormat(sampleReport.getSampleId().testTime):"");
@@ -208,6 +234,11 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         executeStdTv.setValue(sampleReport.getStdVerId()!=null && sampleReport.getStdVerId().getStdId()!=null?sampleReport.getStdVerId().getStdId().getStandard():"");
         versionNumberTv.setValue(sampleReport.getStdVerId()!=null?sampleReport.getStdVerId().getBusiVersion():"");
         inspectCheckResultTv.setValue(sampleReport.getTestResult());
+        if ("不合格".equals(sampleReport.getTestResult())){
+            inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
+        }else {
+            inspectCheckResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+        }
 
     }
     private void doSave(WorkFlowVar workFlowVar) {

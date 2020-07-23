@@ -112,7 +112,7 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
                 tvSample.setContent("--");
                 tvBatchNumber.setContent("--");
             }else {
-                tvSample.setContent(StringUtil.isEmpty(data.getSampleId().getName()) ? "--" : data.getSampleId().getName());
+                tvSample.setContent(String.format("%s(%S)",StringUtil.isEmpty(data.getSampleId().getName()) ? "--" : data.getSampleId().getName(),StringUtil.isEmpty(data.getSampleId().getName()) ? "--" : data.getSampleId().getCode()));
                 tvBatchNumber.setContent(StringUtil.isEmpty(data.getSampleId().getBatchCode()) ? "--" : data.getSampleId().getBatchCode());
                 tvRegistrationTime.setContent(null == data.getSampleId().getRegisterTime() ? "--" :
                         DateUtil.dateFormat(data.getSampleId().getRegisterTime(),"yyyy-MM-dd HH:mm:ss"));
@@ -121,7 +121,7 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
                 if (null == data.getSampleId().getProductId()){
                     tvMateriel.setContent("--");
                 }else {
-                    tvMateriel.setContent(StringUtil.isEmpty(data.getSampleId().getProductId().getName()) ? "--" : data.getSampleId().getProductId().getName());
+                    tvMateriel.setContent(String.format("%s(%s)",StringUtil.isEmpty(data.getSampleId().getProductId().getName()) ? "--" : data.getSampleId().getProductId().getName(),StringUtil.isEmpty(data.getSampleId().getProductId().getName()) ? "--" : data.getSampleId().getProductId().getCode()));
                 }
 
                 //采样点
