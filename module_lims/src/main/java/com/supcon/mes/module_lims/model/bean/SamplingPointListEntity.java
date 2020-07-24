@@ -7,5 +7,5 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
  * on 2020/7/14
  * class name
  */
-public class SamplingPointListEntity extends CommonBAP5ListEntity<SamplingPointEntity> {
+public class SamplingPointListEntity extends CommonBAP5ListEntity<PsIdEntity> {
 }

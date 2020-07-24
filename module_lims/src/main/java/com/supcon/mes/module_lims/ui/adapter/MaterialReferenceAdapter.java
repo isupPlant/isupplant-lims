@@ -10,24 +10,28 @@ import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
-import com.supcon.mes.module_lims.model.bean.MaterialReferenceEntity;
+import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
 
 /**
  * author huodongsheng
  * on 2020/7/9
  * class name
  */
-public class MaterialReferenceAdapter extends BaseListDataRecyclerViewAdapter<MaterialReferenceEntity> {
+public class MaterialReferenceAdapter extends BaseListDataRecyclerViewAdapter<ProdIdEntity> {
+    private boolean isRadio;
     public MaterialReferenceAdapter(Context context) {
         super(context);
     }
-
     @Override
-    protected BaseRecyclerViewHolder<MaterialReferenceEntity> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<ProdIdEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<MaterialReferenceEntity>{
+    public void isRadio(boolean radio) {
+        this.isRadio = radio;
+    }
+
+    class ViewHolder extends BaseRecyclerViewHolder<ProdIdEntity>{
 
         @BindByTag("tvMaterialName")
         CustomTextView tvMaterialName;
@@ -59,7 +63,7 @@ public class MaterialReferenceAdapter extends BaseListDataRecyclerViewAdapter<Ma
         }
 
         @Override
-        protected void update(MaterialReferenceEntity data) {
+        protected void update(ProdIdEntity data) {
             // 物料名称
             if (StringUtil.isEmpty(data.getName()) && StringUtil.isEmpty(data.getCode())){
                 tvMaterialName.setContent("--");
@@ -91,11 +95,18 @@ public class MaterialReferenceAdapter extends BaseListDataRecyclerViewAdapter<Ma
                 }
             }
 
+            if (isRadio){
+                iv_select.setVisibility(View.GONE);
+            }else {
+                iv_select.setVisibility(View.VISIBLE);
+            }
+
             if (data.isSelect()){
                 iv_select.setImageResource(R.drawable.ic_check_yes);
             }else {
                 iv_select.setImageResource(R.drawable.ic_check_no);
             }
+
 
         }
     }

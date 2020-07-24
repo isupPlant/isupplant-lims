@@ -7,5 +7,5 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
  * on 2020/7/14
  * class name
  */
-public class BusinessTypeListEntity extends CommonBAP5ListEntity<BusinessTypeEntity> {
+public class BusinessTypeListEntity extends CommonBAP5ListEntity<BusiTypeIdEntity> {
 }

@@ -20,6 +20,7 @@ import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.constant.BusinessType;
@@ -32,6 +33,10 @@ import com.supcon.mes.module_lims.model.contract.InspectionApplicationApi;
 import com.supcon.mes.module_lims.presenter.InspectionApplicationPresenter;
 import com.supcon.mes.module_lims.ui.adapter.InspectionApplicationAdapter;
 import com.supcon.mes.module_other.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +76,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
     @Override
     protected void onInit() {
         super.onInit();
-
+        EventBus.getDefault().register(this);
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -152,5 +157,16 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
     public void getInspectionApplicationListFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RefreshEvent event) {
+        refreshListController.refreshBegin();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

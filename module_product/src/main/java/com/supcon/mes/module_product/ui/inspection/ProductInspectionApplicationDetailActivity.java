@@ -74,6 +74,13 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
                 presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(id,pendingId);
             }
         });
+
+        getController(InspectionApplicationDetailController.class).setRefreshHeadData(new InspectionApplicationDetailController.OnRequestHeadListener() {
+            @Override
+            public void requestHeadClick() {
+                goRefresh();
+            }
+        });
     }
 
     public void goRefresh(){
@@ -83,7 +90,7 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
 
     @Override
     public void getInspectionDetailHeaderDataSuccess(InspectionApplicationDetailHeaderEntity entity) {
-        getController(InspectionApplicationDetailController.class).setHeardData(entity, new InspectionApplicationDetailController.OnRequestPtListener() {
+        getController(InspectionApplicationDetailController.class).setHeardData(1,entity, new InspectionApplicationDetailController.OnRequestPtListener() {
             @Override
             public void requestPtClick(boolean isEdit) {
                 //请求pt

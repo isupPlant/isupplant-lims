@@ -22,6 +22,7 @@ public class VendorIdEntity extends BaseEntity {
     private Boolean isCustomer;
     private Boolean isSupplier;
     private String name;
+    private boolean isSelect = false;
 
     public Long getId() {
         return id;
@@ -133,5 +134,13 @@ public class VendorIdEntity extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

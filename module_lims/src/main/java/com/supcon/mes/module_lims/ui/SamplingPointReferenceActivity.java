@@ -24,7 +24,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
-import com.supcon.mes.module_lims.model.bean.SamplingPointEntity;
+import com.supcon.mes.module_lims.model.bean.PsIdEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
 import com.supcon.mes.module_lims.model.contract.SamplingPointApi;
 import com.supcon.mes.module_lims.presenter.SamplingPointReferencePresenter;
@@ -44,7 +44,7 @@ import java.util.Map;
 @Router(value = Constant.AppCode.LIMS_PickSiteRefPart)
 @Presenter(value = {SamplingPointReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
-public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<SamplingPointEntity> implements SamplingPointApi.View {
+public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<PsIdEntity> implements SamplingPointApi.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -58,7 +58,7 @@ public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<
     private Map<String, Object> params = new HashMap<>();
 
     @Override
-    protected IListAdapter<SamplingPointEntity> createAdapter() {
+    protected IListAdapter<PsIdEntity> createAdapter() {
         adapter = new SamplingPointReferenceAdapter(context);
         return adapter;
     }

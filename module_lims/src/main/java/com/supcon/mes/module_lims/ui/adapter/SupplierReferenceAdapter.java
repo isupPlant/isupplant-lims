@@ -14,23 +14,24 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceEntity;
+import com.supcon.mes.module_lims.model.bean.VendorIdEntity;
 
 /**
  * author huodongsheng
  * on 2020/7/20
  * class name
  */
-public class SupplierReferenceAdapter extends BaseListDataRecyclerViewAdapter<SupplierReferenceEntity> {
+public class SupplierReferenceAdapter extends BaseListDataRecyclerViewAdapter<VendorIdEntity> {
     public SupplierReferenceAdapter(Context context) {
         super(context);
     }
 
     @Override
-    protected BaseRecyclerViewHolder<SupplierReferenceEntity> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<VendorIdEntity> getViewHolder(int viewType) {
         return new ViewHolder(context,parent);
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<SupplierReferenceEntity>{
+    class ViewHolder extends BaseRecyclerViewHolder<VendorIdEntity>{
 
         @BindByTag("tvName")
         CustomTextView tvName;
@@ -60,7 +61,7 @@ public class SupplierReferenceAdapter extends BaseListDataRecyclerViewAdapter<Su
         }
 
         @Override
-        protected void update(SupplierReferenceEntity data) {
+        protected void update(VendorIdEntity data) {
             tvName.setContent(StringUtil.isEmpty(data.getName()) ? "--" : data.getName());
             tvCode.setContent(StringUtil.isEmpty(data.getCode()) ? "--" : data.getCode());
             if (data.isSelect()){

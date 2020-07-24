@@ -28,8 +28,8 @@ import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.event.MaterialDateEvent;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
-import com.supcon.mes.module_lims.model.bean.MaterialReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
+import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
 import com.supcon.mes.module_lims.model.contract.MaterialReferenceApi;
 import com.supcon.mes.module_lims.presenter.MaterialReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.MaterialReferenceAdapter;
@@ -53,7 +53,7 @@ import io.reactivex.functions.Consumer;
 @Router(value = Constant.AppCode.LIMS_MaterialRef)
 @Presenter(value = {MaterialReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
-public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<MaterialReferenceEntity> implements MaterialReferenceApi.View {
+public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<ProdIdEntity> implements MaterialReferenceApi.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -76,14 +76,14 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
     private MaterialReferenceAdapter adapter;
 
     private Map<String, Object> params = new HashMap<>();
-    private List<MaterialReferenceEntity> list = new ArrayList<>();
+    private List<ProdIdEntity> list = new ArrayList<>();
 
     private boolean isSelectAll = false;
     private boolean radio = false; //是否为单选
 
 
     @Override
-    protected IListAdapter<MaterialReferenceEntity> createAdapter() {
+    protected IListAdapter<ProdIdEntity> createAdapter() {
         adapter = new MaterialReferenceAdapter(context);
         return adapter;
     }
@@ -112,7 +112,7 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Mate
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_material_reference));
         setIsRadio();
-
+        adapter.isRadio(radio);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override

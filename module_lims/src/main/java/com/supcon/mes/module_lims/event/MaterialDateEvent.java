@@ -1,7 +1,7 @@
 package com.supcon.mes.module_lims.event;
 
 import com.supcon.common.com_http.BaseEntity;
-import com.supcon.mes.module_lims.model.bean.MaterialReferenceEntity;
+import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class MaterialDateEvent extends BaseEntity {
     private boolean radio;
-    private List<MaterialReferenceEntity> list;
-    private MaterialReferenceEntity data;
+    private List<ProdIdEntity> list;
+    private ProdIdEntity data;
 
     public boolean isRadio() {
         return radio;
@@ -23,19 +23,19 @@ public class MaterialDateEvent extends BaseEntity {
         this.radio = radio;
     }
 
-    public List<MaterialReferenceEntity> getList() {
+    public List<ProdIdEntity> getList() {
         return list;
     }
 
-    public void setList(List<MaterialReferenceEntity> list) {
+    public void setList(List<ProdIdEntity> list) {
         this.list = list;
     }
 
-    public MaterialReferenceEntity getData() {
+    public ProdIdEntity getData() {
         return data;
     }
 
-    public void setData(MaterialReferenceEntity data) {
+    public void setData(ProdIdEntity data) {
         this.data = data;
     }
 }

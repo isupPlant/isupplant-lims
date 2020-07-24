@@ -99,6 +99,7 @@
         android:tag="ctSupplier"
         app:key="供应商"
         app:content_hint="请选择供应商"
+        app:content_color="@color/font_333333"
         app:editable="true"
         app:necessary="true"
         app:gravity="right|center_vertical"
@@ -208,7 +209,6 @@
         app:edit_hint="请输入数量"
         app:edit_hint_color="#A9A9A9"
         app:editable="true"
-        app:necessary="true"
         app:gravity="right|center_vertical"
         />
     <View

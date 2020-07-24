@@ -2,6 +2,7 @@ package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
+import com.supcon.mes.middleware.util.StringUtil;
 
 /**
  * author huodongsheng
@@ -15,8 +16,12 @@ public class InspectionDetailPtEntity extends BaseEntity {
     private BaseLongIdNameEntity inspectProjId;
     private Integer sort;
     private StdVerIdEntity stdVerId;
-//    private InspectIdEntity inspectStdId;
-//    private StdVerComIdEntity stdVerComId;
+//    private Boolean isChecked;
+//    private Boolean edited;
+//    private Boolean needCheck;
+//    private Long key;
+//    private String currClickColKey;
+//    private Long rowIndex;
     private Integer version;
     private boolean isSelect = false;
 
@@ -68,21 +73,7 @@ public class InspectionDetailPtEntity extends BaseEntity {
         this.stdVerId = stdVerId;
     }
 
-//    public InspectIdEntity getInspectStdId() {
-//        return inspectStdId;
-//    }
-//
-//    public void setInspectStdId(InspectIdEntity inspectStdId) {
-//        this.inspectStdId = inspectStdId;
-//    }
-//
-//    public StdVerComIdEntity getStdVerComId() {
-//        return stdVerComId;
-//    }
-//
-//    public void setStdVerComId(StdVerComIdEntity stdVerComId) {
-//        this.stdVerComId = stdVerComId;
-//    }
+
 
     public Integer getVersion() {
         return version;
@@ -99,4 +90,53 @@ public class InspectionDetailPtEntity extends BaseEntity {
     public void setSelect(boolean select) {
         isSelect = select;
     }
+
+
+//    public Boolean getChecked() {
+//        return isChecked;
+//    }
+//
+//    public void setChecked(Boolean checked) {
+//        isChecked = checked;
+//    }
+//
+//    public Boolean getEdited() {
+//        return edited;
+//    }
+//
+//    public void setEdited(Boolean edited) {
+//        this.edited = edited;
+//    }
+//
+//    public Boolean getNeedCheck() {
+//        return needCheck;
+//    }
+//
+//    public void setNeedCheck(Boolean needCheck) {
+//        this.needCheck = needCheck;
+//    }
+//
+//    public Long getKey() {
+//        return key;
+//    }
+//
+//    public void setKey(Long key) {
+//        this.key = key;
+//    }
+//
+//    public String getCurrClickColKey() {
+//        return currClickColKey;
+//    }
+//
+//    public void setCurrClickColKey(String currClickColKey) {
+//        this.currClickColKey = currClickColKey;
+//    }
+//
+//    public Long getRowIndex() {
+//        return rowIndex;
+//    }
+//
+//    public void setRowIndex(Long rowIndex) {
+//        this.rowIndex = rowIndex;
+//    }
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:core_ptr="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff9f9f9"
@@ -15,9 +16,8 @@
         android:tag="searchTitle" />
 
     <com.supcon.common.view.ptr.PtrFrameLayout
+        android:layout_weight="1"
         android:id="@+id/refreshFrameLayout"
-        android:layout_marginTop="@dimen/dp_50"
-        android:layout_marginBottom="@dimen/dp_50"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:tag="refreshFrameLayout"
@@ -44,11 +44,12 @@
 
 
     <com.supcon.mes.mbap.view.CustomWorkFlowView
+        android:visibility="gone"
         android:id="@+id/customWorkFlowView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
-        android:layout_alignParentBottom= "true"
+        android:layout_marginBottom="-2dp"
         android:tag="customWorkFlowView"
         app:commentable="false" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -7,5 +7,5 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
  * on 2020/7/9
  * class name
  */
-public class MaterialReferenceListEntity extends CommonBAP5ListEntity<MaterialReferenceEntity> {
+public class MaterialReferenceListEntity extends CommonBAP5ListEntity<ProdIdEntity> {
 }

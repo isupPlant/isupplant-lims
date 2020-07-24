@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.BaseRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
@@ -79,11 +80,11 @@ public class QualityStandardAdapter extends BaseListDataRecyclerViewAdapter<Insp
                     onItemChildViewClick(v,0);
                 }
             });
-            ctApplicationScheme.setOnClickListener(new View.OnClickListener() {
+            ctApplicationScheme.setOnChildViewClickListener(new OnChildViewClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onChildViewClick(View childView, int action, Object obj) {
                     if (isEdit){
-                        onItemChildViewClick(v,1);
+                        onItemChildViewClick(childView,1);
                     }
                 }
             });

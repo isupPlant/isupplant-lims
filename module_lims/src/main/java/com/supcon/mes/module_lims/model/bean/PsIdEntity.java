@@ -38,6 +38,7 @@ public class PsIdEntity extends BaseSystemBackEntity {
     private String extraCol;
     private CompanyEntity company;
     private Boolean root;
+    private boolean isSelect;
 
 
 //    public StaffEntity getCreateStaff() {
@@ -254,5 +255,13 @@ public class PsIdEntity extends BaseSystemBackEntity {
 
     public void setRoot(Boolean root) {
         this.root = root;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

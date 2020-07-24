@@ -7,5 +7,5 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
  * on 2020/7/20
  * class name 供应商参照列表实体
  */
-public class SupplierReferenceListEntity extends CommonBAP5ListEntity<SupplierReferenceEntity> {
+public class SupplierReferenceListEntity extends CommonBAP5ListEntity<VendorIdEntity> {
 }

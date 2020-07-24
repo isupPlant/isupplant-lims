@@ -121,8 +121,7 @@
             android:tag="ctApplicationScheme"
             app:content_color="@color/dark_text"
             app:content_size="14"
-            app:editable="true"
-            app:gravity="center|center_vertical"
+            app:gravity="right|center_vertical"
             app:key="@string/lims_application_scheme"
             app:key_color="@color/c_scan_666"
             app:key_size="14" />

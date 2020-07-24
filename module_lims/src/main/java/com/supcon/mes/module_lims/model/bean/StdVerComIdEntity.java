@@ -10,15 +10,20 @@ import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
  * class name
  */
 public class StdVerComIdEntity extends BaseEntity {
+    private String carryFormula;
     private String carryRule;
     private String carrySpace;
     private BaseIdValueEntity carryType;
     private String code;
+    private String defaultValue;
     private BaseIdValueEntity digitType;
     private Long id;
     private Boolean isReport;
-    private Double parallelTimes;
+    private String memoField;
+    private String nameEng;
+    private Integer parallelTimes;
     private String reportName;
+    private String reportSort;
     private Integer sort;
     private StdVerIdEntity stdVerId;
     private BaseLongIdNameEntity stdVerTestId;
@@ -74,11 +79,11 @@ public class StdVerComIdEntity extends BaseEntity {
         isReport = report;
     }
 
-    public Double getParallelTimes() {
+    public Integer getParallelTimes() {
         return parallelTimes;
     }
 
-    public void setParallelTimes(Double parallelTimes) {
+    public void setParallelTimes(Integer parallelTimes) {
         this.parallelTimes = parallelTimes;
     }
 
@@ -144,5 +149,45 @@ public class StdVerComIdEntity extends BaseEntity {
 
     public void setComId(BaseLongIdNameEntity comId) {
         this.comId = comId;
+    }
+
+    public String getCarryFormula() {
+        return carryFormula;
+    }
+
+    public void setCarryFormula(String carryFormula) {
+        this.carryFormula = carryFormula;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public String getMemoField() {
+        return memoField;
+    }
+
+    public void setMemoField(String memoField) {
+        this.memoField = memoField;
+    }
+
+    public String getNameEng() {
+        return nameEng;
+    }
+
+    public void setNameEng(String nameEng) {
+        this.nameEng = nameEng;
+    }
+
+    public String getReportSort() {
+        return reportSort;
+    }
+
+    public void setReportSort(String reportSort) {
+        this.reportSort = reportSort;
     }
 }

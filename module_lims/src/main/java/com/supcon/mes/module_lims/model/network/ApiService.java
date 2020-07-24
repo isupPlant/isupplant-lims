@@ -12,6 +12,7 @@ import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
+import com.supcon.mes.module_lims.model.bean.InspectApplicationSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportDetailListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportEntity;
@@ -259,5 +260,15 @@ public interface ApiService {
      */
     @POST("/msService/QCS/inspectReport/inspectReport/{inspReportView}/submit")
     Flowable<SubmitResultEntity> submitInspectReport(@Path("inspReportView") String path, @QueryMap Map<String,Object> params, @Body InspectReportSubmitEntity reportSubmitEntity);
+
+    /**
+     * 检验申请详情提交接口
+     * @param path
+     * @param params
+     * @param inspectApplicationSubmitEntity
+     * @return
+     */
+    @POST("/msService/QCS/inspect/inspect/{documentType}/submit")
+    Flowable<BAP5CommonEntity> submitInspectApplication(@Path("documentType") String path, @QueryMap Map<String, Object> params, @Body InspectApplicationSubmitEntity inspectApplicationSubmitEntity);
 
 }

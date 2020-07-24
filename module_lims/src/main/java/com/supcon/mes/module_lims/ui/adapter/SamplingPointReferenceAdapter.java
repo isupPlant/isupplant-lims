@@ -12,14 +12,14 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
-import com.supcon.mes.module_lims.model.bean.SamplingPointEntity;
+import com.supcon.mes.module_lims.model.bean.PsIdEntity;
 
 /**
  * author huodongsheng
  * on 2020/7/14
  * class name
  */
-public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapter<SamplingPointEntity> {
+public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapter<PsIdEntity> {
 
 
     public SamplingPointReferenceAdapter(Context context) {
@@ -27,11 +27,11 @@ public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapt
     }
 
     @Override
-    protected BaseRecyclerViewHolder<SamplingPointEntity> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<PsIdEntity> getViewHolder(int viewType) {
         return new ViewHolder(context,parent);
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<SamplingPointEntity>{
+    class ViewHolder extends BaseRecyclerViewHolder<PsIdEntity>{
 
         @BindByTag("tvName")
         TextView tvName;
@@ -59,7 +59,7 @@ public class SamplingPointReferenceAdapter extends BaseListDataRecyclerViewAdapt
         }
 
         @Override
-        protected void update(SamplingPointEntity data) {
+        protected void update(PsIdEntity data) {
             tvName.setText(StringUtil.isEmpty(data.getName()) ? "--" : data.getName());
 
         }
