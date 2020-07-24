@@ -204,19 +204,22 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
                         }
                         if (submitList.size() > 0){
                             //弹出窗口 询问用户 是否收样
-                            new AlertDialog.Builder(context)
-                                    .setTitle("提示")
-                                    .setMessage("确定对这"+submitList.size()+"项进行收样吗？")
-                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            onLoading("收样中...");
-                                            String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
-                                            presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(BusinessType.Sample.SAMPLE_COLLECTION,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
-                                        }
-                                    })
-                                    .setNegativeButton("取消", null)
-                                    .show();
+//                            new AlertDialog.Builder(context)
+//                                    .setTitle("提示")
+//                                    .setMessage("确定对这"+submitList.size()+"项进行收样吗？")
+//                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            onLoading("收样中...");
+//                                            String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
+//                                            presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(BusinessType.Sample.SAMPLE_COLLECTION,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
+//                                        }
+//                                    })
+//                                    .setNegativeButton("取消", null)
+//                                    .show();
+                            onLoading("收样中...");
+                            String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
+                            presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(BusinessType.Sample.SAMPLE_COLLECTION,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
 
                         }else {
                             ToastUtils.show(context,"请至少选择一条样品");
@@ -254,7 +257,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 
     @Override
     public void sampleSubmitSuccess(BAP5CommonEntity entity) {
-        onLoadSuccessAndExit("操作成功", new OnLoaderFinishListener() {
+        onLoadSuccessAndExit("收样成功", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 goRefresh();

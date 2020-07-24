@@ -34,7 +34,6 @@ public class SampleInquiryPresenter extends SampleInquiryApi.Presenter {
         String viewCode = "";
         String modelAlias = "sampleInfo";
         String joinInfo = "LIMSBA_PICKSITE,ID,LIMSSA_SAMPLE_INFOS,PS_ID";
-        boolean isName = false;
         FastQueryCondEntity fastQuery;
         if (type.equals(BusinessType.Sample.SAMPLE_COLLECTION)){
             query = "receiveListPart-query";
@@ -48,33 +47,28 @@ public class SampleInquiryPresenter extends SampleInquiryApi.Presenter {
             viewCode = "LIMSSample_5.0.0.0_sample_collectListLayout";
         }
 
-        Map<String, Object> codeParam = new HashMap();
+        Map<String, Object> firstParams = new HashMap();
         //从外层传进的集合中取出 检索条件 CODE | NAME | BATCH_CODE
         if (params.containsKey(Constant.BAPQuery.CODE)) {
-            codeParam.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
-            isName = false;
+            firstParams.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
+
         }
         if (params.containsKey(Constant.BAPQuery.NAME)){
-            codeParam.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
-            isName = true;
+            firstParams.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
+
         }
         if (params.containsKey(Constant.BAPQuery.BATCH_CODE)){
-            codeParam.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
-            isName = false;
+            firstParams.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
         }
+        fastQuery = BAPQueryHelper.createSingleFastQueryCond(firstParams);
 
-        if (!isName){
-            fastQuery = BAPQueryHelper.createSingleFastQueryCond(params);
-            fastQuery.viewCode = viewCode;
-            fastQuery.modelAlias = modelAlias;
-        }else {
-            fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
-            fastQuery.modelAlias = modelAlias;
-            fastQuery.viewCode = viewCode;
-            //创建fastQuery.subconds内部该有的属性并且赋值
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(codeParam, joinInfo);
-            fastQuery.subconds.add(joinSubcondEntity);
+        Map<String,Object> secondParams=new HashMap<>();
+        if (params.containsKey(Constant.BAPQuery.PICKSITE)){
+           secondParams.put(Constant.BAPQuery.PICKSITE,params.get(Constant.BAPQuery.PICKSITE));
+            fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(secondParams,joinInfo));
         }
+        fastQuery.viewCode = viewCode;
+        fastQuery.modelAlias = modelAlias;
 
         Map<String, Object> map = new HashMap<>();
         map.put("fastQueryCond", fastQuery.toString());

@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.ImageView;
 
 import com.app.annotation.BindByTag;
@@ -115,6 +116,11 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
                 rangeImg.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_inspect_down_arrow);
             } else {
                 rangeImg.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_inspect_up_arrow);
+            }
+            if ("不合格".equals(data.testResult)){
+                checkResultTv.setValueColor(Color.parseColor("#F70606"));
+            }else {
+                checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
             }
         }
     }

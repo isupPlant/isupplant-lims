@@ -152,9 +152,11 @@
         android:paddingRight="@dimen/dp_12">
 
         <ImageView
-            android:layout_width="@dimen/dp_14"
-            android:layout_height="@dimen/dp_14"
-            android:src="@drawable/ic_check_result2" />
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            android:src="@drawable/ic_check_result2"
+            android:scaleType="centerInside"
+            />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/checkResultTv"

@@ -74,6 +74,7 @@ public class SampleInquiryController extends BaseViewController {
         super.onInit();
         EventBus.getDefault().register(this);
 
+        searchTypeList.add(getRootView().getResources().getString(R.string.lims_sample_name));
         searchTypeList.add(getRootView().getResources().getString(R.string.lims_sample_code));
         searchTypeList.add(getRootView().getResources().getString(R.string.lims_batch_number));
         searchTypeList.add(getRootView().getResources().getString(R.string.lims_sampling_point));
@@ -170,7 +171,9 @@ public class SampleInquiryController extends BaseViewController {
             }
             cleanParams();
             switch (resultEntity.key) {
-
+                case "样品名称":
+                    params.put(Constant.BAPQuery.NAME, resultEntity.result);
+                    break;
                 case "样品编码":
                     params.put(Constant.BAPQuery.CODE, resultEntity.result);
                     break;
@@ -178,7 +181,7 @@ public class SampleInquiryController extends BaseViewController {
                     params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
                     break;
                 case "采样点":
-                    params.put(Constant.BAPQuery.NAME, resultEntity.result);
+                    params.put(Constant.BAPQuery.PICKSITE, resultEntity.result);
                     break;
             }
             if (null != mOnSearchOverListener) {

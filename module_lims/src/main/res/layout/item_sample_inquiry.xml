@@ -26,7 +26,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_sample"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -51,7 +51,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_batch_number"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -76,7 +76,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_picksite"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -101,7 +101,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_new"
+                android:src="@drawable/ic_time"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView

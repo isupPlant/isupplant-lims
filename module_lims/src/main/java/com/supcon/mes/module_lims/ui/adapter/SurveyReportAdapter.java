@@ -104,7 +104,7 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
             if (null == data.getProdId()){
                 tvGoods.setContent("--");
             }else {
-                tvGoods.setContent(StringUtil.isEmpty(data.getProdId().getName()) ? "--" : data.getProdId().getName());
+                tvGoods.setContent(StringUtil.isEmpty(data.getProdId().getName()) ? "--" : String.format("%s(%s)",data.getProdId().getName(),data.getProdId().getCode()));
             }
 
             //批号

@@ -7,6 +7,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
+import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_lims.controller.SurverReportDetailController;
@@ -43,6 +44,7 @@ public class OtherSurveyReportDetailActivity extends BaseRefreshActivity {
     @Override
     protected void initView() {
         super.initView();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("其他检验报告单");
         getController(SurverReportDetailController.class).setRefreshController(this,refreshController);
     }
