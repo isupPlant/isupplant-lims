@@ -351,8 +351,21 @@ public class SurverReportDetailController extends BaseViewController implements 
         baseActivity.onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
-                EventBus.getDefault().post(new RefreshEvent());
-                baseActivity.back();
+                if(operate==0){
+                    pendingEntity.id=entity.data.pendingId;
+                    refreshController.setAutoPullDownRefresh(true);
+                    refreshController.setPullDownRefreshEnabled(false);
+                    refreshController.refreshBegin();
+                    refreshController.setOnRefreshListener(new OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            presenterRouter.create(InspectReportDetailAPI.class).getInspectHeadReport(reportEntity.id);
+                        }
+                    });
+                }else {
+                    EventBus.getDefault().post(new RefreshEvent());
+                    baseActivity.back();
+                }
             }
         });
     }

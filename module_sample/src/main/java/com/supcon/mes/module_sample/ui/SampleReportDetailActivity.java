@@ -137,6 +137,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         adapter=new SampleReportDetailAdapter(context);
         contentView.setAdapter(adapter);
     }
+    private int operate=-1;//0保存、1驳回、2提交
     private boolean expand=false;
     @Override
     protected void initListener() {
@@ -174,12 +175,15 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
                 switch (action) {
                     case 0:
                         doSave(workFlowVar);
+                        operate=0;
                         break;
                     case 1:
                         doSubmit(workFlowVar);
+                        operate=1;
                         break;
                     case 2:
                         doSubmit(workFlowVar);
+                        operate=2;
                         break;
                 }
             }
@@ -331,11 +335,26 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
 
     @Override
     public void submitSampleReportSuccess(SubmitResultEntity entity) {
+
         onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
-                EventBus.getDefault().post(new RefreshEvent());
-                back();
+                if(operate==0){
+                    pendingEntity.id=entity.data.pendingId;
+                    refreshController.setAutoPullDownRefresh(true);
+                    refreshController.setPullDownRefreshEnabled(false);
+                    refreshController.refreshBegin();
+                    refreshController.setOnRefreshListener(new OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            presenterRouter.create(SampleReportDetailAPI.class).getSampleReport(reportEntity.getId());
+                        }
+                    });
+                }else {
+                    EventBus.getDefault().post(new RefreshEvent());
+                    back();
+                }
+
             }
         });
     }

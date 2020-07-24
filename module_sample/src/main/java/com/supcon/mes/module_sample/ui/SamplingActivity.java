@@ -200,14 +200,14 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-//                        submitList.clear();
-//                        for (int i = 0; i < adapter.getList().size(); i++) {
-//                            if (adapter.getList().get(i).isSelect()){
-//                                submitList.add(adapter.getList().get(i));
-//                            }
-//                        }
-//                        if (submitList.size() > 0){
-//                            //弹出窗口 询问用户 是否收样
+                        submitList.clear();
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            if (adapter.getList().get(i).isSelect()){
+                                submitList.add(adapter.getList().get(i));
+                            }
+                        }
+                        if (submitList.size() > 0){
+                            //弹出窗口 询问用户 是否收样
 //                        new AlertDialog.Builder(context)
 //                                .setTitle("提示")
 //                                .setMessage("确定对这"+submitList.size()+"项进行取样吗？")
@@ -221,11 +221,13 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
 //                                })
 //                                .setNegativeButton("取消", null)
 //                                .show();
-//
-//                        }else {
-//                            ToastUtils.show(context,"请至少选择一条样品");
-//                        }
-                        IntentRouter.go(context,"LIMS_QualityStdVerRef");
+                            onLoading("取样中...");
+                            String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
+                            presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(BusinessType.Sample.SAMPLING,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
+                        }else {
+                            ToastUtils.show(context,"请至少选择一条样品");
+                        }
+//                        IntentRouter.go(context,"LIMS_QualityStdVerRef");
                     }
                 });
 
@@ -259,7 +261,7 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
 
     @Override
     public void sampleSubmitSuccess(BAP5CommonEntity entity) {
-        onLoadSuccessAndExit("操作成功", new OnLoaderFinishListener() {
+        onLoadSuccessAndExit("取样成功", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 goRefresh();
