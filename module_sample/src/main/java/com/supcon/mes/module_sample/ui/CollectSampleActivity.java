@@ -222,7 +222,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
                             presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(BusinessType.Sample.SAMPLE_COLLECTION,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
 
                         }else {
-                            ToastUtils.show(context,"请至少选择一条样品");
+                            ToastUtils.show(context,"请选择要收样的样品");
                         }
                     }
                 });
@@ -257,7 +257,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 
     @Override
     public void sampleSubmitSuccess(BAP5CommonEntity entity) {
-        onLoadSuccessAndExit("收样成功", new OnLoaderFinishListener() {
+        onLoadSuccessAndExit("提交成功", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 goRefresh();
