@@ -1,52 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/item"
-    android:tag="item"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:paddingStart="@dimen/dp_15"
-    android:paddingEnd="@dimen/dp_15"
-    android:paddingTop="@dimen/dp_10"
-    android:paddingBottom="@dimen/dp_10"
-    android:layout_marginBottom="@dimen/dp_10"
-    android:gravity="center_vertical">
-
-    <ImageView
-        android:layout_width="@dimen/dp_40"
-        android:layout_height="@dimen/dp_40"
-        android:src="@drawable/ic_version"/>
+    android:id="@+id/item"
+    android:tag="item"
+    android:padding="@dimen/dp_10"
+    android:background="@drawable/sl_press_no_stroke"
+    android:translationZ="2dp">
 
     <LinearLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_15"
         android:orientation="vertical">
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/tvName"
-            android:tag="tvName"
-            style="@style/yh_custom_view_horizontal_style"
-            app:content_color="@color/font_333333"
-            app:gravity="center|center_vertical"
-            app:key="客商名称"
-            />
 
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/tvCode"
-            android:tag="tvCode"
-            style="@style/yh_custom_view_horizontal_style"
-            app:content_color="@color/font_333333"
-            app:gravity="center|center_vertical"
-            app:key="商客编码"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_materiel"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvName"
+                android:tag="tvName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_15"
+                app:key="客商名称"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_specifications"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvCode"
+                android:tag="tvCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_15"
+                app:key="商客编码"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
 
 
 
     </LinearLayout>
-
-
 
 
 

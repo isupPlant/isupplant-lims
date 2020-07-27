@@ -64,11 +64,6 @@ public class SupplierReferenceAdapter extends BaseListDataRecyclerViewAdapter<Ve
         protected void update(VendorIdEntity data) {
             tvName.setContent(StringUtil.isEmpty(data.getName()) ? "--" : data.getName());
             tvCode.setContent(StringUtil.isEmpty(data.getCode()) ? "--" : data.getCode());
-            if (data.isSelect()){
-                item.setBackgroundColor(Color.parseColor("#666666"));
-            }else {
-                item.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            }
         }
     }
 }
