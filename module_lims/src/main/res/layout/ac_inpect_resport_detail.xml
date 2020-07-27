@@ -299,7 +299,7 @@
     <com.supcon.mes.mbap.view.CustomWorkFlowView
         android:id="@+id/customWorkFlowView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:tag="customWorkFlowView"
         android:visibility="gone" />
