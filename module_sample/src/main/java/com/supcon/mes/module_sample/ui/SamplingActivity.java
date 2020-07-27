@@ -225,7 +225,7 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
                             String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
                             presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(BusinessType.Sample.SAMPLING,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
                         }else {
-                            ToastUtils.show(context,"请至少选择一条样品");
+                            ToastUtils.show(context,"请选择要取样的样品");
                         }
 //                        IntentRouter.go(context,"LIMS_QualityStdVerRef");
                     }
@@ -261,7 +261,7 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
 
     @Override
     public void sampleSubmitSuccess(BAP5CommonEntity entity) {
-        onLoadSuccessAndExit("取样成功", new OnLoaderFinishListener() {
+        onLoadSuccessAndExit("提交成功", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 goRefresh();
