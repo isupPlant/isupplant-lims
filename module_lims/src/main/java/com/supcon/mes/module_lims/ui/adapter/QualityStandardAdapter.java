@@ -43,6 +43,7 @@ public class QualityStandardAdapter extends BaseListDataRecyclerViewAdapter<Insp
     public void setEdit(boolean isEdit) {
         this.isEdit = isEdit;
     }
+    
 
 
     class ViewHolder extends BaseRecyclerViewHolder<InspectionDetailPtEntity>{

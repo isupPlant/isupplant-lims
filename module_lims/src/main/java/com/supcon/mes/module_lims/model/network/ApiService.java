@@ -149,12 +149,20 @@ public interface ApiService {
     Flowable<SupplierReferenceListEntity> getSupplierReferenceList(@Body Map<String, Object> map);
 
     /**
-     * 质量标准所对应检验项目接口(编辑)
+     * 质量标准所对应检验项目接口(编辑) 在没有请检方案的情况下 获取检验项目的接口
      * @param map
      * @return
      */
     @POST("/msService/QCS/inspect/inspectCom/getInspectComDataByStdVerId")
     Flowable<InspectionItemsListEntity> getInspectionItemsList(@Body Map<String, Object> map);
+
+    /**
+     * 在有请检方案的情况下获取检验项目的接口
+     * @param map
+     * @return
+     */
+    @POST("/msService/QCS/inspect/inspectCom/getInspectComDataByInspectProjId")
+    Flowable<InspectionItemsListEntity> getInspectComDataByInspectProjId(@Body Map<String, Object> map);
 
     /**
      * 质量标准所对应检验项目接口(查看)

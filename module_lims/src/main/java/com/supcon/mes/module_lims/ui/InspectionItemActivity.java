@@ -83,7 +83,9 @@ public class InspectionItemActivity extends BaseRefreshRecyclerActivity<Inspecti
     private String selectTag;
     private String stdVersionId;
     private String inspectStdId;
+    private String inspectProjId;
     private boolean isEdit = false;
+    private boolean inspectProjIdIsValuable = false;
     private InspectionItemAdapter adapter;
     private String jsonList;
     private boolean isSelectAll = false;
@@ -108,8 +110,10 @@ public class InspectionItemActivity extends BaseRefreshRecyclerActivity<Inspecti
 
         selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
         stdVersionId = getIntent().getStringExtra("stdVersionId");
+        inspectProjId = getIntent().getStringExtra("inspectProjId");
         jsonList = getIntent().getStringExtra("stdVerCom");
         isEdit = getIntent().getBooleanExtra("isEdit",false);
+        inspectProjIdIsValuable = getIntent().getBooleanExtra("inspectProjIdIsValuable",false);
         inspectStdId = getIntent().getStringExtra("inspectStdId");
         if (!StringUtil.isEmpty(jsonList)){
             intoList.clear();
@@ -229,7 +233,16 @@ public class InspectionItemActivity extends BaseRefreshRecyclerActivity<Inspecti
             @Override
             public void onRefresh() {
                 if (isEdit){
-                    presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectionItemsList(stdVersionId);
+                    //inspectProjIdIsValuable 为true 表示该质量标准是存在请检方案的  为false表示不存在请检方案
+                    if (inspectProjIdIsValuable){
+                        if (!StringUtil.isEmpty(inspectProjId)){
+                            presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectComDataByInspectProjId(inspectProjId);
+                        }else {
+                            presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectionItemsList(stdVersionId);
+                        }
+                    }else {
+                        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectionItemsList(stdVersionId);
+                    }
                 }else {
                     presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectComDataByInspectStdId(inspectStdId);
                 }
@@ -271,6 +284,32 @@ public class InspectionItemActivity extends BaseRefreshRecyclerActivity<Inspecti
 
     @Override
     public void getInspectComDataByInspectStdIdFailed(String errorMsg) {
+        SnackbarHelper.showError(rootView, errorMsg);
+        refreshListController.refreshComplete(null);
+    }
+
+    @Override
+    public void getInspectComDataByInspectProjIdSuccess(InspectionItemsListEntity entity) {
+        if (entity.data.result.size() > 0){
+            setSelectAllStyle(false);
+        }
+        if (null!= intoList && intoList.size() > 0){
+            for (int i = 0; i < intoList.size(); i++) {
+                for (int j = 0; j < entity.data.result.size(); j++) {
+                    if (intoList.get(i).getId().equals(entity.data.result.get(j).getStdVerComId().getId())){
+                        entity.data.result.get(j).setSelect(true);
+                    }
+                }
+            }
+        }
+
+
+
+        refreshListController.refreshComplete(entity.data.result);
+    }
+
+    @Override
+    public void getInspectComDataByInspectProjIdFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }

@@ -55,7 +55,7 @@ public class ProductInspectionApplicationActivity extends BaseRefreshRecyclerAct
 
     private InspectionApplicationAdapter adapter;
 
-    private boolean isWhole = true;
+    private boolean isWhole = false;
     private Map<String, Object> params = new HashMap<>();
 
     @BindByTag("titleText")

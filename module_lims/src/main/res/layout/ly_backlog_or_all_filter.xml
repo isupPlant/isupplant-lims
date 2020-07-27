@@ -17,22 +17,19 @@
         android:tag="filterGroup">
 
 
-
-        <RadioButton
-            android:id="@+id/filterAll"
-            style="@style/InspectionApplicationFilterStyle"
-            android:checked="true"
-            android:tag="filterAll"
-            android:text="@string/lims_all" />
-
-
         <RadioButton
             android:id="@+id/filterBacklog"
             style="@style/InspectionApplicationFilterStyle"
             android:tag="filterBacklog"
+            android:checked="true"
             android:text="@string/lims_backlog"
             />
 
+        <RadioButton
+            android:id="@+id/filterAll"
+            style="@style/InspectionApplicationFilterStyle"
+            android:tag="filterAll"
+            android:text="@string/lims_all" />
 
 
     </RadioGroup>
@@ -48,13 +45,13 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvAllLine"
-                android:tag="tvAllLine"
+                android:visibility="visible"
+                android:id="@+id/tvBacklogLine"
+                android:tag="tvBacklogLine"
                 android:layout_centerInParent="true"
                 android:layout_width="71dp"
                 android:layout_height="4dp"
                 android:background="#2874D2"/>
-
 
 
         </RelativeLayout>
@@ -65,16 +62,19 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/tvAllLine"
                 android:visibility="gone"
-                android:id="@+id/tvBacklogLine"
-                android:tag="tvBacklogLine"
+                android:tag="tvAllLine"
                 android:layout_centerInParent="true"
                 android:layout_width="71dp"
                 android:layout_height="4dp"
                 android:background="#2874D2"/>
 
 
+
         </RelativeLayout>
+
+
 
 
     </LinearLayout>

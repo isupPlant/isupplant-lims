@@ -8,9 +8,11 @@ import com.supcon.mes.module_lims.model.bean.InspectionItemsListEntity;
  * on 2020/7/21
  * class name
  */
-@ContractFactory(entites = {InspectionItemsListEntity.class,InspectionItemsListEntity.class})
+@ContractFactory(entites = {InspectionItemsListEntity.class,InspectionItemsListEntity.class, InspectionItemsListEntity.class})
 public interface InspectionItemsApi {
     void getInspectionItemsList(String stdVersionId);
 
     void getInspectComDataByInspectStdId(String inspectStdId);
+
+    void getInspectComDataByInspectProjId(String inspectProjId);
 }

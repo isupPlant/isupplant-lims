@@ -63,4 +63,28 @@ public class InspectionItemsPresenter extends InspectionItemsApi.Presenter {
             }
         }));
     }
+
+    @Override
+    public void getInspectComDataByInspectProjId(String inspectProjId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("inspectProjId",inspectProjId);
+        mCompositeSubscription.add(BaseLimsHttpClient.getInspectComDataByInspectProjId(map).onErrorReturn(new Function<Throwable, InspectionItemsListEntity>() {
+            @Override
+            public InspectionItemsListEntity apply(Throwable throwable) throws Exception {
+                InspectionItemsListEntity entity = new InspectionItemsListEntity();
+                entity.msg = throwable.getMessage();
+                entity.success = false;
+                return entity;
+            }
+        }).subscribe(new Consumer<InspectionItemsListEntity>() {
+            @Override
+            public void accept(InspectionItemsListEntity entity) throws Exception {
+                if (entity.success){
+                    getView().getInspectComDataByInspectProjIdSuccess(entity);
+                }else {
+                    getView().getInspectComDataByInspectProjIdFailed(entity.msg);
+                }
+            }
+        }));
+    }
 }

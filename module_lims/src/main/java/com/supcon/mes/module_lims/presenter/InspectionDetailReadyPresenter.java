@@ -21,8 +21,12 @@ public class InspectionDetailReadyPresenter extends InspectionDetailReadyApi.Pre
 
     @Override
     public void getBusinessTypeList() {
+
+        Map<String, Object> tableTypeCodeMap = new HashMap<>();
+        tableTypeCodeMap.put("tableTypeCode","manu");
+
         Map<String, Object> map = new HashMap<>();
-        map.put("customCondition",new HashMap<String,Object>().put("tableTypeCode","manu"));
+        map.put("customCondition",tableTypeCodeMap);
         map.put("pageNo",1);
         map.put("paging",true);
         map.put("pageSize",10);

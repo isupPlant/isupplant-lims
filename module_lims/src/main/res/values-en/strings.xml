@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lims_backlog">Backlog</string>
-    <string name="lims_all">All_list</string>
+    <string name="lims_all">All</string>
     <string name="lims_goods">Goods</string>
     <string name="lims_batch_number">Batch_number</string>
     <string name="lims_examiner">Examiner</string>

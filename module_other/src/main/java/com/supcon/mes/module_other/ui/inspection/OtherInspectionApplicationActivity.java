@@ -53,7 +53,7 @@ import java.util.Map;
 public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationApi.View {
 
     private InspectionApplicationAdapter adapter;
-    private boolean isWhole = true;
+    private boolean isWhole = false;
     private Map<String, Object> params = new HashMap<>();
 
     @BindByTag("titleText")

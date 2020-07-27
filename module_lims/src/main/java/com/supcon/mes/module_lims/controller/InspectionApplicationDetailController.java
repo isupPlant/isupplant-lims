@@ -9,14 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.app.annotation.BindByTag;
-import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -51,7 +49,6 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
-import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.StringUtil;
@@ -61,7 +58,6 @@ import com.supcon.mes.module_lims.event.InspectionItemEvent;
 import com.supcon.mes.module_lims.event.MaterialDateEvent;
 
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
-import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
 import com.supcon.mes.module_lims.model.bean.ApplyDeptIdEntity;
 import com.supcon.mes.module_lims.model.bean.ApplyStaffIdEntity;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
@@ -104,7 +100,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
-import utilcode.util.StringUtils;
 
 
 /**
@@ -476,7 +471,12 @@ public class InspectionApplicationDetailController extends BaseViewController im
                             bundle.putString(Constant.IntentKey.SELECT_TAG,llInspectionItems.getTag()+"");
                             bundle.putString("stdVerCom",adapter.getList().get(a).getInspStdVerCom() == null ? "" : adapter.getList().get(a).getInspStdVerCom());
                             bundle.putString("inspectStdId",StringUtil.isEmpty(adapter.getList().get(a).getId()+"") ? "" :adapter.getList().get(a).getId()+"");
+                            bundle.putString("inspectProjId",adapter.getList().get(a).getInspectProjId() == null ? "" : adapter.getList().get(a).getInspectProjId().getId()+"");
                             bundle.putBoolean("isEdit",isEdit);
+
+                            CustomSwipeLayout ll = (CustomSwipeLayout)recyclerView.getChildAt(a);
+                            CustomTextView ctApplicationScheme = ll.findViewById(R.id.ctApplicationScheme);
+                            bundle.putBoolean("inspectProjIdIsValuable",StringUtil.isEmpty(ctApplicationScheme.getContent()) || ctApplicationScheme.getContent().equals("--") ? false : true);
                             IntentRouter.go(context,Constant.AppCode.LIMS_InspectComDataByStdVerId,bundle);
                         }else {
                             ToastUtils.show(context,"请先选择一项质量标准");
@@ -616,13 +616,16 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 ctMateriel.setEditable(false);
                 ceMaterielBatchNumber.setEditable(false);
             }
-            if (entity.getProdId().isEnableBatch()){
-                ceMaterielBatchNumber.setEditable(true);
-                ceMaterielBatchNumber.setNecessary(true);
-            }else {
-                ceMaterielBatchNumber.setEditable(false);
-                ceMaterielBatchNumber.setNecessary(false);
+            if (null != entity.getProdId()){
+                if (entity.getProdId().isEnableBatch()){
+                    ceMaterielBatchNumber.setEditable(true);
+                    ceMaterielBatchNumber.setNecessary(true);
+                }else {
+                    ceMaterielBatchNumber.setEditable(false);
+                    ceMaterielBatchNumber.setNecessary(false);
+                }
             }
+
             //请检时间
             cdCheckTime.setContent(entity.getApplyTime() == null ? "--" : DateUtil.dateFormat(entity.getApplyTime(), "yyyy-MM-dd HH:mm:ss"));
             //请检人
@@ -776,10 +779,10 @@ public class InspectionApplicationDetailController extends BaseViewController im
             params.put("id", mHeadEntity.getId());
         }
         params.put("__pc__", _pc_);
-        Gson gson = new Gson();
-        String s = gson.toJson(entity);
-        Log.i("eeeeeeeeeeeeeeeee", "->" + s);
-        String s1 = gson.toJson(entity);
+//        Gson gson = new Gson();
+//        String s = gson.toJson(entity);
+//        Log.i("eeeeeeeeeeeeeeeee", "->" + s);
+//        String s1 = gson.toJson(entity);
         presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectApplicationSubmitApi.class).submitInspectApplication(path, params, entity);
     }
 
@@ -969,6 +972,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
                 //变更表头物料信息的值
                 mHeadEntity.setProdId(event.getData());
+                if (event.getData().isEnableBatch()){
+                    ceMaterielBatchNumber.setEditable(true);
+                    ceMaterielBatchNumber.setNecessary(true);
+                }else {
+                    ceMaterielBatchNumber.setEditable(false);
+                    ceMaterielBatchNumber.setNecessary(false);
+                }
                 presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultStandardById(mHeadEntity.getProdId().getId()+"");
 
             }
@@ -1116,7 +1126,12 @@ public class InspectionApplicationDetailController extends BaseViewController im
     public void getDefaultStandardByIdSuccess(TemporaryQualityStandardEntity entity) {
         if (null != entity){
             myDefaultQualityStandardEntity = entity;
-            presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultItems(entity.getStdVersion().getId()+"");
+            if (null != entity.getStdVersion()){
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultItems(entity.getStdVersion().getId()+"");
+            }else {
+                ToastUtils.show(context,"当前物料暂无可用质量标准");
+            }
+
         }
 
     }
@@ -1173,6 +1188,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                     EventBus.getDefault().post(new RefreshEvent());
                     ((BaseActivity)context).back();
                 }else {
+                    customWorkFlowView.findViewById(R.id.commentInput).setVisibility(View.GONE);
                     if (null != mOnRequestHeadListener){
                         mOnRequestHeadListener.requestHeadClick();
                     }
