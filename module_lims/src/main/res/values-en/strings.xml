@@ -52,4 +52,7 @@
     <string name="lims_test_result">Check_result</string>
     <string name="lims_range">Range</string>
     <string name="lims_sample_com">SampleComId</string>
+    <string name="lims_sample_result_input">Sample_result_input</string>
+    <string name="lims_sample_separation_type">Sample_separation_type</string>
+    <string name="lims_sample_type">Sample_type</string>
 </resources>

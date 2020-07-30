@@ -52,5 +52,8 @@
     <string name="lims_test_result">检验结论</string>
     <string name="lims_range">范围</string>
     <string name="lims_sample_com">检测分项</string>
+    <string name="lims_sample_result_input">按样品结果录入</string>
+    <string name="lims_sample_separation_type">分样类型</string>
+    <string name="lims_sample_type">样品类型</string>
 
 </resources>

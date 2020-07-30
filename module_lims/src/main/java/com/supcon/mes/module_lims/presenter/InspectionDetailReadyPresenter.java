@@ -1,6 +1,7 @@
 package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyApi;
@@ -20,10 +21,17 @@ import io.reactivex.functions.Function;
 public class InspectionDetailReadyPresenter extends InspectionDetailReadyApi.Presenter {
 
     @Override
-    public void getBusinessTypeList() {
+    public void getBusinessTypeList(int type) {
 
         Map<String, Object> tableTypeCodeMap = new HashMap<>();
-        tableTypeCodeMap.put("tableTypeCode","manu");
+        if (type == 1){
+            tableTypeCodeMap.put("tableTypeCode","manu");
+        }else if (type == 2){
+            tableTypeCodeMap.put("tableTypeCode","purch");
+        }else if (type == 3){
+            tableTypeCodeMap.put("tableTypeCode","other");
+        }
+
 
         Map<String, Object> map = new HashMap<>();
         map.put("customCondition",tableTypeCodeMap);

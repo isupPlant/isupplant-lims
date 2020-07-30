@@ -2,11 +2,16 @@ package com.supcon.mes.module_sample.model.network;
 
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
+import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
+import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleReportSubmitEntity;
 
 import java.util.Map;
@@ -54,5 +59,15 @@ public interface ApiService {
      */
     @POST("/msService/LIMSSample/sampleReport/sampleReport/{sampleReportView}/submit")
     Flowable<SubmitResultEntity> submitSampleReport(@Path("sampleReportView") String path, @QueryMap Map<String,Object> params, @Body SampleReportSubmitEntity reportSubmitEntity);
+
+    /**
+     * 按样品结果录入 获取样品列表接口
+     * @param pageType
+     * @param map
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleInfo/getPendingSample")
+    Flowable<BAP5CommonEntity<CommonListEntity<SampleEntity>>> getSampleList(@Query("pageType") String pageType,
+                                                                             @Body Map<String, Object> map);
 
 }

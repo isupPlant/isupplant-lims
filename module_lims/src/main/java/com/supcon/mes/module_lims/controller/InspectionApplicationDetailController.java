@@ -197,8 +197,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         super.onInit();
         EventBus.getDefault().register(this);
         presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionDetailReadyApi.class).getIfUpload();
-        //获取业务类型参照的数据
-        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionDetailReadyApi.class).getBusinessTypeList();
+
     }
 
     @Override
@@ -554,6 +553,8 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     public void setHeardData(int type, InspectionApplicationDetailHeaderEntity entity, OnRequestPtListener mOnRequestPtListener) {
         this.type = type;
+        //获取业务类型参照的数据
+        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionDetailReadyApi.class).getBusinessTypeList(type);
         if (null != entity) {
             mHeadEntity = entity;
             if (null != entity.getPending() && null != entity.getPending().openUrl) {
@@ -616,15 +617,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 ctMateriel.setEditable(false);
                 ceMaterielBatchNumber.setEditable(false);
             }
-            if (null != entity.getProdId()){
-                if (entity.getProdId().isEnableBatch()){
-                    ceMaterielBatchNumber.setEditable(true);
-                    ceMaterielBatchNumber.setNecessary(true);
-                }else {
-                    ceMaterielBatchNumber.setEditable(false);
-                    ceMaterielBatchNumber.setNecessary(false);
-                }
-            }
+
+
+
 
             //请检时间
             cdCheckTime.setContent(entity.getApplyTime() == null ? "--" : DateUtil.dateFormat(entity.getApplyTime(), "yyyy-MM-dd HH:mm:ss"));
@@ -691,6 +686,15 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 ctSupplier.setContent("--");
             }
 
+            if (null != entity.getProdId()){
+                if (entity.getProdId().isEnableBatch()){
+                    ceMaterielBatchNumber.setEditable(true);
+                    ceMaterielBatchNumber.setNecessary(true);
+                }else {
+                    ceMaterielBatchNumber.setEditable(false);
+                    ceMaterielBatchNumber.setNecessary(false);
+                }
+            }
 
             //是否实验室检验
             setNeedLaboratory();
@@ -804,7 +808,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
             ((BaseActivity)context).onLoading(view+"驳回中...");
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         }else if ("作废".equals(workFlowVar.dec)){
-            ((BaseActivity)context).onLoading("备件领用单作废中...");
+            ((BaseActivity)context).onLoading(view+"作废中...");
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         }else {
             ((BaseActivity)context).onLoading(view+"提交中...");
