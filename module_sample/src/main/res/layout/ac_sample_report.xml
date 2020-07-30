@@ -63,13 +63,25 @@
                     android:layout_height="0.5dp"
                     android:background="#ffdcdcdc" />
 
-
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/executeStdTv"
                     style="@style/yh_custom_view_horizontal_style"
                     android:tag="executeStdTv"
                     app:gravity="right|center_vertical"
                     app:text="@string/lims_executive_standards"
+                    app:text_color="@color/font_333333" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#ffdcdcdc" />
+
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/versionNumberTv"
+                    style="@style/yh_custom_view_horizontal_style"
+                    android:tag="versionNumberTv"
+                    app:gravity="right|center_vertical"
+                    app:text="@string/lims_version_number"
                     app:text_color="@color/font_333333" />
                 <View
                     android:layout_width="match_parent"
@@ -133,18 +145,6 @@
 
 
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="#ffdcdcdc" />
-
-                    <com.supcon.mes.mbap.view.CustomTextView
-                        android:id="@+id/versionNumberTv"
-                        style="@style/yh_custom_view_horizontal_style"
-                        android:tag="versionNumberTv"
-                        app:gravity="right|center_vertical"
-                        app:text="@string/lims_version_number"
-                        app:text_color="@color/font_333333" />
 
                     <View
                         android:layout_width="match_parent"

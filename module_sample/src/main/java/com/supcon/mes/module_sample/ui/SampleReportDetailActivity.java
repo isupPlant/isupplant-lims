@@ -307,7 +307,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         setSampleReport(entity);
         Map<String,Object> params=new HashMap<>();
         params.put("reportId",entity.getId());
-        params.put("stdVerId",entity.getStdVerId().getStdId().getId());
+        params.put("stdVerId",entity.getStdVerId().getId());
         params.put("pageNo",1);
         presenterRouter.create(SampleReportDetailAPI.class).getReportComList(params);
     }
@@ -367,6 +367,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     @Override
     public void getSampleReportByPendingSuccess(SurveyReportEntity entity) {
         reportEntity=entity;
+        presenterRouter.create(SampleReportDetailAPI.class).getSampleReport(reportEntity.getId());
         setSampleReport(reportEntity);
     }
 
