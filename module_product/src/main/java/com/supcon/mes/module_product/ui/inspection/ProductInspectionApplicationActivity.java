@@ -134,7 +134,7 @@ public class ProductInspectionApplicationActivity extends BaseRefreshRecyclerAct
                     Bundle bundle = new Bundle();
                     bundle.putString("id",adapter.getItem(position).getId()+"");
                     bundle.putString("pendingId",adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id+"");
-                    IntentRouter.go(context,Constant.AppCode.LIMS_ProductApplicationInspectionDetail,bundle);
+                    IntentRouter.go(context,Constant.AppCode.LIMS_ManuInspectView,bundle);
                 }
             }
         });

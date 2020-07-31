@@ -12,10 +12,12 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_incoming.R;
 import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailApi;
 import com.supcon.mes.module_lims.presenter.InspectionApplicationDetailPresenter;
@@ -25,12 +27,13 @@ import com.supcon.mes.module_lims.presenter.InspectionApplicationDetailPresenter
  * on 2020/7/21
  * class name
  */
-@Router(value = Constant.AppCode.LIMS_IncomingApplicationInspectionDetail)
+@Router(value = "", viewCode = "purchInspectView,purchInspectEdit")
 @Presenter(value = {InspectionApplicationDetailPresenter.class})
 @Controller(value = {InspectionApplicationDetailController.class})
 public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailApi.View{
     private String id;
     private String pendingId;
+    private PendingEntity pendingEntity;
 
     @BindByTag("titleText")
     TextView titleText;
@@ -47,6 +50,7 @@ public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActi
         super.onInit();
         id =  getIntent().getStringExtra("id");
         pendingId = getIntent().getStringExtra("pendingId");
+        pendingEntity = (PendingEntity) getIntent().getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
     }
 
     @Override
@@ -68,7 +72,13 @@ public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActi
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(id,pendingId);
+                if (null != id && null != pendingId){
+                    presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(id,pendingId);
+                }else {
+                    //通过待办 获取检验申请单的id
+                    presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionApplicationByPending(pendingEntity.modelId,pendingEntity.id);
+                }
+
             }
         });
 
@@ -109,6 +119,19 @@ public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActi
 
     @Override
     public void getInspectionDetailPtDataFailed(String errorMsg) {
+        refreshController.refreshComplete();
+    }
+
+    @Override
+    public void getInspectionApplicationByPendingSuccess(InspectionApplicationEntity entity) {
+        if (null != entity){
+            presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(entity.getId()+"",pendingEntity.id+"");
+        }
+    }
+
+
+    @Override
+    public void getInspectionApplicationByPendingFailed(String errorMsg) {
         refreshController.refreshComplete();
     }
 }
