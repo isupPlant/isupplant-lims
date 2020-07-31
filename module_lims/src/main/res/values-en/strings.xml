@@ -55,4 +55,5 @@
     <string name="lims_sample_result_input">Sample_result_input</string>
     <string name="lims_sample_separation_type">Sample_separation_type</string>
     <string name="lims_sample_type">Sample_type</string>
+    <string name="lims_inspection_item">Inspection_item</string>
 </resources>

@@ -21,6 +21,7 @@ import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
  * class name 检验申请公用adapter
  */
 public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapter<InspectionApplicationEntity> {
+    private int type;
     public InspectionApplicationAdapter(Context context) {
         super(context);
     }
@@ -28,6 +29,10 @@ public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapte
     @Override
     protected BaseRecyclerViewHolder<InspectionApplicationEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
+    }
+
+    public void setType(int type){
+        this.type = type;
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<InspectionApplicationEntity>{
@@ -97,12 +102,22 @@ public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapte
                 tvExaminer.setContent(StringUtil.isEmpty(data.getApplyStaffId().getName()) ? "--" : data.getApplyStaffId().getName());
             }
 
-            //请检部门
-            if (data.getApplyDeptId() == null){
-                tvInspectionDepartment.setContent("--");
+
+            if (type == 2){
+                //请检部门
+                if (data.getCreateDepartment() == null){
+                    tvInspectionDepartment.setContent("--");
+                }else {
+                    tvInspectionDepartment.setContent(StringUtil.isEmpty(data.getCreateDepartment().getName()) ? "--" : data.getCreateDepartment().getName());
+                }
             }else {
-                tvInspectionDepartment.setContent(StringUtil.isEmpty(data.getApplyDeptId().getName()) ? "--" : data.getApplyDeptId().getName());
+                if (data.getApplyDeptId() == null){
+                    tvInspectionDepartment.setContent("--");
+                }else {
+                    tvInspectionDepartment.setContent(StringUtil.isEmpty(data.getApplyDeptId().getName()) ? "--" : data.getApplyDeptId().getName());
+                }
             }
+
 
             //请检时间
             if (data.getApplyTime() == null){

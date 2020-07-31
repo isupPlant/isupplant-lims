@@ -1,10 +1,12 @@
 package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailApi;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
@@ -89,6 +91,28 @@ public class InspectionApplicationDetailPresenter extends InspectionApplicationD
                     getView().getInspectionDetailPtDataSuccess(entity);
                 }else {
                     getView().getInspectionDetailHeaderDataFailed(entity.msg);
+                }
+            }
+        }));
+    }
+
+    @Override
+    public void getInspectionApplicationByPending(Long moduleId, Long pendingId) {
+        mCompositeSubscription.add(BaseLimsHttpClient.getInspectionApplicationByPending(moduleId, pendingId).onErrorReturn(new Function<Throwable, BAP5CommonEntity<InspectionApplicationEntity>>() {
+            @Override
+            public BAP5CommonEntity<InspectionApplicationEntity> apply(Throwable throwable) throws Exception {
+                BAP5CommonEntity entity = new BAP5CommonEntity();
+                entity.msg = HttpErrorReturnUtil.getErrorInfo(throwable);
+                entity.success = false;
+                return entity;
+            }
+        }).subscribe(new Consumer<BAP5CommonEntity<InspectionApplicationEntity>>() {
+            @Override
+            public void accept(BAP5CommonEntity<InspectionApplicationEntity> entity) throws Exception {
+                if (entity.success){
+                    getView().getInspectionApplicationByPendingSuccess(entity.data);
+                }else {
+                    getView().getInspectionApplicationByPendingFailed(entity.msg);
                 }
             }
         }));

@@ -1,6 +1,8 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -27,6 +29,8 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
 
     class ViewHolder extends BaseRecyclerViewHolder<SampleEntity>{
 
+        @BindByTag("item")
+        LinearLayout item;
         @BindByTag("ctSample")
         CustomTextView ctSample;
         @BindByTag("ctMateriel")
@@ -49,6 +53,12 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
         @Override
         protected int layoutId() {
             return R.layout.item_sample_list;
+        }
+
+        @Override
+        protected void initListener() {
+            super.initListener();
+            item.setOnClickListener(v -> onItemChildViewClick(v,0));
         }
 
         @Override
@@ -104,6 +114,12 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
 
             //登记时间
             ctRegisterTime.setContent(StringUtil.isEmpty(data.getRegisterTime()) ? "--" : data.getRegisterTime());
+
+            if (data.isSelect()){
+                item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_sel);
+            }else {
+                item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_nor);
+            }
         }
     }
 }

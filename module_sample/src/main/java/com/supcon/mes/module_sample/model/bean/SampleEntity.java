@@ -22,6 +22,7 @@ public class SampleEntity extends BaseEntity {
     private BaseIdValueEntity sampleType;
     private BaseIdValueEntity sampleState;
     private BaseIdValueEntity speraType;
+    private boolean isSelect;
 
     public StdVerIdEntity getStdVerId() {
         return stdVerId;
@@ -109,5 +110,13 @@ public class SampleEntity extends BaseEntity {
 
     public void setSperaType(BaseIdValueEntity speraType) {
         this.speraType = speraType;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

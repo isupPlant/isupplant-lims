@@ -170,7 +170,11 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
                         setSelectAllStyle(false);
                     }
                 }else if (action == 1){
+<<<<<<< HEAD
 //                    ToastUtils.show(context,"进入打印页面");
+=======
+                    //ToastUtils.show(context,"进入打印页面");
+>>>>>>> c0702d1ec3083b284e473c51315ae48f07b4e563
                 }
             }
         });

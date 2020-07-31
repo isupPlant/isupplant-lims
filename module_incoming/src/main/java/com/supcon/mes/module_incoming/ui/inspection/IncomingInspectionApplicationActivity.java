@@ -88,6 +88,8 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_incoming_inspection_application));
 
+        adapter.setType(2);
+
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -137,7 +139,7 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
                     Bundle bundle = new Bundle();
                     bundle.putString("id",adapter.getItem(position).getId()+"");
                     bundle.putString("pendingId",adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id+"");
-                    IntentRouter.go(context,Constant.AppCode.LIMS_IncomingApplicationInspectionDetail,bundle);
+                    IntentRouter.go(context,Constant.AppCode.LIMS_PurchInspectView,bundle);
                 }
             }
         });

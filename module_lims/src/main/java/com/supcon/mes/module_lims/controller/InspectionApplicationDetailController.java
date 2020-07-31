@@ -355,9 +355,14 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctSupplier.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.SELECT_TAG,ctSupplier.getTag() + "");
-                IntentRouter.go(context, Constant.AppCode.LIMS_CmcPartRef, bundle);
+                if (action == -1){
+                    mHeadEntity.setVendorId(new VendorIdEntity());
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constant.IntentKey.SELECT_TAG,ctSupplier.getTag() + "");
+                    IntentRouter.go(context, Constant.AppCode.LIMS_CmcPartRef, bundle);
+                }
+
             }
         });
 

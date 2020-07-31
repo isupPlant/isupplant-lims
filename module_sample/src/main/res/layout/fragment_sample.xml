@@ -1,13 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:core_ptr="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_margin="@dimen/dp_1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/shape_gray_box">
+    android:layout_height="match_parent">
 
-    <include
-        layout="@layout/ly_recyclerview_with_scrollbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_box_padding_1"
+        android:orientation="vertical">
+
+        <com.supcon.mes.module_search.ui.view.SearchTitleBar
+            android:id="@+id/searchTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:tag="searchTitle" />
+
+        <com.supcon.common.view.ptr.PtrFrameLayout
+            android:id="@+id/refreshFrameLayout"
+            android:tag="refreshFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            core_ptr:ptr_keep_header_when_refresh="true"
+            core_ptr:ptr_pull_to_fresh="false"
+            core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+            core_ptr:ptr_resistance="1.7"
+            >
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contentView"
+                android:tag="contentView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                />
+
+        </com.supcon.common.view.ptr.PtrFrameLayout>
+
+
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

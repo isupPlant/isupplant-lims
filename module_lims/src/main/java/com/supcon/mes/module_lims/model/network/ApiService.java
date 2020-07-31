@@ -18,6 +18,7 @@ import com.supcon.mes.module_lims.model.bean.InspectReportDetailListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemsListEntity;
@@ -278,5 +279,15 @@ public interface ApiService {
      */
     @POST("/msService/QCS/inspect/inspect/{documentType}/submit")
     Flowable<BAP5CommonEntity> submitInspectApplication(@Path("documentType") String path, @QueryMap Map<String, Object> params, @Body InspectApplicationSubmitEntity inspectApplicationSubmitEntity);
+
+    /**
+     * 通过待办获取检验申请当前列表item的数据
+     * @param moduleId
+     * @param pendingId
+     * @return
+     */
+    @GET("/msService/QCS/inspect/inspect/data/{moduleId}")
+    Flowable<BAP5CommonEntity<InspectionApplicationEntity>> getInspectionApplicationByPending(@Path("moduleId") Long moduleId,
+                                                                            @Query("pendingId") Long pendingId);
 
 }

@@ -87,7 +87,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_other_inspection_application));
-
+        adapter.setType(3);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -137,7 +137,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
                     Bundle bundle = new Bundle();
                     bundle.putString("id",adapter.getItem(position).getId()+"");
                     bundle.putString("pendingId",adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id+"");
-                    IntentRouter.go(context,Constant.AppCode.LIMS_OtherApplicationInspectionDetail,bundle);
+                    IntentRouter.go(context,Constant.AppCode.LIMS_OtherInspectView,bundle);
                 }
             }
         });
