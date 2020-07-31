@@ -54,11 +54,14 @@ public class SampleSurveyReportPresenter extends SampleSurveyReportApi.Presenter
         if (params.containsKey(Constant.BAPQuery.BATCH_CODE)){
             secondParams.put(Constant.BAPQuery.BATCH_CODE, params.get(Constant.BAPQuery.BATCH_CODE));
         }
-        fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(secondParams,joinInfo));
+
+       if (!secondParams.isEmpty())
+            fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(secondParams,joinInfo));
         if (params.containsKey(Constant.BAPQuery.PICKSITE)){
             Map<String,Object> thirdParams=new HashMap<>();
             thirdParams.put(Constant.BAPQuery.PICKSITE,params.get(Constant.BAPQuery.PICKSITE));
             JoinSubcondEntity subcondEntity = new JoinSubcondEntity();
+            subcondEntity.joinInfo=joinInfo;
             subcondEntity.subconds=new ArrayList<>();
             subcondEntity.type = "2";
             subcondEntity.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(thirdParams,"LIMSBA_PICKSITE,ID,LIMSSA_SAMPLE_INFOS,PS_ID"));
