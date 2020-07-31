@@ -29,6 +29,7 @@ public class InspectionApplicationPresenter extends InspectionApplicationApi.Pre
         String viewCode = "";
         String joinInfo = "BASESET_MATERIALS,ID,QCS_INSPECTS,PROD_ID";
         String modelAlias = "inspect";
+        FastQueryCondEntity fastQuery;
         if (type.equals(BusinessType.PleaseCheck.PRODUCT_PLEASE_CHECK)){
             if (isAll){
                 query = "manuInspectList-query";
@@ -69,15 +70,22 @@ public class InspectionApplicationPresenter extends InspectionApplicationApi.Pre
         if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
             codeParam.put(Constant.BAPQuery.TABLE_NO, params.get(Constant.BAPQuery.TABLE_NO));
         }
+        if (type.equals(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK) && params.containsKey(Constant.BAPQuery.TABLE_NO)){
+            //创建一个空的实体类
+            fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(codeParam);
+            fastQuery.modelAlias = modelAlias;
+            fastQuery.viewCode = viewCode;
+        }else {
+            //创建一个空的实体类
+            fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
+            fastQuery.modelAlias = modelAlias;
+            fastQuery.viewCode = viewCode;
+            //创建fastQuery.subconds内部该有的属性并且赋值
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(codeParam, joinInfo);
+            fastQuery.subconds.add(joinSubcondEntity);
+        }
 
 
-        //创建一个空的实体类
-        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
-        fastQuery.modelAlias = modelAlias;
-        fastQuery.viewCode = viewCode;
-        //创建fastQuery.subconds内部该有的属性并且赋值
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(codeParam, joinInfo);
-        fastQuery.subconds.add(joinSubcondEntity);
 
         Map<String, Object> map = new HashMap<>();
         map.put("fastQueryCond", fastQuery.toString());

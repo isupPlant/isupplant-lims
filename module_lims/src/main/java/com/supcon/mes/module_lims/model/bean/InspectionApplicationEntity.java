@@ -22,6 +22,7 @@ public class InspectionApplicationEntity extends BaseEntity {
     private BaseIdValueEntity checkState;
     private Long cid;
     private Boolean closed;
+    private BaseLongIdNameEntity createDepartment;
     private Long id;
     private Boolean needLab;
     private PendingEntity pending;
@@ -174,5 +175,13 @@ public class InspectionApplicationEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public BaseLongIdNameEntity getCreateDepartment() {
+        return createDepartment;
+    }
+
+    public void setCreateDepartment(BaseLongIdNameEntity createDepartment) {
+        this.createDepartment = createDepartment;
     }
 }

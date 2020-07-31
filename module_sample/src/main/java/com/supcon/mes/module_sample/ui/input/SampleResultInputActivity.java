@@ -45,28 +45,10 @@ import io.reactivex.functions.Consumer;
 @Router(value = Constant.AppCode.LIMS_SampleResultInput)
 public class SampleResultInputActivity extends BaseFragmentActivity {
 
-    @BindByTag("searchTitle")
-    SearchTitleBar searchTitle;
-
-    @BindByTag("titleText")
-    TextView titleText;
-
-    @BindByTag("leftBtn")
-    CustomImageButton leftBtn;
-
     private Fragment sampleFragment,inspectionItemsFragment,inspectionSubItemFragment;
 
-    private List<String> searchTypeList = new ArrayList<>();
-    private Map<String, Object> params = new HashMap<>();
-
-    private OnChangeParamsListener mOnChangeParamsListener;
     private OnRefreshInspectionItemListener mOnRefreshInspectionItemListener;
     private OnSampleRefreshListener mOnSampleRefreshListener;
-
-    private SearchResultEntity resultEntity;
-    private String searchKey;
-    private String title;
-    private boolean isFinish = false;
 
     @Override
     protected int getLayoutID() {
@@ -76,15 +58,7 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
     @Override
     protected void onInit() {
         super.onInit();
-        EventBus.getDefault().register(this);
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_sample_result_input));
-        searchTitle.showScan(false);
-
-        searchTypeList.add(getString(R.string.lims_sample_code));
-        searchTypeList.add(getString(R.string.lims_sample_name));
-        searchTypeList.add(getString(R.string.lims_batch_number));
-
     }
 
     @Override
@@ -104,85 +78,6 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
 
     }
 
-    @SuppressLint("CheckResult")
-    @Override
-    protected void initListener() {
-        super.initListener();
-        leftBtn.setOnClickListener(v -> onBackPressed());
-
-        //当前页面搜索图标的的点击事件
-        RxView.clicks(searchTitle.getSearchBtn())
-                .throttleFirst(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        Bundle bundle = new Bundle();
-                        bundle.putStringArrayList(Constant.IntentKey.SEARCH_LIST, (ArrayList<String>) searchTypeList);
-                        IntentRouter.go(context, Constant.Router.SEARCH_HISTORY, bundle);
-                    }
-                });
-
-        //从 历史搜索页面跳转到当前页面的搜索框的点击事件（只要点击 立马跳转到历史搜索页面）
-        searchTitle.setSearchClick(new SearchTitleBar.SearchEventListener() {
-            @Override
-            public void searchClick(boolean isDelete) {
-                SearchResultEntity resultEntity = new SearchResultEntity();
-                resultEntity.key = searchKey;
-                resultEntity.result = title;
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList(Constant.IntentKey.SEARCH_LIST, (ArrayList<String>) searchTypeList);
-                if (!isDelete) {
-                    bundle.putSerializable(Constant.IntentKey.SEARCH_DATA, resultEntity);
-                }
-                IntentRouter.go(context, Constant.Router.SEARCH_HISTORY, bundle);
-                isFinish = true;
-            }
-        });
-
-        searchTitle.setSearchLayoutLisetner(new SearchTitleBar.SearchLayoutListener() {
-            @Override
-            public void searchHideClick() {
-                removeParams();
-            }
-        });
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSearchHistory(EventInfo result) {
-        if (result.getEventId() == EventInfo.searchKey) {
-            resultEntity = (SearchResultEntity) result.getValue();
-            title = resultEntity.result;
-            searchKey = resultEntity.key;
-            if (!TextUtils.isEmpty(title)) {
-                searchTitle.showSearchBtn(title, searchKey);
-            }
-            removeParams();
-            if (searchKey.equals(getString(R.string.lims_sample_code))){
-                params.put(Constant.BAPQuery.CODE,title);
-            }else if (searchKey.equals(getString(R.string.lims_sample_name))){
-                params.put(Constant.BAPQuery.NAME,title);
-            }else if (searchKey.equals(getString(R.string.lims_batch_number))){
-                params.put(Constant.BAPQuery.BATCH_CODE,title);
-            }
-
-            if (mOnChangeParamsListener != null){
-                mOnChangeParamsListener.onChangeParams(params);
-            }
-
-        }
-    }
-
-    private void removeParams(){
-        if (null != params){
-            params.clear();
-        }
-    }
-
     public void setSampleId(Long sampleId){
         if (null != mOnRefreshInspectionItemListener){
             mOnRefreshInspectionItemListener.onRefreshInspectionItem(sampleId);
@@ -193,29 +88,6 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
         if (null != mOnSampleRefreshListener){
             mOnSampleRefreshListener.onSampleRefresh();
         }
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (isFinish) {
-            searchTitle.hideSearchBtn();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    public void setOnChangeParamsListener(OnChangeParamsListener mOnChangeParamsListener){
-        this.mOnChangeParamsListener = mOnChangeParamsListener;
-    }
-
-    public interface OnChangeParamsListener{
-        void onChangeParams(Map<String, Object> params);
     }
 
     public void setOnRefreshInspectionItemListener(OnRefreshInspectionItemListener mOnRefreshInspectionItemListener){

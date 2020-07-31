@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/ctSample"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_9"
+        android:tag="ctSample"
+        app:content_color="@color/fontBlack333"
+        app:content_size="15"
+        app:gravity="center|center_vertical"
+        app:key="@string/lims_inspection_item"
+        app:key_color="@color/c_scan_666"
+        app:key_size="13" />
+
+
+
+</LinearLayout>

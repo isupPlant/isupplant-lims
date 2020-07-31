@@ -87,7 +87,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_other_inspection_application));
-
+        adapter.setType(3);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override

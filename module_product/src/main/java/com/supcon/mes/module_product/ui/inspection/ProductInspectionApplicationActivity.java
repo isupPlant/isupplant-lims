@@ -90,6 +90,7 @@ public class ProductInspectionApplicationActivity extends BaseRefreshRecyclerAct
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_product_inspection_application));
 
+        adapter.setType(1);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override

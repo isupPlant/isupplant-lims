@@ -148,7 +148,7 @@ public class InspectionItemsFragment extends BaseRefreshRecyclerFragment<Inspect
 
     @Override
     public void getInspectionItemListFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
+        //SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }
 }
