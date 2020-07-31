@@ -30,7 +30,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
@@ -55,6 +57,12 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
     private Fragment sampleFragment,inspectionItemsFragment,inspectionSubItemFragment;
 
     private List<String> searchTypeList = new ArrayList<>();
+    private Map<String, Object> params = new HashMap<>();
+
+    private OnChangeParamsListener mOnChangeParamsListener;
+    private OnRefreshInspectionItemListener mOnRefreshInspectionItemListener;
+    private OnSampleRefreshListener mOnSampleRefreshListener;
+
     private SearchResultEntity resultEntity;
     private String searchKey;
     private String title;
@@ -134,7 +142,7 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
         searchTitle.setSearchLayoutLisetner(new SearchTitleBar.SearchLayoutListener() {
             @Override
             public void searchHideClick() {
-
+                removeParams();
             }
         });
     }
@@ -153,9 +161,40 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
             if (!TextUtils.isEmpty(title)) {
                 searchTitle.showSearchBtn(title, searchKey);
             }
+            removeParams();
+            if (searchKey.equals(getString(R.string.lims_sample_code))){
+                params.put(Constant.BAPQuery.CODE,title);
+            }else if (searchKey.equals(getString(R.string.lims_sample_name))){
+                params.put(Constant.BAPQuery.NAME,title);
+            }else if (searchKey.equals(getString(R.string.lims_batch_number))){
+                params.put(Constant.BAPQuery.BATCH_CODE,title);
+            }
+
+            if (mOnChangeParamsListener != null){
+                mOnChangeParamsListener.onChangeParams(params);
+            }
 
         }
     }
+
+    private void removeParams(){
+        if (null != params){
+            params.clear();
+        }
+    }
+
+    public void setSampleId(Long sampleId){
+        if (null != mOnRefreshInspectionItemListener){
+            mOnRefreshInspectionItemListener.onRefreshInspectionItem(sampleId);
+        }
+    }
+
+    public void sampleRefresh(){
+        if (null != mOnSampleRefreshListener){
+            mOnSampleRefreshListener.onSampleRefresh();
+        }
+    }
+
 
     @Override
     protected void onStop() {
@@ -169,5 +208,28 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    public void setOnChangeParamsListener(OnChangeParamsListener mOnChangeParamsListener){
+        this.mOnChangeParamsListener = mOnChangeParamsListener;
+    }
+
+    public interface OnChangeParamsListener{
+        void onChangeParams(Map<String, Object> params);
+    }
+
+    public void setOnRefreshInspectionItemListener(OnRefreshInspectionItemListener mOnRefreshInspectionItemListener){
+        this.mOnRefreshInspectionItemListener = mOnRefreshInspectionItemListener;
+    }
+
+    public interface OnRefreshInspectionItemListener{
+        void onRefreshInspectionItem(Long sampleId);
+    }
+    public void setOnSampleRefreshListener(OnSampleRefreshListener mOnSampleRefreshListener){
+        this.mOnSampleRefreshListener = mOnSampleRefreshListener;
+    }
+
+    public interface OnSampleRefreshListener{
+        void onSampleRefresh();
     }
 }

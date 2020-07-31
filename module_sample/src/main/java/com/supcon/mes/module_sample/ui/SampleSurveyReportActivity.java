@@ -53,7 +53,7 @@ public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<Surv
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    private boolean isWhole = true;
+    private boolean isWhole = false;
 
     private Map<String, Object> params = new HashMap<>();
 

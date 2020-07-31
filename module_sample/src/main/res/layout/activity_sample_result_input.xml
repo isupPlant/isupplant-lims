@@ -19,6 +19,7 @@
 
         <LinearLayout
             android:layout_weight="1"
+            android:weightSum="3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -28,8 +29,9 @@
                 android:tag="fragment_sample"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:layout_margin="@dimen/dp_5"
+                android:background="@drawable/shape_gray_box"
                 />
 
             <FrameLayout
@@ -38,7 +40,8 @@
                 android:layout_margin="@dimen/dp_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="1.8"
+                android:background="@drawable/shape_gray_box"/>
 
         </LinearLayout>
 
@@ -49,6 +52,7 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/shape_gray_box"
              />
 
     </LinearLayout>

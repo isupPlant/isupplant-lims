@@ -1,5 +1,7 @@
 package com.supcon.mes.module_sample.ui.input.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,8 +13,10 @@ import com.app.annotation.Presenter;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -21,8 +25,11 @@ import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.contract.SampleListApi;
 import com.supcon.mes.module_sample.presenter.SampleListPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
+import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,9 +43,22 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    private SampleListAdapter adapter;
+    @BindByTag("searchTitle")
+    SearchTitleBar searchTitle;
 
-    private Map<String, Object> params = new HashMap<>();
+    private SampleListAdapter adapter;
+    SampleResultInputActivity activity;
+
+    private Map<String, Object> mParams = new HashMap<>();
+
+    private int mPosition = -1;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (SampleResultInputActivity) context;
+    }
+
     @Override
     protected IListAdapter<SampleEntity> createAdapter() {
         adapter = new SampleListAdapter(context);
@@ -53,6 +73,10 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     @Override
     protected void onInit() {
         super.onInit();
+        searchTitle.showScan(false);
+        searchTitle.findViewById(R.id.leftBtn).setVisibility(View.GONE);
+        searchTitle.findViewById(R.id.ivSearchBtn).setVisibility(View.GONE);
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -83,7 +107,33 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(pageIndex,params);
+                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(pageIndex,mParams);
+            }
+        });
+
+        adapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
+            if (action == 0){  //mPosition 为记录上次点击的下标位置，如果点击的是与上次的同一条目，就直接return
+                if (mPosition == position){
+                    return;
+                }
+
+                List<SampleEntity> list = adapter.getList();
+                for (int i = 0; i < list.size(); i++) {
+                    list.get(i).setSelect(false);
+                }
+                list.get(position).setSelect(true);
+                adapter.notifyDataSetChanged();
+                mPosition = position;
+                //通知 检验项目更新数据
+                activity.setSampleId(list.get(position).getId());
+            }
+        });
+
+        activity.setOnChangeParamsListener(new SampleResultInputActivity.OnChangeParamsListener() {
+            @Override
+            public void onChangeParams(Map<String, Object> params) {
+                mParams = params;
+                goRefresh();
             }
         });
     }
@@ -92,13 +142,12 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         refreshListController.refreshBegin();
     }
 
-    public void setParams(Map<String, Object> params){
-        this.params = params;
-    }
+
 
     @Override
     public void getSampleListSuccess(CommonListEntity entity) {
         refreshListController.refreshComplete(entity.result);
+        activity.sampleRefresh();
     }
 
     @Override

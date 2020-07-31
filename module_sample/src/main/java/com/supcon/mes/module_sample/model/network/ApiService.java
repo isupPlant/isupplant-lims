@@ -11,6 +11,7 @@ import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
+import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleReportSubmitEntity;
 
@@ -70,4 +71,15 @@ public interface ApiService {
     Flowable<BAP5CommonEntity<CommonListEntity<SampleEntity>>> getSampleList(@Query("pageType") String pageType,
                                                                              @Body Map<String, Object> map);
 
+    /**
+     * 按样品结果录入 获取样品检测项目
+     * @param dealMode
+     * @param sampleId
+     * @param map
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleTest/findSampleTest")
+    Flowable<BAP5CommonEntity<CommonListEntity<InspectionItemsEntity>>> getInspectionItemList(@Query("dealMode") String dealMode,
+                                                                                              @Query("sampleId") String sampleId,
+                                                                                              @Body Map<String, Object> map);
 }
