@@ -203,16 +203,12 @@ public class SampleInquiryController extends BaseViewController {
                 if (null != mOnScanToResultListener){
                     mOnScanToResultListener.scanToResultClick(codeResultEvent.scanResult);
                 }
-
             }
-
         }
     }
 
     private void cleanParams() {
-        params.remove(Constant.BAPQuery.CODE);
-        params.remove(Constant.BAPQuery.BATCH_CODE);
-        params.remove(Constant.BAPQuery.NAME);
+        params.clear();
     }
 
     @Override
