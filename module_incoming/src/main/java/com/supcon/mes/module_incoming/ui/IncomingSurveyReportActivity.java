@@ -77,7 +77,7 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
         super.onInit();
         EventBus.getDefault().register(this);
 
-        refreshListController.setAutoPullDownRefresh(false);
+        refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
     }
