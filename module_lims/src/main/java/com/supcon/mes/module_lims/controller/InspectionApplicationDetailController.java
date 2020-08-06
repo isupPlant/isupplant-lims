@@ -70,6 +70,7 @@ import com.supcon.mes.module_lims.model.bean.InspectApplicationSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeEntity;
+import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
 import com.supcon.mes.module_lims.model.bean.PsIdEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.StdIdEntity;
@@ -239,13 +240,17 @@ public class InspectionApplicationDetailController extends BaseViewController im
         cdCheckTime.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (action == -1){
+                    mHeadEntity.setApplyTime("");
+                    return;
+                }
                 datePickController.listener(new DateTimePicker.OnYearMonthDayTimePickListener() {
                     @Override
                     public void onDateTimePicked(String year, String month, String day, String hour, String minute, String second) {
                         String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                         cdCheckTime.setContent(dateStr);
                         //更换表头中请检时间的值
-                        mHeadEntity.setApplyTime(DateUtil.dateFormat(dateStr,"yyyy-MM-dd HH:mm:ss"));
+                        mHeadEntity.setApplyTime(DateUtil.dateFormat(dateStr,"yyyy-MM-dd HH:mm:ss")+"");
                     }
                 }).show(new Date().getTime());
             }
@@ -255,6 +260,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctBusinessType.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (action == -1){
+                    BusiTypeIdEntity entity = new BusiTypeIdEntity();
+                    entity.setId(null);
+                    entity.setName("");
+                    mHeadEntity.setBusiTypeId(entity);
+                    return;
+                }
                 showSpinnerSelector(ctBusinessType, businessTypeStrList);
             }
         });
@@ -270,7 +282,10 @@ public class InspectionApplicationDetailController extends BaseViewController im
                     bundle.putString(Constant.IntentKey.SELECT_TAG, ctCheckPeople.getTag() + "");
                     IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 } else {
-                    ctCheckPeople.setValue("");
+                    ApplyStaffIdEntity entity = new ApplyStaffIdEntity();
+                    entity.setId(null);
+                    entity.setName("");
+                    mHeadEntity.setApplyStaffId(entity);
                 }
             }
         });
@@ -279,6 +294,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctCheckDepartment.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (action == -1){
+                    ApplyDeptIdEntity entity = new ApplyDeptIdEntity();
+                    entity.setId(null);
+                    entity.setName("");
+                    mHeadEntity.setApplyDeptId(entity);
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.IntentKey.SELECT_TAG, ctCheckDepartment.getTag() + "");
                 IntentRouter.go(context, Constant.Router.DEPART_SELECT, bundle);
@@ -358,6 +380,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctSamplingPoint.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (action == -1){
+                    PsIdEntity entity = new PsIdEntity();
+                    entity.setId(null);
+                    entity.setName("");
+                    mHeadEntity.setPsId(entity);
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.IntentKey.SELECT_TAG, ctSamplingPoint.getTag() + "");
                 IntentRouter.go(context, Constant.AppCode.LIMS_PickSiteRefPart, bundle);
@@ -383,7 +412,11 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctMateriel.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                ctMateriel.setContent("");
+                if (action == -1){
+                    ProdIdEntity entity = new ProdIdEntity();
+                    mHeadEntity.setProdId(entity);
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("radio", true);
                 IntentRouter.go(context, Constant.AppCode.LIMS_MaterialRef, bundle);
@@ -617,6 +650,11 @@ public class InspectionApplicationDetailController extends BaseViewController im
     }
 
     public void setPtData(List<InspectionDetailPtEntity> list) {
+        if (StringUtil.isEmpty(ctMateriel.getContent()) || ctMateriel.getContent().equals("--")){
+            ptList.clear();
+            adapter.setList(ptList);
+            return;
+        }
         ptList = list;
         adapter.setList(ptList);
     }
@@ -634,6 +672,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ceMaterielNum.setEditable(false);
         ceMaterielBatchNumber.setEditable(false);
         rlNeedLaboratory.setOnClickListener(null);
+        llStandardReference.setVisibility(View.GONE);
     }
 
     private void setCanEdit() {
@@ -648,6 +687,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ceMaterielNum.setEditable(true);
         ceMaterielBatchNumber.setEditable(true);
         recyclerView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(context));
+        llStandardReference.setVisibility(View.VISIBLE);
     }
 
     private void setMakingRules(InspectionApplicationDetailHeaderEntity entity) {
@@ -657,11 +697,8 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 ceMaterielBatchNumber.setEditable(false);
             }
 
-
-
-
             //请检时间
-            cdCheckTime.setContent(entity.getApplyTime() == null ? "--" : DateUtil.dateFormat(entity.getApplyTime(), "yyyy-MM-dd HH:mm:ss"));
+            cdCheckTime.setContent(StringUtil.isEmpty(entity.getApplyTime()) || entity.getApplyTime().equals("--")  ? "--" : DateUtil.dateFormat(Long.valueOf(entity.getApplyTime()), "yyyy-MM-dd HH:mm:ss")+"");
             //请检人
             if (null != entity.getApplyStaffId()) {
                 ctCheckPeople.setContent(StringUtil.isEmpty(entity.getApplyStaffId().getName()) ? "--" : entity.getApplyStaffId().getName());
@@ -1222,6 +1259,11 @@ public class InspectionApplicationDetailController extends BaseViewController im
             ptEntity.setStdVerId(stdVerIdEntity); // 质量标准
             ptEntity.setInspStdVerCom(new Gson().toJson(entity.data)); //对应的检验项目
 
+            //每次更换物料 就将之前带进来的质量标准作为删除项删除掉
+            for (int i = 0; i < adapter.getList().size(); i++) {
+                deletePtIds.add(adapter.getList().get(i).getId()+"");
+            }
+            
             ptList.clear();
             ptList.add(ptEntity);
             adapter.setList(ptList);
@@ -1236,6 +1278,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void getDefaultInspProjByStdVerIdSuccess(InspectionDetailPtEntity entity) {
+
         ptList.add(entity);
         adapter.setList(ptList);
     }

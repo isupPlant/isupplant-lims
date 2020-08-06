@@ -4,6 +4,8 @@ import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 import com.supcon.mes.middleware.util.StringUtil;
 
+import java.util.List;
+
 /**
  * author huodongsheng
  * on 2020/7/14
@@ -15,6 +17,7 @@ public class InspectionDetailPtEntity extends BaseEntity {
     private InspectIdEntity inspectId;
     private BaseLongIdNameEntity inspectProjId;
     private BaseLongIdNameEntity inspectProj;
+    private List<StdVerComIdEntity> stdVerComList;
 
     private Integer sort;
     private StdVerIdEntity stdVerId;
@@ -101,8 +104,15 @@ public class InspectionDetailPtEntity extends BaseEntity {
         isSelect = select;
     }
 
+    public List<StdVerComIdEntity> getStdVerComList() {
+        return stdVerComList;
+    }
 
-//    public Boolean getChecked() {
+    public void setStdVerComList(List<StdVerComIdEntity> stdVerComList) {
+        this.stdVerComList = stdVerComList;
+    }
+
+    //    public Boolean getChecked() {
 //        return isChecked;
 //    }
 //

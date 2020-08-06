@@ -1,5 +1,6 @@
 package com.supcon.mes.module_lims.presenter;
 
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
@@ -111,6 +112,7 @@ public class AvailableStdPresenter extends AvailableStdIdApi.Presenter {
             public void accept(BAP5CommonEntity<InspectionDetailPtEntity> entity) throws Exception {
                 if (entity.success){
                     entity.data.setStdVerId(mEntity.getStdVerId());
+                    entity.data.setInspStdVerCom(GsonUtil.gsonString(entity.data.getStdVerComList()));
                     if (null != entity.data.getInspectProj()){   //如果接口中请求回来的请检方案不为空的话   就把请检方案放入adapter能解析的实体中
                         entity.data.setInspectProjId(entity.data.getInspectProj());
                     }

@@ -55,7 +55,7 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
     private Boolean closed;
     private ApplyDeptIdEntity applyDeptId;
     private ApplyStaffIdEntity applyStaffId;
-    private Long applyTime;
+    private String applyTime;
     private PendingEntity pending;
     private CompanyEntity company;
     private SystemCodeEntity sourceType;
@@ -373,11 +373,11 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
         this.applyStaffId = applyStaffId;
     }
 
-    public Long getApplyTime() {
+    public String getApplyTime() {
         return applyTime;
     }
 
-    public void setApplyTime(Long applyTime) {
+    public void setApplyTime(String applyTime) {
         this.applyTime = applyTime;
     }
 
