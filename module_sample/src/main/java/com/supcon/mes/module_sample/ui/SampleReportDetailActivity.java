@@ -225,6 +225,11 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
 
     private void setSampleReport(SurveyReportEntity sampleReport){
         if (sampleReport.getSampleId()!=null){
+            Map<String,Object> params=new HashMap<>();
+            params.put("reportId",sampleReport.getId());
+            params.put("stdVerId",sampleReport.getStdVerId().getId());
+            params.put("pageNo",1);
+            presenterRouter.create(SampleReportDetailAPI.class).getReportComList(params);
             sampleTv.setValue(String.format("%s(%s)",sampleReport.getSampleId().getName(),sampleReport.getSampleId().getCode()));
             inspectPsTv.setValue(sampleReport.getSampleId().getPsId()!=null?sampleReport.getSampleId().getPsId().getName():"");
             registerTimeTv.setValue(sampleReport.getSampleId().getRegisterTime()!=null? DateUtil.dateTimeFormat(sampleReport.getSampleId().getRegisterTime()):"");
@@ -305,11 +310,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     public void getSampleReportSuccess(SurveyReportEntity entity) {
         reportEntity=entity;
         setSampleReport(entity);
-        Map<String,Object> params=new HashMap<>();
-        params.put("reportId",entity.getId());
-        params.put("stdVerId",entity.getStdVerId().getId());
-        params.put("pageNo",1);
-        presenterRouter.create(SampleReportDetailAPI.class).getReportComList(params);
+
     }
 
     @Override
@@ -367,7 +368,6 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     @Override
     public void getSampleReportByPendingSuccess(SurveyReportEntity entity) {
         reportEntity=entity;
-        presenterRouter.create(SampleReportDetailAPI.class).getSampleReport(reportEntity.getId());
         setSampleReport(reportEntity);
     }
 
