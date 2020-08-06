@@ -1,6 +1,7 @@
 package com.supcon.mes.module_lims.model.api;
 
 import com.app.annotation.apt.ContractFactory;
+import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;

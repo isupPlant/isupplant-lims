@@ -3,6 +3,7 @@ package com.supcon.mes.module_lims.model.network;
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
@@ -30,10 +31,8 @@ import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
 
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
-import com.supcon.mes.module_lims.model.bean.SupplierReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
 
-import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
@@ -196,7 +195,6 @@ public interface ApiService {
     Flowable<InspectionDetailPtListEntity> getInspectionDetailPtData(@Path("dg") String dg,
                                                                   @Query("datagridCode") String datagridCode,
                                                                   @Query("id") String id);
-
     /**
      * 查看是否上载
      * @param moduleCode
