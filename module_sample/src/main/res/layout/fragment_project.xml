@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
         android:orientation="horizontal"
@@ -56,6 +57,7 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             android:scrollbars="none"
+            android:background="@color/list_bg"
             />
 
     </com.supcon.common.view.ptr.PtrFrameLayout>

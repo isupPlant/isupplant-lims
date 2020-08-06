@@ -11,6 +11,7 @@ import com.supcon.mes.module_sample.R;
  * class name
  */
 public class EquipmentFragment extends BaseRefreshRecyclerFragment<BaseEntity> {
+    private Long sampleTesId;
     @Override
     protected IListAdapter<BaseEntity> createAdapter() {
         return null;
@@ -19,5 +20,9 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<BaseEntity> {
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_equipment;
+    }
+
+    public void setSampleTesId(Long sampleTesId){
+        this.sampleTesId = sampleTesId;
     }
 }

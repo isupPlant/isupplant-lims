@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <com.supcon.mes.module_search.ui.view.SearchTitleBar
+            android:visibility="gone"
             android:id="@+id/searchTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

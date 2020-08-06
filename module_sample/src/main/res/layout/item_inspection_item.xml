@@ -36,8 +36,10 @@
             <com.supcon.mes.mbap.view.CustomTextView
                 android:id="@+id/tvInspectionItems"
                 android:tag="tvInspectionItems"
-                style="@style/yh_custom_view_horizontal_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:content_color="@color/font_333333"
+                android:layout_marginLeft="@dimen/dp_9"
                 app:gravity="center|center_vertical"
                 app:key="检验项目"
                 />
@@ -56,7 +58,9 @@
             <com.supcon.mes.mbap.view.CustomTextView
                 android:id="@+id/tvRepeatNumber"
                 android:tag="tvRepeatNumber"
-                style="@style/yh_custom_view_horizontal_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_9"
                 app:content_color="@color/font_333333"
                 app:gravity="center|center_vertical"
                 app:key="重复号"
@@ -76,7 +80,9 @@
             <com.supcon.mes.mbap.view.CustomTextView
                 android:id="@+id/ctVersionNumber"
                 android:tag="ctVersionNumber"
-                style="@style/yh_custom_view_horizontal_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_9"
                 app:content_color="@color/font_333333"
                 app:gravity="center|center_vertical"
                 app:key="版本号"

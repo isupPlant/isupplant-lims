@@ -116,6 +116,9 @@ public class InspectionItemsFragment extends BaseRefreshRecyclerFragment<Inspect
                     }
                     list.get(position).setSelect(true);
                     adapter.notifyDataSetChanged();
+
+                    activity.setSampleTesId(list.get(position).getId());
+
                 }
             }
         });
@@ -151,4 +154,6 @@ public class InspectionItemsFragment extends BaseRefreshRecyclerFragment<Inspect
         //SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }
+
+
 }

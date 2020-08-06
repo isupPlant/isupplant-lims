@@ -1,17 +1,16 @@
 package com.supcon.mes.module_sample.ui.input.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.fragment.BaseFragment;
-import com.supcon.mes.mbap.view.CustomTab;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +29,18 @@ public class InspectionSubItemFragment extends BaseFragment {
 
     private String[] title = new String[]{"项目", "设备", "材料"};
     private List<Fragment> fragmentList = new ArrayList<>();
+    SampleResultInputActivity activity;
+
+    private ProjectFragment projectFragment;
+    private EquipmentFragment equipmentFragment;
+    private MaterialFragment materialFragment;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (SampleResultInputActivity) context;
+    }
+
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_inspection_sub_item;
@@ -43,10 +54,14 @@ public class InspectionSubItemFragment extends BaseFragment {
     @Override
     protected void initView() {
         super.initView();
+        projectFragment = new ProjectFragment();
+        fragmentList.add(projectFragment);
 
-        fragmentList.add(new ProjectFragment());
-        fragmentList.add(new EquipmentFragment());
-        fragmentList.add(new MaterialFragment());
+        equipmentFragment = new EquipmentFragment();
+        fragmentList.add(equipmentFragment);
+
+        materialFragment = new MaterialFragment();
+        fragmentList.add(materialFragment);
 
         //使用适配器将ViewPager与Fragment绑定在一起
         viewPage.setAdapter(new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager()));
@@ -58,6 +73,16 @@ public class InspectionSubItemFragment extends BaseFragment {
     @Override
     protected void initListener() {
         super.initListener();
+        activity.setOnInspectionItemSubRefreshListener(new SampleResultInputActivity.OnInspectionItemSubRefreshListener() {
+            @Override
+            public void InspectionItemSubRefresh(Long sampleTesId) {
+                if (null != sampleTesId){
+                    projectFragment.setSampleTesId(sampleTesId);
+                    equipmentFragment.setSampleTesId(sampleTesId);
+                    materialFragment.setSampleTesId(sampleTesId);
+                }
+            }
+        });
 
     }
 
@@ -65,6 +90,7 @@ public class InspectionSubItemFragment extends BaseFragment {
     protected void initData() {
         super.initData();
     }
+
 
     public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 

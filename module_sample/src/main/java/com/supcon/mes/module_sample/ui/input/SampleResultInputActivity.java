@@ -1,41 +1,14 @@
 package com.supcon.mes.module_sample.ui.input;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.os.Bundle;
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-
-import com.app.annotation.BindByTag;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
-import com.supcon.mes.mbap.view.CustomImageButton;
-import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.SearchResultEntity;
-import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.ui.input.fragment.InspectionItemsFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.InspectionSubItemFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.SampleFragment;
-import com.supcon.mes.module_search.ui.view.SearchTitleBar;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -49,6 +22,10 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
 
     private OnRefreshInspectionItemListener mOnRefreshInspectionItemListener;
     private OnSampleRefreshListener mOnSampleRefreshListener;
+    private OnInspectionItemSubRefreshListener mOnInspectionItemSubRefreshListener;
+    private OnOrientationChangeListener mOnOrientationChangeListener;
+
+    private int orientation = 0;
 
     @Override
     protected int getLayoutID() {
@@ -68,7 +45,6 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
         sampleFragment = new SampleFragment();
         inspectionItemsFragment = new InspectionItemsFragment();
         inspectionSubItemFragment = new InspectionSubItemFragment();
-
         fragmentManager.beginTransaction()
                 .add(R.id.fragment_sample,sampleFragment)
                 .add(R.id.fragment_inspection_items,inspectionItemsFragment)
@@ -76,6 +52,14 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
                 .commit();
 
 
+        Configuration cf= this.getResources().getConfiguration(); //获取设置的配置信息
+        orientation = cf.orientation ; //获取屏幕方向
+
+    }
+
+
+    public int getOrientation(){
+        return orientation;
     }
 
     public void setSampleId(Long sampleId){
@@ -103,5 +87,36 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
 
     public interface OnSampleRefreshListener{
         void onSampleRefresh();
+    }
+
+    public void setSampleTesId(Long sampleTesId){
+        if (null != mOnInspectionItemSubRefreshListener){
+            mOnInspectionItemSubRefreshListener.InspectionItemSubRefresh(sampleTesId);
+        }
+    }
+
+    public void setOnInspectionItemSubRefreshListener(OnInspectionItemSubRefreshListener mOnInspectionItemSubRefreshListener){
+        this.mOnInspectionItemSubRefreshListener = mOnInspectionItemSubRefreshListener;
+    }
+
+    public interface OnInspectionItemSubRefreshListener{
+        void InspectionItemSubRefresh(Long sampleTesId);
+    }
+
+    public void setOnOrientationChangeListener(OnOrientationChangeListener mOnOrientationChangeListener){
+        this.mOnOrientationChangeListener = mOnOrientationChangeListener;
+    }
+
+    public interface OnOrientationChangeListener{
+        void orientationChange(int orientation);
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        orientation = getResources().getConfiguration().orientation;
+        if (null != mOnOrientationChangeListener){ // 通知当前屏幕方向
+            mOnOrientationChangeListener.orientationChange(orientation);
+        }
+
     }
 }

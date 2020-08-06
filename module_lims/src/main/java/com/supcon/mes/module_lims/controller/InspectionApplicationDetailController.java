@@ -340,6 +340,18 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
                     }
                 });
+        ceMaterielNum.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    ceMaterielNum.setContent("");
+                }else {
+                    if (TextUtils.isEmpty(ceMaterielNum.getContent())){
+                        ceMaterielNum.setContent("--");
+                    }
+                }
+            }
+        });
 
         //采样点参照监听
         ctSamplingPoint.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -377,28 +389,42 @@ public class InspectionApplicationDetailController extends BaseViewController im
             }
         });
 
-        //
+        //物料值改变时的监听
         RxTextView.textChanges(ctMateriel.contentView())
                 .skipInitialValue()
                 .subscribe(new Consumer<CharSequence>() {
                     @Override
-                    public void accept(CharSequence charSequence) throws Exception {  //物料为空时，计量单位和批号均为不可编辑状态，并且清空原有的值  并且质量标准也清空，质量标准所对的参照按钮也不显示
-                        if (TextUtils.isEmpty(charSequence.toString().trim())) {
+                    public void accept(CharSequence charSequence) throws Exception {  //物料为空时，计量单位和批号均为不可编辑状态，并且清空原有的值  并且质量标准也清空
+                        if (TextUtils.isEmpty(charSequence.toString().trim()) || charSequence.toString().equals("--")) {
                             ctMaterielUnit.setContent("");
-                            ceMaterielBatchNumber.setContent("");
+                            ceMaterielBatchNumber.setContent("--");
                             ceMaterielBatchNumber.setEditable(false);
+                            ceMaterielBatchNumber.setNecessary(false);
                             ptList.clear();
                             adapter.notifyDataSetChanged();
-                            llStandardReference.setVisibility(View.GONE);
                         } else {
                             if (isEdit){
                                 ceMaterielBatchNumber.setEditable(true);
+                                ceMaterielBatchNumber.setNecessary(true);
                             }else {
                                 ceMaterielBatchNumber.setEditable(false);
                             }
                         }
                     }
                 });
+
+        ceMaterielBatchNumber.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    ceMaterielBatchNumber.setContent("");
+                }else {
+                    if (TextUtils.isEmpty(ceMaterielBatchNumber.getContent())){
+                        ceMaterielBatchNumber.setContent("--");
+                    }
+                }
+            }
+        });
 
 
         // 是否需要实验室 监听
@@ -419,6 +445,10 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (null == mHeadEntity.getProdId() || null == mHeadEntity.getProdId().getId()){
+                            ToastUtils.show(context,"请选择物料!");
+                            return;
+                        }
                         //先请求一个接口
                         presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getAvailableStdId(mHeadEntity.getProdId().getId() + "");
                     }
@@ -598,7 +628,6 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ceMaterielNum.setEditable(false);
         ceMaterielBatchNumber.setEditable(false);
         rlNeedLaboratory.setOnClickListener(null);
-        llStandardReference.setVisibility(View.GONE);
     }
 
     private void setCanEdit() {
@@ -612,7 +641,6 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ctMateriel.setEditable(true);
         ceMaterielNum.setEditable(true);
         ceMaterielBatchNumber.setEditable(true);
-        llStandardReference.setVisibility(View.VISIBLE);
         recyclerView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(context));
     }
 
@@ -938,6 +966,8 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         ptList.add(entity);
                     }
                     adapter.setList(ptList);
+                    //需要调用接口 获取选择过来的质量标准的请见方案  for中请求 /msService/LIMSBasic/inspectProj/inspectProj/getDefaultInspProjByStdVerId
+                    //presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultStandardById(mHeadEntity.getProdId().getId()+"");
                 }
             }
 
@@ -1119,11 +1149,24 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void getAvailableStdIdSuccess(AvailableStdEntity entity) {
-        Bundle bundle = new Bundle();
-        bundle.putString("id", entity.getAsId()+"");
-        bundle.putSerializable("existItem", (Serializable) ptList);
-        bundle.putString(Constant.IntentKey.SELECT_TAG, llStandardReference.getTag() + "");
-        IntentRouter.go(context, Constant.AppCode.LIMS_QualityStdVerRef, bundle);
+        if (entity.getHasStdVer()){
+            Bundle bundle = new Bundle();
+            bundle.putString("id", entity.getAsId()+"");
+            bundle.putSerializable("existItem", (Serializable) ptList);
+            bundle.putString(Constant.IntentKey.SELECT_TAG, llStandardReference.getTag() + "");
+            IntentRouter.go(context, Constant.AppCode.LIMS_QualityStdVerRef, bundle);
+        }else {
+            if (null != entity.getAsId()){
+                Bundle bundle = new Bundle();
+                bundle.putString("id", entity.getAsId()+"");
+                bundle.putSerializable("existItem", (Serializable) ptList);
+                bundle.putString(Constant.IntentKey.SELECT_TAG, llStandardReference.getTag() + "");
+                IntentRouter.go(context, Constant.AppCode.LIMS_QualityStdVerRef, bundle);
+            }else {
+                ToastUtils.show(context,"物料未被样品模板关联，无法参照!");
+            }
+        }
+
     }
 
     @Override
@@ -1140,7 +1183,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
             }else {
                 ToastUtils.show(context,"当前物料暂无可用质量标准");
             }
-
+            //获取到的默认质量标准对应的检验项目 需要回填
         }
 
     }
@@ -1164,7 +1207,6 @@ public class InspectionApplicationDetailController extends BaseViewController im
             stdIdEntity.setStandard(myDefaultQualityStandardEntity.getQualityStd() == null ? "" : StringUtil.isEmpty(myDefaultQualityStandardEntity.getQualityStd().getStandard()) ? "" : myDefaultQualityStandardEntity.getQualityStd().getStandard());
             stdVerIdEntity.setStdId(stdIdEntity);
 
-
             BaseLongIdNameEntity baseLongIdNameEntity = new BaseLongIdNameEntity();
             baseLongIdNameEntity.setId(myDefaultQualityStandardEntity.getInspectProj() == null ? null : myDefaultQualityStandardEntity.getInspectProj().getId());
             baseLongIdNameEntity.setName(myDefaultQualityStandardEntity.getInspectProj() == null ? "" : StringUtil.isEmpty(myDefaultQualityStandardEntity.getInspectProj().getName()) ? "" : myDefaultQualityStandardEntity.getInspectProj().getName());
@@ -1177,9 +1219,6 @@ public class InspectionApplicationDetailController extends BaseViewController im
             ptList.add(ptEntity);
             adapter.setList(ptList);
 
-            if (ptList.size() > 0){
-                llStandardReference.setVisibility(View.VISIBLE);
-            }
         }
     }
 

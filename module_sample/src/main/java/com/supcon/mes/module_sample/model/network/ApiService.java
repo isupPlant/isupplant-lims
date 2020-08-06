@@ -11,6 +11,7 @@ import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
+import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
@@ -91,4 +92,15 @@ public interface ApiService {
      */
     @GET("/msService/LIMSSample/sample/sampleCom/getSampleCom")
     Flowable<BAP5CommonEntity<CommonListEntity<InspectionSubEntity>>> getInspectionSubProjectList(@Query("sampleTestIds") String sampleTestIds);
+
+
+    /**
+     * 获取检验分项列表的列名
+     * @param sampleTestIds
+     * @return
+     */
+    @GET("/msService/LIMSSample/sample/sampleTest/getStdGradeColumns")
+    Flowable<BAP5CommonListEntity<InspectionItemColumnEntity>> getInspectionSubProjectColumn(@Query("sampleTestIds") String sampleTestIds);
+
+
 }

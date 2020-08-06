@@ -28,7 +28,8 @@
 
         <activity android:name=".ui.input.SampleResultInputActivity"
             android:theme="@style/AppNoTitleBarTheme"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
 
     </application>
 

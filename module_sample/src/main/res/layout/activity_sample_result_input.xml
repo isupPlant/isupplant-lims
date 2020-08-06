@@ -12,10 +12,10 @@
         android:orientation="horizontal">
 
         <FrameLayout
+            android:layout_marginRight="@dimen/dp_5"
             android:id="@+id/fragment_sample"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/dp_5"
             android:layout_weight="0.55"
             android:background="@drawable/shape_gray_box"
             android:tag="fragment_sample" />
@@ -30,7 +30,6 @@
             <FrameLayout
                 android:id="@+id/fragment_inspection_items"
                 android:tag="fragment_inspection_items"
-                android:layout_margin="@dimen/dp_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.6"
@@ -38,9 +37,9 @@
 
 
             <FrameLayout
+                android:layout_marginTop="@dimen/dp_5"
                 android:id="@+id/fragment_sub_item"
                 android:tag="fragment_sub_item"
-                android:layout_margin="@dimen/dp_5"
                 android:layout_weight="0.4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -49,9 +48,7 @@
         </LinearLayout>
 
 
-
     </LinearLayout>
-
 
 
 </LinearLayout>
