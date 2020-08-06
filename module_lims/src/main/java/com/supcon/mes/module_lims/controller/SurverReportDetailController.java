@@ -117,6 +117,9 @@ public class SurverReportDetailController extends BaseViewController implements 
     @BindByTag("inspectVendorTv")
     CustomTextView inspectVendorTv;
 
+    @BindByTag("vendorLayout")
+    LinearLayout vendorLayout;
+
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -265,7 +268,7 @@ public class SurverReportDetailController extends BaseViewController implements 
             inspectUnitTv.setValue(entity.prodId.getMainUnit()!=null?entity.prodId.getMainUnit().getName():"");
         }
         if (type==2){
-            inspectVendorTv.setVisibility(View.VISIBLE);
+            vendorLayout.setVisibility(View.VISIBLE);
             inspectVendorTv.setValue(entity.inspectId!=null && entity.inspectId.vendorId!=null?entity.inspectId.vendorId.getName():"");
         }
         inspectBatchTv.setValue(entity.batchCode);
@@ -274,7 +277,7 @@ public class SurverReportDetailController extends BaseViewController implements 
         inspectCheckStaffTv.setValue(entity.checkStaffId!=null ?entity.checkStaffId.getName():"");
         inspectCheckDeptTv.setValue(entity.checkDeptId!=null ?entity.checkDeptId.getName():"");
         inspectCheckTimeTv.setValue(entity.checkTime!=null? DateUtil.dateTimeFormat(entity.checkTime):"");
-        inspectQualityStdTv.setValue(entity.stdVerId!=null ?entity.stdVerId.getName():"");
+        inspectQualityStdTv.setValue(entity.stdVerId!=null && entity.stdVerId.getStdId()!=null? entity.stdVerId.getStdId().getName():"");
         inspectCheckResultTv.setValue(entity.checkResult);
         if ("不合格".equals(entity.checkResult)){
             inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
