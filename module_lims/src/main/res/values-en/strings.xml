@@ -56,4 +56,18 @@
     <string name="lims_sample_separation_type">Sample_separation_type</string>
     <string name="lims_sample_type">Sample_type</string>
     <string name="lims_inspection_item">Inspection_item</string>
+    <string name="lims_keeper">Keeper</string>
+    <string name="lims_retain_date">Retain_date</string>
+    <string name="lims_retention">Retention</string>
+    <string name="lims_retainqty">Retain_quality</string>
+    <string name="lims_retain_days">Retain_days</string>
+    <string name="lims_valid_date">Ralid_date</string>
+    <string name="lims_retain_staff">Retain_staff</string>
+    <string name="lims_retain_dept">Retain_dept</string>
+    <string name="lims_storeset">Storeset</string>
+    <string name="lims_record">Record view</string>
+    <string name="lims_plan_date">Plan date</string>
+    <string name="lims_real_date">Real date</string>
+    <string name="lims_state">State</string>
+
 </resources>

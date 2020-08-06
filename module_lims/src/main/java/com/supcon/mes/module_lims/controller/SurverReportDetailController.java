@@ -359,6 +359,7 @@ public class SurverReportDetailController extends BaseViewController implements 
                     refreshController.setOnRefreshListener(new OnRefreshListener() {
                         @Override
                         public void onRefresh() {
+                            customWorkFlowView.findViewById(R.id.commentInput).setVisibility(View.GONE);
                             presenterRouter.create(InspectReportDetailAPI.class).getInspectHeadReport(reportEntity.id);
                         }
                     });

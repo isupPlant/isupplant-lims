@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvOddNumbers"
+            android:tag="tvOddNumbers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxEms="13"
+            android:singleLine="true"
+            android:textStyle="bold"
+            tools:text="chanpinqingjiajndan_20200606_2477777"
+            android:textColor="@color/fontBlack333"
+            android:textSize="15sp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/tvEdit"
+                android:tag="tvEdit"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingBottom="@dimen/dp_3"
+                android:paddingLeft="@dimen/dp_8"
+                android:paddingRight="@dimen/dp_8"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shape_document_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/fontSize_14sp"
+                android:text="编辑"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bgGray2"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sample"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/sampleTv"
+            android:tag="sampleTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:key="@string/lims_sample"
+            android:layout_marginLeft="@dimen/dp_9"
+            app:key_size="13"
+            app:key_color="@color/c_scan_666"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_goods"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/materialTv"
+            android:tag="materialTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:key="@string/lims_goods"
+            android:layout_marginLeft="@dimen/dp_9"
+            app:key_size="13"
+            app:key_color="@color/c_scan_666"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_batch_number"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/batchCodeTv"
+            android:tag="batchCodeTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:key="@string/lims_batch_number"
+            android:layout_marginLeft="@dimen/dp_9"
+            app:key_size="13"
+            app:key_color="@color/c_scan_666"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_person"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/keeperTv"
+            android:tag="keeperTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:key="@string/lims_keeper"
+            android:layout_marginLeft="@dimen/dp_9"
+            app:key_size="13"
+            app:key_color="@color/c_scan_666"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_picksite"
+            />
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/pSiteTv"
+            android:tag="pSiteTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:key="@string/lims_sampling_point"
+            android:layout_marginLeft="@dimen/dp_9"
+            app:key_size="13"
+            app:key_color="@color/c_scan_666"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_wms_date"
+            />
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/retainDateTv"
+            android:tag="retainDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:key="@string/lims_retain_date"
+            android:layout_marginLeft="@dimen/dp_9"
+            app:key_size="13"
+            app:key_color="@color/c_scan_666"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"/>
+    </LinearLayout>
+
+</LinearLayout>
