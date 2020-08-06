@@ -720,7 +720,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 ctSupplier.setContent("--");
             }
 
-            if (null != entity.getProdId()){
+            if (null != entity.getProdId() && isEdit){
                 if (entity.getProdId().isEnableBatch()){
                     ceMaterielBatchNumber.setEditable(true);
                     ceMaterielBatchNumber.setNecessary(true);
