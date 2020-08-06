@@ -19,7 +19,7 @@ public class InspectHeadReportEntity extends BaseEntity {
     public BaseIntIdNameEntity checkStaffId;
     public BaseIntIdNameEntity checkDeptId;
     public Long checkTime;
-    public BaseIntIdNameEntity stdVerId;//质量标准
+    public StdVerIdEntity stdVerId;//质量标准
     public String checkResult;
     public String memoField;
 
