@@ -546,9 +546,14 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         break;
                     case 2:
                         workFlowType = 1;
-                        if (checkSubmit()){
+                        if (workFlowVar.dec.equals("通过")){
                             doSubmit(workFlowVar);
+                        }else {
+                            if (checkSubmit()){
+                                doSubmit(workFlowVar);
+                            }
                         }
+
                         break;
                 }
             }

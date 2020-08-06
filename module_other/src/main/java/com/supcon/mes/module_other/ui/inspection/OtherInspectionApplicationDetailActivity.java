@@ -12,6 +12,7 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
