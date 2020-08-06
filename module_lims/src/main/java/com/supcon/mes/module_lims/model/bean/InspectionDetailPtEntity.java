@@ -14,6 +14,8 @@ public class InspectionDetailPtEntity extends BaseEntity {
     private String inspStdVerCom;
     private InspectIdEntity inspectId;
     private BaseLongIdNameEntity inspectProjId;
+    private BaseLongIdNameEntity inspectProj;
+
     private Integer sort;
     private StdVerIdEntity stdVerId;
 //    private Boolean isChecked;
@@ -55,6 +57,14 @@ public class InspectionDetailPtEntity extends BaseEntity {
 
     public void setInspectProjId(BaseLongIdNameEntity inspectProjId) {
         this.inspectProjId = inspectProjId;
+    }
+
+    public BaseLongIdNameEntity getInspectProj() {
+        return inspectProj;
+    }
+
+    public void setInspectProj(BaseLongIdNameEntity inspectProj) {
+        this.inspectProj = inspectProj;
     }
 
     public Integer getSort() {

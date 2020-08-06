@@ -12,5 +12,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {QualityStandardReferenceListEntity.class})
 public interface QualityStandardReferenceApi {
-    void getQualityStandardReferenceList(int pageNo, String id, Map<String, Object> params);
+    void getQualityStandardReferenceList(int pageNo,boolean hasStdVer, String id, Map<String, Object> params);
 }

@@ -2,7 +2,10 @@ package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
+import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 import com.supcon.mes.module_lims.model.contract.AvailableStdIdApi;
@@ -86,6 +89,34 @@ public class AvailableStdPresenter extends AvailableStdIdApi.Presenter {
                     getView().getDefaultItemsSuccess(entity);
                 }else {
                     getView().getDefaultItemsFailed(entity.msg);
+                }
+            }
+        }));
+    }
+
+    @Override
+    public void getDefaultInspProjByStdVerId(InspectionDetailPtEntity mEntity, String stdVerId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("stdVersionId",stdVerId);
+        mCompositeSubscription.add(BaseLimsHttpClient.getDefaultInspProjByStdVerId(map).onErrorReturn(new Function<Throwable, BAP5CommonEntity<InspectionDetailPtEntity>>() {
+            @Override
+            public BAP5CommonEntity<InspectionDetailPtEntity> apply(Throwable throwable) throws Exception {
+                BAP5CommonEntity entity = new BAP5CommonEntity();
+                entity.msg = HttpErrorReturnUtil.getErrorInfo(throwable);
+                entity.success = false;
+                return entity;
+            }
+        }).subscribe(new Consumer<BAP5CommonEntity<InspectionDetailPtEntity>>() {
+            @Override
+            public void accept(BAP5CommonEntity<InspectionDetailPtEntity> entity) throws Exception {
+                if (entity.success){
+                    entity.data.setStdVerId(mEntity.getStdVerId());
+                    if (null != entity.data.getInspectProj()){   //如果接口中请求回来的请检方案不为空的话   就把请检方案放入adapter能解析的实体中
+                        entity.data.setInspectProjId(entity.data.getInspectProj());
+                    }
+                    getView().getDefaultInspProjByStdVerIdSuccess(entity.data);
+                }else {
+                    getView().getDefaultInspProjByStdVerIdFailed(entity.msg);
                 }
             }
         }));

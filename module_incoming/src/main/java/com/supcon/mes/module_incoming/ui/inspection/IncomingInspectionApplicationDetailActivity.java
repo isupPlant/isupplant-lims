@@ -1,5 +1,6 @@
 package com.supcon.mes.module_incoming.ui.inspection;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 

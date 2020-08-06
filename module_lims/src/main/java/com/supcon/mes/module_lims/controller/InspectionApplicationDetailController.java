@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -544,7 +545,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         }
                         break;
                     case 2:
-                        workFlowType = 2;
+                        workFlowType = 1;
                         if (checkSubmit()){
                             doSubmit(workFlowVar);
                         }
@@ -963,11 +964,10 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         stdIdEntity.setName(StringUtil.isEmpty(list.get(i).getStdId().getName()) ? "" : list.get(i).getStdId().getName());//质量标准
                         stdVerIdEntity.setStdId(stdIdEntity);
                         entity.setStdVerId(stdVerIdEntity);
-                        ptList.add(entity);
+                        //需要调用接口 获取选择过来的质量标准的请见方案
+                        presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultInspProjByStdVerId(entity,entity.getStdVerId().getId()+"");
+
                     }
-                    adapter.setList(ptList);
-                    //需要调用接口 获取选择过来的质量标准的请见方案  for中请求 /msService/LIMSBasic/inspectProj/inspectProj/getDefaultInspProjByStdVerId
-                    //presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultStandardById(mHeadEntity.getProdId().getId()+"");
                 }
             }
 
@@ -1149,15 +1149,17 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void getAvailableStdIdSuccess(AvailableStdEntity entity) {
-        if (entity.getHasStdVer()){
+        if (entity.getHasStdVer()){  // 表示有可用标准
             Bundle bundle = new Bundle();
-            bundle.putString("id", entity.getAsId()+"");
+            bundle.putBoolean("hasStdVer",entity.getHasStdVer());
+            bundle.putString("id", mHeadEntity.getProdId().getId()+"");
             bundle.putSerializable("existItem", (Serializable) ptList);
             bundle.putString(Constant.IntentKey.SELECT_TAG, llStandardReference.getTag() + "");
             IntentRouter.go(context, Constant.AppCode.LIMS_QualityStdVerRef, bundle);
         }else {
-            if (null != entity.getAsId()){
+            if (null != entity.getAsId()){ //表示没有可用标准 但是关联了样品模板  entity.getAsId()为样品模板的id
                 Bundle bundle = new Bundle();
+                bundle.putBoolean("hasStdVer",entity.getHasStdVer());
                 bundle.putString("id", entity.getAsId()+"");
                 bundle.putSerializable("existItem", (Serializable) ptList);
                 bundle.putString(Constant.IntentKey.SELECT_TAG, llStandardReference.getTag() + "");
@@ -1225,6 +1227,17 @@ public class InspectionApplicationDetailController extends BaseViewController im
     @Override
     public void getDefaultItemsFailed(String errorMsg) {
         ToastUtils.show(context,"无法获取默认质量标准对应的检验项目");
+    }
+
+    @Override
+    public void getDefaultInspProjByStdVerIdSuccess(InspectionDetailPtEntity entity) {
+        ptList.add(entity);
+        adapter.setList(ptList);
+    }
+
+    @Override
+    public void getDefaultInspProjByStdVerIdFailed(String errorMsg) {
+        ToastUtils.show(context,"获取质量标准对应的检验方案失败");
     }
 
     @Override

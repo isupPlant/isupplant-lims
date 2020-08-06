@@ -22,7 +22,7 @@ import io.reactivex.functions.Function;
  */
 public class QualityStandardReferencePresenter extends QualityStandardReferenceApi.Presenter {
     @Override
-    public void getQualityStandardReferenceList(int pageNo, String id, Map<String, Object> params) {
+    public void getQualityStandardReferenceList(int pageNo, boolean hasStdVer, String id, Map<String, Object> params) {
         String viewCode = "LIMSBasic_1.0.0_qualityStd_qualityStdVerRef";
         String modelAlias = "stdVersion";
         String joinInfo = "LIMSBA_QUALITY_STDS,ID,LIMSBA_STD_VERSIONS,STD_ID";
@@ -59,7 +59,12 @@ public class QualityStandardReferencePresenter extends QualityStandardReferenceA
             map.put("fastQueryCond",fastQuery.toString());
         }
         Map<String, Object> conditionMap = new HashMap<>();
-        conditionMap.put("analySampleId",id);
+        if (hasStdVer){
+            conditionMap.put("hasStdVer","true");
+            conditionMap.put("productId",id);
+        }else {
+            conditionMap.put("analySampleId",id);
+        }
         map.put("customCondition",conditionMap);
         map.put("pageNo",pageNo);
         map.put("paging",true);

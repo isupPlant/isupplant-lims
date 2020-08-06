@@ -82,6 +82,7 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
     private boolean isSelectAll = false;
     private String id = "";
     private String selectTag = "";
+    private boolean hasStdVer = false;
 
     @Override
     protected IListAdapter<QualityStandardReferenceEntity> createAdapter() {
@@ -109,6 +110,8 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_quality_standard_reference));
+
+        hasStdVer = getIntent().getBooleanExtra("hasStdVer", false);
         list = (List<InspectionDetailPtEntity>) getIntent().getSerializableExtra("existItem");
         id = getIntent().getStringExtra("id");
         selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
@@ -232,7 +235,7 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.QualityStandardReferenceApi.class).getQualityStandardReferenceList(pageIndex,id,params);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.QualityStandardReferenceApi.class).getQualityStandardReferenceList(pageIndex,hasStdVer,id,params);
             }
         });
     }

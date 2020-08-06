@@ -20,6 +20,7 @@ import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemsListEntity;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
@@ -225,6 +226,14 @@ public interface ApiService {
      */
     @GET("/msService/LIMSBasic/qualityStd/stdVerCom/getStdVerComsByStdVerId")
     Flowable<StdVerComIdListEntity> getDefaultItems(@Query("stdVerId") String stdVerId);
+
+    /**
+     * 根据质量标准id 获取对应的请检方案
+     * @param map
+     * @return
+     */
+    @POST("/msService/LIMSBasic/inspectProj/inspectProj/getDefaultInspProjByStdVerId")
+    Flowable<BAP5CommonEntity<InspectionDetailPtEntity>> getDefaultInspProjByStdVerId(@QueryMap Map<String, Object> map);
 
     /**
      * 获取质量检验中检验报告单pt数据
