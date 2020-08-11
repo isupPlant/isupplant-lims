@@ -14,7 +14,7 @@ public class InspectionSubEntity extends BaseEntity {
     private BaseLongIdNameEntity comId;
     private String comName;
     private BaseIdValueEntity comState;
-    private InspectionSubEntity dispMap;
+    private DispMapEntity dispMap;
     private String dispValue;
     private Long id;
     private Boolean isReport;
@@ -55,11 +55,11 @@ public class InspectionSubEntity extends BaseEntity {
         this.comState = comState;
     }
 
-    public InspectionSubEntity getDispMap() {
+    public DispMapEntity getDispMap() {
         return dispMap;
     }
 
-    public void setDispMap(InspectionSubEntity dispMap) {
+    public void setDispMap(DispMapEntity dispMap) {
         this.dispMap = dispMap;
     }
 

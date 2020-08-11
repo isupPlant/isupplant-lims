@@ -692,10 +692,6 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     private void setMakingRules(InspectionApplicationDetailHeaderEntity entity) {
         if (null != entity) {
-            if (null != entity.getSourceType()) { //单据来源类型不为空时，表头物料编码、批号不可编辑
-                ctMateriel.setEditable(false);
-                ceMaterielBatchNumber.setEditable(false);
-            }
 
             //请检时间
             cdCheckTime.setContent(StringUtil.isEmpty(entity.getApplyTime()) || entity.getApplyTime().equals("--")  ? "--" : DateUtil.dateFormat(Long.valueOf(entity.getApplyTime()), "yyyy-MM-dd HH:mm:ss")+"");
@@ -770,6 +766,12 @@ public class InspectionApplicationDetailController extends BaseViewController im
                     ceMaterielBatchNumber.setEditable(false);
                     ceMaterielBatchNumber.setNecessary(false);
                 }
+            }
+
+            if (null != entity.getSourceType() || null != entity.getSourceId()) { //单据来源类型不为空时，表头物料编码、批号不可编辑
+                ctMateriel.setEditable(false);
+                ctMateriel.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+                ceMaterielBatchNumber.setEditable(false);
             }
 
             //是否实验室检验
@@ -1051,6 +1053,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
                     ctMaterielUnit.setContent("--");
                 }
 
+                //批号设置为空
+                ceMaterielBatchNumber.setContent("--");
+
                 //变更表头物料信息的值
                 mHeadEntity.setProdId(event.getData());
                 if (event.getData().isEnableBatch()){
@@ -1225,9 +1230,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
             if (null != entity.getStdVersion()){
                 presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultItems(entity.getStdVersion().getId()+"");
             }else {
-                ToastUtils.show(context,"当前物料暂无可用质量标准");
+                //每次更换物料 就将之前带进来的质量标准作为删除项
+                for (int i = 0; i < adapter.getList().size(); i++) {
+                    deletePtIds.add(adapter.getList().get(i).getId()+"");
+                }
+                ptList.clear();
+                adapter.setList(ptList);
             }
-            //获取到的默认质量标准对应的检验项目 需要回填
         }
 
     }
@@ -1259,11 +1268,11 @@ public class InspectionApplicationDetailController extends BaseViewController im
             ptEntity.setStdVerId(stdVerIdEntity); // 质量标准
             ptEntity.setInspStdVerCom(new Gson().toJson(entity.data)); //对应的检验项目
 
-            //每次更换物料 就将之前带进来的质量标准作为删除项删除掉
+            //每次更换物料 就将之前带进来的质量标准作为删除项
             for (int i = 0; i < adapter.getList().size(); i++) {
                 deletePtIds.add(adapter.getList().get(i).getId()+"");
             }
-            
+
             ptList.clear();
             ptList.add(ptEntity);
             adapter.setList(ptList);

@@ -177,7 +177,6 @@
         app:content_color="@color/font_333333"
         app:key="物料"
         app:content_hint="请选择物料"
-        app:editable="true"
         app:necessary="true"
         app:gravity="right|center_vertical"
         />

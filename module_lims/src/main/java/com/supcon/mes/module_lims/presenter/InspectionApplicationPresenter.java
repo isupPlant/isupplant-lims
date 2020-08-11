@@ -70,7 +70,7 @@ public class InspectionApplicationPresenter extends InspectionApplicationApi.Pre
         if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
             codeParam.put(Constant.BAPQuery.TABLE_NO, params.get(Constant.BAPQuery.TABLE_NO));
         }
-        if (type.equals(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK) && params.containsKey(Constant.BAPQuery.TABLE_NO)){
+        if (params.containsKey(Constant.BAPQuery.TABLE_NO)){
             //创建一个空的实体类
             fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(codeParam);
             fastQuery.modelAlias = modelAlias;

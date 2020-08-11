@@ -103,20 +103,20 @@ public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapte
             }
 
 
-            if (type == 2){
-                //请检部门
-                if (data.getCreateDepartment() == null){
-                    tvInspectionDepartment.setContent("--");
-                }else {
-                    tvInspectionDepartment.setContent(StringUtil.isEmpty(data.getCreateDepartment().getName()) ? "--" : data.getCreateDepartment().getName());
-                }
-            }else {
+//            if (type == 2){
+//                //请检部门
+//                if (data.getCreateDepartment() == null){
+//                    tvInspectionDepartment.setContent("--");
+//                }else {
+//                    tvInspectionDepartment.setContent(StringUtil.isEmpty(data.getCreateDepartment().getName()) ? "--" : data.getCreateDepartment().getName());
+//                }
+//            }else {
                 if (data.getApplyDeptId() == null){
                     tvInspectionDepartment.setContent("--");
                 }else {
                     tvInspectionDepartment.setContent(StringUtil.isEmpty(data.getApplyDeptId().getName()) ? "--" : data.getApplyDeptId().getName());
                 }
-            }
+//            }
 
 
             //请检时间

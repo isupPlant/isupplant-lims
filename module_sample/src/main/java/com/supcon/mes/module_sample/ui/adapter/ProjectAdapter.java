@@ -1,6 +1,8 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomEditText;
@@ -19,6 +22,9 @@ import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -27,6 +33,7 @@ import java.util.List;
  */
 public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSubEntity> {
     private List<InspectionItemColumnEntity> conclusionList;
+    private ConclusionAdapter conclusionAdapter;
     public ProjectAdapter(Context context) {
         super(context);
     }
@@ -56,8 +63,6 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         ImageView ivExpand;
         @BindByTag("llQualityStandard")
         LinearLayout llQualityStandard;
-        @BindByTag("expandTv")
-        TextView expandTv;
         @BindByTag("imageUpDown")
         ImageView imageUpDown;
         @BindByTag("llEnclosure")
@@ -72,6 +77,37 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         @Override
         protected int layoutId() {
             return R.layout.item_inspection_sub_project;
+        }
+
+        @Override
+        protected void initView() {
+            super.initView();
+            conclusionAdapter = new ConclusionAdapter(context);
+            rvConclusion.setLayoutManager(new LinearLayoutManager(context));
+            rvConclusion.setNestedScrollingEnabled(false);
+            rvConclusion.setAdapter(conclusionAdapter);
+        }
+
+        @SuppressLint("CheckResult")
+        @Override
+        protected void initListener() {
+            super.initListener();
+            RxView.clicks(llQualityStandard)
+                    .throttleFirst(300, TimeUnit.MILLISECONDS)
+                    .subscribe(new Consumer<Object>() {
+                        @Override
+                        public void accept(Object o) throws Exception {
+                            if (rvConclusion.getVisibility() == View.VISIBLE){
+                                rvConclusion.setVisibility(View.GONE);
+                                ivExpand.setImageResource(R.drawable.ic_drop_down);
+                            }else if (rvConclusion.getVisibility() == View.GONE){
+                                rvConclusion.setVisibility(View.VISIBLE);
+                                ivExpand.setImageResource(R.drawable.ic_drop_up);
+                            }
+
+
+                        }
+                    });
         }
 
         @Override
@@ -100,6 +136,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "--" : data.getRoundValue()); //修约值
             ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "--" : data.getDispValue()); //报出值
 
+            conclusionAdapter.setList(data.getDispMap().getConclusionList());
+            conclusionAdapter.notifyDataSetChanged();
         }
 
         private void setVisible(boolean visible){

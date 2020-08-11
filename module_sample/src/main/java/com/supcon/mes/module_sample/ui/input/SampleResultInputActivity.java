@@ -6,8 +6,8 @@ import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.ui.input.fragment.InspectionProjectFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.InspectionItemsFragment;
-import com.supcon.mes.module_sample.ui.input.fragment.InspectionSubItemFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.SampleFragment;
 
 /**
@@ -43,13 +43,13 @@ public class SampleResultInputActivity extends BaseFragmentActivity {
         super.initView();
 
         sampleFragment = new SampleFragment();
-        inspectionItemsFragment = new InspectionItemsFragment();
-        inspectionSubItemFragment = new InspectionSubItemFragment();
-        fragmentManager.beginTransaction()
-                .add(R.id.fragment_sample,sampleFragment)
-                .add(R.id.fragment_inspection_items,inspectionItemsFragment)
-                .add(R.id.fragment_sub_item,inspectionSubItemFragment)
-                .commit();
+        inspectionItemsFragment = new InspectionProjectFragment(1l,"lll"); //随便写的1l
+        inspectionSubItemFragment = new InspectionItemsFragment();
+//        fragmentManager.beginTransaction()
+//                .add(R.id.fragment_sample,sampleFragment)
+//                .add(R.id.fragment_inspection_items,inspectionItemsFragment)
+//                .add(R.id.fragment_sub_item,inspectionSubItemFragment)
+//                .commit();
 
 
         Configuration cf= this.getResources().getConfiguration(); //获取设置的配置信息

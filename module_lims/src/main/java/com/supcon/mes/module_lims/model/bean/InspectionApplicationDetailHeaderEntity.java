@@ -58,6 +58,7 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
     private String applyTime;
     private PendingEntity pending;
     private CompanyEntity company;
+    private Long sourceId;
     private SystemCodeEntity sourceType;
 
 
@@ -411,5 +412,13 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
 
     public void setSourceType(SystemCodeEntity sourceType) {
         this.sourceType = sourceType;
+    }
+
+    public Long getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(Long sourceId) {
+        this.sourceId = sourceId;
     }
 }

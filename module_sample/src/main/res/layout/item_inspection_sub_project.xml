@@ -1,144 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dp_5"
-    android:background="@color/white">
-
-    <com.supcon.mes.mbap.view.CustomTextView
-        android:id="@+id/ctInspectionItems"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:tag="ctInspectionItems"
-        app:content_color="@color/fontBlack333"
-        app:content_size="15"
-        app:gravity="right|center_vertical"
-        app:key="@string/lims_inspection_item"
-        app:content_value=""
-        app:key_color="@color/c_scan_666"
-        app:key_size="13" />
-
-    <com.supcon.mes.mbap.view.CustomEditText
-        android:id="@+id/ceOriginalValue"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:tag="ceOriginalValue"
-        app:text_color="@color/c_scan_666"
-        app:content_size="15"
-        app:key="原始值"
-        app:key_size="13"
-        app:edit_hint="请输入原始值"
-        app:edit_hint_color="#A9A9A9"
-        app:gravity="right|center_vertical"
-        />
-
-    <com.supcon.mes.mbap.view.CustomSpinner
-        android:id="@+id/cpOriginalValue"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:tag="cpOriginalValue"
-        app:key="原始值"
-        app:key_size="13"
-        app:content_hint="请选择原始值"
-        app:text_color="@color/font_333333"
-        app:gravity="right|center_vertical"
-        />
-
-    <com.supcon.mes.mbap.view.CustomTextView
-        android:id="@+id/ctRoundOffValue"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:tag="ctRoundOffValue"
-        app:content_color="@color/font_333333"
-        app:key_size="13"
-        app:key="修约值"
-        app:editable="false"
-        app:gravity="right|center_vertical"
-        />
-
-    <com.supcon.mes.mbap.view.CustomEditText
-        android:id="@+id/ceReportedValue"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:tag="ceReportedValue"
-        app:text_color="@color/c_scan_666"
-        app:content_size="15"
-        app:key="报出值"
-        app:key_size="13"
-        app:edit_hint="请输入原始值"
-        app:edit_hint_color="#A9A9A9"
-        app:gravity="right|center_vertical"
-        />
+    android:orientation="vertical">
 
     <LinearLayout
+        android:padding="@dimen/dp_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctInspectionItems"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:tag="ctInspectionItems"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:content_value=""
+            app:gravity="right|center_vertical"
+            app:key="@string/lims_inspection_item"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+        <com.supcon.mes.mbap.view.CustomEditText
+            android:id="@+id/ceOriginalValue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:tag="ceOriginalValue"
+            app:content_size="15"
+            app:edit_hint="请输入原始值"
+            app:edit_hint_color="#A9A9A9"
+            app:gravity="right|center_vertical"
+            app:key="原始值"
+            app:key_size="13"
+            app:text_color="@color/c_scan_666" />
+
+        <com.supcon.mes.mbap.view.CustomSpinner
+            android:id="@+id/cpOriginalValue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:tag="cpOriginalValue"
+            app:content_hint="请选择原始值"
+            app:gravity="right|center_vertical"
+            app:key="原始值"
+            app:key_size="13"
+            app:text_color="@color/font_333333" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctRoundOffValue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:tag="ctRoundOffValue"
+            app:content_color="@color/font_333333"
+            app:editable="false"
+            app:gravity="right|center_vertical"
+            app:key="修约值"
+            app:key_size="13" />
+
+        <com.supcon.mes.mbap.view.CustomEditText
+            android:id="@+id/ceReportedValue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:tag="ceReportedValue"
+            app:content_size="15"
+            app:edit_hint="请输入原始值"
+            app:edit_hint_color="#A9A9A9"
+            app:gravity="right|center_vertical"
+            app:key="报出值"
+            app:key_size="13"
+            app:text_color="@color/c_scan_666" />
 
         <LinearLayout
-            android:id="@+id/llQualityStandard"
-            android:tag="llQualityStandard"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/llQualityStandard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="质量标准"
-                />
-            <ImageView
-                android:id="@+id/ivExpand"
-                android:tag="ivExpand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp_5"
-                android:paddingBottom="@dimen/dp_5"
-                android:src="@drawable/ic_drop_down"
-                android:layout_marginLeft="@dimen/dp_10"
-                />
-        </LinearLayout>
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:tag="llQualityStandard">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="质量标准" />
+
+                <ImageView
+                    android:id="@+id/ivExpand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:src="@drawable/ic_drop_down"
+                    android:tag="ivExpand" />
+            </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/llEnclosure"
-            android:tag="llEnclosure"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/llEnclosure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:tag="llEnclosure">
 
-            <TextView
-                android:id="@+id/expandTv"
-                android:tag="expandTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="附件"
-                />
-            <ImageView
-                android:id="@+id/imageUpDown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp_5"
-                android:paddingBottom="@dimen/dp_5"
-                android:src="@drawable/ic_drop_down"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:tag="imageUpDown" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="附件" />
+
+                <ImageView
+                    android:id="@+id/imageUpDown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:src="@drawable/ic_drop_down"
+                    android:tag="imageUpDown" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:visibility="gone"
         android:id="@+id/rvConclusion"
-        android:tag="rvConclusion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:tag="rvConclusion" />
 
 </LinearLayout>

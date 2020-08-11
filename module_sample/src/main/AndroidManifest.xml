@@ -31,6 +31,17 @@
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
+<!--        按样品结果录入PDA-->
+        <activity android:name=".ui.input.SampleResultInputPDAActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+<!--        检验分项页面 PDA-->
+        <activity android:name=".ui.input.ProjectInspectionItemsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
     </application>
 
 </manifest>

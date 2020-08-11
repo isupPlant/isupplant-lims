@@ -3,6 +3,7 @@ package com.supcon.mes.module_sample.ui.input.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,8 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.common.view.base.activity.BaseActivity;
+import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -30,12 +33,14 @@ import com.supcon.mes.middleware.model.bean.SearchResultEntity;
 import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.contract.SampleListApi;
 import com.supcon.mes.module_sample.presenter.SampleListPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+import com.supcon.mes.module_sample.ui.input.SampleResultInputPDAActivity;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -74,7 +79,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     private Map<String, Object> mParams = new HashMap<>();
 
     private SampleListAdapter adapter;
-    SampleResultInputActivity activity;
+    BaseFragmentActivity activity;
 
     private SearchResultEntity resultEntity;
     private String searchKey;
@@ -82,13 +87,15 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     private boolean isFinish = false;
 
 
-
-    private int mPosition = -1;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        activity = (SampleResultInputActivity) context;
+        if (context instanceof SampleResultInputActivity){
+            activity = (SampleResultInputActivity) context;
+        }else if (context instanceof SampleResultInputPDAActivity){
+            activity = (SampleResultInputPDAActivity) context;
+        }
+
     }
 
     @Override
@@ -189,20 +196,33 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         });
 
         adapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
-            if (action == 0){  //mPosition 为记录上次点击的下标位置，如果点击的是与上次的同一条目，就直接return
-                if (mPosition == position){
-                    return;
-                }
-
+            if (action == 0){
+                //刷新页面
                 List<SampleEntity> list = adapter.getList();
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).setSelect(false);
                 }
                 list.get(position).setSelect(true);
                 adapter.notifyDataSetChanged();
-                mPosition = position;
+
                 //通知 检验项目更新数据
-                activity.setSampleId(list.get(position).getId());
+                if (activity instanceof SampleResultInputActivity){
+                    ((SampleResultInputActivity)activity).setSampleId(list.get(position).getId());
+                }else if (activity instanceof  SampleResultInputPDAActivity){
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("sampleId",list.get(position).getId());
+                    if (!StringUtil.isEmpty(list.get(position).getName()) && !StringUtil.isEmpty(list.get(position).getCode())){
+                        bundle.putString("title", list.get(position).getName()+"(" + list.get(position).getCode() + ")");
+                    }else {
+                        if (StringUtil.isEmpty(list.get(position).getName())){
+                            bundle.putString("title", list.get(position).getCode());
+                        }else {
+                            bundle.putString("title", list.get(position).getName());
+                        }
+                    }
+                    IntentRouter.go(context,Constant.AppCode.LIMS_InspectionItemPda, bundle);
+                }
+
             }
         });
 
@@ -245,7 +265,9 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     @Override
     public void getSampleListSuccess(CommonListEntity entity) {
         refreshListController.refreshComplete(entity.result);
-        activity.sampleRefresh();
+        if (activity instanceof SampleResultInputActivity){
+            ((SampleResultInputActivity)activity).sampleRefresh();
+        }
     }
 
     @Override

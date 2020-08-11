@@ -1,23 +1,18 @@
 package com.supcon.mes.module_sample.ui.input.fragment;
 
 import android.content.Context;
-import android.graphics.Rect;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
+import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.ptr.PtrFrameLayout;
-import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -32,9 +27,8 @@ import com.supcon.mes.module_sample.model.contract.InspectionSubProjectColumnApi
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresenter;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
 import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
+import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +47,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     private ProjectAdapter adapter;
     private Long sampleTesId;
 
-    SampleResultInputActivity activity;
+    BaseFragmentActivity activity;
     SpaceItemDecoration spaceItemDecoration;
     GridLayoutManager gridLayoutManager;
     LinearLayoutManager linearLayoutManager;
@@ -65,7 +59,12 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        activity = (SampleResultInputActivity) context;
+        if (context instanceof SampleResultInputActivity){
+            activity = (SampleResultInputActivity) context;
+        }else if (context instanceof ProjectInspectionItemsActivity){
+            activity = (ProjectInspectionItemsActivity) context;
+        }
+
     }
 
     @Override
@@ -95,17 +94,23 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         linearLayoutManager = new LinearLayoutManager(context);
         linearSpaceItemDecoration = new LinearSpaceItemDecoration(context);
 
-        int orientation = activity.getOrientation();
-        if (orientation == 2){ //横向
-            ToastUtils.show(context,"横向");
-            contentView.setLayoutManager(gridLayoutManager);
-            contentView.addItemDecoration(spaceItemDecoration);
+        if (activity instanceof SampleResultInputActivity){
+            int orientation = ((SampleResultInputActivity)activity).getOrientation();
+            if (orientation == 2){ //横向
+                ToastUtils.show(context,"横向");
+                contentView.setLayoutManager(gridLayoutManager);
+                contentView.addItemDecoration(spaceItemDecoration);
 
-        }else if (orientation == 1){ //竖向
-            ToastUtils.show(context,"竖向");
+            }else if (orientation == 1){ //竖向
+                ToastUtils.show(context,"竖向");
+                contentView.setLayoutManager(linearLayoutManager);
+                contentView.addItemDecoration(linearSpaceItemDecoration);
+            }
+        }else {
             contentView.setLayoutManager(linearLayoutManager);
             contentView.addItemDecoration(linearSpaceItemDecoration);
         }
+
 
 
     }
@@ -116,65 +121,63 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                onLoading("数据加载中。。。");
                 presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionSubProjectApi.class).getInspectionSubProjectList(sampleTesId+"");
             }
         });
 
-        activity.setOnOrientationChangeListener(new SampleResultInputActivity.OnOrientationChangeListener() {
-            @Override
-            public void orientationChange(int orientation) {
-                if (orientation == 2){ //横向
-                    ToastUtils.show(context,"横向");
-                    contentView.setLayoutManager(gridLayoutManager);
+        if (activity instanceof SampleResultInputActivity){
+            ((SampleResultInputActivity)activity).setOnOrientationChangeListener(new SampleResultInputActivity.OnOrientationChangeListener() {
+                @Override
+                public void orientationChange(int orientation) {
+                    if (orientation == 2){ //横向
+                        ToastUtils.show(context,"横向");
+                        contentView.setLayoutManager(gridLayoutManager);
 
-                    if (contentView.getItemDecorationCount() > 0){
-                        RecyclerView.ItemDecoration itemDecorationAt = contentView.getItemDecorationAt(0);
-                        if (null == itemDecorationAt){
-                            contentView.addItemDecoration(spaceItemDecoration);
-                        }else if (itemDecorationAt instanceof LinearSpaceItemDecoration){
-                            contentView.removeItemDecorationAt(0);
+                        if (contentView.getItemDecorationCount() > 0){
+                            RecyclerView.ItemDecoration itemDecorationAt = contentView.getItemDecorationAt(0);
+                            if (null == itemDecorationAt){
+                                contentView.addItemDecoration(spaceItemDecoration);
+                            }else if (itemDecorationAt instanceof LinearSpaceItemDecoration){
+                                contentView.removeItemDecorationAt(0);
+                                contentView.addItemDecoration(spaceItemDecoration);
+                            }
+                        }else {
                             contentView.addItemDecoration(spaceItemDecoration);
                         }
-                    }else {
-                        contentView.addItemDecoration(spaceItemDecoration);
-                    }
 
-                }else if (orientation == 1){ //竖向
-                    ToastUtils.show(context,"竖向");
-                    contentView.setLayoutManager(linearLayoutManager);
-                    if (contentView.getItemDecorationCount() > 0){
-                        RecyclerView.ItemDecoration itemDecorationAt = contentView.getItemDecorationAt(0);
-                        if (null == itemDecorationAt){
-                            contentView.addItemDecoration(linearSpaceItemDecoration);
-                        }else if (itemDecorationAt instanceof SpaceItemDecoration){
-                            contentView.removeItemDecorationAt(0);
+                    }else if (orientation == 1){ //竖向
+                        ToastUtils.show(context,"竖向");
+                        contentView.setLayoutManager(linearLayoutManager);
+                        if (contentView.getItemDecorationCount() > 0){
+                            RecyclerView.ItemDecoration itemDecorationAt = contentView.getItemDecorationAt(0);
+                            if (null == itemDecorationAt){
+                                contentView.addItemDecoration(linearSpaceItemDecoration);
+                            }else if (itemDecorationAt instanceof SpaceItemDecoration){
+                                contentView.removeItemDecorationAt(0);
+                                contentView.addItemDecoration(linearSpaceItemDecoration);
+                            }
+                        }else {
                             contentView.addItemDecoration(linearSpaceItemDecoration);
                         }
-                    }else {
-                        contentView.addItemDecoration(linearSpaceItemDecoration);
-                    }
 
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
+            });
+        }
 
     }
 
     public void setSampleTesId(Long sampleTesId){
         this.sampleTesId = sampleTesId;
+        //onLoading("加载中...");
         getInspectionItemSubColumn();
-        goRefresh();
+
     }
 
 
     public void goRefresh(){
+        //presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionSubProjectApi.class).getInspectionSubProjectList(sampleTesId+"");
         refreshListController.refreshBegin();
     }
 
@@ -184,18 +187,24 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     @Override
     public void getInspectionSubProjectListSuccess(CommonListEntity entity) {
-        onLoadSuccessAndExit("加载成功！", new OnLoaderFinishListener() {
-            @Override
-            public void onLoaderFinished() {
-                refreshListController.refreshComplete(entity.result);
+//        onLoadSuccessAndExit("加载成功！", new OnLoaderFinishListener() {
+//            @Override
+//            public void onLoaderFinished() {
+//
+//            }
+//        });
+        List<InspectionSubEntity> list = entity.result;
+        for (int i = 0; i < list.size(); i++) {
+            if (null != list.get(i).getDispMap()){
+                list.get(i).getDispMap().setConclusionList(conclusionList);
             }
-        });
-
+        }
+        refreshListController.refreshComplete(list);
     }
 
     @Override
     public void getInspectionSubProjectListFailed(String errorMsg) {
-        onLoadFailed(errorMsg);
+        //onLoadFailed(errorMsg);
         refreshListController.refreshComplete(null);
     }
 
@@ -233,12 +242,14 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             }
         }
 
+        goRefresh();
         Log.e("eeeeeeeeeee",conclusionList.toString());
 
     }
 
     @Override
     public void getInspectionSubProjectColumnFailed(String errorMsg) {
+        //onLoadFailed("获取检验分项列名失败");
         columnList.clear();
     }
 }

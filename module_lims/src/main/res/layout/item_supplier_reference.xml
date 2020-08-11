@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dp_15"
-                app:key="商客编码"
+                app:key="客商编码"
                 app:key_color="@color/c_scan_666"
                 app:key_size="13"
                 app:content_size="15"

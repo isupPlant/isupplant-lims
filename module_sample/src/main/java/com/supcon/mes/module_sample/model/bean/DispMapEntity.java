@@ -2,6 +2,8 @@ package com.supcon.mes.module_sample.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 
+import java.util.List;
+
 /**
  * author huodongsheng
  * on 2020/7/31
@@ -9,7 +11,8 @@ import com.supcon.common.com_http.BaseEntity;
  */
 public class DispMapEntity extends BaseEntity {
     private String sampleComRes;
-    private String stdVer1008_result;
+    private List<String> specLimit; // 值
+    private List<ConclusionEntity> conclusionList; //列名称
 
     public String getSampleComRes() {
         return sampleComRes;
@@ -19,11 +22,19 @@ public class DispMapEntity extends BaseEntity {
         this.sampleComRes = sampleComRes;
     }
 
-    public String getStdVer1008_result() {
-        return stdVer1008_result;
+    public List<String> getSpecLimit() {
+        return specLimit;
     }
 
-    public void setStdVer1008_result(String stdVer1008_result) {
-        this.stdVer1008_result = stdVer1008_result;
+    public void setSpecLimit(List<String> specLimit) {
+        this.specLimit = specLimit;
+    }
+
+    public List<ConclusionEntity> getConclusionList() {
+        return conclusionList;
+    }
+
+    public void setConclusionList(List<ConclusionEntity> conclusionList) {
+        this.conclusionList = conclusionList;
     }
 }

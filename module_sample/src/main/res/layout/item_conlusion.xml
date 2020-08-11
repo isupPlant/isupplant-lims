@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFF0F4FC"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_5">
+
+    <RelativeLayout
+        android:id="@+id/rlRange"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center_vertical"
+        android:tag="rlRange">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="范围"
+            android:textColor="@color/font_333333"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/ivExpand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_drop_down"
+            android:tag="ivExpand" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_solid_white_stroke_blue_radius_8"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:tag="llRange">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="rvRange" />
+    </LinearLayout>
+
+
+        <com.supcon.mes.mbap.view.CustomVerticalSpinner
+            android:layout_marginTop="@dimen/dp_5"
+            android:id="@+id/tvConclusionColumnName"
+            android:tag="tvConclusionColumnName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:key="结论" />
+
+
+
+</LinearLayout>
