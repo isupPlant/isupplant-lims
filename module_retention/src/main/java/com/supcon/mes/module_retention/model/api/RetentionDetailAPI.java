@@ -12,6 +12,6 @@ import com.supcon.mes.module_retention.model.bean.RetentionEntity;
 
 @ContractFactory(entites = {RetentionEntity.class, RecodeListEntity.class})
 public interface RetentionDetailAPI {
-    void getRetentionDetailById(Long id);
+    void getRetentionDetailById(Long id,Long pendingId);
     void getRecord(Long id);
 }

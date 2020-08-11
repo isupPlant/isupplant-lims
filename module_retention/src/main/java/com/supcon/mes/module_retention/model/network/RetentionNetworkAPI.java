@@ -31,6 +31,9 @@ public interface RetentionNetworkAPI {
     @GET("/msService/LIMSRetain/retention/retention/data/{id}")
     Flowable<BAP5CommonEntity<RetentionEntity>> getRetentionDetailById(@Path("id") Long id);
 
+    @POST("/msService/LIMSRetain/retention/retention/data/{moduleId}")
+    Flowable<BAP5CommonEntity<RetentionEntity>> getRetentionDetailById(@Path("moduleId") long moduleId,@Query("pendingId") Long pendingId);
+
     @POST("/msService/LIMSRetain/retention/retention/data-dg1592198735798?datagridCode=LIMSRetain_5.0.4.1_retention_retentionViewdg1592198735798")
     Flowable<RecodeListEntity> getRecord(@Query("id") Long id);
 

@@ -15,28 +15,55 @@ import io.reactivex.functions.Consumer;
  * Email:wanghaidong1@supcon.com
  */
 public class RetentionDetailPresenter extends RetentionDetailContract.Presenter {
+
+
     @Override
-    public void getRetentionDetailById(Long id) {
-        mCompositeSubscription.add(
-                RetentionHttpClient
-                        .getRetentionDetailById(id)
-                        .onErrorReturn(error -> {
-                            BAP5CommonEntity commonEntity = new BAP5CommonEntity();
-                            commonEntity.msg = error.getMessage();
-                            commonEntity.success = false;
-                            return commonEntity;
-                        })
-                        .subscribe(new Consumer<BAP5CommonEntity<RetentionEntity>>() {
-                            @Override
-                            public void accept(BAP5CommonEntity<RetentionEntity> commonEntity) throws Exception {
-                                if (commonEntity.success) {
-                                    getView().getRetentionDetailByIdSuccess(commonEntity.data);
-                                } else {
-                                    getView().getRetentionDetailByIdFailed(commonEntity.msg);
+    public void getRetentionDetailById(Long id, Long pendingId) {
+        if (pendingId==null) {
+            mCompositeSubscription.add(
+                    RetentionHttpClient
+                            .getRetentionDetailById(id)
+                            .onErrorReturn(error -> {
+                                BAP5CommonEntity commonEntity = new BAP5CommonEntity();
+                                commonEntity.msg = error.getMessage();
+                                commonEntity.success = false;
+                                return commonEntity;
+                            })
+                            .subscribe(new Consumer<BAP5CommonEntity<RetentionEntity>>() {
+                                @Override
+                                public void accept(BAP5CommonEntity<RetentionEntity> commonEntity) throws Exception {
+                                    if (commonEntity.success) {
+                                        getView().getRetentionDetailByIdSuccess(commonEntity.data);
+                                    } else {
+                                        getView().getRetentionDetailByIdFailed(commonEntity.msg);
+                                    }
                                 }
-                            }
-                        })
-        );
+                            })
+            );
+        }else {
+            mCompositeSubscription.add(
+                    RetentionHttpClient
+                            .getRetentionDetailById(id,pendingId)
+                            .onErrorReturn(error -> {
+                                BAP5CommonEntity commonEntity = new BAP5CommonEntity();
+                                commonEntity.msg = error.getMessage();
+                                commonEntity.success = false;
+                                return commonEntity;
+                            })
+                            .subscribe(new Consumer<BAP5CommonEntity<RetentionEntity>>() {
+                                @Override
+                                public void accept(BAP5CommonEntity<RetentionEntity> commonEntity) throws Exception {
+                                    if (commonEntity.success) {
+                                        getView().getRetentionDetailByIdSuccess(commonEntity.data);
+                                    } else {
+                                        getView().getRetentionDetailByIdFailed(commonEntity.msg);
+                                    }
+                                }
+                            })
+            );
+
+        }
+
     }
 
     @Override
