@@ -169,6 +169,8 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
         }
         //通知检验分项 刷新数据
         projectFragment.setSampleTesId(sampleIdTestId);
+        equipmentFragment.setSampleTesId(sampleIdTestId);
+        materialFragment.setSampleTesId(sampleIdTestId);
     }
 
 

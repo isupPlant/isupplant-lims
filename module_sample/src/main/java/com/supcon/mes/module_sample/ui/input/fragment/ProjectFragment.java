@@ -196,7 +196,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         List<InspectionSubEntity> list = entity.result;
         for (int i = 0; i < list.size(); i++) {
             if (null != list.get(i).getDispMap()){
-                list.get(i).getDispMap().setConclusionList(conclusionList);
+                list.get(i).setConclusionList(conclusionList);
             }
         }
         refreshListController.refreshComplete(list);
@@ -227,24 +227,29 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             }
         }
 
-        for (int i = 0; i < conclusionList.size(); i++) { //删除结论中ColumnKey 中的_result
-            conclusionList.get(i).setColumnKey(conclusionList.get(i).getColumnKey().replace("_result", ""));
-        }
-
+        int k = 0;
+        List<InspectionItemColumnEntity> recordList = new ArrayList<>();
         //将合格范围 放入对应集合中
         for (int i = 0; i < conclusionList.size(); i++) {
             for (int j = 0; j < columnList.size(); j++) {
-                if (columnList.get(j).getColumnType().equals("grade")){ //表示合格范围
-                    if (columnList.get(j).getColumnKey().contains(conclusionList.get(i).getColumnKey()) ){ //如果合格范围中的getColumnKey 包含
-                        conclusionList.get(i).getColumnList().add(columnList.get(i));
+                if (columnList.get(j).getColumnType().equals("range")){ //表示当前是结论
+                    if (columnList.get(j).getColumnKey().equals(conclusionList.get(i).getColumnKey())){ //如果接口数据中的结论的key 跟截取出来的 结论集合的key是同一个key
+                        recordList.clear();
+                        //将当前下标之前的范围放入属于这个结论的集合中
+                        for (int a = j-1; a >= k; a--) {
+                            if (columnList.get(a).getLoad()){
+                                InspectionItemColumnEntity inspectionItemColumnEntity = columnList.get(a);
+                                recordList.add(inspectionItemColumnEntity);
+                            }
+                        }
+                        conclusionList.get(i).setColumnList(recordList);
+                        k = j+1;
                     }
                 }
             }
         }
 
         goRefresh();
-        Log.e("eeeeeeeeeee",conclusionList.toString());
-
     }
 
     @Override

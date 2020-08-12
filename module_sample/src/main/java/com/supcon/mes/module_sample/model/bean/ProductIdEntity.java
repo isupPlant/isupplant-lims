@@ -1,6 +1,8 @@
 package com.supcon.mes.module_sample.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
+import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 
 /**
  * author huodongsheng
@@ -11,6 +13,9 @@ public class ProductIdEntity extends BaseEntity {
     private String code;
     private String name;
     private Long id;
+    private BaseIdValueEntity isBatch;
+    private BaseLongIdNameEntity mainUnit;
+
 
     public String getCode() {
         return code;
@@ -34,5 +39,21 @@ public class ProductIdEntity extends BaseEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public BaseIdValueEntity getIsBatch() {
+        return isBatch;
+    }
+
+    public void setIsBatch(BaseIdValueEntity isBatch) {
+        this.isBatch = isBatch;
+    }
+
+    public BaseLongIdNameEntity getMainUnit() {
+        return mainUnit;
+    }
+
+    public void setMainUnit(BaseLongIdNameEntity mainUnit) {
+        this.mainUnit = mainUnit;
     }
 }

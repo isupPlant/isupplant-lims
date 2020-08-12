@@ -2,6 +2,8 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,11 +15,13 @@ import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
 import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
 
@@ -32,14 +36,10 @@ import io.reactivex.functions.Consumer;
  * class name
  */
 public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSubEntity> {
-    private List<InspectionItemColumnEntity> conclusionList;
+
     private ConclusionAdapter conclusionAdapter;
     public ProjectAdapter(Context context) {
         super(context);
-    }
-
-    public void setConclusionList(List<InspectionItemColumnEntity> conclusionList){
-        this.conclusionList = conclusionList;
     }
 
     @Override
@@ -84,6 +84,20 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             super.initView();
             conclusionAdapter = new ConclusionAdapter(context);
             rvConclusion.setLayoutManager(new LinearLayoutManager(context));
+            rvConclusion.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                    super.getItemOffsets(outRect, view, parent, state);
+                    int childLayoutPosition = parent.getChildAdapterPosition(view);
+                    if (childLayoutPosition == 0) {
+                        outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                    } else if(childLayoutPosition == conclusionAdapter.getItemCount()-1){
+                        outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
+                    } else {
+                        outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                    }
+                }
+            });
             rvConclusion.setNestedScrollingEnabled(false);
             rvConclusion.setAdapter(conclusionAdapter);
         }
@@ -136,8 +150,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "--" : data.getRoundValue()); //修约值
             ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "--" : data.getDispValue()); //报出值
 
-            conclusionAdapter.setList(data.getDispMap().getConclusionList());
-            conclusionAdapter.notifyDataSetChanged();
+            conclusionAdapter.setData(data.getConclusionList(),data.getDispMap());
         }
 
         private void setVisible(boolean visible){

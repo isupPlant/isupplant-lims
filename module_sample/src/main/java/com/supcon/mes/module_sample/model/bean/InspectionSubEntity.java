@@ -5,6 +5,9 @@ import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * author huodongsheng
  * on 2020/7/31
@@ -14,7 +17,8 @@ public class InspectionSubEntity extends BaseEntity {
     private BaseLongIdNameEntity comId;
     private String comName;
     private BaseIdValueEntity comState;
-    private DispMapEntity dispMap;
+    private HashMap<String, Object> dispMap;
+    private List<ConclusionEntity> conclusionList;
     private String dispValue;
     private Long id;
     private Boolean isReport;
@@ -55,12 +59,20 @@ public class InspectionSubEntity extends BaseEntity {
         this.comState = comState;
     }
 
-    public DispMapEntity getDispMap() {
+    public HashMap<String, Object> getDispMap() {
         return dispMap;
     }
 
-    public void setDispMap(DispMapEntity dispMap) {
+    public void setDispMap(HashMap<String, Object> dispMap) {
         this.dispMap = dispMap;
+    }
+
+    public List<ConclusionEntity> getConclusionList() {
+        return conclusionList;
+    }
+
+    public void setConclusionList(List<ConclusionEntity> conclusionList) {
+        this.conclusionList = conclusionList;
     }
 
     public String getDispValue() {

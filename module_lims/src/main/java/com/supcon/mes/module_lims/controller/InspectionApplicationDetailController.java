@@ -183,6 +183,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
     private List<BusiTypeIdEntity> businessTypeList = new ArrayList<>();// 存放提交时业务类型的集合
     private List<InspectionDetailPtEntity> ptList = new ArrayList<>();
     private List<String> deletePtIds = new ArrayList<>();
+    private List<String> myDeleteList = new ArrayList<>();
 
     private int myQualityStandardPosition;
     private boolean isEdit = false;
@@ -358,7 +359,8 @@ public class InspectionApplicationDetailController extends BaseViewController im
                             }
 
                         }else {
-                            mHeadEntity.setQuantity(new BigDecimal("0.00").setScale(2,BigDecimal.ROUND_DOWN));
+                            //mHeadEntity.setQuantity(new BigDecimal("0.00").setScale(2,BigDecimal.ROUND_DOWN));
+                            mHeadEntity.setQuantity(null);
                         }
 
                     }
@@ -673,6 +675,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ceMaterielBatchNumber.setEditable(false);
         rlNeedLaboratory.setOnClickListener(null);
         llStandardReference.setVisibility(View.GONE);
+
+        cdCheckTime.setNecessary(false);
+        ctCheckPeople.setNecessary(false);
+        ctCheckDepartment.setNecessary(false);
+        ctBusinessType.setNecessary(false);
+        ctMateriel.setNecessary(false);
+        ceMaterielBatchNumber.setNecessary(false);
     }
 
     private void setCanEdit() {
@@ -688,6 +697,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ceMaterielBatchNumber.setEditable(true);
         recyclerView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(context));
         llStandardReference.setVisibility(View.VISIBLE);
+
+        cdCheckTime.setNecessary(true);
+        ctCheckPeople.setNecessary(true);
+        ctCheckDepartment.setNecessary(true);
+        ctBusinessType.setNecessary(true);
+        ctMateriel.setNecessary(true);
+        ceMaterielBatchNumber.setNecessary(true);
     }
 
     private void setMakingRules(InspectionApplicationDetailHeaderEntity entity) {
@@ -841,13 +857,19 @@ public class InspectionApplicationDetailController extends BaseViewController im
         dgJson.addProperty(getDg(),GsonUtil.gsonString(ptList));
         entity.dgList = dgJson;
 
+        myDeleteList.clear();
+        for (int i = 0; i < deletePtIds.size(); i++) {
+            if (!deletePtIds.get(i).equals("null") ){
+                myDeleteList.add(deletePtIds.get(i));
+            }
+        }
         //删除质量标准的ids
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < deletePtIds.size(); i++) {
-            if (i < deletePtIds.size() - 1) {
-                sb.append(deletePtIds.get(i)).append(",");
-            } else if (i == deletePtIds.size() - 1) {
-                sb.append(deletePtIds.get(i));
+        for (int i = 0; i < myDeleteList.size(); i++) {
+            if (i < myDeleteList.size() - 1) {
+                sb.append(myDeleteList.get(i)).append(",");
+            } else if (i == myDeleteList.size() - 1) {
+                sb.append(myDeleteList.get(i));
             }
         }
         entity.dgDeletedIds.addProperty(getDg(),sb.length() > 0 ? sb.toString() : null);
@@ -1302,6 +1324,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         ((BaseActivity)context).onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
+                deletePtIds.clear();
                 if (workFlowType == 1){
                     EventBus.getDefault().post(new RefreshEvent());
                     ((BaseActivity)context).back();

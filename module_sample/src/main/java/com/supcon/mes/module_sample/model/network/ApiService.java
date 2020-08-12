@@ -16,6 +16,8 @@ import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleReportSubmitEntity;
+import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
+import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 
 import java.util.Map;
 
@@ -101,6 +103,22 @@ public interface ApiService {
      */
     @GET("/msService/LIMSSample/sample/sampleTest/getStdGradeColumns")
     Flowable<BAP5CommonListEntity<InspectionItemColumnEntity>> getInspectionSubProjectColumn(@Query("sampleTestIds") String sampleTestIds);
+
+    /**
+     * 获取检验分项关联设备列表
+     * @param sampleTestId
+     * @return
+     */
+    @GET("/msService/LIMSSample/sample/testDevice/getTestDevice")
+    Flowable<BAP5CommonEntity<CommonListEntity<TestDeviceEntity>>> getTestDevice(@Query("sampleTestId") String sampleTestId);
+
+    /**
+     * 获取检验分项关联材料列表
+     * @param sampleTestId
+     * @return
+     */
+    @GET("/msService/LIMSSample/sample/testMaterial/getTestMaterial")
+    Flowable<BAP5CommonEntity<CommonListEntity<TestMaterialEntity>>> getTestMaterial(@Query("sampleTestId") String sampleTestId);
 
 
 }

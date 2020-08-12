@@ -128,6 +128,7 @@ public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActi
     @Override
     public void getInspectionApplicationByPendingSuccess(InspectionApplicationEntity entity) {
         if (null != entity){
+            id = entity.getId()+"";
             presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(entity.getId()+"",pendingEntity.id+"");
         }
     }

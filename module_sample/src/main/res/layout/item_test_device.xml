@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_5"
+    android:tag="item"
+    android:translationZ="2dp">
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/ctDeviceType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingEnd="@dimen/dp_12"
+
+        android:tag="ctDeviceType"
+        app:content_color="@color/font_333333"
+        app:content_hint="请选择设备类型"
+        app:editable="true"
+        app:gravity="right|center_vertical"
+        app:key="设备类型" />
+
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/ctDeviceCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingEnd="@dimen/dp_12"
+        android:tag="ctDeviceCode"
+        app:content_color="@color/font_333333"
+        app:content_hint="请选择请设备编码"
+        app:editable="true"
+        app:gravity="right|center_vertical"
+        app:key="设备编码" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/ctDeviceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingEnd="@dimen/dp_12"
+        android:tag="ctDeviceName"
+        app:content_color="@color/font_333333"
+        app:editable="false"
+        app:gravity="right|center_vertical"
+        app:key="设备名称" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/ctDeviceState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingEnd="@dimen/dp_12"
+        android:tag="ctDeviceState"
+        app:content_color="@color/font_333333"
+        app:editable="false"
+        app:gravity="right|center_vertical"
+        app:key="设备状态" />
+
+
+</LinearLayout>
