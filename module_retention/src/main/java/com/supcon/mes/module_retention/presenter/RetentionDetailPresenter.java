@@ -2,11 +2,16 @@ package com.supcon.mes.module_retention.presenter;
 
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
+import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
+import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_retention.model.bean.RecodeListEntity;
 import com.supcon.mes.module_retention.model.bean.RecordEntity;
 import com.supcon.mes.module_retention.model.bean.RetentionEntity;
+import com.supcon.mes.module_retention.model.bean.RetentionSubmitEntity;
 import com.supcon.mes.module_retention.model.contract.RetentionDetailContract;
 import com.supcon.mes.module_retention.model.network.RetentionHttpClient;
+
+import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 
@@ -85,5 +90,34 @@ public class RetentionDetailPresenter extends RetentionDetailContract.Presenter 
                             }
                         })
         );
+    }
+
+    @Override
+    public void submitRetention(String path, Map<String, Object> params, RetentionSubmitEntity retentionSubmit) {
+        mCompositeSubscription.add(
+                RetentionHttpClient
+                        .submitRetention(path, params, retentionSubmit)
+                        .onErrorReturn(error -> {
+                            SubmitResultEntity entity = new SubmitResultEntity();
+                            if (error.getMessage().contains("503")) {
+                                entity.msg = "抱歉，服务不存在或者未启动";
+                            } else {
+                                entity.msg = error.getMessage();
+                            }
+                            entity.success = false;
+                            return entity;
+                        })
+                        .subscribe(new Consumer<SubmitResultEntity>() {
+                            @Override
+                            public void accept(SubmitResultEntity submitResultEntity) throws Exception {
+                                if (submitResultEntity.success) {
+                                    getView().submitRetentionSuccess(submitResultEntity);
+                                } else {
+                                    getView().submitRetentionFailed(submitResultEntity.msg);
+                                }
+                            }
+                        })
+        );
+
     }
 }

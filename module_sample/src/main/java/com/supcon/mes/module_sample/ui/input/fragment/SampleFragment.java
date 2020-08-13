@@ -41,6 +41,7 @@ import com.supcon.mes.module_sample.presenter.SampleListPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputPDAActivity;
+import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputActivity;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -94,6 +95,8 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             activity = (SampleResultInputActivity) context;
         }else if (context instanceof SampleResultInputPDAActivity){
             activity = (SampleResultInputPDAActivity) context;
+        }else if (context instanceof SingleSampleResultInputActivity){
+            activity=(SingleSampleResultInputActivity)context;
         }
 
     }
@@ -113,7 +116,6 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-
         searchTitle.showScan(false);
         titleText.setText(getString(R.string.lims_sample_result_input));
 
