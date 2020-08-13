@@ -21,7 +21,7 @@ import com.supcon.mes.module_other.R;
 @Controller(value = {
         SurverReportDetailController.class
 })
-@Router(Constant.Router.OTHER_INSPREPORT_VIEW)
+@Router(value = Constant.Router.OTHER_INSPREPORT_VIEW,viewCode = "otherInspReportEdit")
 public class OtherSurveyReportDetailActivity extends BaseRefreshActivity {
     @BindByTag("titleText")
     TextView titleText;

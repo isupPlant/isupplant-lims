@@ -215,12 +215,7 @@ public class SurveyReportController extends BaseViewController {
     }
 
     private void cleanParams() {
-        params.remove(Constant.BAPQuery.NAME);
-        params.remove(Constant.BAPQuery.CODE);
-        params.remove(Constant.BAPQuery.BATCH_CODE);
-        params.remove(Constant.BAPQuery.TABLE_NO);
-        params.remove("INSPECT_TABLE_NO");
-
+        params.clear();
     }
 
     @Override

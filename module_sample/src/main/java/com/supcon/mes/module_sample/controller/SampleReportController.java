@@ -216,12 +216,7 @@ public class SampleReportController extends BaseViewController {
     }
 
     private void cleanParams() {
-        params.remove(Constant.BAPQuery.NAME);
-        params.remove(Constant.BAPQuery.CODE);
-        params.remove(Constant.BAPQuery.BATCH_CODE);
-        params.remove(Constant.BAPQuery.TABLE_NO);
-        params.remove(Constant.BAPQuery.PICKSITE);
-
+        params.clear();
     }
 
     @Override

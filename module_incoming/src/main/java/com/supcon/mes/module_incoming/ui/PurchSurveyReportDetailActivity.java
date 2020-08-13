@@ -21,7 +21,7 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 @Controller(value = {
         SurverReportDetailController.class
 })
-@Router(Constant.Router.PURCH_INSPREPORT_VIEW)
+@Router(value = Constant.Router.PURCH_INSPREPORT_VIEW,viewCode = "purchInspReportEdit")
 public class PurchSurveyReportDetailActivity extends BaseRefreshActivity {
     @BindByTag("titleText")
     TextView titleText;
@@ -37,6 +37,7 @@ public class PurchSurveyReportDetailActivity extends BaseRefreshActivity {
         super.onInit();
         Intent intent=getIntent();
         resportEntity= (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
+        pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
     }
 
     @Override

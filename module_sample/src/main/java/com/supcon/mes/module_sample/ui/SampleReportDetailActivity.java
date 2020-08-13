@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
         GetPowerCodeController.class,
         WorkFlowViewController.class
 })
-@Router(value = Constant.Router.SAMPLE_REPORT_VIEW)
+@Router(value = Constant.Router.SAMPLE_REPORT_VIEW,viewCode = "sampleReportEdit")
 public class SampleReportDetailActivity extends BaseRefreshActivity implements SampleReportDetailContract.View, SampleReportContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -214,9 +214,11 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
             @Override
             public void onRefresh() {
                 if (pendingEntity.id!=null){
-                    customWorkFlowView.setVisibility(View.VISIBLE);
-                    getController(WorkFlowViewController.class).initPendingWorkFlowView(customWorkFlowView,pendingEntity.id);
-                    getController(GetPowerCodeController.class).initPowerCode(pendingEntity.activityName);
+                    if (pendingEntity.openUrl.contains("ReportView")) {
+                        customWorkFlowView.setVisibility(View.VISIBLE);
+                        getController(WorkFlowViewController.class).initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
+                        getController(GetPowerCodeController.class).initPowerCode(pendingEntity.activityName);
+                    }
                 }
                 presenterRouter.create(SampleReportAPI.class).getSampleReportByPending(pendingEntity.modelId,pendingEntity.id);
             }
@@ -368,6 +370,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     @Override
     public void getSampleReportByPendingSuccess(SurveyReportEntity entity) {
         reportEntity=entity;
+        pendingEntity=reportEntity.pending;
         setSampleReport(reportEntity);
     }
 

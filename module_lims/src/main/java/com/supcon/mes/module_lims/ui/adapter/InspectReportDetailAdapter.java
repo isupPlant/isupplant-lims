@@ -2,16 +2,13 @@ package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.model.bean.InspectReportDetailEntity;
@@ -133,7 +130,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
 
         @Override
         protected int layoutId() {
-            return R.layout.item_range;
+            return R.layout.item_report_range;
         }
 
         @Override
@@ -142,6 +139,4 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
             judgeRangeTv.setValue(data.dispValue);
         }
     }
-
-
 }
