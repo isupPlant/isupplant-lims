@@ -23,6 +23,7 @@ public class DeviceReferenceEntity extends BaseEntity {
     private BaseIdValueEntity state;
     private BaseLongIdNameEntity useDept;
     private Boolean valid;
+    private boolean isSelect;
 
     public Long getCid() {
         return cid;
@@ -118,6 +119,14 @@ public class DeviceReferenceEntity extends BaseEntity {
 
     public void setValid(Boolean valid) {
         this.valid = valid;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 
     static class InstallPlaceBean extends BaseEntity {

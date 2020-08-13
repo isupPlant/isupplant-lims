@@ -34,7 +34,7 @@
         android:paddingEnd="@dimen/dp_12"
         android:tag="ctDeviceCode"
         app:content_color="@color/font_333333"
-        app:content_hint="请选择请设备编码"
+        app:content_hint="请选择设备编码"
         app:editable="true"
         app:gravity="right|center_vertical"
         app:key="设备编码" />

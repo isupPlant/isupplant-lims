@@ -73,6 +73,14 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                             }
                         }
                     }
+
+                    //是否启用批次
+                    if (data.getProductId().isEnableBatch()){
+                        ceBatchNumber.setEditable(true);
+                    }else {
+                        ceBatchNumber.setEditable(false);
+                        ceBatchNumber.setHint("");
+                    }
                 }else {
                     ctMateriel.setContent("--");
                 }

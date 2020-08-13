@@ -26,9 +26,11 @@ import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
+import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.model.bean.EamIdEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.contract.TestDeviceListApi;
 import com.supcon.mes.module_sample.presenter.TestDevicePresenter;
@@ -142,18 +144,27 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
                 mPosition = position;
                 if (action == 0){
                     adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
-                    for (int i = 0; i < adapter.getList().size(); i++) {
-                        if (i != position){
-                            adapter.getList().get(i).setSelect(false);
-                        }
-                    }
+//                    for (int i = 0; i < adapter.getList().size(); i++) {
+//                        if (i != position){
+//                            adapter.getList().get(i).setSelect(false);
+//                        }
+//                    }
                     adapter.notifyDataSetChanged();
                 }else if (action == 1){ //设备类型
                     Bundle bundle = new Bundle();
                     bundle.putString(Constant.IntentKey.SELECT_TAG,childView.getTag()+"");
                     IntentRouter.go(context,Constant.AppCode.LIMS_EamTypeRefPart,bundle);
-                }else if (action == 2){
-
+                }else if (action == -1){ //设备类型删除动作
+                    adapter.getList().get(position).setEamTypeId(null);
+                    adapter.notifyItemChanged(position);
+                }else if (action == 2){ //设备编码
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constant.IntentKey.SELECT_TAG,childView.getTag()+"");
+                    bundle.putString("eamClassId",adapter.getList().get(position).getEamTypeId() == null ? "" : adapter.getList().get(position).getEamTypeId().getId()+"");
+                    IntentRouter.go(context,Constant.AppCode.LIMS_EamInfoRefPart,bundle);
+                }else if (action == -2){ //设备编码删除动作
+                    adapter.getList().get(position).setEamId(null);
+                    adapter.notifyItemChanged(position);
                 }
             }
         });
@@ -178,6 +189,17 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
                 entity.setName(deviceTypeReferenceEntity.getName());
                 entity.setId(deviceTypeReferenceEntity.getId());
                 adapter.getList().get(mPosition).setEamTypeId(entity);
+                adapter.notifyItemChanged(mPosition);
+            }
+        }else if (selectDataEvent.getEntity() instanceof DeviceReferenceEntity){
+            if (selectDataEvent.getSelectTag().equals("ctDeviceCode")){
+                DeviceReferenceEntity deviceReferenceEntity = (DeviceReferenceEntity) selectDataEvent.getEntity();
+                EamIdEntity bean = new EamIdEntity();
+                bean.setName(deviceReferenceEntity.getName());
+                bean.setCode(deviceReferenceEntity.getCode());
+                bean.setState(deviceReferenceEntity.getState());
+                bean.setId(deviceReferenceEntity.getId());
+                adapter.getList().get(mPosition).setEamId(bean);
                 adapter.notifyItemChanged(mPosition);
             }
         }

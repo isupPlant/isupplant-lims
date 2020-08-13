@@ -3,6 +3,7 @@ package com.supcon.mes.module_sample.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
+import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
 
 /**
  * author huodongsheng
@@ -14,7 +15,7 @@ public class ProductIdEntity extends BaseEntity {
     private String name;
     private Long id;
     private BaseIdValueEntity isBatch;
-    private BaseLongIdNameEntity mainUnit;
+    private BaseSystemBackEntity mainUnit;
 
 
     public String getCode() {
@@ -49,11 +50,21 @@ public class ProductIdEntity extends BaseEntity {
         this.isBatch = isBatch;
     }
 
-    public BaseLongIdNameEntity getMainUnit() {
+    public BaseSystemBackEntity getMainUnit() {
         return mainUnit;
     }
 
-    public void setMainUnit(BaseLongIdNameEntity mainUnit) {
+    public void setMainUnit(BaseSystemBackEntity mainUnit) {
         this.mainUnit = mainUnit;
+    }
+
+    //是否启用批次
+    public boolean isEnableBatch() {
+        if (isBatch != null) {
+            if ("BaseSet_isBatch/nobatch".equals(isBatch.getId())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -9,6 +10,7 @@ import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_sample.R;
@@ -57,18 +59,31 @@ public class TestDeviceAdapter extends BaseListDataRecyclerViewAdapter<TestDevic
             item.setOnClickListener(v -> onItemChildViewClick(v,0));
 
             //设备类型
-            RxView.clicks(ctDeviceType)
-                    .throttleFirst(300, TimeUnit.MILLISECONDS)
-                    .subscribe(o -> {
+            ctDeviceType.setOnChildViewClickListener(new OnChildViewClickListener() {
+                @Override
+                public void onChildViewClick(View childView, int action, Object obj) {
+                    if (action == -1){
+                        onItemChildViewClick(ctDeviceType, -1);
+                    }else {
                         onItemChildViewClick(ctDeviceType, 1);
-                    });
+                    }
+
+                }
+            });
+
 
             //设备编码
-            RxView.clicks(ctDeviceCode)
-                    .throttleFirst(300, TimeUnit.MILLISECONDS)
-                    .subscribe(o -> {
+            ctDeviceCode.setOnChildViewClickListener(new OnChildViewClickListener() {
+                @Override
+                public void onChildViewClick(View childView, int action, Object obj) {
+                    if (action == -1){
+                        onItemChildViewClick(ctDeviceCode, -2);
+                    }else {
                         onItemChildViewClick(ctDeviceCode, 2);
-                    });
+                    }
+                }
+            });
+
         }
 
         @Override

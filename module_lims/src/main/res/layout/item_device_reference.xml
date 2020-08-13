@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/item"
+    android:tag="item"
+    android:padding="@dimen/dp_10"
+    android:background="@drawable/sl_press_no_stroke"
+    android:translationZ="2dp">
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvName"
+                android:tag="tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="设备"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvDeviceState"
+                android:tag="tvDeviceState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key="设备状态"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

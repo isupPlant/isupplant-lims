@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.input.fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,15 +20,26 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.module_lims.event.MaterialDateEvent;
+import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.model.bean.ProductIdEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 import com.supcon.mes.module_sample.model.contract.TestMaterialListApi;
 import com.supcon.mes.module_sample.presenter.TestMaterialPresenter;
 import com.supcon.mes.module_sample.ui.adapter.TestMaterialAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
@@ -62,6 +74,8 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(false);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -103,7 +117,9 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("radio", false);
+                        IntentRouter.go(context, Constant.AppCode.LIMS_MaterialRef, bundle);
                     }
                 });
 
@@ -132,11 +148,11 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
                     adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
-                    for (int i = 0; i < adapter.getList().size(); i++) {
-                        if (i != position){
-                            adapter.getList().get(i).setSelect(false);
-                        }
-                    }
+//                    for (int i = 0; i < adapter.getList().size(); i++) {
+//                        if (i != position){
+//                            adapter.getList().get(i).setSelect(false);
+//                        }
+//                    }
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -152,6 +168,29 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
         refreshListController.refreshBegin();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void selectMaterial(MaterialDateEvent event){
+        if (!event.isRadio()){
+            if (null != event.getList()){
+                List<ProdIdEntity> list = event.getList();
+                for (int i = 0; i < list.size(); i++) {
+                    TestMaterialEntity testMaterialEntity = new TestMaterialEntity();
+                    testMaterialEntity.setBatchCode("");
+                    testMaterialEntity.setUseQty(new BigDecimal(0));
+                    ProductIdEntity productIdEntity = new ProductIdEntity();
+                    productIdEntity.setId(list.get(i).getId());
+                    productIdEntity.setCode(list.get(i).getCode());
+                    productIdEntity.setIsBatch(list.get(i).getIsBatch());
+                    productIdEntity.setMainUnit(list.get(i).getMainUnit());
+                    productIdEntity.setName(list.get(i).getName());
+                    testMaterialEntity.setProductId(productIdEntity);
+                    adapter.getList().add(testMaterialEntity);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     @Override
     public void getTestMaterialSuccess(CommonListEntity entity) {
         refreshListController.refreshComplete(entity.result);
@@ -161,5 +200,11 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     public void getTestMaterialFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

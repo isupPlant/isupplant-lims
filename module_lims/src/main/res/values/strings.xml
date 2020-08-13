@@ -39,6 +39,7 @@
     <string name="lims_sampling_point_reference">采样点参照</string>
     <string name="lims_supplier_reference">供应商参照</string>
     <string name="lims_device_type_reference">设备类型参照</string>
+    <string name="lims_device_reference">设备参照</string>
     <string name="lims_inspection_items">检验项目</string>
     <string name="lims_busitype">业务类型</string>
     <string name="lims_inspect_quantity">请检数量</string>

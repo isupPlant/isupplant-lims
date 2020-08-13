@@ -92,4 +92,6 @@ public class TestMaterialEntity extends BaseEntity {
     public void setSelect(boolean select) {
         isSelect = select;
     }
+
+
 }
