@@ -57,7 +57,7 @@ public class RangeAdapter extends BaseRecyclerViewAdapter<InspectionItemColumnEn
 
         @Override
         protected int layoutId() {
-            return R.layout.item_range;
+            return R.layout.item_report_range;
         }
 
         @Override

@@ -246,10 +246,13 @@ public class SurverReportDetailController extends BaseViewController implements 
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(InspectReportDetailAPI.class).getInspectReportByPending(pendingEntity.modelId,pendingEntity.id);
-                powerCodeController.initPowerCode(pendingEntity.activityName);
-                workFlowViewController.initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
-                customWorkFlowView.setVisibility(View.VISIBLE);
+
+                presenterRouter.create(InspectReportDetailAPI.class).getInspectReportByPending(pendingEntity.modelId, pendingEntity.id);
+                if (pendingEntity.openUrl.contains("ReportView")) {
+                    powerCodeController.initPowerCode(pendingEntity.activityName);
+                    workFlowViewController.initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
+                    customWorkFlowView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -317,11 +320,13 @@ public class SurverReportDetailController extends BaseViewController implements 
      */
     @Override
     public void getInspectReportByPendingSuccess(InspectReportEntity entity) {
-        InspectHeadReportEntity reportEntity=entity.data;
-        if (reportEntity!=null){
-            this.reportEntity=reportEntity;
-            presenterRouter.create(InspectReportDetailAPI.class).getInspectHeadReport(reportEntity.id);
-        }
+        reportEntity=entity.data;
+        this.pendingEntity=reportEntity.pending;
+        setInspectHead(reportEntity);
+        Map<String,Object> params=new HashMap<>();
+        params.put("inspectReportId",reportEntity.id);
+        params.put("pageNo",1);
+        presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(params);
     }
 
     /**

@@ -136,7 +136,7 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
 
         @Override
         protected int layoutId() {
-            return R.layout.item_range;
+            return R.layout.item_report_range;
         }
 
         @Override
