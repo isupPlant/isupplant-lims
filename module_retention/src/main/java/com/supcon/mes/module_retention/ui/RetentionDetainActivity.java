@@ -3,6 +3,8 @@ package com.supcon.mes.module_retention.ui;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,11 +15,17 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
+import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -26,16 +34,25 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.GetPowerCodeController;
 import com.supcon.mes.middleware.controller.WorkFlowViewController;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
+import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.middleware.model.bean.Unit;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
+import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_retention.R;
 import com.supcon.mes.module_retention.model.api.RetentionDetailAPI;
 import com.supcon.mes.module_retention.model.bean.RecodeListEntity;
 import com.supcon.mes.module_retention.model.bean.RetentionEntity;
+import com.supcon.mes.module_retention.model.bean.RetentionSubmitEntity;
 import com.supcon.mes.module_retention.model.contract.RetentionDetailContract;
 import com.supcon.mes.module_retention.presenter.RetentionDetailPresenter;
 import com.supcon.mes.module_retention.ui.adapter.RecordAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,7 +67,7 @@ import java.util.concurrent.TimeUnit;
         GetPowerCodeController.class,
         WorkFlowViewController.class
 })
-@Router(Constant.Router.RETENTION_VIEW)
+@Router(value=Constant.Router.RETENTION_VIEW,viewCode = "retentionEdit")
 public class RetentionDetainActivity extends BaseRefreshActivity implements RetentionDetailContract.View {
 
     @BindByTag("titleText")
@@ -121,7 +138,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     }
 
     private boolean expand = false;
-
+    private int operate=-1;
     @Override
     protected void initListener() {
         super.initListener();
@@ -153,12 +170,37 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
             initPending();
         });
 
+        customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+                WorkFlowVar workFlowVar = (WorkFlowVar) obj;
+                switch (action) {
+                    case 0:
+                        operate=0;
+                        doSave(workFlowVar);
+                        break;
+                    case 1:
+                        operate=1;
+                        doSubmit(workFlowVar);
+                        break;
+                    case 2:
+                        operate=2;
+                        doSubmit(workFlowVar);
+                        break;
+                }
+            }
+        });
+
+
     }
 
     private void initPending() {
         if (pendingEntity != null && pendingEntity.id != null) {
-            getController(GetPowerCodeController.class).initPowerCode(pendingEntity.activityName);
-            getController(WorkFlowViewController.class).initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
+            if (pendingEntity.openUrl.contains("retentionView")) {
+                customWorkFlowView.setVisibility(View.VISIBLE);
+                getController(GetPowerCodeController.class).initPowerCode(pendingEntity.activityName);
+                getController(WorkFlowViewController.class).initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
+            }
         }
     }
 
@@ -184,9 +226,64 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
 
     }
 
+    private void doSave(WorkFlowVar workFlowVar) {
+
+        onLoading("留单保存中...");
+        RetentionSubmitEntity entity = new RetentionSubmitEntity();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
+        entity.workFlowVar = jsonObject;
+        entity.operateType = Constant.Transition.SAVE;
+        generateSaveOrSubmit(entity);
+    }
+    private void generateSaveOrSubmit(RetentionSubmitEntity entity) {
+        entity.deploymentId = pendingEntity.deploymentId+"";
+        entity.taskDescription = pendingEntity.taskDescription;
+        entity.activityName = pendingEntity.activityName;
+        entity.pendingId = pendingEntity.id.toString();
+        entity.retention=retentionEntity;
+        String viewCode="retentionView";
+        entity.viewCode = "LIMSRetain_5.0.4.1_retention_retentionView";
+        String path = viewCode;
+        String _pc_ = getController(GetPowerCodeController.class).getPowerCodeResult();
+        Map<String, Object> params = new HashMap<>();
+        if (retentionEntity.id != null) {
+            params.put("id", retentionEntity.id);
+        }
+        params.put("__pc__", _pc_);
+        Gson gson = new Gson();
+        String s = gson.toJson(entity);
+        Log.i("RetentionEntity", "->" + s);
+        presenterRouter.create(RetentionDetailAPI.class).submitRetention(path, params, entity);
+    }
+
+    private void doSubmit(WorkFlowVar workFlowVar) {
+        RetentionSubmitEntity entity = new RetentionSubmitEntity();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("dec", workFlowVar.dec);
+        jsonObject.addProperty("operateType", workFlowVar.operateType);
+        jsonObject.addProperty("outcome", workFlowVar.outCome);
+        if (workFlowVar.outcomeMapJson != null) {
+            jsonObject.addProperty("outcomeMapJson", workFlowVar.outcomeMapJson.toString());
+        }
+        if (workFlowVar.idsMap != null) {
+            jsonObject.addProperty("idsMap", workFlowVar.idsMap.toString());
+        }
+
+        if ("驳回".equals(workFlowVar.dec)) {
+           onLoading("留样单驳回中...");
+            jsonObject.addProperty("workFlowVarStatus", "cancel");
+        } else {
+            onLoading("留样单提交中");
+        }
+        entity.operateType = Constant.Transition.SUBMIT;
+        entity.workFlowVar = jsonObject;
+        generateSaveOrSubmit(entity);
+    }
     @Override
     public void getRetentionDetailByIdSuccess(RetentionEntity entity) {
         retentionEntity = entity;
+        pendingEntity=retentionEntity.pending;
         setRetentionEntity();
     }
 
@@ -207,5 +304,36 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     public void getRecordFailed(String errorMsg) {
         refreshController.refreshComplete();
         ToastUtils.show(context, errorMsg);
+    }
+
+    @Override
+    public void submitRetentionSuccess(SubmitResultEntity entity) {
+       onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
+            @Override
+            public void onLoaderFinished() {
+                if(operate==0){
+                    pendingEntity.id=entity.data.pendingId;
+                    refreshController.setAutoPullDownRefresh(true);
+                    refreshController.setPullDownRefreshEnabled(false);
+                    refreshController.refreshBegin();
+                    refreshController.setOnRefreshListener(new OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            customWorkFlowView.findViewById(R.id.commentInput).setVisibility(View.GONE);
+                            presenterRouter.create(RetentionDetailAPI.class).getRetentionDetailById(retentionEntity.id, null);
+                        }
+                    });
+                }else {
+                    EventBus.getDefault().post(new RefreshEvent());
+                    back();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void submitRetentionFailed(String errorMsg) {
+        onLoadFailed(errorMsg);
     }
 }
