@@ -5,6 +5,7 @@ import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
 
@@ -12,6 +13,8 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
+import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
+import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.bean.InspectApplicationSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
@@ -296,5 +299,21 @@ public interface ApiService {
     @GET("/msService/QCS/inspect/inspect/data/{moduleId}")
     Flowable<BAP5CommonEntity<InspectionApplicationEntity>> getInspectionApplicationByPending(@Path("moduleId") Long moduleId,
                                                                             @Query("pendingId") Long pendingId);
+
+    /**
+     * 获取设备类型参照接口
+     * @param map
+     * @return
+     */
+    @POST("/msService/BaseSet/eamType/eamType/eamTypeRefPart-query")
+    Flowable<BAP5CommonEntity<CommonListEntity<DeviceTypeReferenceEntity>>> getDeviceTypeReference(@Body Map<String, Object> map);
+
+    /**
+     * 获取设备参照列表接口
+     * @param map
+     * @return
+     */
+    @POST("/msService/BaseSet/eamInfo/eamInfo/eamInfoRefPart-query")
+    Flowable<BAP5CommonEntity<CommonListEntity<DeviceReferenceEntity>>> getDeviceReference(@Body Map<String, Object> map);
 
 }

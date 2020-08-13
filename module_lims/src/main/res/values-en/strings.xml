@@ -38,6 +38,7 @@
     <string name="lims_quality_standard_reference">Quality_standard_reference</string>
     <string name="lims_sampling_point_reference">Sampling_point_reference</string>
     <string name="lims_supplier_reference">Supplier_reference</string>
+    <string name="lims_device_type_reference">Device_type_reference</string>
     <string name="lims_inspection_items">Inspection_items</string>
     <string name="lims_busitype">Business type</string>
     <string name="lims_inspect_quantity">Inspection_quantity</string>

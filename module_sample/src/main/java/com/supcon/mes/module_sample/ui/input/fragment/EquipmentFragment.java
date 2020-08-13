@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.input.fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,14 +20,23 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
+import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
+import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.contract.TestDeviceListApi;
 import com.supcon.mes.module_sample.presenter.TestDevicePresenter;
 import com.supcon.mes.module_sample.ui.adapter.TestDeviceAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.TimeUnit;
 
@@ -49,6 +59,7 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     private Long sampleTesId;
 
     private TestDeviceAdapter adapter;
+    private int mPosition = -1;
     @Override
     protected IListAdapter<TestDeviceEntity> createAdapter() {
         adapter = new TestDeviceAdapter(context);
@@ -58,6 +69,8 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(false);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -126,6 +139,7 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                mPosition = position;
                 if (action == 0){
                     adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
                     for (int i = 0; i < adapter.getList().size(); i++) {
@@ -134,8 +148,10 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
                         }
                     }
                     adapter.notifyDataSetChanged();
-                }else if (action == 1){
-
+                }else if (action == 1){ //设备类型
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constant.IntentKey.SELECT_TAG,childView.getTag()+"");
+                    IntentRouter.go(context,Constant.AppCode.LIMS_EamTypeRefPart,bundle);
                 }else if (action == 2){
 
                 }
@@ -153,6 +169,20 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
         goRefresh();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void selectDataEvent(SelectDataEvent selectDataEvent){
+        if (selectDataEvent.getEntity() instanceof DeviceTypeReferenceEntity){
+            if (selectDataEvent.getSelectTag().equals("ctDeviceType")){
+                DeviceTypeReferenceEntity deviceTypeReferenceEntity = (DeviceTypeReferenceEntity) selectDataEvent.getEntity();
+                BaseLongIdNameEntity entity = new BaseLongIdNameEntity();
+                entity.setName(deviceTypeReferenceEntity.getName());
+                entity.setId(deviceTypeReferenceEntity.getId());
+                adapter.getList().get(mPosition).setEamTypeId(entity);
+                adapter.notifyItemChanged(mPosition);
+            }
+        }
+    }
+
     private void goRefresh(){
         refreshListController.refreshBegin();
     }
@@ -166,5 +196,11 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     public void getTestDeviceFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

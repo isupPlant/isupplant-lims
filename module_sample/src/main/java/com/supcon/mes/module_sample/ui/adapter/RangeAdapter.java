@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
+import android.view.View;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseRecyclerViewAdapter;
@@ -62,6 +63,11 @@ public class RangeAdapter extends BaseRecyclerViewAdapter<InspectionItemColumnEn
 
         @Override
         protected void update(InspectionItemColumnEntity data) {
+            if (data.getLoad()){
+                ctRange.setVisibility(View.VISIBLE);
+            }else {
+                ctRange.setVisibility(View.GONE);
+            }
             ctRange.setKey(data.getColumnName());
             for (String key: hashMap.keySet()) {
                 if (key.equals(data.getColumnKey())){

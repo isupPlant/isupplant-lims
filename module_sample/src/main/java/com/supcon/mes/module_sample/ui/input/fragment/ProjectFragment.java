@@ -5,12 +5,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
@@ -166,6 +168,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             });
         }
 
+
     }
 
     public void setSampleTesId(Long sampleTesId){
@@ -214,7 +217,6 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
         columnList.clear();
         columnList.addAll(entity.data);
-
         //先把数据中的结论摘出来 作为父级实体
         for (int i = 0; i < columnList.size(); i++) {
             if (columnList.get(i).getColumnType().equals("range")){ //表示是结论
@@ -237,10 +239,8 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                         recordList.clear();
                         //将当前下标之前的范围放入属于这个结论的集合中
                         for (int a = j-1; a >= k; a--) {
-                            if (columnList.get(a).getLoad()){
-                                InspectionItemColumnEntity inspectionItemColumnEntity = columnList.get(a);
-                                recordList.add(inspectionItemColumnEntity);
-                            }
+                            InspectionItemColumnEntity inspectionItemColumnEntity = columnList.get(a);
+                            recordList.add(inspectionItemColumnEntity);
                         }
                         conclusionList.get(i).setColumnList(recordList);
                         k = j+1;

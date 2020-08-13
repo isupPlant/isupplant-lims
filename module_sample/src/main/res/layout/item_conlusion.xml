@@ -52,8 +52,8 @@
 
         <com.supcon.mes.mbap.view.CustomVerticalSpinner
             android:layout_marginTop="@dimen/dp_5"
-            android:id="@+id/tvConclusionColumnName"
-            android:tag="tvConclusionColumnName"
+            android:id="@+id/tsConclusionColumnName"
+            android:tag="tsConclusionColumnName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:key="结论" />

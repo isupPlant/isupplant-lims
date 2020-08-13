@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
@@ -15,7 +16,9 @@ import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -38,8 +41,11 @@ import io.reactivex.functions.Consumer;
 public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSubEntity> {
 
     private ConclusionAdapter conclusionAdapter;
+
+
     public ProjectAdapter(Context context) {
         super(context);
+
     }
 
     @Override
@@ -122,6 +128,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 
                         }
                     });
+
         }
 
         @Override

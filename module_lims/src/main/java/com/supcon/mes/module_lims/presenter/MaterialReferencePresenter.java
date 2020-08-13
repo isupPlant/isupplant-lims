@@ -34,6 +34,7 @@ public class MaterialReferencePresenter extends MaterialReferenceApi.Presenter {
         }
         map.put("pageNo",pageNo);
         map.put("paging",true);
+        map.put("customCondition",new MaterialReferenceListEntity());
         map.put("pageSize",10);
 
         mCompositeSubscription.add(BaseLimsHttpClient.getMaterialReference(map).onErrorReturn(new Function<Throwable, MaterialReferenceListEntity>() {

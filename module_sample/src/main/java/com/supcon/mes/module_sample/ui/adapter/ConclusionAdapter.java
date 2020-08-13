@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
@@ -13,11 +14,15 @@ import android.widget.RelativeLayout;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.ConclusionEntity;
+import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,8 +35,13 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
     private List<ConclusionEntity> list;
     private HashMap<String, Object> hashMap;
     private RangeAdapter rangeAdapter;
+    private SinglePickController mSinglePickController;
+    private List<String> spinnerList = new ArrayList<>();
     public ConclusionAdapter(Context context) {
         super(context);
+        mSinglePickController = new SinglePickController((Activity) context);
+        mSinglePickController.setCanceledOnTouchOutside(true);
+        mSinglePickController.setDividerVisible(true);
     }
 
     @Override
@@ -65,8 +75,8 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
         RecyclerView rvRange;
         @BindByTag("llRange")
         LinearLayout llRange;
-        @BindByTag("tvConclusionColumnName")
-        CustomVerticalSpinner tvConclusionColumnName;
+        @BindByTag("tsConclusionColumnName")
+        CustomVerticalSpinner tsConclusionColumnName;
 
         public ViewHolder(Context context) {
             super(context);
@@ -83,7 +93,7 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
                     super.getItemOffsets(outRect, view, parent, state);
                     int childLayoutPosition = parent.getChildAdapterPosition(view);
                     if (childLayoutPosition == 0) {
-                        outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(5, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(5, context));
+                        outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(5, context));
                     } else {
                         outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(5, context));
                     }
@@ -108,6 +118,29 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
                     }
                 }
             });
+
+
+            tsConclusionColumnName.setOnChildViewClickListener(new OnChildViewClickListener() {
+                @Override
+                public void onChildViewClick(View childView, int action, Object obj) {
+                    spinnerList.clear();
+                    List<InspectionItemColumnEntity> columnList = list.get(getAdapterPosition()).getColumnList();
+                    for (int i = 0; i < columnList.size(); i++) {
+                        spinnerList.add(columnList.get(i).getResult());
+                    }
+                    mSinglePickController.list(spinnerList)
+                            .listener((index, item) -> {
+
+                                for (String key: hashMap.keySet()) {
+                                    if (key.equals(list.get(getAdapterPosition()).getColumnKey())){
+                                        hashMap.put(key,spinnerList.get(index));
+                                    }
+                                }
+                                notifyItemChanged(getAdapterPosition());
+
+                            }).show();
+                }
+            });
         }
 
         @Override
@@ -117,10 +150,11 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
 
         @Override
         protected void update(ConclusionEntity data) {
-            tvConclusionColumnName.setKey(data.getColumnName());
+            tsConclusionColumnName.setKey(data.getColumnName());
             for (String key: hashMap.keySet()) {
                 if (key.equals(data.getColumnKey())){
-                    tvConclusionColumnName.setContent((String) hashMap.get(key));
+                    tsConclusionColumnName.setContent((String) hashMap.get(key));
+                    tsConclusionColumnName.setSpinner((String) hashMap.get(key));
                 }
             }
 
