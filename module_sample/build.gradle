@@ -62,4 +62,6 @@ dependencies {
     implementation project(':isupplant-lims:module_lims')
     annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
 
+    implementation 'io.apisense:rhino-android:1.1.1'
+
 }

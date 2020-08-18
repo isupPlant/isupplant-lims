@@ -71,5 +71,10 @@
     <string name="lims_plan_date">计划观察日期</string>
     <string name="lims_real_date">实际观察日期</string>
     <string name="lims_state">状态</string>
+    <string name="LIMSSample_sample_doNotNeedCalculate">没有需要计算的分项，请确认</string>
+    <string name="LIMSSample_sample_originValIsNull">检测分项【%1$s】重复号【%2$s】原始值为空，无法计算！</string>
+    <string name="LIMSSample_sample_roundValIsNull">检测分项【%1$s】重复号【%2$s】修约值为空，无法计算！</string>
+    <string name="LIMSSample_sample_dispValIsNull">检测分项【%1$s】重复号【%2$s】报出值为空，无法计算！</string>
+    <string name="LIMSSample_sample_dispValTypeError">检测分项【%1$s】重复号【%2$s】报出值非数字类型，无法计算！</string>
 
 </resources>

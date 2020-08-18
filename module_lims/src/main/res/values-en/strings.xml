@@ -71,5 +71,10 @@
     <string name="lims_plan_date">Plan date</string>
     <string name="lims_real_date">Real date</string>
     <string name="lims_state">State</string>
+    <string name="LIMSSample_sample_doNotNeedCalculate">There are no items to be calculated, please confirm</string>
+    <string name="LIMSSample_sample_originValIsNull">Inspection items【%1$s】duplicate number【%2$s】the original value is null，beyond computation！</string>
+    <string name="LIMSSample_sample_roundValIsNull">Inspection items【%1$s】duplicate number【%2$s】rounding off value is null，beyond computation！</string>
+    <string name="LIMSSample_sample_dispValIsNull">Inspection items【%1$s】duplicate number【%2$s】reported value is null，beyond computation！</string>
+    <string name="LIMSSample_sample_dispValTypeError">Inspection items【%1$s】duplicate number【%2$s】the reported value is not a numeric type，beyond computation！</string>
 
 </resources>
