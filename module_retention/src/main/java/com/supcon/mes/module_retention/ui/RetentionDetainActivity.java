@@ -283,7 +283,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     @Override
     public void getRetentionDetailByIdSuccess(RetentionEntity entity) {
         retentionEntity = entity;
-        pendingEntity=retentionEntity.pending;
+
         setRetentionEntity();
     }
 

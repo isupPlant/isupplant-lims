@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.model.network;
 
 import com.app.annotation.apt.ApiFactory;
+import com.app.annotation.apt.ContractFactory;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
@@ -15,13 +16,16 @@ import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
+import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
 import com.supcon.mes.module_sample.model.bean.SampleReportSubmitEntity;
+import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 
 import java.util.Map;
 
 import io.reactivex.Flowable;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -119,6 +123,27 @@ public interface ApiService {
      */
     @GET("/msService/LIMSSample/sample/testMaterial/getTestMaterial")
     Flowable<BAP5CommonEntity<CommonListEntity<TestMaterialEntity>>> getTestMaterial(@Query("sampleTestId") String sampleTestId);
+
+
+    /**
+     * 获取单样品结果录入检验分项列表
+     * @param id
+     * @return
+     */
+    @GET("/msService/LIMSSample/sample/sampleCom/getSampleCom")
+    Flowable<CommonBAP5ListEntity<SampleInspectItemEntity>> getSampleCom(@Query("sampleId") Long id);
+
+
+    @GET("/msService/LIMSSample/sample/sampleTest/getStdGradeColumns")
+    Flowable<SingleInspectionItemListEntity> getSampleInspectItem(@Query("sampleId") Long sampleId);
+
+    /**
+     * 获取样品检验分项的文件
+     * @param id
+     * @return
+     */
+    @GET("/msService/LIMSSample/baseService/workbench/download?entityCode=LIMSSample_5.0.0.0_sample")
+    Flowable<ResponseBody> getSampleInspectItemFile(@Query("id") Long id);
 
 
 }

@@ -71,5 +71,9 @@
     <string name="lims_plan_date">Plan date</string>
     <string name="lims_real_date">Real date</string>
     <string name="lims_state">State</string>
+    <string name="lims_single_sample_result_input">Single_sample_result_input</string>
+    <string name="lims_inspect_project">Test items</string>
+    <string name="lims_inspect_method">Test method</string>
+
 
 </resources>

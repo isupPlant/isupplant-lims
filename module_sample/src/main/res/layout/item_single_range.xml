@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/dp_10"
+    android:paddingEnd="@dimen/dp_5"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_5">
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/judgeRangeTv"
+        android:tag="judgeRangeTv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        app:gravity="right|center_vertical"
+        app:content_color="@color/font_666666"
+        app:content_size="14"
+        app:key_color="@color/font_333333"
+        app:content_value="1111111111"
+        app:key="@string/lims_range"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingEnd="@dimen/dp_5"
+        app:key_size="14" />
+
+</LinearLayout>
