@@ -13,6 +13,7 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
+import com.supcon.mes.module_lims.model.bean.ConfigEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
@@ -315,5 +316,7 @@ public interface ApiService {
      */
     @POST("/msService/BaseSet/eamInfo/eamInfo/eamInfoRefPart-query")
     Flowable<BAP5CommonEntity<CommonListEntity<DeviceReferenceEntity>>> getDeviceReference(@Body Map<String, Object> map);
+
+
 
 }

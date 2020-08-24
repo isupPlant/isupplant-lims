@@ -40,12 +40,12 @@ public class Util {
     }
 
     public static boolean isNumeric(String str){
-        for (int i = str.length();--i>=0;){
-            if (!Character.isDigit(str.charAt(i))){
-                return false;
-            }
+        try {
+            Double.parseDouble(str);
+        }catch (Exception e){
+            return false;
         }
-        return true;
+      return true;
     }
 
     /**
@@ -87,4 +87,66 @@ public class Util {
     public static double standardDiviation(List<Double> x) {
         return  Math.sqrt(variance(x));
     }
+
+    public static double getAvg(List<Double> list){
+        double result=0d;
+        if (list.size()==0){
+            return result;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            result += list.get(i);
+        }
+
+        return result/list.size();
+    }
+
+    public static double getSum(List<Double> list){
+        double result = 0d;
+
+        if (list.size()==0){
+            return result;
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            result += list.get(i);
+        }
+        return result;
+    }
+
+    public static double getMax(List<Double> list){
+        double result = 0d;
+
+        if (list.size()==0){
+            return result;
+        }else {
+            result = list.get(0);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) > result){
+                result = list.get(i);
+            }
+
+        }
+        return result;
+    }
+
+    public static double getMin(List<Double> list){
+        double result = 0d;
+
+        if (list.size()==0){
+            return result;
+        }else {
+            result = list.get(0);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) < result){
+                result = list.get(i);
+            }
+
+        }
+        return result;
+    }
+
 }

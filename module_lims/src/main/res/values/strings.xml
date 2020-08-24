@@ -76,5 +76,6 @@
     <string name="LIMSSample_sample_roundValIsNull">检测分项【%1$s】重复号【%2$s】修约值为空，无法计算！</string>
     <string name="LIMSSample_sample_dispValIsNull">检测分项【%1$s】重复号【%2$s】报出值为空，无法计算！</string>
     <string name="LIMSSample_sample_dispValTypeError">检测分项【%1$s】重复号【%2$s】报出值非数字类型，无法计算！</string>
+    <string name="LIMSSample_sample_error_valueKindError">请输入数字类型！</string>
 
 </resources>

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -41,6 +42,10 @@ import io.reactivex.functions.Consumer;
 public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSubEntity> {
 
     private ConclusionAdapter conclusionAdapter;
+
+    private OriginalValueChangeListener mOriginalValueChangeListener;
+    private String originalValue;
+    private boolean originalFocus;
 
 
     public ProjectAdapter(Context context) {
@@ -129,6 +134,26 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         }
                     });
 
+            //原始值数值变化监听
+            RxTextView.textChanges(ceOriginalValue.editText())
+                    .skipInitialValue()
+                    .subscribe(new Consumer<CharSequence>() {
+                        @Override
+                        public void accept(CharSequence charSequence) throws Exception {
+                            originalValue = charSequence.toString();
+                        }
+                    });
+            //原始值焦点监听
+            ceOriginalValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    originalFocus = hasFocus;
+                        if (null != mOriginalValueChangeListener){
+                            mOriginalValueChangeListener.originalValueChange(originalFocus,originalValue,getAdapterPosition());
+                        }
+                    }
+            });
+
         }
 
         @Override
@@ -147,6 +172,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "--" : data.getOriginValue());
                     }else {
                         setVisible(true);
+                        ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "--" : data.getOriginValue());
                     }
                 }else {
                     setVisible(true);
@@ -169,5 +195,13 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 cpOriginalValue.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    public void setOriginalValueChangeListener(OriginalValueChangeListener mOriginalValueChangeListener){
+        this.mOriginalValueChangeListener = mOriginalValueChangeListener;
+    }
+
+    public interface OriginalValueChangeListener{
+        void originalValueChange(boolean hasFocus, String value, int position);
     }
 }

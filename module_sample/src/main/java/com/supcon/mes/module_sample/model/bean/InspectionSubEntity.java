@@ -14,7 +14,13 @@ import java.util.List;
  * class name
  */
 public class InspectionSubEntity extends BaseEntity {
+    private String calcParamInfo;
+    private String calculFormula;
     private String calculateParamNames;
+    private String carryFormula;
+    private BaseIdValueEntity digitType;
+    private String carrySpace;
+    private BaseIdValueEntity carryType;
     private BaseLongIdNameEntity comId;
     private String comName;
     private BaseIdValueEntity comState;
@@ -35,6 +41,25 @@ public class InspectionSubEntity extends BaseEntity {
     private String unitName;
     private BaseIdValueEntity valueKind;
     private Integer version;
+    private BaseIdValueEntity limitType;
+    private String maxValue;
+    private String minValue;
+
+    public String getCalcParamInfo() {
+        return calcParamInfo;
+    }
+
+    public void setCalcParamInfo(String calcParamInfo) {
+        this.calcParamInfo = calcParamInfo;
+    }
+
+    public String getCalculFormula() {
+        return calculFormula;
+    }
+
+    public void setCalculFormula(String calculFormula) {
+        this.calculFormula = calculFormula;
+    }
 
     public String getCalculateParamNames() {
         return calculateParamNames;
@@ -42,6 +67,38 @@ public class InspectionSubEntity extends BaseEntity {
 
     public void setCalculateParamNames(String calculateParamNames) {
         this.calculateParamNames = calculateParamNames;
+    }
+
+    public String getCarryFormula() {
+        return carryFormula;
+    }
+
+    public void setCarryFormula(String carryFormula) {
+        this.carryFormula = carryFormula;
+    }
+
+    public BaseIdValueEntity getDigitType() {
+        return digitType;
+    }
+
+    public void setDigitType(BaseIdValueEntity digitType) {
+        this.digitType = digitType;
+    }
+
+    public String getCarrySpace() {
+        return carrySpace;
+    }
+
+    public void setCarrySpace(String carrySpace) {
+        this.carrySpace = carrySpace;
+    }
+
+    public BaseIdValueEntity getCarryType() {
+        return carryType;
+    }
+
+    public void setCarryType(BaseIdValueEntity carryType) {
+        this.carryType = carryType;
     }
 
     public BaseLongIdNameEntity getComId() {
@@ -202,5 +259,29 @@ public class InspectionSubEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public BaseIdValueEntity getLimitType() {
+        return limitType;
+    }
+
+    public void setLimitType(BaseIdValueEntity limitType) {
+        this.limitType = limitType;
+    }
+
+    public String getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(String maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public String getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(String minValue) {
+        this.minValue = minValue;
     }
 }

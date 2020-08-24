@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.ui.input.fragment.EquipmentFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.InspectionProjectFragment;
@@ -156,6 +158,14 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                     @Override
                     public void accept(Object o) throws Exception {
                         projectFragment.manualCalculate();
+                    }
+                });
+        RxView.clicks(rl_save)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.e("eeee",Util.isNumeric("hahahh")+"");
                     }
                 });
     }
