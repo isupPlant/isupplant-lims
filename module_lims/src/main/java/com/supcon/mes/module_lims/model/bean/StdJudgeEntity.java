@@ -16,6 +16,7 @@ public class StdJudgeEntity extends InspectReportDetailEntity {
     public String minValue;
     public String resultValue;
 
+
     public SystemCodeEntity standardGrade;
     public BaseIntIdNameEntity stdVerComId;
 

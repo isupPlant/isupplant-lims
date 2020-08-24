@@ -18,5 +18,5 @@ import java.util.Map;
 public interface RetentionDetailAPI {
     void getRetentionDetailById(Long id,Long pendingId);
     void getRecord(Long id);
-    void submitRetention(String path, Map<String,Object> params, RetentionSubmitEntity retentionSubmit);
+    void submitRetention(String path, Map<String, Object> params, RetentionSubmitEntity retentionSubmit);
 }

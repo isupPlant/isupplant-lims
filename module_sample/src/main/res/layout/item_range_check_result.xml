@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFF0F4FC"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/dp_10"
+    android:paddingEnd="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_5">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:id="@+id/rlRange"
+        android:tag="rlRange"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/lims_range"
+            android:gravity="center"
+            />
+        <ImageView
+            android:id="@+id/ivExpand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:src="@drawable/ic_drop_down"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:tag="ivExpand" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/dp_5"
+        android:id="@+id/llRange"
+        android:tag="llRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_range_line"
+        android:orientation="vertical"
+        android:visibility="gone"
+        />
+    <com.supcon.mes.mbap.view.CustomSpinner
+        android:layout_marginTop="@dimen/dp_5"
+        android:id="@+id/checkResultTv"
+        android:tag="checkResultTv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        app:content_color="@color/dark_text"
+        app:content_size="13"
+        app:gravity="right|center_vertical"
+        app:key="@string/lims_check_result"
+        app:key_color="@color/c_scan_666"
+        app:key_width="@dimen/dp_100"
+        app:key_size="15" />
+
+</LinearLayout>

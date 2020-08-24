@@ -1,5 +1,7 @@
 package com.supcon.mes.module_lims;
 
+import com.supcon.mes.module_lims.utils.Util;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,6 +14,6 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+        boolean flag=Util.parseStrInRange("10","(24,50)");
     }
 }
