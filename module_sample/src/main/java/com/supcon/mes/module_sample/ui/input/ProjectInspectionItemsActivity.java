@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.functions.Consumer;
+
 /**
  * author huodongsheng
  * on 2020/8/7
@@ -126,7 +128,6 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
         RxView.clicks(ivProject)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe(o -> openDrawLayout());
-
         viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -148,6 +149,15 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
             }
         });
+
+        RxView.clicks(rl_calculation)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        projectFragment.manualCalculate();
+                    }
+                });
     }
 
 

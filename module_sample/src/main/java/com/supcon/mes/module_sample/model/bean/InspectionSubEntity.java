@@ -14,6 +14,7 @@ import java.util.List;
  * class name
  */
 public class InspectionSubEntity extends BaseEntity {
+    private String calculateParamNames;
     private BaseLongIdNameEntity comId;
     private String comName;
     private BaseIdValueEntity comState;
@@ -34,6 +35,14 @@ public class InspectionSubEntity extends BaseEntity {
     private String unitName;
     private BaseIdValueEntity valueKind;
     private Integer version;
+
+    public String getCalculateParamNames() {
+        return calculateParamNames;
+    }
+
+    public void setCalculateParamNames(String calculateParamNames) {
+        this.calculateParamNames = calculateParamNames;
+    }
 
     public BaseLongIdNameEntity getComId() {
         return comId;
