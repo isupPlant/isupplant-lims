@@ -23,22 +23,32 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.model.bean.StdJudgeEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
+import com.supcon.mes.module_lims.utils.FileUtils;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
+import com.supcon.mes.module_sample.model.bean.CalcParamInfoEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
+import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleCheckResultEntity;
 import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -46,7 +56,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * Created by wanghaidong on 2020/8/14
  * Email:wanghaidong1@supcon.com
  */
-public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter {
+public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<SampleInspectItemEntity> {
 
     public SingleSampleInpectAdapter(Context context) {
         super(context);
@@ -58,8 +68,12 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter {
     }
 
     public Activity activity;
+    public ScriptEngine engine;
     Map<String,List<CustomEditText>>  calculateListMap=new HashMap<>();
+    Map<String,SampleInspectItemEntity> calculateMap=new HashMap<>();
+    Map<String,List<SampleInspectItemEntity>> calculateInspectItemEntityMap=new HashMap<>();
     Map<String,CustomEditText> calculateTextMap=new HashMap<>();
+
     class SingleSampleInspectViewHolder extends BaseRecyclerViewHolder<SampleInspectItemEntity> {
 
         @BindByTag("ctInspectionItems")
@@ -82,9 +96,16 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter {
         ImageView ivExpand;
         @BindByTag("llRangeCheckResult")
         LinearLayout llRangeCheckResult;
+        @BindByTag("llEnclosure")
+        LinearLayout llEnclosure;
+        @BindByTag("imageUpDown")
+        ImageView imageUpDown;
+        @BindByTag("imageFileView")
+        ImageView imageFileView;
         boolean firstExpand = true;//是否是第一次展开的，默认是第一次
         private SinglePickController<String> mPickController;
         private List<String> cpOriginalValueList = new ArrayList<>();
+
 
         public SingleSampleInspectViewHolder(Context context) {
             super(context);
@@ -180,6 +201,16 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter {
                         detailEntity.setDispValue(dispValue);
                         editSampleInspectReportValue(dispValue, detailEntity);
                     });
+            RxView.clicks(imageUpDown)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o -> {
+                        onItemChildViewClick(imageUpDown,1);
+                    });
+            RxView.clicks(imageFileView)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o -> {
+                        onItemChildViewClick(imageFileView,2);
+                    });
         }
 
         @Override
@@ -206,7 +237,9 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter {
                 ceOriginalValue.setVisibility(View.VISIBLE);
                 ceOriginalValue.setContent(data.getOriginValue());
                 calculateListMap.put(busiVersion,new ArrayList<>());
+                calculateInspectItemEntityMap.put(busiVersion,new ArrayList<>());
                 calculateTextMap.put(busiVersion,ceOriginalValue);
+                calculateMap.put(busiVersion,data);
             }else if ("LIMSBasic_valueKind/number".equals(data.getValueKind().getId())){
                 cpOriginalValue.setVisibility(View.GONE);
                 ceOriginalValue.setVisibility(View.VISIBLE);
@@ -216,15 +249,153 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter {
                 if (calculateListMap.containsKey(busiVersion)){
                     List<CustomEditText> originalValueList=calculateListMap.get(busiVersion);
                     originalValueList.add(ceOriginalValue);
+                    List<SampleInspectItemEntity> sampleInspectItemEntities=calculateInspectItemEntityMap.get(busiVersion);
+                    sampleInspectItemEntities.add(data);
                 }
-
             }else if ("LIMSBasic_valueKind/text".equals(data.getValueKind().getId())){
                 cpOriginalValue.setVisibility(View.GONE);
                 ceOriginalValue.setVisibility(View.VISIBLE);
                 ceOriginalValue.setContent(data.getOriginValue());
                 ceOriginalValue.setEditable(true);
             }
+            if (!StringUtil.isEmpty(data.getFileUploadMultiFileIds()) && ("image".equals(data.getFileUploadMultiFileIcons()) || ".mp4".equals(data.getFileUploadMultiFileNames()))){
+                new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames()).setFileOnSuccessListener(new OnSuccessListener<File>() {
+                    @Override
+                    public void onSuccess(File result) {
+                        data.setFilePath(result.getPath());
+                    }
+                });
+            }
+
         }
+    }
+
+
+    //计算
+    public void calculate(String busiVersion,CustomEditText ceOriginalValue){
+        List<SampleInspectItemEntity> sampleInspectItemEntities=calculateInspectItemEntityMap.get(busiVersion);
+        for (int i = 0; i <sampleInspectItemEntities.size() ; i++) {
+            if (StringUtil.isEmpty(sampleInspectItemEntities.get(i).getCalcParamInfo())){
+//                ToastUtils.show(context,"暂无计算公式");
+                return;
+            }
+            SampleInspectItemEntity itemEntity=calculateMap.get(busiVersion);
+            StringBuffer script = new StringBuffer("function executeFunc(){");
+            String calcParamInfo = sampleInspectItemEntities.get(i).getCalcParamInfo();
+            List<CalcParamInfoEntity> calcParamInfoList = GsonUtil.jsonToList(calcParamInfo, CalcParamInfoEntity.class);
+            for (int j = 0; j < calcParamInfoList.size(); j++) {
+                String calculateParamValue = getCalculateParamValue(true,calcParamInfoList.get(j).getParamType().getId(),
+                        calcParamInfoList.get(j).getTestItemName(), calcParamInfoList.get(j).getTestComName(),
+                        calcParamInfoList.get(j).getIncomeType().getId(), calcParamInfoList.get(j).getOutcomeType().getId(),
+                        calcParamInfoList.get(j).getDealFunc().getId());
+
+                if (StringUtil.isEmpty(calculateParamValue)){
+                    return;
+                }
+                script.append("var "+calcParamInfoList.get(j).getParamName()+ "=" +calculateParamValue+ ";");
+            }
+            script.append(itemEntity.getCalculFormula() + "}");
+
+            try {
+                engine.eval(script.toString());
+                Invocable inv2 = (Invocable) engine;
+                Object res = inv2.invokeFunction("executeFunc");//执行计算公式
+                ceOriginalValue.setContent(res.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+    private String getCalculateParamValue(boolean autoCalculate,String paramType, String testItem, String comName, String incomeType, String outcomeType, String dealFunc) {
+        List<InspectionSubEntity> sampeComs = new ArrayList<>();
+        if (null != sampeComs) {
+            List<String> valueArr = new ArrayList<>();
+            for (int i = 0; i < sampeComs.size(); i++) {
+                if (incomeType.equals("LIMSBasic_incomeType/originValue")) {
+                    if (StringUtil.isEmpty(sampeComs.get(i).getOriginValue())) {
+                        if (!autoCalculate) {
+                            //原始值为空，非自动计算时报错
+                            String string = context.getResources().getString(R.string.LIMSSample_sample_originValIsNull);
+                            String format = String.format(string, sampeComs.get(i).getComName(), sampeComs.get(i).getParallelNo() + "");
+                            ToastUtils.show(context, format);
+                        }
+                        return null;
+                    }
+                    valueArr.add(sampeComs.get(i).getOriginValue());
+                } else if (incomeType.equals("LIMSBasic_incomeType/roundValue")) {
+                    if (StringUtil.isEmpty(sampeComs.get(i).getRoundValue())) {
+                        if (!autoCalculate) {
+                            //修约值为空，非自动计算时报错
+                            String string = context.getResources().getString(R.string.LIMSSample_sample_roundValIsNull);
+                            String format = String.format(string, sampeComs.get(i).getComName(), sampeComs.get(i).getParallelNo() + "");
+                            ToastUtils.show(context, format);
+                        }
+                        return null;
+                    }
+                    valueArr.add(sampeComs.get(i).getRoundValue());
+                } else if (incomeType.equals("LIMSBasic_incomeType/dispValue")) {
+                    if (StringUtil.isEmpty(sampeComs.get(i).getDispValue())) {
+                        if (!autoCalculate) {
+                            //报出值为空，非自动计算时报错
+                            String string = context.getResources().getString(R.string.LIMSSample_sample_dispValIsNull);
+                            String format = String.format(string, sampeComs.get(i).getComName(), sampeComs.get(i).getParallelNo() + "");
+                            ToastUtils.show(context, format);
+                        }
+                        return null;
+                    } else if (!StringUtil.isEmpty(sampeComs.get(i).getDispValue()) && !Util.isNumeric(sampeComs.get(i).getDispValue())) {
+                        if (!autoCalculate) {
+                            //报出值非数字，非自动计算时报错
+                            String string = context.getResources().getString(R.string.LIMSSample_sample_dispValTypeError);
+                            String format = String.format(string, sampeComs.get(i).getComName(), sampeComs.get(i).getParallelNo() + "");
+                            ToastUtils.show(context, format);
+                        }
+                        return null;
+                    }
+                    valueArr.add(sampeComs.get(i).getDispValue());
+                }
+
+            }
+
+            //能进到该方法中的 一定是数值类型的 所以直接将String 转 Double
+            List<Double> valueList = new ArrayList<>();
+            for (int i = 0; i < valueArr.size(); i++) {
+                valueList.add(Double.valueOf(valueArr.get(i)));
+            }
+
+            if(outcomeType.equals("LIMSBasic_outcomeType/dealFunc") ){
+                //输出类型为处理值
+
+                if(dealFunc.equals("LIMSBasic_dealFunc/avg")){
+                    //平均值
+                    return Util.getAvg(valueList)+"";
+                }else if(dealFunc.equals("LIMSBasic_dealFunc/sum") ){
+                    //求和
+                    return Util.getSum(valueList)+"";
+                }else if(dealFunc.equals("LIMSBasic_dealFunc/count") ){
+                    //个数
+                    return valueList.size()+"";
+                }else if(dealFunc.equals("LIMSBasic_dealFunc/max") ){
+                    //最大值
+                    return Util.getMax(valueList)+"";
+                }else if(dealFunc.equals("LIMSBasic_dealFunc/min") ){
+                    //最小值
+                    return Util.getMin(valueList)+"";
+                }else if(dealFunc.equals("LIMSBasic_dealFunc/stdev") ){
+                    //标准方差
+                    return Util.standardDiviation(valueList)+"";
+                }
+            }else if(outcomeType.equals("LIMSBasic_outcomeType/arr") ){
+                //输出类型为数组
+                return "[" + valueArr.toString() + "]";
+            }
+
+
+        }
+
+
+        return null;
     }
 
     private void editSampleInspectReportValue(String reportValue, SampleInspectItemEntity detailEntity) {

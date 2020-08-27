@@ -18,6 +18,7 @@ public class SampleInspectItemEntity extends InspectionItemsEntity {
     private String comName;//检测分项
     private String unitName;//计量单位
     private String calculFormula;
+    private String calcParamInfo;
     private String calculateParamNames;
     private String memoField;//备注
     private Map<String,Object> dispMap;
@@ -28,11 +29,20 @@ public class SampleInspectItemEntity extends InspectionItemsEntity {
     private String fileUploadMultiFileIcons;//附件类型
     private String fileUploadMultiFileIds;//附件id
     private String fileUploadMultiFileNames;//附件名称
+    private String executableFormula;
     private boolean isExpand;//扩展/收缩
     private BaseIdValueEntity limitType;
     private BaseIdValueEntity valueKind;//数据类型
+    private String filePath;
 
 
+    public String getCalcParamInfo() {
+        return calcParamInfo;
+    }
+
+    public void setCalcParamInfo(String calcParamInfo) {
+        this.calcParamInfo = calcParamInfo;
+    }
 
     public String getOriginValue() {
         return originValue;
@@ -198,5 +208,21 @@ public class SampleInspectItemEntity extends InspectionItemsEntity {
 
     public void setValueKind(BaseIdValueEntity valueKind) {
         this.valueKind = valueKind;
+    }
+
+    public String getExecutableFormula() {
+        return executableFormula;
+    }
+
+    public void setExecutableFormula(String executableFormula) {
+        this.executableFormula = executableFormula;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

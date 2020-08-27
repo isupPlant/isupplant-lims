@@ -175,7 +175,18 @@
                     android:paddingTop="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_5"
                     android:src="@drawable/ic_drop_down"
+                    android:padding="@dimen/dp_5"
                     android:tag="imageUpDown" />
+                <ImageView
+                    android:id="@+id/imageFileView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:padding="@dimen/dp_5"
+                    android:src="@drawable/ic_drop_down"
+                    android:tag="imageFileView" />
             </LinearLayout>
         </LinearLayout>
 

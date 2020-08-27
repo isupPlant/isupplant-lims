@@ -18,6 +18,7 @@ import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
 import com.supcon.mes.module_sample.model.bean.SampleReportSubmitEntity;
+import com.supcon.mes.module_sample.model.bean.SampleSignatureEntity;
 import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
@@ -27,6 +28,7 @@ import java.util.Map;
 import io.reactivex.Flowable;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -143,7 +145,13 @@ public interface ApiService {
      * @return
      */
     @GET("/msService/LIMSSample/baseService/workbench/download?entityCode=LIMSSample_5.0.0.0_sample")
-    Flowable<ResponseBody> getSampleInspectItemFile(@Query("id") Long id);
+    Flowable<ResponseBody> getSampleInspectItemFile(@Query("id") String id);
 
+    @FormUrlEncoded
+    @POST("/msService/LIMSSample/sample/sampleTest/recordResultSubmit")
+    Flowable<BAP5CommonEntity> recordResultSubmit(@Body Map<String,Object> paramsMap);
+
+    @GET("/msService/baseService/signature/buttonSignature/getSignatureEnabled")
+    Flowable<BAP5CommonEntity<SampleSignatureEntity>> getSignatureEnabled(@Query("buttonCode") String buttonCode);
 
 }
