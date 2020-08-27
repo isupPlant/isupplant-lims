@@ -3,7 +3,6 @@ package com.supcon.mes.module_sample.ui.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.text.InputType;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,16 +22,12 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeEntity;
-import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.model.bean.SampleCheckResultEntity;
 import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

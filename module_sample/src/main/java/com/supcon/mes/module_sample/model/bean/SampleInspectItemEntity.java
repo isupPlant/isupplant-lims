@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.model.bean;
 
 
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
+import com.supcon.mes.module_lims.model.bean.SampleTestIdEntity;
 
 import java.util.Map;
 

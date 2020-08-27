@@ -1,20 +1,17 @@
 package com.supcon.mes.module_sample.model.network;
 
 import com.app.annotation.apt.ApiFactory;
-import com.app.annotation.apt.ContractFactory;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
-import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
-import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
-import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
-import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
 import com.supcon.mes.module_sample.model.bean.SampleReportSubmitEntity;

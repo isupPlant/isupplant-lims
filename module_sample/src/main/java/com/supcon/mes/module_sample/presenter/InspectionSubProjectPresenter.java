@@ -3,7 +3,7 @@ package com.supcon.mes.module_sample.presenter;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
-import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.contract.InspectionSubProjectApi;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 

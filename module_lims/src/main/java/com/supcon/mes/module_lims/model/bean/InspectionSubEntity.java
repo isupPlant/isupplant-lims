@@ -1,16 +1,14 @@
-package com.supcon.mes.module_sample.model.bean;
+package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
-import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
-import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
 
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * author huodongsheng
- * on 2020/7/31
+ * on 2020/8/27
  * class name
  */
 public class InspectionSubEntity extends BaseEntity {
@@ -25,7 +23,7 @@ public class InspectionSubEntity extends BaseEntity {
     private String comName;
     private BaseIdValueEntity comState;
     private HashMap<String, Object> dispMap;
-    private List<ConclusionEntity> conclusionList;
+    private List<ConclusionEntity> conclusionList; // 多结论集合
     private String dispValue;
     private Long id;
     private Boolean isReport;
@@ -44,6 +42,10 @@ public class InspectionSubEntity extends BaseEntity {
     private BaseIdValueEntity limitType;
     private String maxValue;
     private String minValue;
+    private String recordOriginValue;
+    private String recordDispValue;
+    private boolean conclusionState = true;  //结论状态，作用于 不合格为红色分项/合格为正常分项
+    private boolean isOpen = false; //是否展开子项
 
     public String getCalcParamInfo() {
         return calcParamInfo;
@@ -283,5 +285,45 @@ public class InspectionSubEntity extends BaseEntity {
 
     public void setMinValue(String minValue) {
         this.minValue = minValue;
+    }
+
+//    public boolean isSelect() {
+//        return isSelect;
+//    }
+//
+//    public void setSelect(boolean select) {
+//        isSelect = select;
+//    }
+
+    public boolean isConclusionState() {
+        return conclusionState;
+    }
+
+    public void setConclusionState(boolean conclusionState) {
+        this.conclusionState = conclusionState;
+    }
+
+    public String getRecordOriginValue() {
+        return recordOriginValue;
+    }
+
+    public void setRecordOriginValue(String recordOriginValue) {
+        this.recordOriginValue = recordOriginValue;
+    }
+
+    public String getRecordDispValue() {
+        return recordDispValue;
+    }
+
+    public void setRecordDispValue(String recordDispValue) {
+        this.recordDispValue = recordDispValue;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
     }
 }

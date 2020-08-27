@@ -1,11 +1,10 @@
-package com.supcon.mes.module_sample.model.bean;
+package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
-import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
 
 /**
  * author huodongsheng
- * on 2020/7/31
+ * on 2020/8/27
  * class name
  */
 public class SampleTestIdEntity extends BaseEntity {

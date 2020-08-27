@@ -61,4 +61,6 @@ dependencies {
     implementation project(':isupplant-shell:module_scan')
     annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
 
+    implementation 'io.apisense:rhino-android:1.1.1'
+
 }
