@@ -1,9 +1,29 @@
 package com.supcon.mes.module_lims.utils;
 
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import static com.supcon.mes.middleware.ui.view.AddFileListView.getDataColumn;
 
 /**
  * Created by wanghaidong on 2020/7/16
@@ -16,6 +36,324 @@ public class Util {
      * @param d
      * @return
      */
+    /**
+     * 压缩图片（质量压缩）
+     * @param bitmap
+     */
+    public static File compressImage(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while (baos.toByteArray().length / 1024 > 500) {  //循环判断如果压缩后图片是否大于500kb,大于继续压缩
+            baos.reset();//重置baos即清空baos
+            options -= 10;//每次都减少10
+            bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+            long length = baos.toByteArray().length;
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date(System.currentTimeMillis());
+        String filename = format.format(date);
+        File file = new File(Environment.getExternalStorageDirectory(),filename+".png");
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            try {
+                fos.write(baos.toByteArray());
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+    public static Intent openFile(Context context,String filePath) {
+
+        System.out.println("打开的文件路径 : " + filePath);
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return null;
+        }
+        String authority = "com.supcon.supplant.fileprovider";
+        Uri fileUri = FileProvider.getUriForFile(context, authority, file);
+        /* 取得扩展名 */
+        String fileName = file.getName();
+        String end = fileName.substring(file.getName().lastIndexOf(".") + 1,
+                file.getName().length()).toLowerCase();
+        /* 依扩展名的类型决定MimeType */
+        Intent intent = null;
+        if (end.equals("jpg") || end.equals("gif") || end.equals("png")
+                || end.equals("jpeg") || end.equals("bmp")) {
+            intent = getImageFileIntent(filePath, fileUri);
+        } else if (end.equals("ppt")) {
+            intent = getPptFileIntent(filePath, fileUri);
+        } else if (end.equals("xls") || end.equals("xlsx")||end.equals("xml")) {
+//          intent = getExcelFileIntent(filePath);
+            intent = getExcelFileIntent(filePath, fileUri);
+        } else if (end.equals("doc")) {
+            intent = getWordFileIntent(filePath, fileUri);
+        } else if (end.equals("docx")) {
+            intent = getWordFileIntent(filePath, fileUri);
+        } else if (end.equals("pdf")) {
+            intent = getPdfFileIntent(filePath, fileUri);
+        } else if (end.equals("chm")) {
+            intent = getChmFileIntent(filePath, fileUri);
+        } else if (end.equals("txt")) {
+            intent = getTextFileIntent(filePath, false, fileUri);
+        }if (end.equals("mp4")) {
+            intent = getMp4FileIntent(filePath,fileUri);
+        }
+        return intent;
+    }
+    public static String getFileType(File file){
+        String fileName = file.getName();
+        return  fileName.substring(file.getName().lastIndexOf(".") + 1,
+                file.getName().length()).toLowerCase();
+    }
+
+
+
+    // 播放音乐
+    public static Intent openMusic(String filePath, Uri fileUri) {
+
+        File file = new File(filePath);
+        System.out.println("打开的文件路径 : " + filePath);
+        if (!file.exists()) {
+            return null;
+        }
+        /* 取得扩展名 */
+        String fileName = file.getName();
+        String end = fileName.substring(file.getName().lastIndexOf(".") + 1,
+                file.getName().length()).toLowerCase();
+        /* 依扩展名的类型决定MimeType */
+        Intent intent = null;
+        intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        Uri uri = Uri.fromFile(new File(filePath));
+        Uri uri = uriString(filePath, fileUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "audio/*");
+        return intent;
+    }
+
+
+    private static Intent getMp4FileIntent(String param,Uri filUri) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = uriString(param, filUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "video/mp4");
+        return intent;
+    }
+
+    public static Intent getImageFileIntent(String param, Uri filUri) {
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = uriString(param, filUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "image/*");
+        return intent;
+    }
+
+    // Android获取一个用于打开PPT文件的intent
+    public static Intent getPptFileIntent(String param, Uri filUri) {
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//      Uri uri = Uri.fromFile(new File(param));
+        Uri uri = uriString(param, filUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+        return intent;
+    }
+
+    // Android获取一个用于打开Excel文件的intent
+    public static Intent getExcelFileIntent(String param, Uri filUri) {
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = uriString(param, filUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "application/vnd.ms-excel");
+//      Uri uri = Uri.fromFile(new File(param));
+//      intent.setDataAndType(uri, "application/vnd.ms-excel");
+        return intent;
+    }
+
+    // Android获取一个用于打开Word文件的intent
+    public static Intent getWordFileIntent(String param, Uri filUri) {
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//      Uri uri = Uri.fromFile(new File(param));
+        Uri uri = uriString(param, filUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "application/msword");
+        return intent;
+    }
+
+    // Android获取一个用于打开CHM文件的intent
+    public static Intent getChmFileIntent(String param, Uri filUri) {
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = uriString(param, filUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "application/x-chm");
+        return intent;
+    }
+
+    // Android获取一个用于打开文本文件的intent
+    public static Intent getTextFileIntent(String param, boolean paramBoolean, Uri filUri) {
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (paramBoolean) {
+            Uri uri1 = Uri.parse(param);
+            intent.setDataAndType(uri1, "text/plain");
+        } else {
+            Uri uri2 = Uri.fromFile(new File(param));
+//            Uri uri = uriString(param, filUri);
+//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.setDataAndType(uri2, "text/plain");
+        }
+        return intent;
+    }
+
+    // Android获取一个用于打开PDF文件的intent
+    public static Intent getPdfFileIntent(String param, Uri filUri) {
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//      Uri uri = Uri.fromFile(new File(param));
+        Uri uri = uriString(param, filUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "application/pdf");
+        return intent;
+    }
+
+    public static Uri uriString(String param, Uri filUri) {
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //data是file类型,忘了复制过来
+            uri = filUri;
+        } else {
+            uri = Uri.fromFile(new File(param));
+        }
+        return uri;
+    }
+    public static String getPath(Context context, Uri uri) {
+
+        final boolean isKitKat = true;
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+
+                // TODO handle non-primary volumes
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] {
+                        split[1]
+                };
+
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+
+        return null;
+    }
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
     public static String big2(Float d) {
         if (d == null || d == 0) {
             return "";

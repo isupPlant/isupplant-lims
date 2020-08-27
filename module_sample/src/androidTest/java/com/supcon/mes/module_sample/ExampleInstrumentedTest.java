@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -18,9 +20,17 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-        assertEquals("com.supcon.mes.module_sample", appContext.getPackageName());
+       String s="{\n" +
+               "    \"stdVer1116_result\":null,\n" +
+               "    \"specLimit\":[\n" +
+               "\n" +
+               "    ]\n" +
+               "}";
+        try {
+            JSONObject jsonObject=new JSONObject(s);
+            jsonObject.getJSONArray("specLimit");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
