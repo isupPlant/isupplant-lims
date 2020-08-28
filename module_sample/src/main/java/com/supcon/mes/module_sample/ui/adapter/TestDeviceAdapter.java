@@ -16,6 +16,7 @@ import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**

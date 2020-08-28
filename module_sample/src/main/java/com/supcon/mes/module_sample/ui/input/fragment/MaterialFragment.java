@@ -12,12 +12,10 @@ import android.widget.LinearLayout;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.supcon.common.com_http.BaseEntity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.IntentRouter;
@@ -26,9 +24,10 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.event.MaterialDateEvent;
+import com.supcon.mes.module_lims.event.SampleMaterialDataEvent;
 import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
+import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.bean.ProductIdEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 import com.supcon.mes.module_sample.model.contract.TestMaterialListApi;
 import com.supcon.mes.module_sample.presenter.TestMaterialPresenter;
@@ -39,6 +38,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -60,6 +60,8 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     private Long sampleTesId;
 
     private TestMaterialAdapter adapter;
+
+    private List<String> deleteList = new ArrayList<>();
     @Override
     protected IListAdapter<TestMaterialEntity> createAdapter() {
         adapter = new TestMaterialAdapter(context);
@@ -84,6 +86,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     @Override
     protected void initView() {
         super.initView();
+        deleteList.clear();
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -117,9 +120,18 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        StringBuffer sb = new StringBuffer();
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            if (i < adapter.getList().size() - 1) {
+                                sb.append(adapter.getList().get(i).getMatCode()).append(",");
+                            } else if (i == (adapter.getList().size() - 1)) {
+                                sb.append(adapter.getList().get(i).getMatCode());
+                            }
+                        }
                         Bundle bundle = new Bundle();
                         bundle.putBoolean("radio", false);
-                        IntentRouter.go(context, Constant.AppCode.LIMS_MaterialRef, bundle);
+                        bundle.putString("matInfoCodeList",sb.toString());
+                        IntentRouter.go(context, Constant.AppCode.LIMS_MatInfoRef, bundle);
                     }
                 });
 
@@ -132,6 +144,9 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
                         int a = 0;
                         for (int i = 0; i < adapter.getList().size(); i++) {
                             if (adapter.getList().get(i).isSelect()){
+                                if (null != adapter.getList().get(i).getId()){
+                                    deleteList.add(adapter.getList().get(i).getId()+"");
+                                }
                                 adapter.remove(i);
                                 adapter.notifyDataSetChanged();
                                 a++;
@@ -169,24 +184,26 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void selectMaterial(MaterialDateEvent event){
+    public void selectMaterial(SampleMaterialDataEvent event){
         if (!event.isRadio()){
             if (null != event.getList()){
-                List<ProdIdEntity> list = event.getList();
+                List<SampleMaterialEntity> list = event.getList();
                 for (int i = 0; i < list.size(); i++) {
                     TestMaterialEntity testMaterialEntity = new TestMaterialEntity();
-                    testMaterialEntity.setBatchCode("");
-                    testMaterialEntity.setUseQty(new BigDecimal(0));
-                    ProductIdEntity productIdEntity = new ProductIdEntity();
-                    productIdEntity.setId(list.get(i).getId());
-                    productIdEntity.setCode(list.get(i).getCode());
-                    productIdEntity.setIsBatch(list.get(i).getIsBatch());
-                    productIdEntity.setMainUnit(list.get(i).getMainUnit());
-                    productIdEntity.setName(list.get(i).getName());
-                    testMaterialEntity.setProductId(productIdEntity);
+                    testMaterialEntity.setBatchCode(list.get(i).getBatchCode());
+                    testMaterialEntity.setMatCode(list.get(i).getCode());
+                    testMaterialEntity.setProductId(list.get(i).getProductId());
+
+//                    ProductIdEntity productIdEntity = new ProductIdEntity();
+//                    productIdEntity.setId(list.get(i).getId());
+//                    productIdEntity.setCode(list.get(i).getCode());
+//                    productIdEntity.setIsBatch(list.get(i).getIsBatch());
+//                    productIdEntity.setMainUnit(list.get(i).getMainUnit());
+//                    productIdEntity.setName(list.get(i).getName());
+//                    testMaterialEntity.setProductId(productIdEntity);
                     adapter.getList().add(testMaterialEntity);
                 }
-                adapter.notifyDataSetChanged();
+                refreshListController.refreshComplete(adapter.getList());
             }
         }
     }
@@ -200,6 +217,22 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     public void getTestMaterialFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    public List<TestMaterialEntity> getTestMaterialList(){
+        return adapter.getList();
+    }
+
+    public String getDeleteList() {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < deleteList.size(); i++) {
+            if (i < deleteList.size() - 1) {
+                sb.append(deleteList.get(i)).append(",");
+            } else if (i == (deleteList.size() - 1)) {
+                sb.append(deleteList.get(i));
+            }
+        }
+        return sb.toString();
     }
 
     @Override

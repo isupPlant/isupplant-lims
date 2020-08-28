@@ -9,6 +9,7 @@ import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
 import com.supcon.mes.middleware.util.FormDataHelper;
 import com.supcon.mes.middleware.util.PicUtil;
 import com.supcon.mes.module_lims.model.contract.FileUpContract;
+import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
 import java.io.BufferedInputStream;
@@ -33,19 +34,19 @@ public class FileUpLoadPresenter extends FileUpContract.Presenter {
     public void upFile(File file) {
         List<MultipartBody.Part> parts = FormDataHelper.createFileForm(file);
         mCompositeSubscription.add(
-                MiddlewareHttpClient.bapUploadFile(parts)
-                        .onErrorReturn(new Function<Throwable, BAP5CommonEntity<AttachmentEntity>>() {
+                SampleHttpClient.bapUploadFile(parts)
+                        .onErrorReturn(new Function<Throwable, BAP5CommonEntity<FileDataEntity>>() {
                             @Override
-                            public BAP5CommonEntity<AttachmentEntity> apply(Throwable throwable) throws Exception {
-                                BAP5CommonEntity<AttachmentEntity> bap5CommonEntity = new BAP5CommonEntity<AttachmentEntity>();
+                            public BAP5CommonEntity apply(Throwable throwable) throws Exception {
+                                BAP5CommonEntity<FileDataEntity> bap5CommonEntity = new BAP5CommonEntity<FileDataEntity>();
                                 bap5CommonEntity.success = false;
                                 bap5CommonEntity.msg = throwable.getMessage();
                                 return bap5CommonEntity;
                             }
                         })
-                        .subscribe(new Consumer<BAP5CommonEntity<AttachmentEntity>>() {
+                        .subscribe(new Consumer<BAP5CommonEntity<FileDataEntity>>() {
                             @Override
-                            public void accept(BAP5CommonEntity<AttachmentEntity> result) throws Exception {
+                            public void accept(BAP5CommonEntity<FileDataEntity> result) throws Exception {
                                 if (result.success) {
                                     getView().upFileSuccess(result);
                                 } else {

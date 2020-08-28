@@ -40,6 +40,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
@@ -62,6 +64,8 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
 
     private TestDeviceAdapter adapter;
     private int mPosition = -1;
+
+    private List<String> deleteList = new ArrayList<>();
     @Override
     protected IListAdapter<TestDeviceEntity> createAdapter() {
         adapter = new TestDeviceAdapter(context);
@@ -81,6 +85,8 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     @Override
     protected void initView() {
         super.initView();
+        deleteList.clear();
+
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -115,7 +121,7 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
                     public void accept(Object o) throws Exception {
                         TestDeviceEntity entity = new TestDeviceEntity();
                         adapter.getList().add(entity);
-                        adapter.notifyDataSetChanged();
+                        refreshListController.refreshComplete(adapter.getList());
                     }
                 });
 
@@ -127,6 +133,11 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
                         int a = 0;
                         for (int i = 0; i < adapter.getList().size(); i++) {
                             if (adapter.getList().get(i).isSelect()){
+
+                                if (null != adapter.getList().get(i).getId()){
+                                    deleteList.add(adapter.getList().get(i).getId()+"");
+                                }
+
                                 adapter.remove(i);
                                 adapter.notifyDataSetChanged();
                                 a++;
@@ -218,6 +229,22 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     public void getTestDeviceFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    public List<TestDeviceEntity> getTestDeviceList(){
+        return adapter.getList();
+    }
+
+    public String getDeleteList() {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < deleteList.size(); i++) {
+            if (i < deleteList.size() - 1) {
+                sb.append(deleteList.get(i)).append(",");
+            } else if (i == (deleteList.size() - 1)) {
+                sb.append(deleteList.get(i));
+            }
+        }
+        return sb.toString();
     }
 
     @Override

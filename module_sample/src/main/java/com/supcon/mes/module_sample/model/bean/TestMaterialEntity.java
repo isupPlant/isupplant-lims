@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
+import com.supcon.mes.module_lims.model.bean.ProductIdEntity;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,9 @@ import java.math.BigDecimal;
 public class TestMaterialEntity extends BaseEntity {
     private Long id;
     private String batchCode;
+    private String matCode;
+    private Long matRecordId;
+    private String memoField;
     private ProductIdEntity productId;
     private Long sampleId;
     private BaseLongIdNameEntity sampleTestId;
@@ -35,6 +39,30 @@ public class TestMaterialEntity extends BaseEntity {
 
     public void setBatchCode(String batchCode) {
         this.batchCode = batchCode;
+    }
+
+    public String getMatCode() {
+        return matCode;
+    }
+
+    public void setMatCode(String matCode) {
+        this.matCode = matCode;
+    }
+
+    public Long getMatRecordId() {
+        return matRecordId;
+    }
+
+    public void setMatRecordId(Long matRecordId) {
+        this.matRecordId = matRecordId;
+    }
+
+    public String getMemoField() {
+        return memoField;
+    }
+
+    public void setMemoField(String memoField) {
+        this.memoField = memoField;
     }
 
     public ProductIdEntity getProductId() {

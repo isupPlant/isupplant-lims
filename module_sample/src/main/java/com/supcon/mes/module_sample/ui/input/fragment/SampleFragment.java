@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.com_http.BaseEntity;
@@ -25,6 +26,7 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
@@ -42,6 +44,9 @@ import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputPDAActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputActivity;
+import com.supcon.mes.module_scan.controller.CommonScanController;
+import com.supcon.mes.module_scan.model.event.CodeResultEvent;
+import com.supcon.mes.module_scan.util.scanCode.CodeUtlis;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,6 +66,7 @@ import io.reactivex.functions.Consumer;
  * on 2020/7/29
  * class name
  */
+@Controller(value = {CommonScanController.class})
 @Presenter(value = {SampleListPresenter.class})
 public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> implements SampleListApi.View {
 
@@ -116,7 +122,6 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        searchTitle.showScan(false);
         titleText.setText(getString(R.string.lims_sample_result_input));
 
         searchTypeList.add(getString(R.string.lims_sample_code));
@@ -228,6 +233,15 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             }
         });
 
+        RxView.clicks(searchTitle.getRightScanActionBar())
+                .throttleFirst(200, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        getController(CommonScanController.class).openCameraScan();
+                    }
+                });
+
     }
 
     public void goRefresh(){
@@ -254,6 +268,50 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             }
 
             goRefresh();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCodeReciver(CodeResultEvent codeResultEvent) {
+        if (CodeUtlis.QR_TYPE.equals(codeResultEvent.type)) {
+            if (!StringUtil.isEmpty(codeResultEvent.scanResult)){
+
+                for (int i = 0; i < adapter.getList().size(); i++) {
+                    adapter.getList().get(i).setSelect(false);
+                }
+                int position = -1;
+                for (int i = 0; i < adapter.getList().size(); i++) {
+                    if (adapter.getList().get(i).getCode().equals(codeResultEvent.scanResult)){
+                        adapter.getList().get(i).setSelect(true);
+                        position = i;
+                        break;
+                    }
+                }
+                adapter.notifyDataSetChanged();
+
+                if (position == -1){
+                    ToastUtils.show(context,"并未扫描到匹配的编码");
+                    return;
+                }
+
+                //通知 检验项目更新数据
+                if (activity instanceof SampleResultInputActivity){
+                    ((SampleResultInputActivity)activity).setSampleId(adapter.getList().get(position).getId());
+                }else if (activity instanceof  SampleResultInputPDAActivity){
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("sampleId",adapter.getList().get(position).getId());
+                    if (!StringUtil.isEmpty(adapter.getList().get(position).getName()) && !StringUtil.isEmpty(adapter.getList().get(position).getCode())){
+                        bundle.putString("title", adapter.getList().get(position).getName()+"(" + adapter.getList().get(position).getCode() + ")");
+                    }else {
+                        if (StringUtil.isEmpty(adapter.getList().get(position).getName())){
+                            bundle.putString("title", adapter.getList().get(position).getCode());
+                        }else {
+                            bundle.putString("title", adapter.getList().get(position).getName());
+                        }
+                    }
+                    IntentRouter.go(context,Constant.AppCode.LIMS_InspectionItemPda, bundle);
+                }
+            }
         }
     }
 

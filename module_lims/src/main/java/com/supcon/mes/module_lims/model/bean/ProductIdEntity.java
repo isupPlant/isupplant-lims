@@ -1,13 +1,11 @@
-package com.supcon.mes.module_sample.model.bean;
+package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
-import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
-import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
 
 /**
  * author huodongsheng
- * on 2020/7/29
+ * on 2020/8/27
  * class name
  */
 public class ProductIdEntity extends BaseEntity {

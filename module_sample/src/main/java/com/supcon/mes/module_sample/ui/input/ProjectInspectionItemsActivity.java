@@ -17,13 +17,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
+import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
+import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
+import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 import com.supcon.mes.module_sample.ui.input.fragment.EquipmentFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.InspectionProjectFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.MaterialFragment;
@@ -73,10 +79,12 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     private InspectionProjectFragment inspectionProjectFragment;
 
     private Long sampleId ;
+    private Long sampleIdTestId;
     private String mTitle;
 
     private ImageView ivProject;
 
+    private SampleRecordResultSubmitController controller;
     @Override
     protected int getLayoutID() {
         return R.layout.activity_project_inspection_items;
@@ -121,6 +129,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .add(R.id.fragment_inspection_items,inspectionProjectFragment)
                 .commit();
 
+        controller = new SampleRecordResultSubmitController();
     }
 
     @SuppressLint("CheckResult")
@@ -165,7 +174,32 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        Log.e("eeee",Util.isNumeric("hahahh")+"");
+                        List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+                        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+                        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+                        String equipmentDelete = equipmentFragment.getDeleteList();
+                        String materialDelete = materialFragment.getDeleteList();
+
+                        SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("save",
+                                sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
+                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
+                    }
+                });
+
+        RxView.clicks(rl_submit)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+                        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+                        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+                        String equipmentDelete = equipmentFragment.getDeleteList();
+                        String materialDelete = materialFragment.getDeleteList();
+
+                        SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
+                                sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
+                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
                     }
                 });
     }
@@ -181,6 +215,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     }
 
     public void notifyInspectionItemsRefresh(Long sampleIdTestId, String name){
+        this.sampleIdTestId = sampleIdTestId;
         //设置标题为 当前选中的检验项目
         searchTitle.setTitle(name);
         //如果当前抽屉是打开的状态 就让他关闭

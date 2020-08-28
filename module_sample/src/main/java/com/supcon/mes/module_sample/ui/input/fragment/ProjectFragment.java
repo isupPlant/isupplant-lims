@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
@@ -11,21 +12,26 @@ import com.app.annotation.Presenter;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.controller.CalculationController;
 
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
 import com.supcon.mes.module_sample.custom.SpaceItemDecoration;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.contract.InspectionSubProjectApi;
 import com.supcon.mes.module_sample.model.contract.InspectionSubProjectColumnApi;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresenter;
@@ -33,6 +39,8 @@ import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
 import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +52,7 @@ import java.util.List;
  * class name
  */
 @Presenter(value = {InspectionSubProjectPresenter.class, InspectionSubProjectColumnPresenter.class})
-@Controller(value = {SystemConfigController.class, CalculationController.class})
+@Controller(value = {SystemConfigController.class, CalculationController.class, LimsFileUpLoadController.class})
 public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEntity> implements InspectionSubProjectApi.View, InspectionSubProjectColumnApi.View {
 
     @BindByTag("contentView")
@@ -52,12 +60,14 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     private ProjectAdapter adapter;
     private Long sampleTesId;
+    private String filePath;
 
     BaseFragmentActivity activity;
     SpaceItemDecoration spaceItemDecoration;
     GridLayoutManager gridLayoutManager;
     LinearLayoutManager linearLayoutManager;
     LinearSpaceItemDecoration linearSpaceItemDecoration;
+
 
     private List<InspectionItemColumnEntity> columnList = new ArrayList<>();
     private List<ConclusionEntity> conclusionList = new ArrayList<>();
@@ -132,10 +142,33 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             }
         });
 
+        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+            @Override
+            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                InspectionSubEntity itemEntity = adapter.getItem(position);
+                if (action == 1) {
+                    getController(LimsFileUpLoadController.class).
+                            showPopup(getActivity(),ProjectFragment.this)
+                            .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
+                                @Override
+                                public void onSuccess(FileDataEntity fileDataEntity) {
+                                    filePath=fileDataEntity.getLocalPath();
+                                    itemEntity.setFileUploadMultiFileNames(fileDataEntity.getPath());
+                                    itemEntity.setFileUploadMultiFileIcons(fileDataEntity.getFileIcon());
+                                    itemEntity.setFilePath(filePath);
+                                }
+                            });
+                }
+            }
+        });
+
         adapter.setOriginalValueChangeListener(new ProjectAdapter.OriginalValueChangeListener() {
             @Override
             public void originalValueChange(boolean hasFocus, String value, int position) {
                 if (!hasFocus) {
+                    if (StringUtil.isEmpty(adapter.getList().get(position).getOriginValue()) && StringUtil.isEmpty(adapter.getList().get(position).getRecordOriginValue())){
+                        return;
+                    }
                     if (adapter.getList().get(position).getOriginValue().equals(adapter.getList().get(position).getRecordOriginValue())) {
                         return; //表示原始值只是获取又失去焦点 并未做修改
                     }
@@ -154,6 +187,10 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             @Override
             public void dispValueChange(boolean hasFocus, String value, int position) {
                 if (!hasFocus) {
+                    if (StringUtil.isEmpty(adapter.getList().get(position).getDispValue()) && StringUtil.isEmpty(adapter.getList().get(position).getRecordDispValue())){
+                        return;
+                    }
+
                     if (adapter.getList().get(position).getDispValue().equals(adapter.getList().get(position).getRecordDispValue())) {
                         return; //表示原始值只是获取又失去焦点 并未做修改
                     }
@@ -321,6 +358,11 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                 adapter.notifyItemChanged(position);
             }
         });
+
+    }
+
+    public List<InspectionSubEntity> getInspectionSubList(){
+        return adapter.getList();
 
     }
 }

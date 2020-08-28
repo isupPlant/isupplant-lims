@@ -183,6 +183,7 @@ public class ReferenceController extends BaseViewController {
             case "物料编码":
             case "编码":
             case "设备编码":
+            case "编号":
                 params.put(Constant.BAPQuery.CODE, entity.result);
                 break;
             case "规格":
@@ -192,6 +193,9 @@ public class ReferenceController extends BaseViewController {
                 params.put(Constant.BAPQuery.MODEL, entity.result);
             case "版本号":
                 params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
+                break;
+            case "生产批号":
+                params.put(Constant.BAPQuery.BATCH_CODE, entity.result);
                 break;
 
 

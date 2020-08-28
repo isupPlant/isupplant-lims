@@ -25,6 +25,32 @@
             android:src="@drawable/ic_inspection_department" />
 
         <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="ctNumber"
+            app:content_color="@color/font_333333"
+            app:editable="false"
+            app:gravity="right|center_vertical"
+            app:key="编号" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_inspection_department" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ctMateriel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

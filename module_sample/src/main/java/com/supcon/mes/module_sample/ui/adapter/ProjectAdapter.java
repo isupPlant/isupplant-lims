@@ -129,6 +129,15 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         }
                     });
 
+            RxView.clicks(llEnclosure)
+                    .throttleFirst(300,TimeUnit.MILLISECONDS)
+                    .subscribe(new Consumer<Object>() {
+                        @Override
+                        public void accept(Object o) throws Exception {
+                            onItemChildViewClick(llEnclosure,1);
+                        }
+                    });
+
             //原始值数值变化监听
             RxTextView.textChanges(ceOriginalValue.editText())
                     .skipInitialValue()

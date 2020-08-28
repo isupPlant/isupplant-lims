@@ -7,6 +7,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.middleware.model.bean.wom.MaterialEntity;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
 
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
@@ -32,6 +33,7 @@ import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeListEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
+import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
 
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
@@ -318,5 +320,7 @@ public interface ApiService {
     Flowable<BAP5CommonEntity<CommonListEntity<DeviceReferenceEntity>>> getDeviceReference(@Body Map<String, Object> map);
 
 
+    @POST("/msService/LIMSMaterial/mATInfo/matInfo/matInfoRef-query")
+    Flowable<BAP5CommonEntity<CommonListEntity<SampleMaterialEntity>>> getSampleMaterialReference(@Body Map<String, Object> map);
 
 }

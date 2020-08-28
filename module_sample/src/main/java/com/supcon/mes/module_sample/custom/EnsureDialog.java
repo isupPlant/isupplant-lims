@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.mes.module_sample.R;
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class EnsureDialog extends Dialog {
     TextView btn_cancel;
     TextView btn_ensure;
-    public EnsureDialog(@NonNull Context context) {
+    public EnsureDialog(Context context) {
         super(context, R.style.MyDialog);
     }
 

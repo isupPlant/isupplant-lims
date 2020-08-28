@@ -15,21 +15,23 @@ public class SampleRecordResultSubmitEntity extends BaseEntity {
     //testMaterialDeleteIds:
     private String dealMode;//保存或提交
     private Long sampleId;
+    private Long sampleTestId;
     private List sampleComListJson;
     private List testDeviceListJson;
     private List testMaterialListJson;
     private String testDeviceDeleteIds;
     private String testMaterialDeleteIds;
 
-    public SampleRecordResultSubmitEntity(String dealMode, Long sampleId, List sampleComListJson) {
+    public SampleRecordResultSubmitEntity(String dealMode, Long sampleId,List sampleComListJson) {
         this.dealMode = dealMode;
         this.sampleId = sampleId;
         this.sampleComListJson = sampleComListJson;
     }
 
-    public SampleRecordResultSubmitEntity(String dealMode, Long sampleId, List sampleComListJson, List testDeviceListJson, List testMaterialListJson, String testDeviceDeleteIds, String testMaterialDeleteIds) {
+    public SampleRecordResultSubmitEntity(String dealMode, Long sampleId, Long sampleTestId,List sampleComListJson, List testDeviceListJson, List testMaterialListJson, String testDeviceDeleteIds, String testMaterialDeleteIds) {
         this.dealMode = dealMode;
         this.sampleId = sampleId;
+        this.sampleTestId=sampleTestId;
         this.sampleComListJson = sampleComListJson;
         this.testDeviceListJson = testDeviceListJson;
         this.testMaterialListJson = testMaterialListJson;
@@ -91,5 +93,13 @@ public class SampleRecordResultSubmitEntity extends BaseEntity {
 
     public void setSampleComListJson(List sampleComListJson) {
         this.sampleComListJson = sampleComListJson;
+    }
+
+    public Long getSampleTestId() {
+        return sampleTestId;
+    }
+
+    public void setSampleTestId(Long sampleTestId) {
+        this.sampleTestId = sampleTestId;
     }
 }

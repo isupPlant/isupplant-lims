@@ -39,6 +39,8 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
 
     class ViewHolder extends BaseRecyclerViewHolder<TestMaterialEntity>{
 
+        @BindByTag("ctNumber")
+        CustomTextView ctNumber;
         @BindByTag("ctMateriel")
         CustomTextView ctMateriel;
         @BindByTag("ceBatchNumber")
@@ -168,7 +170,7 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                 }else {
                     ctMateriel.setContent("--");
                 }
-
+                ctNumber.setContent(StringUtil.isEmpty(data.getMatCode()) ? "--" : data.getMatCode());
                 ceBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "" : data.getBatchCode());
                 ceConsumption.setContent(data.getUseQty() == null ? "" : data.getUseQty().setScale(2, BigDecimal.ROUND_DOWN)+"");
 

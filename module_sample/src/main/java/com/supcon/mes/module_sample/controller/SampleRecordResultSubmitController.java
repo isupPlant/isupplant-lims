@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.activity.BaseActivity;
+import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.controller.BasePresenterController;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
@@ -14,7 +15,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.custom.EnsureDialog;
 import com.supcon.mes.module_sample.model.api.SampleRecordResultSubmitAPI;
-import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSignEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.SampleSignatureEntity;
@@ -37,7 +38,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 @Presenter(value = SampleRecordResultSubmitPresenter.class)
 public class SampleRecordResultSubmitController extends BasePresenterController implements SampleRecordResultSubmitContract.View {
     Map<String,Object> paramsMap=new HashMap<>();
-    private BaseActivity activity;
+    private BaseFragmentActivity activity;
     EnsureDialog ensureDialog;
 
     /**
@@ -47,13 +48,14 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
      * @param submitEntity
      */
     int type;
-    public void recordResultSubmit(BaseActivity activity,int type,SampleRecordResultSubmitEntity submitEntity){
+    public void recordResultSubmit(BaseFragmentActivity activity,int type,SampleRecordResultSubmitEntity submitEntity){
         this.activity=activity;
         this.type=type;
         paramsMap.put("dealMode",submitEntity.getDealMode());
         paramsMap.put("sampleId",submitEntity.getSampleId());
         paramsMap.put("sampleComListJson",submitEntity.getSampleComListJson());
         if (type==2){
+            paramsMap.put("sampleTestId",submitEntity.getSampleTestId());
             paramsMap.put("testDeviceListJson",submitEntity.getTestDeviceListJson());
             paramsMap.put("testMaterialListJson",submitEntity.getTestMaterialListJson());
             paramsMap.put("testDeviceDeleteIds",submitEntity.getTestDeviceDeleteIds());
@@ -73,7 +75,7 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
     }
     private boolean checkSubmit(List<InspectionSubEntity> inspectionSubEntities){
         for (InspectionSubEntity inspectionSubEntity:inspectionSubEntities){
-            if (!TextUtils.isEmpty(inspectionSubEntity.getDispValue())){
+            if (TextUtils.isEmpty(inspectionSubEntity.getDispValue())){
                 setLoadDialog();
                 return false;
             }

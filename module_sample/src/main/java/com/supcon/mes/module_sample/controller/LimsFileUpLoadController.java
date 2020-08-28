@@ -26,8 +26,10 @@ import android.widget.TextView;
 
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.activity.BaseActivity;
+import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.controller.BasePresenterController;
 import com.supcon.common.view.base.controller.BaseViewController;
+import com.supcon.common.view.base.fragment.BaseFragment;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.utils.DateUtil;
@@ -67,18 +69,20 @@ public class LimsFileUpLoadController extends BasePresenterController implements
     Uri imageUri; //图片路径
     OnSuccessListener<FileDataEntity> onSuccessListener;
     OnSuccessListener<File> fileOnSuccessListener;
-    private BaseActivity context;
+    private Activity context;
     private String filePath;
+    private BaseFragment fragment;
 
-    public void setContext(BaseActivity context) {
+    public void setContext(Activity context) {
         this.context = context;
     }
 
-    public void showPopup(BaseActivity context) {
+    public LimsFileUpLoadController showPopup(Activity context,BaseFragment fragment) {
         if (popupWindow != null && popupWindow.isShowing()) {
-            return;
+            return this;
         }
         this.context = context;
+        this.fragment=fragment;
         contentViewSign = LayoutInflater.from(context).inflate(R.layout.pop_file_upload, null);
         popupWindow = new PopupWindow(contentViewSign);
         popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -134,7 +138,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType("*/*");
-                    context.startActivityForResult(intent, FILE_SELECT);
+                    fragment.startActivityForResult(intent, FILE_SELECT);
                 }
                 backgroundAlpha(1.0f);
                 popupWindow.dismiss();
@@ -150,6 +154,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
             }
         });
 
+        return this;
     }
 
     private String cameraName;
@@ -179,7 +184,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //照相
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); //指定图片输出地址
-        context.startActivityForResult(intent, CAMERA); //启动照相
+        fragment.startActivityForResult(intent, CAMERA); //启动照相
     }
 
     public void backgroundAlpha(float bgAlpha) {
@@ -195,12 +200,25 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         // 获取用户选择文件的URI
         if (requestCode == CAMERA && resultCode == Activity.RESULT_OK) {
             try {
-                context.onLoading("正在上传文件...");
+                if (context instanceof BaseActivity){
+                    ((BaseActivity) context).onLoading("正在上传文件...");
+                }
+
+                if (context instanceof BaseFragmentActivity){
+                    ((BaseFragmentActivity) context).onLoading("正在上传文件...");
+                }
+
                 filePath = AddFileListView.getPath(context, imageUri);
                 File file = new File(filePath);
                 presenterRouter.create(FileUpAPI.class).upFile(file);
             } catch (Exception e) {
-                context.closeLoader();
+                if (context instanceof BaseActivity){
+                    ((BaseActivity) context).closeLoader();
+                }
+
+                if (context instanceof BaseFragmentActivity){
+                    ((BaseFragmentActivity) context).closeLoader();
+                }
                 e.printStackTrace();
             }
         } else if (requestCode == FILE_SELECT && resultCode == Activity.RESULT_OK) {
@@ -209,10 +227,22 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                 Uri uri = data.getData();
                 filePath = AddFileListView.getPath(context, uri);
                 File file = new File(filePath);
-                context.onLoading("正在上传文件...");
+                if (context instanceof BaseActivity){
+                    ((BaseActivity) context).onLoading("正在上传文件...");
+                }
+
+                if (context instanceof BaseFragmentActivity){
+                    ((BaseFragmentActivity) context).onLoading("正在上传文件...");
+                }
                 presenterRouter.create(FileUpAPI.class).upFile(file);
             } catch (Exception e) {
-                context.closeLoader();
+                if (context instanceof BaseActivity){
+                    ((BaseActivity) context).closeLoader();
+                }
+
+                if (context instanceof BaseFragmentActivity){
+                    ((BaseFragmentActivity) context).closeLoader();
+                }
                 e.printStackTrace();
             }
         }
@@ -220,16 +250,32 @@ public class LimsFileUpLoadController extends BasePresenterController implements
 
     @Override
     public void upFileSuccess(BAP5CommonEntity entity) {
-        context.onLoadSuccessAndExit("上传成功", new OnLoaderFinishListener() {
-            @Override
-            public void onLoaderFinished() {
-                if (onSuccessListener != null) {
-                    FileDataEntity fileDataEntity = (FileDataEntity) entity.data;
-                    fileDataEntity.setLocalPath(filePath);
-                    onSuccessListener.onSuccess(fileDataEntity);
+        if (context instanceof BaseActivity){
+            ((BaseActivity) context).onLoadSuccessAndExit("上传成功", new OnLoaderFinishListener() {
+                @Override
+                public void onLoaderFinished() {
+                    if (onSuccessListener != null) {
+                        FileDataEntity fileDataEntity = (FileDataEntity) entity.data;
+                        fileDataEntity.setLocalPath(filePath);
+                        onSuccessListener.onSuccess(fileDataEntity);
+                    }
                 }
-            }
-        });
+            });
+        }
+
+        if (context instanceof BaseFragmentActivity){
+            ((BaseFragmentActivity) context).onLoadSuccessAndExit("上传成功", new OnLoaderFinishListener() {
+                @Override
+                public void onLoaderFinished() {
+                    if (onSuccessListener != null) {
+                        FileDataEntity fileDataEntity = (FileDataEntity) entity.data;
+                        fileDataEntity.setLocalPath(filePath);
+                        onSuccessListener.onSuccess(fileDataEntity);
+                    }
+                }
+            });
+        }
+
     }
 
     public OnSuccessListener<File> getFileOnSuccessListener() {
@@ -250,7 +296,13 @@ public class LimsFileUpLoadController extends BasePresenterController implements
 
     @Override
     public void upFileFailed(String errorMsg) {
-        context.onLoadFailed(errorMsg);
+        if (context instanceof BaseActivity){
+            ((BaseActivity) context).onLoadFailed(errorMsg);
+        }
+
+        if (context instanceof BaseFragmentActivity){
+            ((BaseFragmentActivity) context).onLoadFailed(errorMsg);
+        }
     }
 
     public LimsFileUpLoadController loadFile(String id, String fileName) {

@@ -144,7 +144,17 @@ public class SingleSampleResultInputItemActivity extends BaseRefreshRecyclerActi
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 itemEntity=adapter.getItem(position);
                 if (action == 1) {
-                    getController(LimsFileUpLoadController.class).showPopup(SingleSampleResultInputItemActivity.this);
+//                    getController(LimsFileUpLoadController.class).
+//                            showPopup(SingleSampleResultInputItemActivity.this)
+//                            .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
+//                        @Override
+//                        public void onSuccess(FileDataEntity fileDataEntity) {
+//                            filePath=fileDataEntity.getLocalPath();
+//                            itemEntity.setFileUploadMultiFileNames(fileDataEntity.getPath());
+//                            itemEntity.setFileUploadMultiFileIcons(fileDataEntity.getFileIcon());
+//                            itemEntity.setFilePath(filePath);
+//                        }
+//                    });
                 }else if (action==2){
                     if (!TextUtils.isEmpty(itemEntity.getFilePath())){
                         File file=new File(itemEntity.getFilePath());
@@ -161,15 +171,7 @@ public class SingleSampleResultInputItemActivity extends BaseRefreshRecyclerActi
                 }
             }
         });
-        getController(LimsFileUpLoadController.class).setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
-            @Override
-            public void onSuccess(FileDataEntity fileDataEntity) {
-                filePath=fileDataEntity.getLocalPath();
-                itemEntity.setFileUploadMultiFileNames(fileDataEntity.getPath());
-                itemEntity.setFileUploadMultiFileIcons(fileDataEntity.getFileIcon());
-                itemEntity.setFilePath(filePath);
-            }
-        });
+
 
     }
 
