@@ -263,7 +263,7 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
                 ceOriginalValue.setContent(data.getOriginValue());
                 ceOriginalValue.setEditable(true);
             }
-            if (!StringUtil.isEmpty(data.getFileUploadMultiFileIds()) && ("image".equals(data.getFileUploadMultiFileIcons()) || ".mp4".equals(data.getFileUploadMultiFileNames()))){
+            if (!StringUtil.isEmpty(data.getFileUploadMultiFileIds())){
                 new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames()).setFileOnSuccessListener(new OnSuccessListener<File>() {
                     @Override
                     public void onSuccess(File result) {

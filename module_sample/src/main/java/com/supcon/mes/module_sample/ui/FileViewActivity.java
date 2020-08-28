@@ -49,9 +49,6 @@ public class FileViewActivity extends BaseActivity {
     ImageView imageFileView;
     @BindByTag("video")
     VideoView video;
-    @BindByTag("webView")
-    WebView webView;
-    String loadUrl;
     @Override
     protected int getLayoutID() {
         return R.layout.ac_file_view;
@@ -61,14 +58,13 @@ public class FileViewActivity extends BaseActivity {
     protected void onInit() {
         super.onInit();
         file = (File) getIntent().getSerializableExtra("file");
-        loadUrl=getIntent().getStringExtra("url");
     }
 
     @Override
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-//        titleText.setText(file.getName());
+        titleText.setText(file.getName());
         imageFileView = findViewById(R.id.imageFileView);
     }
 
@@ -90,7 +86,6 @@ public class FileViewActivity extends BaseActivity {
                 imageFileView.setVisibility(View.VISIBLE);
                 Glide.with(context).load(file).into(imageFileView);
             } else if (FileUtils.videoFile(file)) {
-
                 MediaController localMediaController = new MediaController(this);
                 localMediaController.setVisibility(View.VISIBLE);
                 video.setMediaController(localMediaController);
@@ -101,29 +96,7 @@ public class FileViewActivity extends BaseActivity {
                 video.requestFocus();
                 video.start();
             }
-        }else if (!TextUtils.isEmpty(loadUrl)){
-            webView.setWebViewClient(new AppWebViewClients());
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.getSettings().setUseWideViewPort(true);
-            webView.loadUrl(loadUrl);
         }
     }
-    public class AppWebViewClients extends WebViewClient {
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            // TODO Auto-generated method stub
-            view.loadUrl(url);
-            return true;
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            // TODO Auto-generated method stub
-            super.onPageFinished(view, url);
-
-        }
-    }
-
 }
 
