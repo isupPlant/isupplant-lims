@@ -83,6 +83,10 @@
     <string name="LIMSSample_sample_dispValIsNull">Inspection items【%1$s】duplicate number【%2$s】reported value is null，beyond computation！</string>
     <string name="LIMSSample_sample_dispValTypeError">Inspection items【%1$s】duplicate number【%2$s】the reported value is not a numeric type，beyond computation！</string>
     <string name="LIMSSample_sample_error_valueKindError">Please input the number type!</string>
-
+    <string name="lims_observeItem">ObserveItem</string>
+    <string name="lims_observeValue">ObserveValue</string>
+    <string name="lims_observeResult">ObserveResult</string>
+    <string name="lims_memo">Remarks</string>
+    <string name="lims_retention_view_record">Retention observe record</string>
 
 </resources>

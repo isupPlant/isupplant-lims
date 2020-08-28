@@ -82,6 +82,10 @@
     <string name="LIMSSample_sample_dispValIsNull">检测分项【%1$s】重复号【%2$s】报出值为空，无法计算！</string>
     <string name="LIMSSample_sample_dispValTypeError">检测分项【%1$s】重复号【%2$s】报出值非数字类型，无法计算！</string>
     <string name="LIMSSample_sample_error_valueKindError">请输入数字类型！</string>
-
+    <string name="lims_observeItem">观察项目</string>
+    <string name="lims_observeValue">观察结果</string>
+    <string name="lims_observeResult">结论</string>
+    <string name="lims_memo">备注</string>
+    <string name="lims_retention_view_record">留样观察记录</string>
 
 </resources>

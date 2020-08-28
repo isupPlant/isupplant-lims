@@ -6,6 +6,7 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.module_retention.model.bean.RecodeListEntity;
 import com.supcon.mes.module_retention.model.bean.RecordEntity;
+import com.supcon.mes.module_retention.model.bean.RecordViewEntity;
 import com.supcon.mes.module_retention.model.bean.RetentionEntity;
 import com.supcon.mes.module_retention.model.bean.RetentionListEntity;
 import com.supcon.mes.module_retention.model.bean.RetentionSubmitEntity;
@@ -43,4 +44,6 @@ public interface RetentionNetworkAPI {
     @POST("/msService/LIMSRetain/retention/retention/{retentionView}/submit")
     Flowable<SubmitResultEntity> submitRetention(@Path("retentionView") String path, @QueryMap Map<String,Object> params, @Body RetentionSubmitEntity retentionSubmit);
 
+    @POST("/msService/LIMSRetain/retention/retPlan/{data_dg}")
+    Flowable<CommonBAP5ListEntity<RecordViewEntity>> getRetentionRecode(@Path("data_dg") String data_dg,@Query("datagridCode") String datagridCode,@Query("id") Long id);
 }

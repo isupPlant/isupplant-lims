@@ -153,7 +153,7 @@ public class SingleSampleResultInputItemActivity extends BaseRefreshRecyclerActi
                             bundle.putSerializable("file", file);
                             IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
                         }else {
-                            Util.openFile(SingleSampleResultInputItemActivity.this,itemEntity.getFilePath());
+                            startActivity(Util.openFile(SingleSampleResultInputItemActivity.this,itemEntity.getFilePath()));
                         }
                     }else {
                         ToastUtils.show(context,"没有可查看的文件");
