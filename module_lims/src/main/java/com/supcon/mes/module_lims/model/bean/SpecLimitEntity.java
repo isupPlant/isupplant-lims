@@ -1,12 +1,10 @@
-package com.supcon.mes.module_sample.model.bean;
+package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
-import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
-import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 
 /**
  * author huodongsheng
- * on 2020/8/21
+ * on 2020/8/27
  * class name
  */
 public class SpecLimitEntity extends BaseEntity {
@@ -21,7 +19,7 @@ public class SpecLimitEntity extends BaseEntity {
     private String minValue;
     private String resultKey;
     private String resultValue;
-    private BaseIdValueEntity standardGrade;
+    private BaseLimsIdValueEntity standardGrade;
     private BaseLongIdNameEntity stdVerComId;
     private String unQualifiedValue;
 
@@ -113,11 +111,11 @@ public class SpecLimitEntity extends BaseEntity {
         this.resultValue = resultValue;
     }
 
-    public BaseIdValueEntity getStandardGrade() {
+    public BaseLimsIdValueEntity getStandardGrade() {
         return standardGrade;
     }
 
-    public void setStandardGrade(BaseIdValueEntity standardGrade) {
+    public void setStandardGrade(BaseLimsIdValueEntity standardGrade) {
         this.standardGrade = standardGrade;
     }
 

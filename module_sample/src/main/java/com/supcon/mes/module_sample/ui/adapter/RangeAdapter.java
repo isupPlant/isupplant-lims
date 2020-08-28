@@ -7,8 +7,8 @@ import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +19,8 @@ import java.util.List;
  * class name
  */
 public class RangeAdapter extends BaseRecyclerViewAdapter<InspectionItemColumnEntity> {
-    private List<InspectionItemColumnEntity> list;
     private HashMap<String, Object> hashMap;
+    private List<InspectionItemColumnEntity> list;
 
     public RangeAdapter(Context context) {
         super(context);
@@ -46,6 +46,7 @@ public class RangeAdapter extends BaseRecyclerViewAdapter<InspectionItemColumnEn
     public int getItemCount() {
         return list.size();
     }
+
 
     class ViewHolder extends BaseRecyclerViewHolder<InspectionItemColumnEntity>{
 

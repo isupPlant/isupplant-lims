@@ -1,11 +1,11 @@
-package com.supcon.mes.module_sample.model.bean;
+package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 
 /**
  * author huodongsheng
- * on 2020/8/19
+ * on 2020/8/27
  * class name
  */
 public class CalcParamInfoEntity extends BaseEntity {

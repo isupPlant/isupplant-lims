@@ -1,34 +1,32 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
-import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
-import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
-import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
-import com.supcon.mes.module_sample.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -41,16 +39,19 @@ import io.reactivex.functions.Consumer;
  */
 public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSubEntity> {
 
-    private ConclusionAdapter conclusionAdapter;
+//    private ConclusionAdapter conclusionAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
     private OriginalValueChangeListener mOriginalValueChangeListener;
+    private DispValueChangeListener mDispValueChangeListener;
     private String originalValue;
+    private String dispValue;
     private boolean originalFocus;
+    private boolean dispValueFocus;
 
 
     public ProjectAdapter(Context context) {
         super(context);
-
     }
 
     @Override
@@ -59,7 +60,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<InspectionSubEntity>{
-
+        private ConclusionAdapter conclusionAdapter;
         @BindByTag("ctInspectionItems")
         CustomTextView ctInspectionItems;
         @BindByTag("ceOriginalValue")
@@ -80,6 +81,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         LinearLayout llEnclosure;
         @BindByTag("rvConclusion")
         RecyclerView rvConclusion;
+        @BindByTag("item")
+        LinearLayout item;
 
         public ViewHolder(Context context) {
             super(context);
@@ -93,8 +96,9 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         @Override
         protected void initView() {
             super.initView();
-            conclusionAdapter = new ConclusionAdapter(context);
-            rvConclusion.setLayoutManager(new LinearLayoutManager(context));
+            linearLayoutManager = new LinearLayoutManager(context);
+            rvConclusion.setLayoutManager(linearLayoutManager);
+            ((DefaultItemAnimator)rvConclusion.getItemAnimator()).setSupportsChangeAnimations(false);
             rvConclusion.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -109,8 +113,6 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     }
                 }
             });
-            rvConclusion.setNestedScrollingEnabled(false);
-            rvConclusion.setAdapter(conclusionAdapter);
         }
 
         @SuppressLint("CheckResult")
@@ -122,15 +124,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-                            if (rvConclusion.getVisibility() == View.VISIBLE){
-                                rvConclusion.setVisibility(View.GONE);
-                                ivExpand.setImageResource(R.drawable.ic_drop_down);
-                            }else if (rvConclusion.getVisibility() == View.GONE){
-                                rvConclusion.setVisibility(View.VISIBLE);
-                                ivExpand.setImageResource(R.drawable.ic_drop_up);
-                            }
-
-
+                           getList().get(getAdapterPosition()).setOpen(!getList().get(getAdapterPosition()).isOpen());
+                           notifyItemChanged(getAdapterPosition());
                         }
                     });
 
@@ -141,6 +136,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         @Override
                         public void accept(CharSequence charSequence) throws Exception {
                             originalValue = charSequence.toString();
+                            getList().get(getAdapterPosition()).setOriginValue(originalValue);
+
                         }
                     });
             //原始值焦点监听
@@ -148,10 +145,33 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     originalFocus = hasFocus;
-                        if (null != mOriginalValueChangeListener){
+                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
                             mOriginalValueChangeListener.originalValueChange(originalFocus,originalValue,getAdapterPosition());
                         }
                     }
+            });
+
+            //报出值数值变化监听
+            RxTextView.textChanges(ceReportedValue.editText())
+                    .skipInitialValue()
+                    .subscribe(new Consumer<CharSequence>() {
+                        @Override
+                        public void accept(CharSequence charSequence) throws Exception {
+                            dispValue = charSequence.toString();
+                            getList().get(getAdapterPosition()).setDispValue(dispValue);
+
+                        }
+                    });
+
+            //报出值焦点监听
+            ceReportedValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    dispValueFocus = hasFocus;
+                    if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
+                        mDispValueChangeListener.dispValueChange(dispValueFocus,dispValue,getAdapterPosition());
+                    }
+                }
             });
 
         }
@@ -169,10 +189,10 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     }else if (data.getValueKind().getValue().equals("计算")){
                         setVisible(true);
                         ceOriginalValue.setEditable(false);
-                        ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "--" : data.getOriginValue());
+                        ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                     }else {
                         setVisible(true);
-                        ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "--" : data.getOriginValue());
+                        ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                     }
                 }else {
                     setVisible(true);
@@ -183,7 +203,41 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "--" : data.getRoundValue()); //修约值
             ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "--" : data.getDispValue()); //报出值
 
-            conclusionAdapter.setData(data.getConclusionList(),data.getDispMap());
+            //判断当前分项中有没有 不合格的结论  有的话 为false
+            HashMap<String, Object> dispMap = data.getDispMap();
+            List<ConclusionEntity> conclusionList = data.getConclusionList();
+            for (int i = 0; i < conclusionList.size(); i++) {
+                for (String key : dispMap.keySet()){
+                    if (key.equals(conclusionList.get(i).getColumnKey())){
+                        if (String.valueOf(dispMap.get(key)).equals(conclusionList.get(i).getColumnList().get(0).getResult())){
+                            data.setConclusionState(false);
+                        }else {
+                            data.setConclusionState(true);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (data.isConclusionState()){
+                ctInspectionItems.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            }else {
+                ctInspectionItems.setBackgroundColor(Color.parseColor("#B20404"));
+            }
+
+            if (data.isOpen()){
+                rvConclusion.setVisibility(View.VISIBLE);
+                ivExpand.setImageResource(R.drawable.ic_drop_up);
+            }else {
+                rvConclusion.setVisibility(View.GONE);
+                ivExpand.setImageResource(R.drawable.ic_drop_down);
+            }
+
+            conclusionAdapter = new ConclusionAdapter(context);
+            rvConclusion.setAdapter(conclusionAdapter);
+            conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());
+            conclusionAdapter.setList(data.getConclusionList());
+            conclusionAdapter.notifyDataSetChanged();
         }
 
         private void setVisible(boolean visible){
@@ -203,5 +257,13 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 
     public interface OriginalValueChangeListener{
         void originalValueChange(boolean hasFocus, String value, int position);
+    }
+
+    public void setDispValueChangeListener(DispValueChangeListener mDispValueChangeListener){
+        this.mDispValueChangeListener = mDispValueChangeListener;
+    }
+
+    public interface DispValueChangeListener{
+        void dispValueChange(boolean hasFocus, String value, int position);
     }
 }

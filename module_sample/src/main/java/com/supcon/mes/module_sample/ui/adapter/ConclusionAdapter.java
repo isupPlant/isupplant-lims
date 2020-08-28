@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,15 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.app.annotation.BindByTag;
-import com.supcon.common.view.base.adapter.BaseRecyclerViewAdapter;
+import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
+import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.bean.ConclusionEntity;
-import com.supcon.mes.module_sample.model.bean.InspectionItemColumnEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,12 +33,13 @@ import java.util.List;
  * on 2020/8/11
  * class name
  */
-public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity> {
-    private List<ConclusionEntity> list;
+public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<ConclusionEntity> {
     private HashMap<String, Object> hashMap;
-    private RangeAdapter rangeAdapter;
+
+    private LinearLayoutManager linearLayoutManager;
     private SinglePickController mSinglePickController;
     private List<String> spinnerList = new ArrayList<>();
+
     public ConclusionAdapter(Context context) {
         super(context);
         mSinglePickController = new SinglePickController((Activity) context);
@@ -44,29 +47,30 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
         mSinglePickController.setDividerVisible(true);
     }
 
+//    @Override
+//    public int getItemCount() {
+//        return list.size();
+//    }
+
     @Override
     protected BaseRecyclerViewHolder<ConclusionEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
     }
+    
+//    @Override
+//    public ConclusionEntity getItem(int position) {
+//        return list.get(position);
+//    }
 
-    @Override
-    public ConclusionEntity getItem(int position) {
-        return list.get(position);
-    }
-
-    public void setData(List<ConclusionEntity> list, HashMap<String, Object> hashMap){
-        this.list = list;
+    public void setData(List<ConclusionEntity> list, HashMap<String, Object> hashMap) {
         this.hashMap = hashMap;
-        this.notifyDataSetChanged();
+//        this.list = list;
+//        this.notifyDataSetChanged();
     }
 
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
 
-    class ViewHolder extends BaseRecyclerViewHolder<ConclusionEntity>{
-
+    class ViewHolder extends BaseRecyclerViewHolder<ConclusionEntity> {
+        private RangeAdapter rangeAdapter;
         @BindByTag("ivExpand")
         ImageView ivExpand;
         @BindByTag("rlRange")
@@ -85,8 +89,9 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
         @Override
         protected void initView() {
             super.initView();
-            rangeAdapter = new RangeAdapter(context);
-            rvRange.setLayoutManager(new LinearLayoutManager(context));
+
+            linearLayoutManager = new LinearLayoutManager(context);
+            rvRange.setLayoutManager(linearLayoutManager);
             rvRange.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -99,9 +104,9 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
                     }
                 }
             });
-            rvRange.setNestedScrollingEnabled(false);
-            rvRange.setAdapter(rangeAdapter);
+
         }
+
 
         @Override
         protected void initListener() {
@@ -109,33 +114,29 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
             rlRange.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (llRange.getVisibility() == View.VISIBLE){
-                        llRange.setVisibility(View.GONE);
-                        ivExpand.setImageResource(R.drawable.ic_drop_down);
-                    }else if (llRange.getVisibility() == View.GONE){
-                        llRange.setVisibility(View.VISIBLE);
-                        ivExpand.setImageResource(R.drawable.ic_drop_up);
-                    }
+                    getList().get(getAdapterPosition()).setOpen(!getList().get(getAdapterPosition()).isOpen());
+                    notifyItemChanged(getAdapterPosition());
                 }
             });
-
 
             tsConclusionColumnName.setOnChildViewClickListener(new OnChildViewClickListener() {
                 @Override
                 public void onChildViewClick(View childView, int action, Object obj) {
                     spinnerList.clear();
-                    List<InspectionItemColumnEntity> columnList = list.get(getAdapterPosition()).getColumnList();
+                    List<InspectionItemColumnEntity> columnList = getList().get(getAdapterPosition()).getColumnList();
                     for (int i = 0; i < columnList.size(); i++) {
                         spinnerList.add(columnList.get(i).getResult());
                     }
                     mSinglePickController.list(spinnerList)
                             .listener((index, item) -> {
 
-                                for (String key: hashMap.keySet()) {
-                                    if (key.equals(list.get(getAdapterPosition()).getColumnKey())){
-                                        hashMap.put(key,spinnerList.get(index));
-                                    }
-                                }
+                                getItem(getAdapterPosition()).setFinalResult(spinnerList.get(index));
+                                //hashMap.put("finalResult", );
+//                                for (String key : hashMap.keySet()) {
+//                                    if (key.equals(list.get(getAdapterPosition()).getColumnKey())) {
+//
+//                                    }
+//                                }
                                 notifyItemChanged(getAdapterPosition());
 
                             }).show();
@@ -150,14 +151,31 @@ public class ConclusionAdapter extends BaseRecyclerViewAdapter<ConclusionEntity>
 
         @Override
         protected void update(ConclusionEntity data) {
-            tsConclusionColumnName.setKey(data.getColumnName());
-            for (String key: hashMap.keySet()) {
-                if (key.equals(data.getColumnKey())){
-                    tsConclusionColumnName.setContent((String) hashMap.get(key));
-                    tsConclusionColumnName.setSpinner((String) hashMap.get(key));
-                }
+            tsConclusionColumnName.setKey(StringUtil.isEmpty(data.getColumnName()) ? "" : data.getColumnName());
+            tsConclusionColumnName.setContent(StringUtil.isEmpty(data.getFinalResult()) ? "" : data.getFinalResult());
+
+            if (data.getFinalResult() !=null && data.getFinalResult().equals(data.getColumnList().get(0).getResult())) {
+                data.setQualified(false);
+            } else {
+                data.setQualified(true);
             }
 
+            if (data.isQualified()) {
+                tsConclusionColumnName.setContentTextColor(Color.parseColor("#808080"));
+            } else {
+                tsConclusionColumnName.setContentTextColor(Color.parseColor("#B20404"));
+            }
+
+            if (data.isOpen()){
+                llRange.setVisibility(View.VISIBLE);
+                ivExpand.setImageResource(R.drawable.ic_drop_up);
+            }else {
+                llRange.setVisibility(View.GONE);
+                ivExpand.setImageResource(R.drawable.ic_drop_down);
+            }
+
+            rangeAdapter = new RangeAdapter(context);
+            rvRange.setAdapter(rangeAdapter);
             rangeAdapter.setData(data.getColumnList(),hashMap);
         }
     }

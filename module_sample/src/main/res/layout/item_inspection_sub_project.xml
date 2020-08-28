@@ -3,11 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
 
     <LinearLayout
+        android:id="@+id/item"
+        android:tag="item"
         android:padding="@dimen/dp_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
