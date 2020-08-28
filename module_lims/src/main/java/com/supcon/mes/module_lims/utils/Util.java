@@ -38,6 +38,7 @@ public class Util {
      */
     /**
      * 压缩图片（质量压缩）
+     *
      * @param bitmap
      */
     public static File compressImage(Bitmap bitmap) {
@@ -53,7 +54,7 @@ public class Util {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date(System.currentTimeMillis());
         String filename = format.format(date);
-        File file = new File(Environment.getExternalStorageDirectory(),filename+".png");
+        File file = new File(Environment.getExternalStorageDirectory(), filename + ".png");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             try {
@@ -69,14 +70,15 @@ public class Util {
 
         return file;
     }
-    public static Intent openFile(Context context,String filePath) {
+
+    public static Intent openFile(Context context, String filePath) {
 
         System.out.println("打开的文件路径 : " + filePath);
         File file = new File(filePath);
         if (!file.exists()) {
             return null;
         }
-        String authority = "com.supcon.supplant.fileprovider";
+        String authority = context.getPackageName() + ".fileprovider";
         Uri fileUri = FileProvider.getUriForFile(context, authority, file);
         /* 取得扩展名 */
         String fileName = file.getName();
@@ -89,8 +91,7 @@ public class Util {
             intent = getImageFileIntent(filePath, fileUri);
         } else if (end.equals("ppt")) {
             intent = getPptFileIntent(filePath, fileUri);
-        } else if (end.equals("xls") || end.equals("xlsx")||end.equals("xml")) {
-//          intent = getExcelFileIntent(filePath);
+        } else if (end.equals("xls") || end.equals("xlsx") || end.equals("xml")) {
             intent = getExcelFileIntent(filePath, fileUri);
         } else if (end.equals("doc")) {
             intent = getWordFileIntent(filePath, fileUri);
@@ -101,18 +102,19 @@ public class Util {
         } else if (end.equals("chm")) {
             intent = getChmFileIntent(filePath, fileUri);
         } else if (end.equals("txt")) {
-            intent = getTextFileIntent(filePath, false, fileUri);
-        }if (end.equals("mp4")) {
-            intent = getMp4FileIntent(filePath,fileUri);
+            intent = getTextFileIntent(filePath, fileUri);
+        }
+        if (end.equals("mp4")) {
+            intent = getMp4FileIntent(filePath, fileUri);
         }
         return intent;
     }
-    public static String getFileType(File file){
+
+    public static String getFileType(File file) {
         String fileName = file.getName();
-        return  fileName.substring(file.getName().lastIndexOf(".") + 1,
+        return fileName.substring(file.getName().lastIndexOf(".") + 1,
                 file.getName().length()).toLowerCase();
     }
-
 
 
     // 播放音乐
@@ -140,7 +142,7 @@ public class Util {
     }
 
 
-    private static Intent getMp4FileIntent(String param,Uri filUri) {
+    private static Intent getMp4FileIntent(String param, Uri filUri) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -166,11 +168,10 @@ public class Util {
     public static Intent getPptFileIntent(String param, Uri filUri) {
 
         Intent intent = new Intent("android.intent.action.VIEW");
-        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//      Uri uri = Uri.fromFile(new File(param));
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION );
         Uri uri = uriString(param, filUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
         return intent;
     }
@@ -179,76 +180,63 @@ public class Util {
     public static Intent getExcelFileIntent(String param, Uri filUri) {
 
         Intent intent = new Intent("android.intent.action.VIEW");
-        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = uriString(param, filUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        Uri uri = uriString(param, filUri);
         intent.setDataAndType(uri, "application/vnd.ms-excel");
-//      Uri uri = Uri.fromFile(new File(param));
-//      intent.setDataAndType(uri, "application/vnd.ms-excel");
         return intent;
     }
 
     // Android获取一个用于打开Word文件的intent
     public static Intent getWordFileIntent(String param, Uri filUri) {
-
         Intent intent = new Intent("android.intent.action.VIEW");
-        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//      Uri uri = Uri.fromFile(new File(param));
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Uri uri = uriString(param, filUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setDataAndType(uri, "application/msword");
         return intent;
     }
 
     // Android获取一个用于打开CHM文件的intent
     public static Intent getChmFileIntent(String param, Uri filUri) {
-
         Intent intent = new Intent("android.intent.action.VIEW");
-        intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        Uri uri = Uri.fromFile(new File(param));
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Uri uri = uriString(param, filUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setDataAndType(uri, "application/x-chm");
         return intent;
     }
 
     // Android获取一个用于打开文本文件的intent
-    public static Intent getTextFileIntent(String param, boolean paramBoolean, Uri filUri) {
+    public static Intent getTextFileIntent(String param, Uri filUri) {
 
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (paramBoolean) {
-            Uri uri1 = Uri.parse(param);
-            intent.setDataAndType(uri1, "text/plain");
-        } else {
-            Uri uri2 = Uri.fromFile(new File(param));
-//            Uri uri = uriString(param, filUri);
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            intent.setDataAndType(uri2, "text/plain");
-        }
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Uri uri = uriString(param, filUri);
+        intent.setDataAndType(uri, "text/plain");
         return intent;
     }
 
     // Android获取一个用于打开PDF文件的intent
     public static Intent getPdfFileIntent(String param, Uri filUri) {
-
         Intent intent = new Intent("android.intent.action.VIEW");
-        intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//      Uri uri = Uri.fromFile(new File(param));
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Uri uri = uriString(param, filUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setDataAndType(uri, "application/pdf");
         return intent;
     }
 
     public static Uri uriString(String param, Uri filUri) {
         Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             //data是file类型,忘了复制过来
             uri = filUri;
         } else {
@@ -256,6 +244,7 @@ public class Util {
         }
         return uri;
     }
+
     public static String getPath(Context context, Uri uri) {
 
         final boolean isKitKat = true;
@@ -298,7 +287,7 @@ public class Util {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -322,6 +311,7 @@ public class Util {
 
         return null;
     }
+
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
@@ -363,6 +353,7 @@ public class Util {
         // 四舍五入,保留2位小数
         return d1.divide(d2, 2, BigDecimal.ROUND_HALF_UP).toString();
     }
+
     public static String big(Float d) {
         if (d == null || d == 0) {
             return "";
@@ -372,6 +363,7 @@ public class Util {
         // 四舍五入,保留2位小数
         return d1.divide(d2, 1, BigDecimal.ROUND_HALF_UP).toString();
     }
+
     /**
      * 浮点型保留两位小数
      *
@@ -389,44 +381,45 @@ public class Util {
     }
 
 
-    public static boolean parseStrInRange(String number,String range){
+    public static boolean parseStrInRange(String number, String range) {
         if (TextUtils.isEmpty(number) && TextUtils.isEmpty(range))
             return false;
         try {
-            char firstCh=range.charAt(0);
-            char lastCh=range.charAt(range.length()-1);
-            double min,max;
-            double rangeNumber=Double.parseDouble(number);
-            min=Double.parseDouble(range.substring(1,range.indexOf(',')));
-            max=Double.parseDouble(range.substring(range.indexOf(',')+1,range.length()-1));
-            if (firstCh=='(' && lastCh==')'){
-                return rangeNumber>min && rangeNumber<max;
-            }else if (firstCh=='(' && lastCh==']'){
-                return rangeNumber>min && rangeNumber<=max;
-            }else if (firstCh=='[' && lastCh==')'){
-                return rangeNumber>=min && rangeNumber<max;
-            }else if (firstCh=='[' && lastCh==']'){
-                return rangeNumber>=min && rangeNumber<=max;
+            char firstCh = range.charAt(0);
+            char lastCh = range.charAt(range.length() - 1);
+            double min, max;
+            double rangeNumber = Double.parseDouble(number);
+            min = Double.parseDouble(range.substring(1, range.indexOf(',')));
+            max = Double.parseDouble(range.substring(range.indexOf(',') + 1, range.length() - 1));
+            if (firstCh == '(' && lastCh == ')') {
+                return rangeNumber > min && rangeNumber < max;
+            } else if (firstCh == '(' && lastCh == ']') {
+                return rangeNumber > min && rangeNumber <= max;
+            } else if (firstCh == '[' && lastCh == ')') {
+                return rangeNumber >= min && rangeNumber < max;
+            } else if (firstCh == '[' && lastCh == ']') {
+                return rangeNumber >= min && rangeNumber <= max;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
-    public static boolean parseInRangeStr(String reportValue,String dispValue){
+
+    public static boolean parseInRangeStr(String reportValue, String dispValue) {
         if (TextUtils.isEmpty(reportValue) && TextUtils.isEmpty(reportValue))
             return false;
 
         try {
-           if (dispValue.contains(",")){
-               String strArr[]=dispValue.split(",");
-               for(String str:strArr){
-                   if (str.equals(reportValue))
-                       return true;
-               }
-           }else {
-               return reportValue.equals(dispValue);
-           }
+            if (dispValue.contains(",")) {
+                String strArr[] = dispValue.split(",");
+                for (String str : strArr) {
+                    if (str.equals(reportValue))
+                        return true;
+                }
+            } else {
+                return reportValue.equals(dispValue);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -434,17 +427,18 @@ public class Util {
     }
 
 
-    public static boolean isNumeric(String str){
+    public static boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
-      return true;
+        return true;
     }
 
     /**
      * 传入一个数列x计算平均值
+     *
      * @param x
      * @return 平均值
      */
@@ -452,14 +446,15 @@ public class Util {
         int n = x.size();            //数列元素个数
         double sum = 0;
         for (double i : x) {        //求和
-            sum+=i;
+            sum += i;
         }
-        return sum/n;
+        return sum / n;
     }
 
     /**
      * 传入一个数列x计算方差
      * 方差s^2=[（x1-x）^2+（x2-x）^2+......（xn-x）^2]/（n）（x为平均数）
+     *
      * @param x 要计算的数列
      * @return 方差
      */
@@ -468,37 +463,38 @@ public class Util {
         double avg = average(x);    //求平均值
         double var = 0;
         for (double i : x) {
-            var += (i-avg)*(i-avg);    //（x1-x）^2+（x2-x）^2+......（xn-x）^2
+            var += (i - avg) * (i - avg);    //（x1-x）^2+（x2-x）^2+......（xn-x）^2
         }
-        return var/n;
+        return var / n;
     }
 
     /**
      * 传入一个数列x计算标准差
      * 标准差σ=sqrt(s^2)，即标准差=方差的平方根
+     *
      * @param x 要计算的数列
      * @return 标准差
      */
     public static double standardDiviation(List<Double> x) {
-        return  Math.sqrt(variance(x));
+        return Math.sqrt(variance(x));
     }
 
-    public static double getAvg(List<Double> list){
-        double result=0d;
-        if (list.size()==0){
+    public static double getAvg(List<Double> list) {
+        double result = 0d;
+        if (list.size() == 0) {
             return result;
         }
         for (int i = 0; i < list.size(); i++) {
             result += list.get(i);
         }
 
-        return result/list.size();
+        return result / list.size();
     }
 
-    public static double getSum(List<Double> list){
+    public static double getSum(List<Double> list) {
         double result = 0d;
 
-        if (list.size()==0){
+        if (list.size() == 0) {
             return result;
         }
 
@@ -508,17 +504,17 @@ public class Util {
         return result;
     }
 
-    public static double getMax(List<Double> list){
+    public static double getMax(List<Double> list) {
         double result = 0d;
 
-        if (list.size()==0){
+        if (list.size() == 0) {
             return result;
-        }else {
+        } else {
             result = list.get(0);
         }
 
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) > result){
+            if (list.get(i) > result) {
                 result = list.get(i);
             }
 
@@ -526,17 +522,17 @@ public class Util {
         return result;
     }
 
-    public static double getMin(List<Double> list){
+    public static double getMin(List<Double> list) {
         double result = 0d;
 
-        if (list.size()==0){
+        if (list.size() == 0) {
             return result;
-        }else {
+        } else {
             result = list.get(0);
         }
 
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) < result){
+            if (list.get(i) < result) {
                 result = list.get(i);
             }
 
