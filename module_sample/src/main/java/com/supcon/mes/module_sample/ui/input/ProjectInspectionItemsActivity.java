@@ -204,6 +204,9 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 });
     }
 
+    public void go(){
+        boolean b = inspectionProjectFragment.lookNext();
+    }
 
 
     public void openDrawLayout() {
