@@ -23,6 +23,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
@@ -35,6 +36,8 @@ import com.supcon.mes.module_sample.ui.input.fragment.InspectionProjectFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.MaterialFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.ProjectFragment;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -202,6 +205,19 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                         controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
                     }
                 });
+        controller.setSubmitOnSuccessListener(new OnSuccessListener<Integer>() {
+            @Override
+            public void onSuccess(Integer result) {
+                if (result == 1){//保存
+                    inspectionProjectFragment.againRefresh();
+                }else if (result == 2){//提交
+                    if (!inspectionProjectFragment.lookNext()){
+                        EventBus.getDefault().post("refersh");
+                        onBackPressed();
+                    }
+                }
+            }
+        });
     }
 
 

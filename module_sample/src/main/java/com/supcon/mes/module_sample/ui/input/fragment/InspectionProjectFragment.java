@@ -122,25 +122,8 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
-                    List<InspectionItemsEntity> list = adapter.getList();
-                    for (int i = 0; i < list.size(); i++) {
-                        list.get(i).setSelect(false);
-                    }
-                    list.get(position).setSelect(true);
-                    adapter.notifyDataSetChanged();
 
-                    if (activity instanceof SampleResultInputActivity){
-                        ((SampleResultInputActivity)activity).setSampleTesId(list.get(position).getId());
-                    }else if (activity instanceof ProjectInspectionItemsActivity){
-                        String name;
-                        if (null ==  list.get(position).getTestId()){
-                            name = "--";
-                        }else {
-                            name = list.get(position).getTestId().getName();
-                        }
-                        ((ProjectInspectionItemsActivity)activity).notifyInspectionItemsRefresh(list.get(position).getId(),name);
-                    }
-
+                    itemClickListener(position);
 
                 }
             }
@@ -173,7 +156,53 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
         refreshListController.refreshBegin();
     }
 
+    public void itemClickListener(int position){
+        List<InspectionItemsEntity> list = adapter.getList();
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setSelect(false);
+        }
+        list.get(position).setSelect(true);
+        adapter.notifyDataSetChanged();
 
+        if (activity instanceof SampleResultInputActivity){
+            ((SampleResultInputActivity)activity).setSampleTesId(list.get(position).getId());
+        }else if (activity instanceof ProjectInspectionItemsActivity){
+            String name;
+            if (null ==  list.get(position).getTestId()){
+                name = "--";
+            }else {
+                name = list.get(position).getTestId().getName();
+            }
+            ((ProjectInspectionItemsActivity)activity).notifyInspectionItemsRefresh(list.get(position).getId(),name);
+        }
+    }
+
+
+    public boolean lookNext(){
+        for (int i = 0; i < adapter.getList().size(); i++) {
+            if (adapter.getList().get(i).isSelect()){
+                if (i+1 <= adapter.getList().size()-1){
+                    itemClickListener(i+1);
+                    return true;
+                }else {
+                    return false;
+                }
+            }else {
+                return false;
+            }
+
+        }
+        return false;
+    }
+
+    public void againRefresh(){
+        for (int i = 0; i < adapter.getList().size(); i++) {
+            if (adapter.getList().get(i).isSelect()){
+                itemClickListener(i);
+                break;
+            }
+        }
+    }
 
     @Override
     public void getInspectionItemListSuccess(CommonListEntity entity) {
