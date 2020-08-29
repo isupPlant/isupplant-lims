@@ -101,8 +101,6 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             activity = (SampleResultInputActivity) context;
         }else if (context instanceof SampleResultInputPDAActivity){
             activity = (SampleResultInputPDAActivity) context;
-        }else if (context instanceof SingleSampleResultInputActivity){
-            activity=(SingleSampleResultInputActivity)context;
         }
 
     }

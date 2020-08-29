@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -18,7 +19,10 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.view.picker.SinglePicker;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -28,6 +32,7 @@ import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -50,14 +55,19 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     private boolean originalFocus;
     private boolean dispValueFocus;
 
-
+    private SinglePickController mSinglePickController;
     public SingleProjectAdapter(Context context) {
         super(context);
+        mSinglePickController = new SinglePickController((Activity) context);
+        mSinglePickController.setCanceledOnTouchOutside(true);
+        mSinglePickController.setDividerVisible(true);
     }
 
     @Override
     protected BaseRecyclerViewHolder<InspectionSubEntity> getViewHolder(int viewType) {
+
         return new ViewHolder(context);
+
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<InspectionSubEntity>{
@@ -164,7 +174,6 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         public void accept(CharSequence charSequence) throws Exception {
                             originalValue = charSequence.toString();
                             getList().get(getAdapterPosition()).setOriginValue(originalValue);
-
                         }
                     });
             //原始值焦点监听
@@ -198,6 +207,25 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                     if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
                         mDispValueChangeListener.dispValueChange(dispValueFocus,dispValue,getAdapterPosition());
                     }
+                }
+            });
+            //枚举原始值改变时的监听
+            cpOriginalValue.setOnChildViewClickListener(new OnChildViewClickListener() {
+                @Override
+                public void onChildViewClick(View childView, int action, Object obj) {
+                    String[] split = getList().get(getAdapterPosition()).getOptionNames().split(",");
+                    List<String> list = Arrays.asList(split);
+                    mSinglePickController.list(list)
+                            .listener(new SinglePicker.OnItemPickListener() {
+                                @Override
+                                public void onItemPicked(int index, Object item) {
+                                    getItem(getAdapterPosition()).setOriginValue(list.get(index));
+                                    notifyItemChanged(getAdapterPosition());
+                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
+                                        mOriginalValueChangeListener.originalValueChange(false,getItem(getAdapterPosition()).getOriginValue(),getAdapterPosition());
+                                    }
+                                }
+                            }).show();
                 }
             });
 

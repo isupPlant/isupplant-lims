@@ -1,8 +1,10 @@
 package com.supcon.mes.module_sample.controller;
 
+import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.activity.BaseActivity;
@@ -66,7 +68,6 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
         paramsMap.put("sampleId",submitEntity.getSampleId());
         paramsMap.put("sampleComListJson",submitEntity.getSampleComListJson());
         paramsMap.put("signatureInfo","");
-        Log.i("sampleComListJson",submitEntity.getSampleComListJson().toString());
         if (type==2){
             paramsMap.put("sampleTestId",submitEntity.getSampleTestId());
             paramsMap.put("testDeviceListJson",submitEntity.getTestDeviceListJson());
@@ -102,21 +103,33 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
         }
         ensureDialog = new EnsureDialog(activity);
         ensureDialog.setCanceledOnTouchOutside(false);
+        backgroundAlpha(0.6f);
+        ensureDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                backgroundAlpha(1.0f);
+            }
+        });
         ensureDialog.show();
         ensureDialog.setOnPositiveClickListener(new EnsureDialog.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
+                ensureDialog.dismiss();
                 if (type==1){
-                    buttonCode="LIMSSample_5.0.0.0_sample_recordBySample_BUTTON_sampleComSubmit";
-                    presenterRouter.create(SampleRecordResultSubmitAPI.class).getSignatureEnabled("LIMSSample_5.0.0.0_sample_recordBySingleSample_BUTTON_sampleComSubmit");
-                }else if (type==2){
                     buttonCode="LIMSSample_5.0.0.0_sample_recordBySingleSample_BUTTON_sampleComSubmit";
+                }else if (type==2){
+                    buttonCode="LIMSSample_5.0.0.0_sample_recordBySample_BUTTON_sampleComSubmit";
                 }
                 presenterRouter.create(SampleRecordResultSubmitAPI.class).getSignatureEnabled(buttonCode);
             }
         });
     }
-
+    //设置蒙版
+    private void backgroundAlpha(float f) {
+        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+        lp.alpha = f;
+        activity.getWindow().setAttributes(lp);
+    }
 
     @Override
     public void recordResultSubmitSuccess(BAP5CommonEntity entity) {
@@ -144,11 +157,23 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
     @Override
     public void getSignatureEnabledSuccess(SampleSignatureEntity entity) {
         activity.onLoading("正在提交，请稍后...");
-        SampleRecordResultSignEntity signEntity=new SampleRecordResultSignEntity();
-        signEntity.setButtonCode(buttonCode);
-        signEntity.setSignatureType(entity.getSignatureType());
-        signEntity.setFirstReason(entity.getViewName()+"(提交)");
-        paramsMap.put("signatureInfo",signEntity);
+//        SampleRecordResultSignEntity signEntity=new SampleRecordResultSignEntity();
+//        signEntity.setButtonCode(buttonCode);
+//        signEntity.setSignatureType(entity.getSignatureType());
+//        if (type==1){
+//            signEntity.setFirstReason("单样品录入结果(提交)");
+//        }else if (type==2){
+//            signEntity.setFirstReason("按样品录入结果(提交)");
+//        }
+//
+//        paramsMap.put("signatureInfo",signEntity);
+        List<InspectionSubEntity> inspectionSubEntities= (List<InspectionSubEntity>) paramsMap.get("sampleComListJson");
+        for (InspectionSubEntity inspectionSubEntity:inspectionSubEntities){
+            if (TextUtils.isEmpty(inspectionSubEntity.getDispValue())){
+                inspectionSubEntity.setDispValue("未检");
+            }
+        }
+        paramsMap.put("sampleComListJson",inspectionSubEntities);
         presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
     }
 

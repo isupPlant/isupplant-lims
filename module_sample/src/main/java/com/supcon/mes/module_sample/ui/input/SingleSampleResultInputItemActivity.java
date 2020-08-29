@@ -132,7 +132,7 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
                 .subscribe(o ->  {
                     List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();
                     SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("submit",sampleEntity.getId(),inspectionSubList);
-                    submitController.recordResultSubmit(SingleSampleResultInputItemActivity.this,2,submitEntity);
+                    submitController.recordResultSubmit(SingleSampleResultInputItemActivity.this,1,submitEntity);
                 });
         RxView.clicks(rl_calculation)
                 .throttleFirst(300,TimeUnit.MILLISECONDS)

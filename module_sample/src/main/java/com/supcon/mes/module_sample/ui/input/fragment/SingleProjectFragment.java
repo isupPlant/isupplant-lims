@@ -177,8 +177,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                                 }
                             });
                 }else if (action==2){
-                    String path=itemEntity.getFilePath();
-                    if (!TextUtils.isEmpty(path)){
+
                         if (!TextUtils.isEmpty(itemEntity.getFilePath())){
                             File file=new File(itemEntity.getFilePath());
                             if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
@@ -191,7 +190,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                         }else {
                             ToastUtils.show(context,"没有可查看的文件");
                         }
-                    }
+
                 }
             }
         });
