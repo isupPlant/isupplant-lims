@@ -159,7 +159,7 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        manualCalculate();
+                        //manualCalculate();
                     }
                 });
     }

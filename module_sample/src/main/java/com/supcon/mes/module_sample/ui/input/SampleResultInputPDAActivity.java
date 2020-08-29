@@ -9,6 +9,10 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.ui.input.fragment.SampleFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 /**
  * author huodongsheng
  * on 2020/8/7
@@ -17,7 +21,7 @@ import com.supcon.mes.module_sample.ui.input.fragment.SampleFragment;
 @Router(Constant.AppCode.LIMS_SampleResultInputPda)
 public class SampleResultInputPDAActivity extends BaseFragmentActivity {
 
-    private Fragment sampleFragment;
+    private SampleFragment sampleFragment;
 
     @Override
     protected int getLayoutID() {
@@ -27,6 +31,7 @@ public class SampleResultInputPDAActivity extends BaseFragmentActivity {
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
     }
 
@@ -38,5 +43,18 @@ public class SampleResultInputPDAActivity extends BaseFragmentActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.fragment_sample,sampleFragment)
                 .commit();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refershSample(String refersh){
+        if (refersh.equals("refersh")){
+            sampleFragment.goRefresh();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

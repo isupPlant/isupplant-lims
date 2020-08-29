@@ -195,6 +195,15 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
         return false;
     }
 
+    public void againRefresh(){
+        for (int i = 0; i < adapter.getList().size(); i++) {
+            if (adapter.getList().get(i).isSelect()){
+                itemClickListener(i);
+                break;
+            }
+        }
+    }
+
     @Override
     public void getInspectionItemListSuccess(CommonListEntity entity) {
         //请求数据回来默认 第一个item 为选中状态
