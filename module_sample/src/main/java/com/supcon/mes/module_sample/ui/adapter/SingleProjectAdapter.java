@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +26,7 @@ import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -80,12 +82,15 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         LinearLayout llQualityStandard;
         @BindByTag("imageUpDown")
         ImageView imageUpDown;
+        @BindByTag("imageFileView")
+        ImageView imageFileView;
         @BindByTag("llEnclosure")
         LinearLayout llEnclosure;
         @BindByTag("rvConclusion")
         RecyclerView rvConclusion;
         @BindByTag("item")
         LinearLayout item;
+
 
         public ViewHolder(Context context) {
             super(context);
@@ -132,14 +137,24 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         }
                     });
 
-            RxView.clicks(llEnclosure)
-                    .throttleFirst(300,TimeUnit.MILLISECONDS)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
-                            onItemChildViewClick(llEnclosure,1);
-                        }
+            RxView.clicks(imageUpDown)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o->{
+                        onItemChildViewClick(imageUpDown,1);
                     });
+            RxView.clicks(imageFileView)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o->{
+                        onItemChildViewClick(imageUpDown,2);
+                    });
+//            RxView.clicks(llEnclosure)
+//                    .throttleFirst(300,TimeUnit.MILLISECONDS)
+//                    .subscribe(new Consumer<Object>() {
+//                        @Override
+//                        public void accept(Object o) throws Exception {
+//                            onItemChildViewClick(llEnclosure,1);
+//                        }
+//                    });
 
             //原始值数值变化监听
             RxTextView.textChanges(ceOriginalValue.editText())
@@ -246,6 +261,9 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                 ivExpand.setImageResource(R.drawable.ic_drop_down);
             }
 
+            if (!TextUtils.isEmpty(data.getFileUploadMultiFileIds())){
+                new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames());
+            }
             conclusionAdapter = new ConclusionAdapter(context);
             rvConclusion.setAdapter(conclusionAdapter);
             conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());

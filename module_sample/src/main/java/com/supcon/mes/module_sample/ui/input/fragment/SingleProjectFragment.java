@@ -20,6 +20,7 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
@@ -31,6 +32,9 @@ import com.supcon.mes.module_lims.controller.CalculationController;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.utils.FileUtils;
+import com.supcon.mes.module_lims.utils.Util;
+import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
@@ -49,10 +53,13 @@ import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresente
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
 import com.supcon.mes.module_sample.presenter.SingleSampleResultInputPresenter;
 import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
+import com.supcon.mes.module_sample.ui.adapter.SingleProjectAdapter;
+import com.supcon.mes.module_sample.ui.adapter.SingleSampleInpectAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,11 +78,9 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     @BindByTag("contentView")
     RecyclerView contentView;
-
-    private ProjectAdapter adapter;
+    private SingleProjectAdapter adapter;
     private Long sampleTesId;
     private String filePath;
-
     BaseFragmentActivity activity;
     SpaceItemDecoration spaceItemDecoration;
     GridLayoutManager gridLayoutManager;
@@ -98,7 +103,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     @Override
     protected IListAdapter<InspectionSubEntity> createAdapter() {
-        adapter = new ProjectAdapter(context);
+        adapter = new SingleProjectAdapter(context);
         return adapter;
     }
 
@@ -171,11 +176,27 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                                     itemEntity.setFilePath(filePath);
                                 }
                             });
+                }else if (action==2){
+                    String path=itemEntity.getFilePath();
+                    if (!TextUtils.isEmpty(path)){
+                        if (!TextUtils.isEmpty(itemEntity.getFilePath())){
+                            File file=new File(itemEntity.getFilePath());
+                            if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("file", file);
+                                IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
+                            }else {
+                                Util.openFile(getActivity(),itemEntity.getFilePath());
+                            }
+                        }else {
+                            ToastUtils.show(context,"没有可查看的文件");
+                        }
+                    }
                 }
             }
         });
 
-        adapter.setOriginalValueChangeListener(new ProjectAdapter.OriginalValueChangeListener() {
+        adapter.setOriginalValueChangeListener(new SingleProjectAdapter.OriginalValueChangeListener() {
             @Override
             public void originalValueChange(boolean hasFocus, String value, int position) {
                 if (!hasFocus) {
@@ -196,7 +217,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                 }
             }
         });
-        adapter.setDispValueChangeListener(new ProjectAdapter.DispValueChangeListener() {
+        adapter.setDispValueChangeListener(new SingleProjectAdapter.DispValueChangeListener() {
             @Override
             public void dispValueChange(boolean hasFocus, String value, int position) {
                 if (!hasFocus) {
@@ -262,17 +283,10 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     }
 
-    public void setSampleTesId(Long sampleTesId) {
-        this.sampleTesId = sampleTesId;
-        //onLoading("加载中...");
-        getInspectionItemSubColumn();
+    public void goRefresh(){
+        refreshListController.refreshBegin();
     }
 
-
-
-    public void getInspectionItemSubColumn() {
-        presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionSubProjectColumnApi.class).getInspectionSubProjectColumn(sampleTesId + "");
-    }
 
     public void manualCalculate() {
         //手动计算

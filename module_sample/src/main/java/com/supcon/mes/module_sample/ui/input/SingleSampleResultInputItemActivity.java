@@ -39,43 +39,19 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
-import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
-import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnItemChildViewClickListener;
-import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
-import com.supcon.common.view.util.ToastUtils;
-import com.supcon.common.view.view.CustomSwipeLayout;
-import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
-import com.supcon.mes.mbap.utils.DateUtil;
-import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
-import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
-import com.supcon.mes.middleware.model.bean.PopupWindowEntity;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
-import com.supcon.mes.middleware.ui.view.AddFileListView;
-import com.supcon.mes.middleware.util.EmptyAdapterHelper;
-import com.supcon.mes.middleware.util.FileUtil;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
-import com.supcon.mes.module_lims.utils.FileUtils;
-import com.supcon.mes.module_lims.utils.Util;
-import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
-import com.supcon.mes.module_sample.model.api.SingleSampleResultInputAPI;
-import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
-import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
-import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
-import com.supcon.mes.module_sample.model.contract.SingleSampleResultInputContract;
-import com.supcon.mes.module_sample.presenter.SingleSampleResultInputPresenter;
-import com.supcon.mes.module_sample.ui.adapter.SingleSampleInpectAdapter;
+
 import com.supcon.mes.module_sample.ui.input.fragment.SingleProjectFragment;
 
-import java.io.File;
+import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -86,7 +62,7 @@ import io.reactivex.functions.Consumer;
  * Email:wanghaidong1@supcon.com
  */
 
-@Controller(value = SampleRecordResultSubmitController.class)
+
 @Router(Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM)
 public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
 
@@ -105,6 +81,7 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
     RelativeLayout rl_submit;
     @BindByTag("rl_calculation")
     RelativeLayout rl_calculation;
+    SampleRecordResultSubmitController submitController;
     @Override
     protected int getLayoutID() {
         return R.layout.ac_single_sample_input_result_item;
@@ -115,7 +92,9 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
     protected void onInit() {
         super.onInit();
         sampleEntity = (SampleEntity) getIntent().getSerializableExtra("sampleEntity");
+        submitController=new SampleRecordResultSubmitController();
     }
+
     SingleProjectFragment fragment;
     @Override
     protected void initView() {
@@ -145,7 +124,7 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
                     public void accept(Object o) throws Exception {
                         List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();
                         SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("save",sampleEntity.getId(),inspectionSubList);
-
+                        submitController.recordResultSubmit(SingleSampleResultInputItemActivity.this,1,submitEntity);
                     }
                 });
         RxView.clicks(rl_submit)
@@ -153,15 +132,27 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
                 .subscribe(o ->  {
                     List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();
                     SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("submit",sampleEntity.getId(),inspectionSubList);
+                    submitController.recordResultSubmit(SingleSampleResultInputItemActivity.this,2,submitEntity);
                 });
         RxView.clicks(rl_calculation)
                 .throttleFirst(300,TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        manualCalculate();
+                        fragment.manualCalculate();
                     }
                 });
+        submitController.setSubmitOnSuccessListener(new OnSuccessListener<Integer>() {
+            @Override
+            public void onSuccess(Integer type) {
+                if (type==1){//保存
+                    fragment.goRefresh();
+                }else if (type==2){//提交
+                    EventBus.getDefault().post(new RefreshEvent());
+                    back();
+                }
+            }
+        });
     }
 
 }

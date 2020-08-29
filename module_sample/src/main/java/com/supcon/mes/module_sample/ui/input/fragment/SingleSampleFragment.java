@@ -25,6 +25,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
 import com.supcon.mes.middleware.model.event.EventInfo;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.StringUtil;
@@ -198,7 +199,9 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
         refreshListController.refreshBegin();
     }
 
-
+    public void onRefresh(RefreshEvent refreshEvent){
+        refreshListController.refreshBegin();
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSearchHistory(EventInfo result) {
         if (result.getEventId() == EventInfo.searchKey) {
