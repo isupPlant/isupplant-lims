@@ -69,10 +69,10 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
             activity.onLoading("正在保存，请稍后...");
             presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
         }else if ("submit".equals(submitEntity.getDealMode())){
-//            if (checkSubmit(submitEntity.getSampleComListJson())) {
-//                activity.onLoading("正在提交，请稍后...");
-//                presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
-//            }
+            if (checkSubmit(submitEntity.getSampleComListJson())) {
+                activity.onLoading("正在提交，请稍后...");
+                presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
+            }
         }
 
     }
