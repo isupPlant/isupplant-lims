@@ -23,10 +23,10 @@
         core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
         core_ptr:ptr_resistance="1.7">
 
-        <android.support.v4.widget.NestedScrollView
+        <ScrollView
             android:id="@+id/ns_scroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fillViewport="true"
             android:scrollbars="none"
             android:tag="ns_scroll">
@@ -48,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:background="#ffdcdcdc" />
+
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/pSiteTv"
                     style="@style/yh_custom_view_horizontal_style"
@@ -119,8 +120,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:tag="ll_other_info"
-                    android:visibility="gone"
-                    >
+                    android:visibility="gone">
 
                     <com.supcon.mes.mbap.view.CustomTextView
                         android:id="@+id/retainDateTv"
@@ -134,6 +134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="#ffdcdcdc" />
+
                     <com.supcon.mes.mbap.view.CustomTextView
                         android:id="@+id/retainDaysTv"
                         style="@style/yh_custom_view_horizontal_style"
@@ -146,6 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="#ffdcdcdc" />
+
                     <com.supcon.mes.mbap.view.CustomTextView
                         android:id="@+id/validDateTv"
                         style="@style/yh_custom_view_horizontal_style"
@@ -158,6 +160,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="#ffdcdcdc" />
+
                     <com.supcon.mes.mbap.view.CustomTextView
                         android:id="@+id/staffTv"
                         style="@style/yh_custom_view_horizontal_style"
@@ -170,6 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="#ffdcdcdc" />
+
                     <com.supcon.mes.mbap.view.CustomTextView
                         android:id="@+id/deptTv"
                         style="@style/yh_custom_view_horizontal_style"
@@ -182,6 +186,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="#ffdcdcdc" />
+
                     <com.supcon.mes.mbap.view.CustomTextView
                         android:id="@+id/keeperTv"
                         style="@style/yh_custom_view_horizontal_style"
@@ -194,6 +199,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="#ffdcdcdc" />
+
                     <com.supcon.mes.mbap.view.CustomTextView
                         android:id="@+id/storeSetTv"
                         style="@style/yh_custom_view_horizontal_style"
@@ -235,9 +241,12 @@
                         android:src="@drawable/ic_drop_down"
                         android:tag="imageUpDown" />
                 </RelativeLayout>
+
                 <LinearLayout
+                    android:id="@+id/ll_record_view"
+                    android:tag="ll_record_view"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_40"
                     android:background="#F9F9F9"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -251,15 +260,23 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="@dimen/dp_5"
                         android:text="@string/lims_record"
                         android:textColor="#333333"
-                        android:textSize="@dimen/fontSize_14sp" />
+                        android:textSize="@dimen/fontSize_15sp"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:src="@drawable/ic_search_view"
+                        />
                 </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="#fff8f8f8"
                     android:paddingStart="11dp"
                     android:paddingEnd="12dp">
@@ -267,14 +284,13 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/contentView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:overScrollMode="never"
                         android:scrollbars="none"
                         android:tag="contentView" />
                 </RelativeLayout>
-
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+        </ScrollView>
     </com.supcon.common.view.ptr.PtrFrameLayout>
 
     <com.supcon.mes.mbap.view.CustomWorkFlowView

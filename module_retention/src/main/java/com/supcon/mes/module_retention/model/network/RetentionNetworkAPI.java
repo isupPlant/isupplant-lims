@@ -44,6 +44,6 @@ public interface RetentionNetworkAPI {
     @POST("/msService/LIMSRetain/retention/retention/{retentionView}/submit")
     Flowable<SubmitResultEntity> submitRetention(@Path("retentionView") String path, @QueryMap Map<String,Object> params, @Body RetentionSubmitEntity retentionSubmit);
 
-    @POST("/msService/LIMSRetain/retention/retPlan/{data_dg}")
-    Flowable<CommonBAP5ListEntity<RecordViewEntity>> getRetentionRecode(@Path("data_dg") String data_dg,@Query("datagridCode") String datagridCode,@Query("id") Long id);
+    @POST("/msService/LIMSRetain/retention/retPlan/data-dg1592896739534?datagridCode=LIMSRetain_5.0.4.1_retention_retRecordViewdg1592896739534")
+    Flowable<CommonBAP5ListEntity<RecordViewEntity>> getRetentionRecode(@Query("id") Long id,@Body Map<String,Object> paramsMap);
 }
