@@ -16,4 +16,8 @@ public class RecordEntity extends BaseEntity {
     public Long realDate;
     public BaseLongIdNameEntity retId;
     public BaseIdValueEntity retPlanState;
+
+    public boolean isStateObserved(){
+       return retPlanState!=null && "LIMSRetain_planState/observed".equals(retPlanState.getId());
+    }
 }

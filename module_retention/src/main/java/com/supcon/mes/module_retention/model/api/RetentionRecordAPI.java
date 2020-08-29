@@ -9,5 +9,5 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
  */
 @ContractFactory(entites = CommonBAP5ListEntity.class)
 public interface RetentionRecordAPI {
-    void getRetentionRecode(String data_dg,String datagridCode,Long id);
+    void getRetentionRecode(Long id);
 }

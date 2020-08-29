@@ -23,7 +23,10 @@ public class SampleRecordResultSubmitPresenter extends SampleRecordResultSubmitC
                         .onErrorReturn(error->{
                             BAP5CommonEntity commonEntity=new BAP5CommonEntity();
                             commonEntity.msg= HttpErrorReturnUtil.getErrorInfo(error);
-                            commonEntity.success=false;
+                            if (commonEntity.msg.contains("End of input at line 1 column 1 path"))
+                                commonEntity.success=true;
+                            else
+                                commonEntity.success=false;
                             return commonEntity;
                         })
                         .subscribe(new Consumer<BAP5CommonEntity>() {

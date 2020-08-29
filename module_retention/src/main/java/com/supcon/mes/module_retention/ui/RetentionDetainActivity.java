@@ -1,11 +1,13 @@
 package com.supcon.mes.module_retention.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,9 +42,11 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
 import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
+import com.supcon.mes.module_retention.IntentRouter;
 import com.supcon.mes.module_retention.R;
 import com.supcon.mes.module_retention.model.api.RetentionDetailAPI;
 import com.supcon.mes.module_retention.model.bean.RecodeListEntity;
+import com.supcon.mes.module_retention.model.bean.RecordEntity;
 import com.supcon.mes.module_retention.model.bean.RetentionEntity;
 import com.supcon.mes.module_retention.model.bean.RetentionSubmitEntity;
 import com.supcon.mes.module_retention.model.contract.RetentionDetailContract;
@@ -70,6 +74,8 @@ import java.util.concurrent.TimeUnit;
 @Router(value=Constant.Router.RETENTION_VIEW,viewCode = "retentionEdit")
 public class RetentionDetainActivity extends BaseRefreshActivity implements RetentionDetailContract.View {
 
+    @BindByTag("leftBtn")
+    ImageButton leftBtn;
     @BindByTag("titleText")
     TextView titleText;
     @BindByTag("sampleTv")
@@ -109,6 +115,8 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     RecordAdapter adapter;
     @BindByTag("customWorkFlowView")
     CustomWorkFlowView customWorkFlowView;
+    @BindByTag("ll_record_view")
+    LinearLayout ll_record_view;
 
     @Override
     protected int getLayoutID() {
@@ -117,6 +125,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
 
     RetentionEntity retentionEntity;
     PendingEntity pendingEntity;
+
 
     @Override
     protected void onInit() {
@@ -145,6 +154,11 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         refreshController.setPullDownRefreshEnabled(false);
         refreshController.setAutoPullDownRefresh(true);
 
+        RxView.clicks(leftBtn)
+                .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    back();
+                });
         RxView.clicks(imageUpDown)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
@@ -160,7 +174,6 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                     }
                 });
         refreshController.setOnRefreshListener(() -> {
-
             if (retentionEntity != null && pendingEntity == null) {
                 pendingEntity = retentionEntity.pending;
                 presenterRouter.create(RetentionDetailAPI.class).getRetentionDetailById(retentionEntity.id, null);
@@ -170,6 +183,22 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
             initPending();
         });
 
+        RxView.clicks(ll_record_view)
+                .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(o->{
+                        if (adapter.selectPosition<0)
+                            ToastUtils.show(context,"请选择一行记录进行查看");
+                        else {
+                            RecordEntity recordEntity=adapter.getItem(adapter.selectPosition);
+                            if (!recordEntity.isStateObserved())
+                                ToastUtils.show(context,"状态非已观察，不允许查看！");
+                            else{
+                                Bundle bundle=new Bundle();
+                                bundle.putLong("id",recordEntity.id);
+                                IntentRouter.go(context,Constant.Router.RETENTION_VIEW_RECORD,bundle);
+                            }
+                        }
+                    });
         customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {

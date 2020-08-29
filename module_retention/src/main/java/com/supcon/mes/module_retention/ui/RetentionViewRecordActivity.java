@@ -1,6 +1,11 @@
 package com.supcon.mes.module_retention.ui;
 
 import android.content.Intent;
+import android.graphics.Rect;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -10,7 +15,9 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.constant.Constant;
@@ -38,9 +45,10 @@ public class RetentionViewRecordActivity extends BaseRefreshRecyclerActivity<Rec
     ImageButton leftBtn;
     @BindByTag("titleText")
     TextView titleText;
+    @BindByTag("contentView")
+    RecyclerView contentView;
     RetentionViewRecordAdapter adapter;
     Long id;
-    String dataDg;
 
     @Override
     protected IListAdapter<RecordViewEntity> createAdapter() {
@@ -57,7 +65,6 @@ public class RetentionViewRecordActivity extends BaseRefreshRecyclerActivity<Rec
         super.onInit();
         Intent intent=getIntent();
         id=intent.getLongExtra("id",0);
-        dataDg=intent.getStringExtra("dataDg");
     }
 
     @Override
@@ -65,9 +72,22 @@ public class RetentionViewRecordActivity extends BaseRefreshRecyclerActivity<Rec
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this,R.color.themeColor);
         titleText.setText(R.string.lims_retention_view_record);
-        refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(false);
+        refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+        contentView.setLayoutManager(new LinearLayoutManager(context));
+        contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int childLayoutPosition = parent.getChildAdapterPosition(view);
+                if (childLayoutPosition == 0) {
+                    outRect.set(DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
+                } else {
+                    outRect.set(DisplayUtil.dip2px(12, context), 0, DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
+                }
+            }
+        });
     }
 
     @Override
@@ -82,17 +102,16 @@ public class RetentionViewRecordActivity extends BaseRefreshRecyclerActivity<Rec
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(RetentionRecordAPI.class).getRetentionRecode("data-"+dataDg,"LIMSRetain_5.0.4.1_retention_retRecordView"+dataDg,id);
+                presenterRouter.create(RetentionRecordAPI.class).getRetentionRecode(id);
             }
         });
+
     }
 
     @Override
     public void getRetentionRecodeSuccess(CommonBAP5ListEntity entity) {
-        if (entity.data!=null)
-            refreshListController.refreshComplete(entity.data.result);
-        else
-            refreshListController.refreshComplete();
+        refreshListController.refreshComplete(entity.data.result);
+
     }
 
     @Override

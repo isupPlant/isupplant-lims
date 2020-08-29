@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.controller;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.app.annotation.Presenter;
@@ -54,6 +55,8 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
         paramsMap.put("dealMode",submitEntity.getDealMode());
         paramsMap.put("sampleId",submitEntity.getSampleId());
         paramsMap.put("sampleComListJson",submitEntity.getSampleComListJson());
+        paramsMap.put("signatureInfo","");
+        Log.i("sampleComListJson",submitEntity.getSampleComListJson().toString());
         if (type==2){
             paramsMap.put("sampleTestId",submitEntity.getSampleTestId());
             paramsMap.put("testDeviceListJson",submitEntity.getTestDeviceListJson());
@@ -66,10 +69,10 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
             activity.onLoading("正在保存，请稍后...");
             presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
         }else if ("submit".equals(submitEntity.getDealMode())){
-            if (checkSubmit(submitEntity.getSampleComListJson())) {
-                activity.onLoading("正在提交，请稍后...");
-                presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
-            }
+//            if (checkSubmit(submitEntity.getSampleComListJson())) {
+//                activity.onLoading("正在提交，请稍后...");
+//                presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
+//            }
         }
 
     }

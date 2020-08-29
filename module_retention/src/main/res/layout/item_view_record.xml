@@ -63,6 +63,8 @@
             app:key="@string/lims_memo"
             app:key_color="@color/c_scan_666"
             app:key_width="@dimen/dp_100"
-            app:key_size="14" />
+            app:key_size="14"
+            app:max_lines="2"
+            />
     </LinearLayout>
 </LinearLayout>
