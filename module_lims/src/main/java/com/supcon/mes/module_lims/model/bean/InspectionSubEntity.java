@@ -44,6 +44,7 @@ public class InspectionSubEntity extends BaseEntity {
     private String minValue;
     private String recordOriginValue;
     private String recordDispValue;
+    private String optionNames;
     private boolean conclusionState = true;  //结论状态，作用于 不合格为红色分项/合格为正常分项
     private boolean isOpen = false; //是否展开子项
     private String fileUploadMultiFileIcons;//附件类型
@@ -361,5 +362,13 @@ public class InspectionSubEntity extends BaseEntity {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getOptionNames() {
+        return optionNames;
+    }
+
+    public void setOptionNames(String optionNames) {
+        this.optionNames = optionNames;
     }
 }

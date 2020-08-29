@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -31,6 +31,9 @@
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctNumber"
             app:content_color="@color/font_333333"
+            app:key_color="@color/font_666666"
+            app:key_size="13"
+            app:content_size="15"
             app:editable="false"
             app:gravity="right|center_vertical"
             app:key="编号" />
@@ -42,13 +45,13 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_inspection_department" />
+            android:src="@drawable/ic_materiel" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ctMateriel"
@@ -57,6 +60,9 @@
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctMateriel"
             app:content_color="@color/font_333333"
+            app:key_color="@color/font_666666"
+            app:key_size="13"
+            app:content_size="15"
             app:editable="false"
             app:gravity="right|center_vertical"
             app:key="物料" />
@@ -68,8 +74,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -83,6 +89,9 @@
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ceBatchNumber"
             app:edit_hint="请输入批号"
+            app:text_color="@color/font_333333"
+            app:key_size="13"
+            app:content_size="15"
             app:gravity="right|center_vertical"
             app:key="批号" />
 
@@ -93,8 +102,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -108,6 +117,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ceConsumption"
+            app:text_color="@color/font_333333"
+            app:key_size="13"
+            app:content_size="15"
             app:edit_hint="请输入用量"
             app:gravity="right|center_vertical"
             app:key="用量" />

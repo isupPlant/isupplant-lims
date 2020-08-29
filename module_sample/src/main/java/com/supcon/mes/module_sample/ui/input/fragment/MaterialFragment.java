@@ -94,7 +94,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
                 super.getItemOffsets(outRect, view, parent, state);
                 int childLayoutPosition = parent.getChildAdapterPosition(view);
                 if (childLayoutPosition == 0) {
-                    outRect.set(DisplayUtil.dip2px(12, context), 0, DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
+                    outRect.set(DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
                 } else {
                     outRect.set(DisplayUtil.dip2px(12, context), 0, DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
                 }

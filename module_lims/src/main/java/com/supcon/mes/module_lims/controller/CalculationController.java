@@ -524,7 +524,7 @@ public class CalculationController extends BaseViewController {
         for (int i = 0; i < sampleComDgData.size(); i++) {
             if (sampleComDgData.get(i).getValueKind().getId().equals("LIMSBasic_valueKind/calculate")) {
                 String paramNameArr = sampleComDgData.get(i).getCalculateParamNames();
-                if (paramNameArr.contains(sampleCom.getComName())) {
+                if (!StringUtil.isEmpty(paramNameArr) && paramNameArr.contains(sampleCom.getComName())) {
                     return true;
                 }
             }

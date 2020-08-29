@@ -11,57 +11,126 @@
     android:tag="item"
     android:translationZ="2dp">
 
-    <com.supcon.mes.mbap.view.CustomTextView
-        android:id="@+id/ctDeviceType"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dp_12"
-        android:paddingEnd="@dimen/dp_12"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
-        android:tag="ctDeviceType"
-        app:content_color="@color/font_333333"
-        app:content_hint="请选择设备类型"
-        app:editable="true"
-        app:gravity="right|center_vertical"
-        app:key="设备类型" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_materiel" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctDeviceType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="ctDeviceType"
+            app:content_color="@color/font_333333"
+            app:content_hint="请选择设备类型"
+            app:content_size="15"
+            app:editable="true"
+            app:gravity="right|center_vertical"
+            app:key="设备类型"
+            app:key_color="@color/font_666666"
+            app:key_size="13" />
+
+    </LinearLayout>
 
 
-    <com.supcon.mes.mbap.view.CustomTextView
-        android:id="@+id/ctDeviceCode"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dp_12"
-        android:paddingEnd="@dimen/dp_12"
-        android:tag="ctDeviceCode"
-        app:content_color="@color/font_333333"
-        app:content_hint="请选择设备编码"
-        app:editable="true"
-        app:gravity="right|center_vertical"
-        app:key="设备编码" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
-    <com.supcon.mes.mbap.view.CustomTextView
-        android:id="@+id/ctDeviceName"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_materiel" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctDeviceCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="ctDeviceCode"
+            app:content_color="@color/font_333333"
+            app:content_hint="请选择设备编码"
+            app:content_size="15"
+            app:editable="true"
+            app:gravity="right|center_vertical"
+            app:key="设备编码"
+            app:key_color="@color/font_666666"
+            app:key_size="13" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dp_12"
-        android:paddingEnd="@dimen/dp_12"
-        android:tag="ctDeviceName"
-        app:content_color="@color/font_333333"
-        app:editable="false"
-        app:gravity="right|center_vertical"
-        app:key="设备名称" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
-    <com.supcon.mes.mbap.view.CustomTextView
-        android:id="@+id/ctDeviceState"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_materiel" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctDeviceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="ctDeviceName"
+            app:content_color="@color/font_333333"
+            app:content_size="15"
+            app:editable="false"
+            app:gravity="right|center_vertical"
+            app:key="设备名称"
+            app:key_color="@color/font_666666"
+            app:key_size="13" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dp_12"
-        android:paddingEnd="@dimen/dp_12"
-        android:tag="ctDeviceState"
-        app:content_color="@color/font_333333"
-        app:editable="false"
-        app:gravity="right|center_vertical"
-        app:key="设备状态" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_materiel" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctDeviceState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="ctDeviceState"
+            app:content_color="@color/font_333333"
+            app:content_size="15"
+            app:editable="false"
+            app:gravity="right|center_vertical"
+            app:key="设备状态"
+            app:key_color="@color/font_666666"
+            app:key_size="13" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

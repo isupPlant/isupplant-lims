@@ -54,6 +54,12 @@ public class InspectionItemsListAdapter extends BaseListDataRecyclerViewAdapter<
         }
 
         @Override
+        protected void initView() {
+            super.initView();
+            tvInspectionItems.contentView().setSingleLine(true);
+        }
+
+        @Override
         protected void initListener() {
             super.initListener();
             item.setOnClickListener(v -> onItemChildViewClick(v,0));

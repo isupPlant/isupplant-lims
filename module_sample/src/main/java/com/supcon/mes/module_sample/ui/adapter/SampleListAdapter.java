@@ -3,6 +3,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -31,8 +32,8 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
 
         @BindByTag("item")
         LinearLayout item;
-        @BindByTag("ctSample")
-        CustomTextView ctSample;
+        @BindByTag("tvSample")
+        TextView tvSample;
         @BindByTag("ctMateriel")
         CustomTextView ctMateriel;
         @BindByTag("ctBatchNumber")
@@ -41,8 +42,8 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
         CustomTextView ctSampleSeparationType;
         @BindByTag("ctSamplingPoint")
         CustomTextView ctSamplingPoint;
-        @BindByTag("ctSampleType")
-        CustomTextView ctSampleType;
+        @BindByTag("tvSampleType")
+        TextView tvSampleType;
         @BindByTag("ctRegisterTime")
         CustomTextView ctRegisterTime;
 
@@ -65,18 +66,22 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
         protected void update(SampleEntity data) {
             //样品名称 & 样品编码
             if (!StringUtil.isEmpty(data.getName()) && !StringUtil.isEmpty(data.getCode())){
-                ctSample.setContent(data.getName()+"("+data.getCode()+")");
+                tvSample.setText(data.getName()+"("+data.getCode()+")");
             }else {
                 if (StringUtil.isEmpty(data.getName()) && StringUtil.isEmpty(data.getCode())){
-                    ctSample.setContent("--");
+                    tvSample.setText("--");
                 }else {
                     if (StringUtil.isEmpty(data.getName())){
-                        ctSample.setContent(data.getCode());
+                        tvSample.setText(data.getCode());
                     }else {
-                        ctSample.setContent(data.getName());
+                        tvSample.setText(data.getName());
                     }
                 }
             }
+
+            tvSampleType.setText(null == data.getSampleType() ? "--" :
+                    StringUtil.isEmpty(data.getSampleType().getValue()) ? "--" : data.getSampleType().getValue());
+
 
             //物料名称 & 物料编码
             if (null != data.getProductId()){
@@ -108,9 +113,9 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
             ctSamplingPoint.setContent(null == data.getPsId() ? "--" :
                     StringUtil.isEmpty(data.getPsId().getName()) ? "--" : data.getPsId().getName());
 
-            //样品类型
-            ctSampleType.setContent(null == data.getSampleType() ? "--" :
-                    StringUtil.isEmpty(data.getSampleType().getValue()) ? "--" : data.getSampleType().getValue());
+//            //样品类型
+//            ctSampleType.setContent(null == data.getSampleType() ? "--" :
+//                    StringUtil.isEmpty(data.getSampleType().getValue()) ? "--" : data.getSampleType().getValue());
 
             //登记时间
             ctRegisterTime.setContent(StringUtil.isEmpty(data.getRegisterTime()) ? "--" : data.getRegisterTime());
