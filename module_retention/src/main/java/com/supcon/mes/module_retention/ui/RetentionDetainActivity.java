@@ -117,6 +117,10 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     CustomWorkFlowView customWorkFlowView;
     @BindByTag("ll_record_view")
     LinearLayout ll_record_view;
+    @BindByTag("observePlanTv")
+    TextView observePlanTv;
+    @BindByTag("observePlanImg")
+    ImageView observePlanImg;
 
     @Override
     protected int getLayoutID() {
@@ -229,6 +233,10 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                 customWorkFlowView.setVisibility(View.VISIBLE);
                 getController(GetPowerCodeController.class).initPowerCode(pendingEntity.activityName);
                 getController(WorkFlowViewController.class).initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
+            }else if (pendingEntity.openUrl.contains("retentionEdit")){
+                observePlanTv.setText(R.string.lims_observer_plan);
+                observePlanImg.setVisibility(View.GONE);
+                adapter.edit=true;
             }
         }
     }
@@ -256,7 +264,6 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     }
 
     private void doSave(WorkFlowVar workFlowVar) {
-
         onLoading("留单保存中...");
         RetentionSubmitEntity entity = new RetentionSubmitEntity();
         JsonObject jsonObject = new JsonObject();
@@ -311,8 +318,9 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     }
     @Override
     public void getRetentionDetailByIdSuccess(RetentionEntity entity) {
+        if (retentionEntity==null)
+            pendingEntity=entity.pending;
         retentionEntity = entity;
-
         setRetentionEntity();
     }
 

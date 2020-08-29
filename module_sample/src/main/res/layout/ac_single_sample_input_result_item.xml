@@ -8,5 +8,80 @@
 
     <include layout="@layout/ly_titlebar"></include>
 
-    <include layout="@layout/ly_recyclerview" />
+    <LinearLayout
+        android:id="@+id/ll_fragment"
+        android:tag="ll_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        />
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:tag="rl_save">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:background="@drawable/shape_save_button"
+                android:gravity="center"
+                android:text="保存"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:tag="rl_submit">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:background="@drawable/shape_submit_button"
+                android:gravity="center"
+                android:text="提交"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_calculation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:tag="rl_calculation">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:background="@drawable/shape_save_button"
+                android:gravity="center"
+                android:text="计算"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
 </LinearLayout>

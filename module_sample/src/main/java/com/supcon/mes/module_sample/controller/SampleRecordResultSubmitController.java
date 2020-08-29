@@ -13,6 +13,7 @@ import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.custom.EnsureDialog;
 import com.supcon.mes.module_sample.model.api.SampleRecordResultSubmitAPI;
@@ -41,6 +42,15 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
     Map<String,Object> paramsMap=new HashMap<>();
     private BaseFragmentActivity activity;
     EnsureDialog ensureDialog;
+    OnSuccessListener<Integer> submitOnSuccessListener;
+
+    public OnSuccessListener<Integer> getSubmitOnSuccessListener() {
+        return submitOnSuccessListener;
+    }
+
+    public void setSubmitOnSuccessListener(OnSuccessListener<Integer> submitOnSuccessListener) {
+        this.submitOnSuccessListener = submitOnSuccessListener;
+    }
 
     /**
      *
@@ -114,8 +124,13 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
             @Override
             public void onLoaderFinished() {
                 if ("submit".equals(paramsMap.get("dealMode"))){
-                    EventBus.getDefault().post(new RefreshEvent());
-                    activity.back();
+                    if (submitOnSuccessListener!=null){
+                        submitOnSuccessListener.onSuccess(2);
+                    }
+                }else {
+                    if (submitOnSuccessListener!=null){
+                        submitOnSuccessListener.onSuccess(1);
+                    }
                 }
             }
         });

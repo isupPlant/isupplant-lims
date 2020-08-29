@@ -88,5 +88,6 @@
     <string name="lims_observeResult">ObserveResult</string>
     <string name="lims_memo">Remarks</string>
     <string name="lims_retention_view_record">Retention observe record</string>
+    <string name="lims_observer_plan">Observe plan</string>
 
 </resources>

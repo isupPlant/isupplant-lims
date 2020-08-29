@@ -1,6 +1,7 @@
 package com.supcon.mes.module_retention.ui.adapter;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.app.annotation.BindByTag;
@@ -28,6 +29,7 @@ public class RecordAdapter extends BaseListDataRecyclerViewAdapter<RecordEntity>
         return new RecordViewHolder(context);
     }
     public int selectPosition=-1;
+    public boolean edit=false;
     class RecordViewHolder extends BaseRecyclerViewHolder<RecordEntity>{
 
         @BindByTag("planDateTv")
@@ -38,6 +40,10 @@ public class RecordAdapter extends BaseListDataRecyclerViewAdapter<RecordEntity>
         CustomTextView stateTv;
         @BindByTag("ll_item")
         LinearLayout ll_item;
+        @BindByTag("ll_real")
+        LinearLayout ll_real;
+        @BindByTag("ll_state")
+        LinearLayout ll_state;
         public RecordViewHolder(Context context) {
             super(context);
         }
@@ -55,23 +61,31 @@ public class RecordAdapter extends BaseListDataRecyclerViewAdapter<RecordEntity>
         @Override
         protected void initListener() {
             super.initListener();
-            RxView.clicks(itemView)
-                    .throttleFirst(2000, TimeUnit.MILLISECONDS)
-                    .subscribe(o -> {
-                        selectPosition=getAdapterPosition();
-                        notifyDataSetChanged();
-                    });
+            if (!edit) {
+                RxView.clicks(itemView)
+                        .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                        .subscribe(o -> {
+                            selectPosition = getAdapterPosition();
+                            notifyDataSetChanged();
+                        });
+            }
         }
 
         @Override
         protected void update(RecordEntity data) {
             planDateTv.setValue(data.planDate!=null? DateUtil.dateFormat(data.planDate):"");
-            realDateTv.setValue(data.realDate!=null?DateUtil.dateFormat(data.realDate):"");
-            stateTv.setValue(data.retPlanState!=null?data.retPlanState.getValue():"");
-            if (getAdapterPosition()==selectPosition)
-                ll_item.setBackground(context.getResources().getDrawable(R.drawable.bg_record));
-            else
-                ll_item.setBackgroundColor(context.getResources().getColor(R.color.white));
+            if (edit) {
+                ll_real.setVisibility(View.GONE);
+                ll_state.setVisibility(View.GONE);
+            }
+            else  {
+                realDateTv.setValue(data.realDate != null ? DateUtil.dateFormat(data.realDate) : "");
+                stateTv.setValue(data.retPlanState != null ? data.retPlanState.getValue() : "");
+                if (getAdapterPosition() == selectPosition)
+                    ll_item.setBackground(context.getResources().getDrawable(R.drawable.bg_record));
+                else
+                    ll_item.setBackgroundColor(context.getResources().getColor(R.color.white));
+            }
         }
     }
 }
