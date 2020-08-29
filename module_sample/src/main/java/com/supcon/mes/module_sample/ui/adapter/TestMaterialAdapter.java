@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -57,6 +58,14 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
         @Override
         protected int layoutId() {
             return R.layout.item_test_mateial;
+        }
+
+        @Override
+        protected void initView() {
+            super.initView();
+            ctMateriel.contentView().setSingleLine(true);
+            ceBatchNumber.setKeyTextColor(Color.parseColor("#666666"));
+            ceConsumption.setKeyTextColor(Color.parseColor("#666666"));
         }
 
         @SuppressLint("CheckResult")

@@ -9,48 +9,56 @@
     android:tag="item"
     android:translationZ="2dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_35"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_16">
 
-        <ImageView
+        <TextView
+            android:id="@+id/tvSample"
+            android:tag="tvSample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_goods" />
+            android:textStyle="bold"
+            android:textSize="@dimen/fontSize_15sp"
+            android:textColor="@color/font_333333"/>
 
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/ctSample"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvSampleType"
+            android:tag="tvSampleType"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_9"
-            android:tag="ctSample"
-            app:content_color="@color/fontBlack333"
-            app:content_size="15"
-            app:gravity="center|center_vertical"
-            app:key="@string/lims_sample"
-            app:key_color="@color/c_scan_666"
-            app:key_size="13" />
+            android:textColor="@color/font_333333"
+            android:textStyle="bold"
+            android:textSize="@dimen/fontSize_15sp"/>
+
+    </RelativeLayout>
 
 
-    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16"
         >
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_inspection_department" />
+            android:src="@drawable/ic_materiel" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ctMateriel"
@@ -58,11 +66,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctMateriel"
-            app:content_color="@color/fontBlack333"
+            app:content_color="@color/font_333333"
             app:content_size="15"
             app:gravity="center|center_vertical"
             app:key="@string/lims_goods"
-            app:key_color="@color/c_scan_666"
+            app:key_color="@color/font_666666"
             app:key_size="13" />
 
 
@@ -73,8 +81,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -87,11 +95,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctBatchNumber"
-            app:content_color="@color/fontBlack333"
+            app:content_color="@color/font_333333"
             app:content_size="15"
             app:gravity="center|center_vertical"
             app:key="@string/lims_batch_number"
-            app:key_color="@color/c_scan_666"
+            app:key_color="@color/font_666666"
             app:key_size="13" />
 
 
@@ -102,13 +110,13 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_examiner" />
+            android:src="@drawable/ic_check_num" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ctSampleSeparationType"
@@ -116,11 +124,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctSampleSeparationType"
-            app:content_color="@color/fontBlack333"
+            app:content_color="@color/font_333333"
             app:content_size="15"
             app:gravity="center|center_vertical"
             app:key="@string/lims_sample_separation_type"
-            app:key_color="@color/c_scan_666"
+            app:key_color="@color/font_666666"
             app:key_size="13" />
 
 
@@ -132,13 +140,13 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_check_time" />
+            android:src="@drawable/ic_sampling_point_green" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ctSamplingPoint"
@@ -150,48 +158,48 @@
             app:content_size="15"
             app:gravity="center|center_vertical"
             app:key="@string/lims_sampling_point"
-            app:key_color="@color/c_scan_666"
+            app:key_color="@color/font_666666"
             app:key_size="13" />
 
 
     </LinearLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:paddingLeft="@dimen/dp_12"-->
+<!--        android:paddingRight="@dimen/dp_12">-->
+
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_check_time" />-->
+
+<!--        <com.supcon.mes.mbap.view.CustomTextView-->
+<!--            android:id="@+id/ctSampleType"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="@dimen/dp_9"-->
+<!--            android:tag="ctSampleType"-->
+<!--            app:content_color="@color/fontBlack333"-->
+<!--            app:content_size="15"-->
+<!--            app:gravity="center|center_vertical"-->
+<!--            app:key="@string/lims_sample_type"-->
+<!--            app:key_color="@color/c_scan_666"-->
+<!--            app:key_size="13" />-->
+
+
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_check_time" />
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/ctSampleType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_9"
-            android:tag="ctSampleType"
-            app:content_color="@color/fontBlack333"
-            app:content_size="15"
-            app:gravity="center|center_vertical"
-            app:key="@string/lims_sample_type"
-            app:key_color="@color/c_scan_666"
-            app:key_size="13" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -204,11 +212,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctRegisterTime"
-            app:content_color="@color/fontBlack333"
+            app:content_color="@color/font_333333"
             app:content_size="15"
             app:gravity="center|center_vertical"
             app:key="@string/lims_registration_time"
-            app:key_color="@color/c_scan_666"
+            app:key_color="@color/font_666666"
             app:key_size="13" />
 
 

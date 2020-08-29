@@ -1,84 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     >
 
     <LinearLayout
-        android:id="@+id/item"
-        android:tag="item"
-        android:padding="@dimen/dp_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:translationZ="2dp">
 
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/ctInspectionItems"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:tag="ctInspectionItems"
-            app:content_color="@color/fontBlack333"
-            app:content_size="15"
-            app:content_value=""
-            app:gravity="right|center_vertical"
-            app:key="@string/lims_inspection_item"
-            app:key_color="@color/c_scan_666"
-            app:key_size="13" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
 
-        <com.supcon.mes.mbap.view.CustomEditText
-            android:id="@+id/ceOriginalValue"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:tag="ceOriginalValue"
-            app:content_size="15"
-            app:edit_hint="请输入原始值"
-            app:edit_hint_color="#A9A9A9"
-            app:gravity="right|center_vertical"
-            app:key="原始值"
-            app:key_size="13"
-            app:text_color="@color/c_scan_666" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_testing" />
 
-        <com.supcon.mes.mbap.view.CustomSpinner
-            android:id="@+id/cpOriginalValue"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:tag="cpOriginalValue"
-            app:content_hint="请选择原始值"
-            app:gravity="right|center_vertical"
-            app:key="原始值"
-            app:key_size="13"
-            app:text_color="@color/font_333333" />
 
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/ctRoundOffValue"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:tag="ctRoundOffValue"
-            app:content_color="@color/font_333333"
-            app:editable="false"
-            app:gravity="right|center_vertical"
-            app:key="修约值"
-            app:key_size="13" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctInspectionItems"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="ctInspectionItems"
+                app:content_color="@color/font_333333"
+                app:content_size="15"
+                app:gravity="right|center_vertical"
+                app:key="@string/lims_inspection_item"
+                app:key_color="@color/font_666666"
+                app:key_size="13" />
+        </LinearLayout>
 
-        <com.supcon.mes.mbap.view.CustomEditText
-            android:id="@+id/ceReportedValue"
+
+        <LinearLayout
+            android:id="@+id/llCeOriginalValue"
+            android:tag="llCeOriginalValue"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:tag="ceReportedValue"
-            app:content_size="15"
-            app:edit_hint="请输入报出值"
-            app:edit_hint_color="#A9A9A9"
-            app:gravity="right|center_vertical"
-            app:key="报出值"
-            app:key_size="13"
-            app:text_color="@color/c_scan_666" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_original" />
+
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:id="@+id/ceOriginalValue"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="ceOriginalValue"
+                app:content_size="15"
+                app:edit_hint="请输入原始值"
+                app:edit_hint_color="#A9A9A9"
+                app:gravity="right|center_vertical"
+                app:key="原始值"
+                app:key_size="13"
+                app:text_color="@color/font_333333" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llCpOriginalValue"
+            android:tag="llCpOriginalValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_original" />
+
+
+            <com.supcon.mes.mbap.view.CustomSpinner
+                android:id="@+id/cpOriginalValue"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="cpOriginalValue"
+                app:content_hint="请选择原始值"
+                app:gravity="right|center_vertical"
+                app:key="原始值"
+                app:key_size="13"
+                app:text_color="@color/font_333333" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_modify" />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctRoundOffValue"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="ctRoundOffValue"
+                app:content_color="@color/font_333333"
+                app:editable="false"
+                app:gravity="right|center_vertical"
+                app:key="修约值"
+                app:key_size="13"
+                app:key_color="@color/font_666666"
+                app:content_size="15"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_report" />
+
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:id="@+id/ceReportedValue"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:layout_height="@dimen/dp_35"
+                android:tag="ceReportedValue"
+                app:content_size="15"
+                app:edit_hint="请输入报出值"
+                app:edit_hint_color="#A9A9A9"
+                app:gravity="right|center_vertical"
+                app:key="报出值"
+                app:key_size="13"
+                app:text_color="@color/font_333333" />
+
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,14 +214,12 @@
                     android:text="附件" />
 
                 <ImageView
-                    android:id="@+id/imageUpDown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_5"
-                    android:src="@drawable/ic_drop_down"
-                    android:tag="imageUpDown" />
+                    android:src="@drawable/ic_drop_down" />
             </LinearLayout>
 
         </LinearLayout>

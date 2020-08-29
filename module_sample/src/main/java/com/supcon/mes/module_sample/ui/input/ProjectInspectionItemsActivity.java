@@ -105,7 +105,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
         searchTitle.showScan(false);
         ivProject = searchTitle.findViewById(R.id.ivSearchBtn);
-        ivProject.setImageResource(R.drawable.ic_address);
+        ivProject.setImageResource(R.drawable.ic_lims_template);
         searchTitle.setTitle("");
         leftBtn.setOnClickListener(v -> onBackPressed());
 

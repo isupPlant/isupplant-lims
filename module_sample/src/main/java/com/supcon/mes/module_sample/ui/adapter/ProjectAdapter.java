@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -17,7 +18,10 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.view.picker.SinglePicker;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -26,6 +30,7 @@ import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -49,9 +54,14 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
     private boolean originalFocus;
     private boolean dispValueFocus;
 
+    private SinglePickController mSinglePickController;
+
 
     public ProjectAdapter(Context context) {
         super(context);
+        mSinglePickController = new SinglePickController((Activity) context);
+        mSinglePickController.setCanceledOnTouchOutside(true);
+        mSinglePickController.setDividerVisible(true);
     }
 
     @Override
@@ -75,14 +85,16 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         ImageView ivExpand;
         @BindByTag("llQualityStandard")
         LinearLayout llQualityStandard;
-        @BindByTag("imageUpDown")
-        ImageView imageUpDown;
         @BindByTag("llEnclosure")
         LinearLayout llEnclosure;
         @BindByTag("rvConclusion")
         RecyclerView rvConclusion;
-        @BindByTag("item")
-        LinearLayout item;
+        @BindByTag("llCeOriginalValue")
+        LinearLayout llCeOriginalValue;
+        @BindByTag("llCpOriginalValue")
+        LinearLayout llCpOriginalValue;
+
+
 
         public ViewHolder(Context context) {
             super(context);
@@ -104,15 +116,26 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                     super.getItemOffsets(outRect, view, parent, state);
                     int childLayoutPosition = parent.getChildAdapterPosition(view);
-                    if (childLayoutPosition == 0) {
-                        outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
-                    } else if(childLayoutPosition == conclusionAdapter.getItemCount()-1){
-                        outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
-                    } else {
-                        outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+
+                        if (childLayoutPosition == 0 && childLayoutPosition == conclusionAdapter.getItemCount()-1) {
+                            outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
+                        } else {
+                            if (childLayoutPosition == 0){
+                                outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                            }else if(childLayoutPosition == conclusionAdapter.getItemCount()-1){
+                                outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
+                            } else {
+                                outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                            }
+                        }
                     }
-                }
+
             });
+
+            ceOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
+            cpOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
+            ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
+
         }
 
         @SuppressLint("CheckResult")
@@ -160,6 +183,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     }
             });
 
+
+
             //报出值数值变化监听
             RxTextView.textChanges(ceReportedValue.editText())
                     .skipInitialValue()
@@ -183,6 +208,26 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 }
             });
 
+            //枚举原始值改变时的监听
+            cpOriginalValue.setOnChildViewClickListener(new OnChildViewClickListener() {
+                @Override
+                public void onChildViewClick(View childView, int action, Object obj) {
+                    String[] split = getList().get(getAdapterPosition()).getOptionNames().split(",");
+                    List<String> list = Arrays.asList(split);
+                    mSinglePickController.list(list)
+                            .listener(new SinglePicker.OnItemPickListener() {
+                                @Override
+                                public void onItemPicked(int index, Object item) {
+                                    getItem(getAdapterPosition()).setOriginValue(list.get(index));
+                                    notifyItemChanged(getAdapterPosition());
+                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
+                                        mOriginalValueChangeListener.originalValueChange(false,getItem(getAdapterPosition()).getOriginValue(),getAdapterPosition());
+                                    }
+                                }
+                            }).show();
+                }
+            });
+
         }
 
         @Override
@@ -195,6 +240,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 if (!StringUtil.isEmpty(data.getValueKind().getValue())){ // 值类型不为空
                     if (data.getValueKind().getValue().equals("枚举")){
                         setVisible(false);
+                        cpOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                     }else if (data.getValueKind().getValue().equals("计算")){
                         setVisible(true);
                         ceOriginalValue.setEditable(false);
@@ -251,11 +297,11 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 
         private void setVisible(boolean visible){
             if (visible){
-                ceOriginalValue.setVisibility(View.VISIBLE);
-                cpOriginalValue.setVisibility(View.GONE);
+                llCeOriginalValue.setVisibility(View.VISIBLE);
+                llCpOriginalValue.setVisibility(View.GONE);
             }else {
-                ceOriginalValue.setVisibility(View.GONE);
-                cpOriginalValue.setVisibility(View.VISIBLE);
+                llCeOriginalValue.setVisibility(View.GONE);
+                llCpOriginalValue.setVisibility(View.VISIBLE);
             }
         }
     }
