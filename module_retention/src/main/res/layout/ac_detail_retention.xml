@@ -258,6 +258,8 @@
                         android:background="#009AFC" />
 
                     <TextView
+                        android:id="@+id/observePlanTv"
+                        android:tag="observePlanTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_5"
@@ -267,6 +269,8 @@
                         />
 
                     <ImageView
+                        android:id="@+id/observePlanImg"
+                        android:tag="observePlanImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_5"

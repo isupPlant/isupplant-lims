@@ -1,12 +1,17 @@
 package com.supcon.mes.module_sample.presenter;
 
+import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
 import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.contract.SingleSampleResultInputContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by wanghaidong on 2020/8/14
@@ -18,42 +23,43 @@ public class SingleSampleResultInputPresenter extends SingleSampleResultInputCon
         mCompositeSubscription.add(
                 SampleHttpClient
                         .getSampleCom(id)
-                        .onErrorReturn(error->{
-                            CommonBAP5ListEntity commonBAP5ListEntity=new CommonBAP5ListEntity();
-                            commonBAP5ListEntity.msg=error.getMessage();
-                            commonBAP5ListEntity.success=false;
-                            return commonBAP5ListEntity;
+                        .onErrorReturn(error -> {
+                            CommonBAP5ListEntity bap5ListEntity = new CommonBAP5ListEntity();
+                            bap5ListEntity.success = false;
+                            bap5ListEntity.msg = error.getMessage();
+                            return bap5ListEntity;
                         })
-                       .subscribe(new Consumer<CommonBAP5ListEntity<SampleInspectItemEntity>>() {
-                           @Override
-                           public void accept(CommonBAP5ListEntity<SampleInspectItemEntity> sampleInspectListEntity) throws Exception {
-                               if (sampleInspectListEntity.success){
-                                   getView().getSampleComSuccess(sampleInspectListEntity);
-                               }else {
-                                   getView().getSampleComFailed(sampleInspectListEntity.msg);
-                               }
-                           }
-                       })
-        );
+                        .subscribe(new Consumer<CommonBAP5ListEntity<InspectionSubEntity>>() {
+                            @Override
+                            public void accept(CommonBAP5ListEntity<InspectionSubEntity> bAP5ListEntity) throws Exception {
+                                if (bAP5ListEntity.success) {
+                                    getView().getSampleComSuccess(bAP5ListEntity);
+                                } else {
+                                    getView().getSampleComFailed(bAP5ListEntity.msg);
+                                }
+                            }
+                        }));
+
+
     }
 
     @Override
     public void getSampleInspectItem(Long sampleId) {
         mCompositeSubscription.add(
                 SampleHttpClient.getSampleInspectItem(sampleId)
-                                .onErrorReturn(error->{
-                                    SingleInspectionItemListEntity entity=new SingleInspectionItemListEntity();
-                                    entity.msg=error.getMessage();
-                                    entity.success=false;
-                                    return entity;
-                                })
-                                .subscribe(singleInspectionItemListEntity -> {
-                                    if (singleInspectionItemListEntity.success){
-                                        getView().getSampleInspectItemSuccess(singleInspectionItemListEntity);
-                                    }else {
-                                        getView().getSampleInspectItemFailed(singleInspectionItemListEntity.msg);
-                                    }
-                                })
+                        .onErrorReturn(error -> {
+                            SingleInspectionItemListEntity entity = new SingleInspectionItemListEntity();
+                            entity.msg = error.getMessage();
+                            entity.success = false;
+                            return entity;
+                        })
+                        .subscribe(singleInspectionItemListEntity -> {
+                            if (singleInspectionItemListEntity.success) {
+                                getView().getSampleInspectItemSuccess(singleInspectionItemListEntity);
+                            } else {
+                                getView().getSampleInspectItemFailed(singleInspectionItemListEntity.msg);
+                            }
+                        })
         );
     }
 }

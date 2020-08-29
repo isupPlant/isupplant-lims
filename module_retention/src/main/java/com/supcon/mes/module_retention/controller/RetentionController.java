@@ -188,10 +188,7 @@ public class RetentionController extends BaseViewController {
             }
             cleanParams();
             switch (resultEntity.key) {
-                case "物料名称":
-                    params.put(Constant.BAPQuery.NAME, resultEntity.result);
-                    break;
-                case "物料编码":
+                case "样品编码":
                     params.put(Constant.BAPQuery.CODE, resultEntity.result);
                     break;
                 case "批号":
@@ -200,8 +197,17 @@ public class RetentionController extends BaseViewController {
                 case "单据编号":
                     params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
                     break;
-                case "检验申请":
-                    params.put("INSPECT_TABLE_NO", resultEntity.result);
+                case "物料名称":
+                    params.put("MATER_NAME",resultEntity.result);
+                    break;
+                case "物料编码":
+                    params.put("MATER_CODE",resultEntity.result);
+                    break;
+                case "采样点":
+                    params.put(Constant.BAPQuery.PICKSITE, resultEntity.result);
+                    break;
+                case "保管员":
+                    params.put(Constant.BAPQuery.STAFF_NAME,resultEntity.result);
                     break;
             }
             if (null != mOnSearchOverListener) {

@@ -27,8 +27,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -36,6 +38,7 @@ import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -54,77 +57,77 @@ import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.ui.view.AddFileListView;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.FileUtil;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_lims.utils.FileUtils;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
+import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
 import com.supcon.mes.module_sample.model.api.SingleSampleResultInputAPI;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
+import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.contract.SingleSampleResultInputContract;
 import com.supcon.mes.module_sample.presenter.SingleSampleResultInputPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SingleSampleInpectAdapter;
+import com.supcon.mes.module_sample.ui.input.fragment.SingleProjectFragment;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by wanghaidong on 2020/8/13
  * Email:wanghaidong1@supcon.com
  */
-@Presenter(value = {
-        SingleSampleResultInputPresenter.class,
-})
-@Controller(value = {
-        LimsFileUpLoadController.class
-})
+
+@Controller(value = SampleRecordResultSubmitController.class)
 @Router(Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM)
-public class SingleSampleResultInputItemActivity extends BaseRefreshRecyclerActivity<SampleInspectItemEntity> implements SingleSampleResultInputContract.View {
+public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
 
 
-    SingleSampleInpectAdapter adapter;
+
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
     TextView titleText;
-    @BindByTag("contentView")
-    RecyclerView contentView;
+
     SampleEntity sampleEntity;
-    String filePath;
-    SampleInspectItemEntity itemEntity;
+
+    @BindByTag("rl_save")
+    RelativeLayout rl_save;
+    @BindByTag("rl_submit")
+    RelativeLayout rl_submit;
+    @BindByTag("rl_calculation")
+    RelativeLayout rl_calculation;
     @Override
     protected int getLayoutID() {
         return R.layout.ac_single_sample_input_result_item;
     }
 
-    @Override
-    protected IListAdapter<SampleInspectItemEntity> createAdapter() {
-        return adapter = new SingleSampleInpectAdapter(context);
-    }
 
     @Override
     protected void onInit() {
         super.onInit();
         sampleEntity = (SampleEntity) getIntent().getSerializableExtra("sampleEntity");
     }
-
+    SingleProjectFragment fragment;
     @Override
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(R.string.lims_single_sample_result_input);
-        adapter.activity = this;
-        refreshListController.setAutoPullDownRefresh(true);
-        refreshListController.setPullDownRefreshEnabled(false);
-        contentView.setLayoutManager(new LinearLayoutManager(context));
-        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3, context)));
-        contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
-        contentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "没有数据", false));
-        contentView.setScrollBarSize(2);
+        fragment=new SingleProjectFragment();
+        Bundle bundle=new Bundle();
+        bundle.putLong("sampleId",sampleEntity.getId());
+        fragment.setArguments(bundle);
+        fragmentManager.beginTransaction().replace(R.id.ll_fragment,fragment).commit();
+
     }
 
     @Override
@@ -135,66 +138,30 @@ public class SingleSampleResultInputItemActivity extends BaseRefreshRecyclerActi
                 .subscribe(o -> {
                     back();
                 });
-        refreshListController.setOnRefreshListener(() -> {
-            presenterRouter.create(SingleSampleResultInputAPI.class).getSampleCom(sampleEntity.getId());
-            presenterRouter.create(SingleSampleResultInputAPI.class).getSampleInspectItem(sampleEntity.getId());
-        });
-        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-            @Override
-            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                itemEntity=adapter.getItem(position);
-                if (action == 1) {
-//                    getController(LimsFileUpLoadController.class).
-//                            showPopup(SingleSampleResultInputItemActivity.this)
-//                            .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
-//                        @Override
-//                        public void onSuccess(FileDataEntity fileDataEntity) {
-//                            filePath=fileDataEntity.getLocalPath();
-//                            itemEntity.setFileUploadMultiFileNames(fileDataEntity.getPath());
-//                            itemEntity.setFileUploadMultiFileIcons(fileDataEntity.getFileIcon());
-//                            itemEntity.setFilePath(filePath);
-//                        }
-//                    });
-                }else if (action==2){
-                    if (!TextUtils.isEmpty(itemEntity.getFilePath())){
-                        File file=new File(itemEntity.getFilePath());
-                        if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("file", file);
-                            IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
-                        }else {
-                            startActivity(Util.openFile(SingleSampleResultInputItemActivity.this,itemEntity.getFilePath()));
-                        }
-                    }else {
-                        ToastUtils.show(context,"没有可查看的文件");
+        RxView.clicks(rl_save)
+                .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();
+                        SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("save",sampleEntity.getId(),inspectionSubList);
+
                     }
-                }
-            }
-        });
-
-
-    }
-
-    @Override
-    public void getSampleComSuccess(CommonBAP5ListEntity entity) {
-        refreshListController.refreshComplete(entity.data.result);
-    }
-
-    @Override
-    public void getSampleComFailed(String errorMsg) {
-        ToastUtils.show(context, errorMsg);
-        refreshListController.refreshComplete();
-    }
-
-    @Override
-    public void getSampleInspectItemSuccess(SingleInspectionItemListEntity entity) {
-        adapter.setConclusionEntities(entity.data);
-    }
-
-    @Override
-    public void getSampleInspectItemFailed(String errorMsg) {
-        refreshListController.refreshComplete();
-        ToastUtils.show(context, errorMsg);
+                });
+        RxView.clicks(rl_submit)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(o ->  {
+                    List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();
+                    SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("submit",sampleEntity.getId(),inspectionSubList);
+                });
+        RxView.clicks(rl_calculation)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        manualCalculate();
+                    }
+                });
     }
 
 }

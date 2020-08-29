@@ -87,5 +87,6 @@
     <string name="lims_observeResult">结论</string>
     <string name="lims_memo">备注</string>
     <string name="lims_retention_view_record">留样观察记录</string>
+    <string name="lims_observer_plan">观察计划</string>
 
 </resources>

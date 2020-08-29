@@ -137,7 +137,7 @@ public interface ApiService {
      * @return
      */
     @GET("/msService/LIMSSample/sample/sampleCom/getSampleCom")
-    Flowable<CommonBAP5ListEntity<SampleInspectItemEntity>> getSampleCom(@Query("sampleId") Long id);
+    Flowable<CommonBAP5ListEntity<InspectionSubEntity>> getSampleCom(@Query("sampleId") Long id);
 
 
     @GET("/msService/LIMSSample/sample/sampleTest/getStdGradeColumns")
