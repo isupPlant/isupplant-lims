@@ -151,6 +151,16 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             super.initListener();
 
 
+            RxView.clicks(imageUpDown)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o->{
+                        onItemChildViewClick(imageUpDown,1);
+                    });
+            RxView.clicks(imageFileView)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o->{
+                        onItemChildViewClick(imageUpDown,2);
+                    });
 
             RxView.clicks(llQualityStandard)
                     .throttleFirst(300, TimeUnit.MILLISECONDS)
@@ -162,14 +172,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         }
                     });
 
-            RxView.clicks(llEnclosure)
-                    .throttleFirst(300,TimeUnit.MILLISECONDS)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
-                            onItemChildViewClick(llEnclosure,1);
-                        }
-                    });
+
 
             //原始值数值变化监听
             RxTextView.textChanges(ceOriginalValue.editText())
