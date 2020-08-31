@@ -169,10 +169,11 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                             showPopup(getActivity(), SingleProjectFragment.this)
                             .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
                                 @Override
-                                public void onSuccess(FileDataEntity fileDataEntity) {
+                                public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
                                     filePath=fileDataEntity.getLocalPath();
-                                    itemEntity.setFileUploadMultiFileNames(fileDataEntity.getPath());
-                                    itemEntity.setFileUploadMultiFileIcons(fileDataEntity.getFileIcon());
+                                    itemEntity.setFileUploadFileAddPaths(fileDataEntity.getPath());
+                                    itemEntity.setFileUploadFileDeleteIds(itemEntity.getFileUploadMultiFileIds());
+                                    itemEntity.setFileUploadMultiFileNames(filePath.substring(filePath.lastIndexOf("/")+1));
                                     itemEntity.setFilePath(filePath);
                                 }
                             });
@@ -194,6 +195,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                 }
             }
         });
+
 
         adapter.setOriginalValueChangeListener(new SingleProjectAdapter.OriginalValueChangeListener() {
             @Override

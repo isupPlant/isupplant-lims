@@ -214,12 +214,23 @@
                     android:text="附件" />
 
                 <ImageView
+                    android:id="@+id/imageUpDown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_5"
-                    android:src="@drawable/ic_drop_down" />
+                    android:src="@drawable/ic_up_file"
+                    android:tag="imageUpDown" />
+                <ImageView
+                    android:id="@+id/imageFileView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:src="@drawable/ic_view_file"
+                    android:tag="imageFileView" />
             </LinearLayout>
 
         </LinearLayout>

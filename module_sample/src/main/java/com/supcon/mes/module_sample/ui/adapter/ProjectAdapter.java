@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,11 +26,14 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +97,10 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         LinearLayout llCeOriginalValue;
         @BindByTag("llCpOriginalValue")
         LinearLayout llCpOriginalValue;
-
+        @BindByTag("imageUpDown")
+        ImageView imageUpDown;
+        @BindByTag("imageFileView")
+        ImageView imageFileView;
 
 
         public ViewHolder(Context context) {
@@ -304,6 +311,15 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     notifyItemChanged(getAdapterPosition());
                 }
             });
+            if (!TextUtils.isEmpty(data.getFileUploadMultiFileIds())){
+                new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames()).setFileOnSuccessListener(new OnSuccessListener<File>() {
+                    @Override
+                    public void onSuccess(File result) {
+                        data.setFilePath(result.getPath());
+                    }
+                });
+            }
+
             rvConclusion.setAdapter(conclusionAdapter);
             conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());
             conclusionAdapter.setList(data.getConclusionList());

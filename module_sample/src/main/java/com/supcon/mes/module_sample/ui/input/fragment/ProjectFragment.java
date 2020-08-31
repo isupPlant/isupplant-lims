@@ -1,9 +1,11 @@
 package com.supcon.mes.module_sample.ui.input.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.app.annotation.BindByTag;
@@ -16,6 +18,7 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
@@ -24,6 +27,9 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.controller.CalculationController;
 
+import com.supcon.mes.module_lims.utils.FileUtils;
+import com.supcon.mes.module_lims.utils.Util;
+import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
@@ -41,6 +47,7 @@ import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -148,19 +155,36 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                 InspectionSubEntity itemEntity = adapter.getItem(position);
                 if (action == 1) {
                     getController(LimsFileUpLoadController.class).
-                            showPopup(getActivity(),ProjectFragment.this)
+                            showPopup(getActivity(), ProjectFragment.this)
                             .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
                                 @Override
-                                public void onSuccess(FileDataEntity fileDataEntity) {
+                                public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
                                     filePath=fileDataEntity.getLocalPath();
-                                    itemEntity.setFileUploadMultiFileNames(fileDataEntity.getPath());
-                                    itemEntity.setFileUploadMultiFileIcons(fileDataEntity.getFileIcon());
+                                    itemEntity.setFileUploadFileAddPaths(fileDataEntity.getPath());
+                                    itemEntity.setFileUploadFileDeleteIds(itemEntity.getFileUploadMultiFileIds());
+                                    itemEntity.setFileUploadMultiFileNames(filePath.substring(filePath.lastIndexOf("/")+1));
                                     itemEntity.setFilePath(filePath);
                                 }
                             });
+                }else if (action==2){
+
+                    if (!TextUtils.isEmpty(itemEntity.getFilePath())){
+                        File file=new File(itemEntity.getFilePath());
+                        if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("file", file);
+                            IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
+                        }else {
+                            Util.openFile(getActivity(),itemEntity.getFilePath());
+                        }
+                    }else {
+                        ToastUtils.show(context,"没有可查看的文件");
+                    }
+
                 }
             }
         });
+
 
         adapter.setOriginalValueChangeListener(new ProjectAdapter.OriginalValueChangeListener() {
             @Override

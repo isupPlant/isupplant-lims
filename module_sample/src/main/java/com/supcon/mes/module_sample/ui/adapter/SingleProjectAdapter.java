@@ -26,12 +26,14 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +47,7 @@ import io.reactivex.functions.Consumer;
  */
 public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSubEntity> {
 
-//    private ConclusionAdapter conclusionAdapter;
+    //    private ConclusionAdapter conclusionAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     private OriginalValueChangeListener mOriginalValueChangeListener;
@@ -56,6 +58,8 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     private boolean dispValueFocus;
 
     private SinglePickController mSinglePickController;
+
+
     public SingleProjectAdapter(Context context) {
         super(context);
         mSinglePickController = new SinglePickController((Activity) context);
@@ -65,9 +69,7 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
     @Override
     protected BaseRecyclerViewHolder<InspectionSubEntity> getViewHolder(int viewType) {
-
         return new ViewHolder(context);
-
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<InspectionSubEntity>{
@@ -90,16 +92,20 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         ImageView ivExpand;
         @BindByTag("llQualityStandard")
         LinearLayout llQualityStandard;
-        @BindByTag("imageUpDown")
-        ImageView imageUpDown;
-        @BindByTag("imageFileView")
-        ImageView imageFileView;
         @BindByTag("llEnclosure")
         LinearLayout llEnclosure;
         @BindByTag("rvConclusion")
         RecyclerView rvConclusion;
-        @BindByTag("item")
-        LinearLayout item;
+        @BindByTag("llCeOriginalValue")
+        LinearLayout llCeOriginalValue;
+        @BindByTag("llCpOriginalValue")
+        LinearLayout llCpOriginalValue;
+        @BindByTag("imageUpDown")
+        ImageView imageUpDown;
+        @BindByTag("imageFileView")
+        ImageView imageFileView;
+        @BindByTag("tvRepeatNumber")
+        CustomTextView tvRepeatNumber;
 
 
         public ViewHolder(Context context) {
@@ -122,28 +128,42 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                     super.getItemOffsets(outRect, view, parent, state);
                     int childLayoutPosition = parent.getChildAdapterPosition(view);
-                    if (childLayoutPosition == 0) {
-                        outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
-                    } else if(childLayoutPosition == conclusionAdapter.getItemCount()-1){
-                        outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
+
+                    if (childLayoutPosition == 0 && childLayoutPosition == conclusionAdapter.getItemCount()-1) {
+                        outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
                     } else {
-                        outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                        if (childLayoutPosition == 0){
+                            outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                        }else if(childLayoutPosition == conclusionAdapter.getItemCount()-1){
+                            outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
+                        } else {
+                            outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                        }
                     }
                 }
+
             });
+
+            ceOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
+            cpOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
+            ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
+
         }
 
         @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
+
+
+
             RxView.clicks(llQualityStandard)
                     .throttleFirst(300, TimeUnit.MILLISECONDS)
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-                           getList().get(getAdapterPosition()).setOpen(!getList().get(getAdapterPosition()).isOpen());
-                           notifyItemChanged(getAdapterPosition());
+                            getList().get(getAdapterPosition()).setOpen(!getList().get(getAdapterPosition()).isOpen());
+                            notifyItemChanged(getAdapterPosition());
                         }
                     });
 
@@ -157,14 +177,6 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                     .subscribe(o->{
                         onItemChildViewClick(imageUpDown,2);
                     });
-//            RxView.clicks(llEnclosure)
-//                    .throttleFirst(300,TimeUnit.MILLISECONDS)
-//                    .subscribe(new Consumer<Object>() {
-//                        @Override
-//                        public void accept(Object o) throws Exception {
-//                            onItemChildViewClick(llEnclosure,1);
-//                        }
-//                    });
 
             //原始值数值变化监听
             RxTextView.textChanges(ceOriginalValue.editText())
@@ -174,6 +186,7 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         public void accept(CharSequence charSequence) throws Exception {
                             originalValue = charSequence.toString();
                             getList().get(getAdapterPosition()).setOriginValue(originalValue);
+
                         }
                     });
             //原始值焦点监听
@@ -181,11 +194,13 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     originalFocus = hasFocus;
-                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
-                            mOriginalValueChangeListener.originalValueChange(originalFocus,originalValue,getAdapterPosition());
-                        }
+                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
+                        mOriginalValueChangeListener.originalValueChange(originalFocus,originalValue,getAdapterPosition());
                     }
+                }
             });
+
+
 
             //报出值数值变化监听
             RxTextView.textChanges(ceReportedValue.editText())
@@ -209,6 +224,7 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                     }
                 }
             });
+
             //枚举原始值改变时的监听
             cpOriginalValue.setOnChildViewClickListener(new OnChildViewClickListener() {
                 @Override
@@ -234,14 +250,16 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         @Override
         protected void update(InspectionSubEntity data) {
             //检验项目
-            ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "--" : data.getComName());
             ctInspectionProject.setValue(data.getSampleTestId()!=null && data.getSampleTestId().getTestId()!=null?data.getSampleTestId().getTestId().getName():"");
             busiVersionTv.setValue(data.getSampleTestId()!=null && data.getSampleTestId().getTestId()!=null?data.getSampleTestId().getTestId().getBusiVersion():"");
+            ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "--" : data.getComName());
+            tvRepeatNumber.setValue(data.getParallelNo()!=null?data.getParallelNo().toString():"");
             //原始值
             if(null != data.getValueKind()){ // 值类型
                 if (!StringUtil.isEmpty(data.getValueKind().getValue())){ // 值类型不为空
                     if (data.getValueKind().getValue().equals("枚举")){
                         setVisible(false);
+                        cpOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                     }else if (data.getValueKind().getValue().equals("计算")){
                         setVisible(true);
                         ceOriginalValue.setEditable(false);
@@ -260,19 +278,26 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "--" : data.getDispValue()); //报出值
 
             //判断当前分项中有没有 不合格的结论  有的话 为false
-            HashMap<String, Object> dispMap = data.getDispMap();
+            //HashMap<String, Object> dispMap = data.getDispMap();
             List<ConclusionEntity> conclusionList = data.getConclusionList();
             for (int i = 0; i < conclusionList.size(); i++) {
-                for (String key : dispMap.keySet()){
-                    if (key.equals(conclusionList.get(i).getColumnKey())){
-                        if (String.valueOf(dispMap.get(key)).equals(conclusionList.get(i).getColumnList().get(0).getResult())){
-                            data.setConclusionState(false);
-                        }else {
-                            data.setConclusionState(true);
-                        }
-                        break;
+                if (null != conclusionList.get(i).getFinalResult()){
+                    if (conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(0).getResult())){
+                        data.setConclusionState(false);
+                    }else {
+
+                        data.setConclusionState(true);
                     }
+                    break;
+                }else {
+                    data.setConclusionState(true);
                 }
+
+//                for (String key : dispMap.keySet()){
+//                    if (key.equals(conclusionList.get(i).getColumnKey())){
+//
+//                    }
+//                }
             }
 
             if (data.isConclusionState()){
@@ -289,10 +314,21 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                 ivExpand.setImageResource(R.drawable.ic_drop_down);
             }
 
-            if (!TextUtils.isEmpty(data.getFileUploadMultiFileIds())){
-                new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames());
-            }
             conclusionAdapter = new ConclusionAdapter(context);
+            conclusionAdapter.setOnConclusionChangeListener(new ConclusionAdapter.OnConclusionChangeListener() {
+                @Override
+                public void onConclusionChange(int position) {
+                    notifyItemChanged(getAdapterPosition());
+                }
+            });
+            if (!TextUtils.isEmpty(data.getFileUploadMultiFileIds())){
+                new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames()).setFileOnSuccessListener(new OnSuccessListener<File>() {
+                    @Override
+                    public void onSuccess(File result) {
+                        data.setFilePath(result.getPath());
+                    }
+                });
+            }
             rvConclusion.setAdapter(conclusionAdapter);
             conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());
             conclusionAdapter.setList(data.getConclusionList());
@@ -301,11 +337,11 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
         private void setVisible(boolean visible){
             if (visible){
-                ceOriginalValue.setVisibility(View.VISIBLE);
-                cpOriginalValue.setVisibility(View.GONE);
+                llCeOriginalValue.setVisibility(View.VISIBLE);
+                llCpOriginalValue.setVisibility(View.GONE);
             }else {
-                ceOriginalValue.setVisibility(View.GONE);
-                cpOriginalValue.setVisibility(View.VISIBLE);
+                llCeOriginalValue.setVisibility(View.GONE);
+                llCpOriginalValue.setVisibility(View.VISIBLE);
             }
         }
     }
