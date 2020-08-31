@@ -131,15 +131,18 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
                     }
                     mSinglePickController.list(spinnerList)
                             .listener((index, item) -> {
-
+                                //供展示
                                 getItem(getAdapterPosition()).setFinalResult(spinnerList.get(index));
-                                //hashMap.put("finalResult", );
-//                                for (String key : hashMap.keySet()) {
-//                                    if (key.equals(list.get(getAdapterPosition()).getColumnKey())) {
-//
-//                                    }
-//                                }
-                                notifyItemChanged(getAdapterPosition());
+
+                                //供提交
+                                for (String key : hashMap.keySet()) {
+                                    if (key.equals(list.get(getAdapterPosition()).getColumnKey())) {
+                                        hashMap.put(key, spinnerList.get(index));
+                                        break;
+                                    }
+                                }
+                                //notifyItemChanged(getAdapterPosition());
+
                                 if (null != mOnConclusionChangeListener){
                                     mOnConclusionChangeListener.onConclusionChange(getAdapterPosition());
                                 }
