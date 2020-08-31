@@ -108,7 +108,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_goods" />
+            android:src="@drawable/ic_lims_consumption" />
 
 
         <com.supcon.mes.mbap.view.CustomEditText

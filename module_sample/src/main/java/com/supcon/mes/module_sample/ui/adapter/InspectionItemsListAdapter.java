@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -81,6 +82,27 @@ public class InspectionItemsListAdapter extends BaseListDataRecyclerViewAdapter<
             //状态
             tvState.setText(null == data.getTestState() ? "--" :
                     StringUtil.isEmpty(data.getTestState().getValue()) ? "--" : data.getTestState().getValue());
+
+            if (null != data.getTestState()){
+                if (data.getTestState().getValue().equals("待检验")){
+                    tvState.setTextColor(Color.parseColor("#1F82D2"));
+                }else if (data.getTestState().getValue().equals("部分已检")){
+                    tvState.setTextColor(Color.parseColor("#15B9B8"));
+                } else if (data.getTestState().getValue().equals("已检验")){
+                    tvState.setTextColor(Color.parseColor("#1A9D17"));
+                }else if (data.getTestState().getValue().equals("待复核")){
+                    tvState.setTextColor(Color.parseColor("#D2881F"));
+                }else if (data.getTestState().getValue().equals("已复核")){
+                    tvState.setTextColor(Color.parseColor("#3634A3"));
+                }else if (data.getTestState().getValue().equals("已拒绝")){
+                    tvState.setTextColor(Color.parseColor("#D25A1F"));
+                }else if (data.getTestState().getValue().equals("已取消")){
+                    tvState.setTextColor(Color.parseColor("#E15774"));
+                }
+
+            }
+
+            if(data.getTestState().equals(""))
 
             if (data.isSelect()){
                 item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_sel);

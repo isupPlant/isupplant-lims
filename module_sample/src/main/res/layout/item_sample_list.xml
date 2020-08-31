@@ -9,16 +9,19 @@
     android:tag="item"
     android:translationZ="2dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_35"
+        android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_16">
 
         <TextView
             android:id="@+id/tvSample"
+            android:layout_weight="1"
             android:tag="tvSample"
+            android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -28,14 +31,13 @@
         <TextView
             android:id="@+id/tvSampleType"
             android:tag="tvSampleType"
-            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/font_333333"
             android:textStyle="bold"
             android:textSize="@dimen/fontSize_15sp"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 

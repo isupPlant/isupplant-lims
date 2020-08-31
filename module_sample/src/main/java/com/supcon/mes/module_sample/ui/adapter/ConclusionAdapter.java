@@ -40,6 +40,8 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
     private SinglePickController mSinglePickController;
     private List<String> spinnerList = new ArrayList<>();
 
+    private OnConclusionChangeListener mOnConclusionChangeListener;
+
     public ConclusionAdapter(Context context) {
         super(context);
         mSinglePickController = new SinglePickController((Activity) context);
@@ -138,6 +140,9 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
 //                                    }
 //                                }
                                 notifyItemChanged(getAdapterPosition());
+                                if (null != mOnConclusionChangeListener){
+                                    mOnConclusionChangeListener.onConclusionChange(getAdapterPosition());
+                                }
 
                             }).show();
                 }
@@ -178,5 +183,13 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
             rvRange.setAdapter(rangeAdapter);
             rangeAdapter.setData(data.getColumnList(),hashMap);
         }
+    }
+
+    public void setOnConclusionChangeListener(OnConclusionChangeListener mOnConclusionChangeListener){
+        this.mOnConclusionChangeListener = mOnConclusionChangeListener;
+    }
+
+    public interface OnConclusionChangeListener{
+        void onConclusionChange(int position);
     }
 }

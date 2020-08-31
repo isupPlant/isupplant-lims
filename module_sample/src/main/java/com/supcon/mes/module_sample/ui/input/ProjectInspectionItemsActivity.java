@@ -96,10 +96,12 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     @Override
     protected void onInit() {
         super.onInit();
+
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
 
         sampleId = getIntent().getLongExtra("sampleId",0);
         mTitle = getIntent().getStringExtra("title");
+        Log.e("eeeeeeeeeeeeee","ProjectInspectionItemsActivity.onInit");
     }
 
     @Override
@@ -133,6 +135,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .commit();
 
         controller = new SampleRecordResultSubmitController();
+        Log.e("eeeeeeeeeeeeee","ProjectInspectionItemsActivity.initView");
     }
 
     @SuppressLint("CheckResult")
@@ -218,6 +221,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 }
             }
         });
+        Log.e("eeeeeeeeeeeeee","ProjectInspectionItemsActivity.initListener");
     }
 
 

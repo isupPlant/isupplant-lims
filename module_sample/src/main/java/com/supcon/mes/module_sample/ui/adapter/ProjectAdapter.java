@@ -142,6 +142,9 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         @Override
         protected void initListener() {
             super.initListener();
+
+
+
             RxView.clicks(llQualityStandard)
                     .throttleFirst(300, TimeUnit.MILLISECONDS)
                     .subscribe(new Consumer<Object>() {
@@ -259,19 +262,25 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "--" : data.getDispValue()); //报出值
 
             //判断当前分项中有没有 不合格的结论  有的话 为false
-            HashMap<String, Object> dispMap = data.getDispMap();
+            //HashMap<String, Object> dispMap = data.getDispMap();
             List<ConclusionEntity> conclusionList = data.getConclusionList();
             for (int i = 0; i < conclusionList.size(); i++) {
-                for (String key : dispMap.keySet()){
-                    if (key.equals(conclusionList.get(i).getColumnKey())){
-                        if (String.valueOf(dispMap.get(key)).equals(conclusionList.get(i).getColumnList().get(0).getResult())){
-                            data.setConclusionState(false);
-                        }else {
-                            data.setConclusionState(true);
-                        }
-                        break;
+                if (null != conclusionList.get(i).getFinalResult()){
+                    if (conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(0).getResult())){
+                        data.setConclusionState(false);
+                    }else {
+                        data.setConclusionState(true);
                     }
+                    break;
+                }else {
+                    data.setConclusionState(true);
                 }
+
+//                for (String key : dispMap.keySet()){
+//                    if (key.equals(conclusionList.get(i).getColumnKey())){
+//
+//                    }
+//                }
             }
 
             if (data.isConclusionState()){
@@ -289,6 +298,12 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             }
 
             conclusionAdapter = new ConclusionAdapter(context);
+            conclusionAdapter.setOnConclusionChangeListener(new ConclusionAdapter.OnConclusionChangeListener() {
+                @Override
+                public void onConclusionChange(int position) {
+                    notifyItemChanged(getAdapterPosition());
+                }
+            });
             rvConclusion.setAdapter(conclusionAdapter);
             conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());
             conclusionAdapter.setList(data.getConclusionList());

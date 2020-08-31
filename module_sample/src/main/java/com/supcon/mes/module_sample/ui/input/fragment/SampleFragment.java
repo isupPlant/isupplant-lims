@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -225,6 +226,8 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                             bundle.putString("title", list.get(position).getName());
                         }
                     }
+                    //LIMS_Sampling
+                    //LIMS_InspectionItemPda
                     IntentRouter.go(context,Constant.AppCode.LIMS_InspectionItemPda, bundle);
                 }
 
@@ -318,6 +321,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             mParams.clear();
         }
     }
+
 
 
     @Override
