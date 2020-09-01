@@ -102,7 +102,6 @@ public class InspectionItemsListAdapter extends BaseListDataRecyclerViewAdapter<
 
             }
 
-            if(data.getTestState().equals(""))
 
             if (data.isSelect()){
                 item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_sel);

@@ -57,7 +57,7 @@
     <string name="lims_sample_result_input">按样品录入结果</string>
     <string name="lims_sample_separation_type">分样类型</string>
     <string name="lims_sample_type">样品类型</string>
-    <string name="lims_inspection_item">检验分项</string>
+    <string name="lims_inspection_item">检测分项</string>
     <string name="lims_keeper">保管员</string>
     <string name="lims_retain_date">留样日期</string>
     <string name="lims_retention">留样管理</string>

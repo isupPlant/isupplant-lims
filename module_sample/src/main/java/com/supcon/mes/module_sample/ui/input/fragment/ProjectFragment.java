@@ -188,35 +188,25 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
         adapter.setOriginalValueChangeListener(new ProjectAdapter.OriginalValueChangeListener() {
             @Override
-            public void originalValueChange(boolean hasFocus, String value, int position) {
-                if (!hasFocus) {
-                    if (StringUtil.isEmpty(adapter.getList().get(position).getOriginValue()) && StringUtil.isEmpty(adapter.getList().get(position).getRecordOriginValue())){
-                        return;
-                    }
-                    if (adapter.getList().get(position).getOriginValue().equals(adapter.getList().get(position).getRecordOriginValue())) {
-                        return; //表示原始值只是获取又失去焦点 并未做修改
-                    }
-
-                    adapter.getList().get(position).setRecordOriginValue(value);
-                    getController(CalculationController.class).originValOnChange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
-                        @Override
-                        public void notifyRefreshAdapter(int position) {
-                            adapter.notifyItemChanged(position);
-                        }
-                    });
+            public void originalValueChange( String value, int position) {
+                if (adapter.getList().get(position).getOriginValue().equals(adapter.getList().get(position).getRecordOriginValue())) {
+                    return; //表示原始值输入的原始值还是原先的值
                 }
+
+                adapter.getList().get(position).setRecordOriginValue(value);
+                getController(CalculationController.class).originValOnChange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
+                    @Override
+                    public void notifyRefreshAdapter(int position) {
+                        adapter.notifyItemChanged(position);
+                    }
+                });
             }
         });
         adapter.setDispValueChangeListener(new ProjectAdapter.DispValueChangeListener() {
             @Override
-            public void dispValueChange(boolean hasFocus, String value, int position) {
-                if (!hasFocus) {
-                    if (StringUtil.isEmpty(adapter.getList().get(position).getDispValue()) && StringUtil.isEmpty(adapter.getList().get(position).getRecordDispValue())){
-                        return;
-                    }
-
+            public void dispValueChange( String value, int position) {
                     if (adapter.getList().get(position).getDispValue().equals(adapter.getList().get(position).getRecordDispValue())) {
-                        return; //表示原始值只是获取又失去焦点 并未做修改
+                        return; //表示原始值跟上次的值一样
                     }
                     adapter.getList().get(position).setRecordDispValue(value);
                     getController(CalculationController.class).dispValueOnchange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
@@ -226,7 +216,6 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                         }
                     });
                 }
-            }
         });
 
         if (activity instanceof SampleResultInputActivity) {

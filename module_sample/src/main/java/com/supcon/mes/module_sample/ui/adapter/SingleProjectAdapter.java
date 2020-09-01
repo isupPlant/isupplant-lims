@@ -10,9 +10,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -178,52 +182,94 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         onItemChildViewClick(imageUpDown,2);
                     });
 
-            //原始值数值变化监听
-            RxTextView.textChanges(ceOriginalValue.editText())
-                    .skipInitialValue()
-                    .subscribe(new Consumer<CharSequence>() {
-                        @Override
-                        public void accept(CharSequence charSequence) throws Exception {
-                            originalValue = charSequence.toString();
-                            getList().get(getAdapterPosition()).setOriginValue(originalValue);
+//            //原始值数值变化监听
+//            RxTextView.textChanges(ceOriginalValue.editText())
+//                    .skipInitialValue()
+//                    .subscribe(new Consumer<CharSequence>() {
+//                        @Override
+//                        public void accept(CharSequence charSequence) throws Exception {
+//                            originalValue = charSequence.toString();
+//                            getList().get(getAdapterPosition()).setOriginValue(originalValue);
+//
+//                        }
+//                    });
+//            //原始值焦点监听
+//            ceOriginalValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    originalFocus = hasFocus;
+//                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
+//                        mOriginalValueChangeListener.originalValueChange(originalFocus,originalValue,getAdapterPosition());
+//                    }
+//                }
+//            });
 
-                        }
-                    });
-            //原始值焦点监听
-            ceOriginalValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            ceOriginalValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    originalFocus = hasFocus;
-                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
-                        mOriginalValueChangeListener.originalValueChange(originalFocus,originalValue,getAdapterPosition());
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE){
+                        originalValue = ceOriginalValue.editText().getText().toString();
+                        getList().get(getAdapterPosition()).setOriginValue(originalValue); //将输入的值设置为原始值
+
+                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm.isActive()){
+                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
+                        }
+
+                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                            mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                        }
+                        return true;
                     }
+                    return false;
                 }
             });
 
 
-
-            //报出值数值变化监听
-            RxTextView.textChanges(ceReportedValue.editText())
-                    .skipInitialValue()
-                    .subscribe(new Consumer<CharSequence>() {
-                        @Override
-                        public void accept(CharSequence charSequence) throws Exception {
-                            dispValue = charSequence.toString();
-                            getList().get(getAdapterPosition()).setDispValue(dispValue);
-
-                        }
-                    });
-
-            //报出值焦点监听
-            ceReportedValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            ceReportedValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    dispValueFocus = hasFocus;
-                    if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
-                        mDispValueChangeListener.dispValueChange(dispValueFocus,dispValue,getAdapterPosition());
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE){
+
+                        dispValue = ceReportedValue.editText().getText().toString();
+                        getList().get(getAdapterPosition()).setDispValue(dispValue);
+
+                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm.isActive()){
+                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
+                        }
+
+                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
+                            mDispValueChangeListener.dispValueChange(dispValue,getAdapterPosition());
+                        }
+                        return true;
                     }
+
+                    return false;
                 }
             });
+//            //报出值数值变化监听
+//            RxTextView.textChanges(ceReportedValue.editText())
+//                    .skipInitialValue()
+//                    .subscribe(new Consumer<CharSequence>() {
+//                        @Override
+//                        public void accept(CharSequence charSequence) throws Exception {
+//                            dispValue = charSequence.toString();
+//                            getList().get(getAdapterPosition()).setDispValue(dispValue);
+//
+//                        }
+//                    });
+//
+//            //报出值焦点监听
+//            ceReportedValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    dispValueFocus = hasFocus;
+//                    if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
+//                        mDispValueChangeListener.dispValueChange(dispValueFocus,dispValue,getAdapterPosition());
+//                    }
+//                }
+//            });
 
             //枚举原始值改变时的监听
             cpOriginalValue.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -238,7 +284,7 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                                     getItem(getAdapterPosition()).setOriginValue(list.get(index));
                                     notifyItemChanged(getAdapterPosition());
                                     if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
-                                        mOriginalValueChangeListener.originalValueChange(false,getItem(getAdapterPosition()).getOriginValue(),getAdapterPosition());
+                                        mOriginalValueChangeListener.originalValueChange(getItem(getAdapterPosition()).getOriginValue(),getAdapterPosition());
                                     }
                                 }
                             }).show();
@@ -249,6 +295,12 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
         @Override
         protected void update(InspectionSubEntity data) {
+            ceOriginalValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
+            ceOriginalValue.editText().setSingleLine();
+
+            ceReportedValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
+            ceReportedValue.editText().setSingleLine();
+            
             //检验项目
             ctInspectionProject.setValue(data.getSampleTestId()!=null && data.getSampleTestId().getTestId()!=null?data.getSampleTestId().getTestId().getName():"");
             busiVersionTv.setValue(data.getSampleTestId()!=null && data.getSampleTestId().getTestId()!=null?data.getSampleTestId().getTestId().getBusiVersion():"");
@@ -351,7 +403,7 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     }
 
     public interface OriginalValueChangeListener{
-        void originalValueChange(boolean hasFocus, String value, int position);
+        void originalValueChange( String value, int position);
     }
 
     public void setDispValueChangeListener(DispValueChangeListener mDispValueChangeListener){
@@ -359,6 +411,6 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     }
 
     public interface DispValueChangeListener{
-        void dispValueChange(boolean hasFocus, String value, int position);
+        void dispValueChange( String value, int position);
     }
 }

@@ -151,8 +151,8 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
     @Override
     protected void initListener() {
         super.initListener();
-        Bundle bundle=getArguments();
-        sampleTesId=bundle.getLong("sampleId");
+        Bundle bundle = getArguments();
+        sampleTesId = bundle.getLong("sampleId");
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -170,27 +170,27 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                             .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
                                 @Override
                                 public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
-                                    filePath=fileDataEntity.getLocalPath();
+                                    filePath = fileDataEntity.getLocalPath();
                                     itemEntity.setFileUploadFileAddPaths(fileDataEntity.getPath());
                                     itemEntity.setFileUploadFileDeleteIds(itemEntity.getFileUploadMultiFileIds());
-                                    itemEntity.setFileUploadMultiFileNames(filePath.substring(filePath.lastIndexOf("/")+1));
+                                    itemEntity.setFileUploadMultiFileNames(filePath.substring(filePath.lastIndexOf("/") + 1));
                                     itemEntity.setFilePath(filePath);
                                 }
                             });
-                }else if (action==2){
+                } else if (action == 2) {
 
-                        if (!TextUtils.isEmpty(itemEntity.getFilePath())){
-                            File file=new File(itemEntity.getFilePath());
-                            if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("file", file);
-                                IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
-                            }else {
-                                Util.openFile(getActivity(),itemEntity.getFilePath());
-                            }
-                        }else {
-                            ToastUtils.show(context,"没有可查看的文件");
+                    if (!TextUtils.isEmpty(itemEntity.getFilePath())) {
+                        File file = new File(itemEntity.getFilePath());
+                        if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("file", file);
+                            IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
+                        } else {
+                            Util.openFile(getActivity(), itemEntity.getFilePath());
                         }
+                    } else {
+                        ToastUtils.show(context, "没有可查看的文件");
+                    }
 
                 }
             }
@@ -199,44 +199,36 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
         adapter.setOriginalValueChangeListener(new SingleProjectAdapter.OriginalValueChangeListener() {
             @Override
-            public void originalValueChange(boolean hasFocus, String value, int position) {
-                if (!hasFocus) {
-                    if (StringUtil.isEmpty(adapter.getList().get(position).getOriginValue()) && StringUtil.isEmpty(adapter.getList().get(position).getRecordOriginValue())){
-                        return;
-                    }
-                    if (adapter.getList().get(position).getOriginValue().equals(adapter.getList().get(position).getRecordOriginValue())) {
-                        return; //表示原始值只是获取又失去焦点 并未做修改
-                    }
+            public void originalValueChange(String value, int position) {
 
-                    adapter.getList().get(position).setRecordOriginValue(value);
-                    getController(CalculationController.class).originValOnChange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
-                        @Override
-                        public void notifyRefreshAdapter(int position) {
-                            adapter.notifyItemChanged(position);
-                        }
-                    });
+                if (adapter.getList().get(position).getOriginValue().equals(adapter.getList().get(position).getRecordOriginValue())) {
+                    return; //表示原始值只是获取又失去焦点 并未做修改
                 }
+
+                adapter.getList().get(position).setRecordOriginValue(value);
+                getController(CalculationController.class).originValOnChange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
+                    @Override
+                    public void notifyRefreshAdapter(int position) {
+                        adapter.notifyItemChanged(position);
+                    }
+                });
             }
         });
         adapter.setDispValueChangeListener(new SingleProjectAdapter.DispValueChangeListener() {
             @Override
-            public void dispValueChange(boolean hasFocus, String value, int position) {
-                if (!hasFocus) {
-                    if (StringUtil.isEmpty(adapter.getList().get(position).getDispValue()) && StringUtil.isEmpty(adapter.getList().get(position).getRecordDispValue())){
-                        return;
-                    }
+            public void dispValueChange(String value, int position) {
 
-                    if (adapter.getList().get(position).getDispValue().equals(adapter.getList().get(position).getRecordDispValue())) {
-                        return; //表示原始值只是获取又失去焦点 并未做修改
-                    }
-                    adapter.getList().get(position).setRecordDispValue(value);
-                    getController(CalculationController.class).dispValueOnchange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
-                        @Override
-                        public void notifyRefreshAdapter(int position) {
-                            adapter.notifyItemChanged(position);
-                        }
-                    });
+                if (adapter.getList().get(position).getDispValue().equals(adapter.getList().get(position).getRecordDispValue())) {
+                    return; //表示原始值只是获取又失去焦点 并未做修改
                 }
+                adapter.getList().get(position).setRecordDispValue(value);
+                getController(CalculationController.class).dispValueOnchange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
+                    @Override
+                    public void notifyRefreshAdapter(int position) {
+                        adapter.notifyItemChanged(position);
+                    }
+                });
+
             }
         });
 
@@ -284,7 +276,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     }
 
-    public void goRefresh(){
+    public void goRefresh() {
         refreshListController.refreshBegin();
     }
 
@@ -300,14 +292,14 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     }
 
-    public List<InspectionSubEntity> getInspectionSubList(){
+    public List<InspectionSubEntity> getInspectionSubList() {
         return adapter.getList();
 
     }
 
     @Override
     public void getSampleComSuccess(CommonBAP5ListEntity entity) {
-        myInspectionSubList=entity.data.result;
+        myInspectionSubList = entity.data.result;
 
         for (int i = 0; i < myInspectionSubList.size(); i++) {
             List<ConclusionEntity> conclusionListLocal = GsonUtil.jsonToList(GsonUtil.gsonString(conclusionList), ConclusionEntity.class);
@@ -385,7 +377,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
     @Override
     public void getSampleInspectItemFailed(String errorMsg) {
         refreshListController.refreshComplete();
-        ToastUtils.show(context,errorMsg);
+        ToastUtils.show(context, errorMsg);
     }
 }
 
