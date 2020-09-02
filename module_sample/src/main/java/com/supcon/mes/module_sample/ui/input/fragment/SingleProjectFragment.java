@@ -171,27 +171,27 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                             .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
                                 @Override
                                 public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
-                                    filePath = fileDataEntity.getLocalPath();
-                                    itemEntity.setFileUploadFileAddPaths(fileDataEntity.getPath());
-                                    itemEntity.setFileUploadFileDeleteIds(itemEntity.getFileUploadMultiFileIds());
-                                    itemEntity.setFileUploadMultiFileNames(filePath.substring(filePath.lastIndexOf("/") + 1));
-                                    itemEntity.setFilePath(filePath);
+//                                    filePath = fileDataEntity.getLocalPath();
+//                                    itemEntity.setFileUploadFileAddPaths(fileDataEntity.getPath());
+//                                    itemEntity.setFileUploadFileDeleteIds(itemEntity.getFileUploadMultiFileIds());
+//                                    itemEntity.setFileUploadMultiFileNames(filePath.substring(filePath.lastIndexOf("/") + 1));
+//                                    itemEntity.setFilePath(filePath);
                                 }
                             });
                 } else if (action == 2) {
 
-                    if (!TextUtils.isEmpty(itemEntity.getFilePath())) {
-                        File file = new File(itemEntity.getFilePath());
-                        if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("file", file);
-                            IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
-                        } else {
-                            Util.openFile(getActivity(), itemEntity.getFilePath());
-                        }
-                    } else {
-                        ToastUtils.show(context, "没有可查看的文件");
-                    }
+//                    if (!TextUtils.isEmpty(itemEntity.getFilePath())) {
+//                        File file = new File(itemEntity.getFilePath());
+//                        if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable("file", file);
+//                            IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
+//                        } else {
+//                            Util.openFile(getActivity(), itemEntity.getFilePath());
+//                        }
+//                    } else {
+//                        ToastUtils.show(context, "没有可查看的文件");
+//                    }
 
                 }
             }
