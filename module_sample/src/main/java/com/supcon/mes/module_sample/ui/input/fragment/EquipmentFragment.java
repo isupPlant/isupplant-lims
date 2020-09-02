@@ -25,6 +25,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
@@ -155,11 +156,11 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
                 mPosition = position;
                 if (action == 0){
                     adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
-//                    for (int i = 0; i < adapter.getList().size(); i++) {
-//                        if (i != position){
-//                            adapter.getList().get(i).setSelect(false);
-//                        }
-//                    }
+                    for (int i = 0; i < adapter.getList().size(); i++) {
+                        if (i != position){
+                            adapter.getList().get(i).setSelect(false);
+                        }
+                    }
                     adapter.notifyDataSetChanged();
                 }else if (action == 1){ //设备类型
                     Bundle bundle = new Bundle();
@@ -245,6 +246,16 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
             }
         }
         return sb.toString();
+    }
+
+    public boolean checkTestDevice(){
+        for (int i = 0; i < adapter.getList().size(); i++) {
+            if (null == adapter.getList().get(i).getEamId() || StringUtil.isEmpty(adapter.getList().get(i).getEamId().getCode())){
+                ToastUtils.show(context,"设备中存在未选择的设备编码!");
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

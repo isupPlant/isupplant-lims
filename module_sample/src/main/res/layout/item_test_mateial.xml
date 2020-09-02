@@ -88,12 +88,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ceBatchNumber"
-            app:edit_hint="请输入批号"
+            app:edit_hint="请输入生产批号"
             app:text_color="@color/font_333333"
             app:key_size="13"
             app:content_size="15"
             app:gravity="right|center_vertical"
-            app:key="批号" />
+            app:key="生产批号" />
 
     </LinearLayout>
 
@@ -118,6 +118,7 @@
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ceConsumption"
             app:text_color="@color/font_333333"
+            app:necessary="true"
             app:key_size="13"
             app:content_size="15"
             app:edit_hint="请输入用量"

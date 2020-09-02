@@ -163,11 +163,11 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
                     adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
-//                    for (int i = 0; i < adapter.getList().size(); i++) {
-//                        if (i != position){
-//                            adapter.getList().get(i).setSelect(false);
-//                        }
-//                    }
+                    for (int i = 0; i < adapter.getList().size(); i++) {
+                        if (i != position){
+                            adapter.getList().get(i).setSelect(false);
+                        }
+                    }
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -193,14 +193,6 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
                     testMaterialEntity.setBatchCode(list.get(i).getBatchCode());
                     testMaterialEntity.setMatCode(list.get(i).getCode());
                     testMaterialEntity.setProductId(list.get(i).getProductId());
-
-//                    ProductIdEntity productIdEntity = new ProductIdEntity();
-//                    productIdEntity.setId(list.get(i).getId());
-//                    productIdEntity.setCode(list.get(i).getCode());
-//                    productIdEntity.setIsBatch(list.get(i).getIsBatch());
-//                    productIdEntity.setMainUnit(list.get(i).getMainUnit());
-//                    productIdEntity.setName(list.get(i).getName());
-//                    testMaterialEntity.setProductId(productIdEntity);
                     adapter.getList().add(testMaterialEntity);
                 }
                 refreshListController.refreshComplete(adapter.getList());
@@ -233,6 +225,16 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
             }
         }
         return sb.toString();
+    }
+
+    public boolean checkTestMater(){
+        for (int i = 0; i < adapter.getList().size(); i++) {
+            if (null == adapter.getList().get(i).getUseQty()){
+                ToastUtils.show(context,"材料中存在未输入的用量！");
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

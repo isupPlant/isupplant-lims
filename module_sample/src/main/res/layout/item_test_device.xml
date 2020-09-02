@@ -67,6 +67,7 @@
             app:editable="true"
             app:gravity="right|center_vertical"
             app:key="设备编码"
+            app:necessary="true"
             app:key_color="@color/font_666666"
             app:key_size="13" />
 
