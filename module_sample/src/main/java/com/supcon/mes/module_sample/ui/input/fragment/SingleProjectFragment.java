@@ -88,6 +88,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
     LinearSpaceItemDecoration linearSpaceItemDecoration;
 
 
+
     private List<InspectionItemColumnEntity> columnList = new ArrayList<>();
     private List<ConclusionEntity> conclusionList = new ArrayList<>();
     private List<InspectionSubEntity> myInspectionSubList = new ArrayList<>();
@@ -297,10 +298,11 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     }
 
+    private List<InspectionSubEntity> originalInspectionSubList=new ArrayList<>();
     @Override
     public void getSampleComSuccess(CommonBAP5ListEntity entity) {
         myInspectionSubList = entity.data.result;
-
+        originalInspectionSubList=entity.data.result;
         for (int i = 0; i < myInspectionSubList.size(); i++) {
             List<ConclusionEntity> conclusionListLocal = GsonUtil.jsonToList(GsonUtil.gsonString(conclusionList), ConclusionEntity.class);
             myInspectionSubList.get(i).setConclusionList(conclusionListLocal);
@@ -329,6 +331,9 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         refreshListController.refreshComplete(myInspectionSubList);
     }
 
+    public List<InspectionSubEntity> getOriginalInspectionSubList(){
+        return originalInspectionSubList;
+    }
     @Override
     public void getSampleComFailed(String errorMsg) {
         refreshListController.refreshComplete();
