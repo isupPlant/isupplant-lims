@@ -40,6 +40,7 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
@@ -124,6 +125,12 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
                     @Override
                     public void accept(Object o) throws Exception {
                         List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();
+                        String OriginalInspectionSubList=fragment.getOriginalInspectionSubList().toString();
+                        String newInspectionSubList=inspectionSubList.toString();
+                        if (newInspectionSubList.equals(OriginalInspectionSubList)){
+                            ToastUtils.show(SingleSampleResultInputItemActivity.this,"您未修改任何数据，无需保存！");
+                            return;
+                        }
                         SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("save",sampleEntity.getId(),inspectionSubList);
                         submitController.recordResultSubmit(SingleSampleResultInputItemActivity.this,1,submitEntity);
                     }
