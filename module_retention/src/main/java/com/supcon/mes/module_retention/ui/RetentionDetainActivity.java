@@ -71,7 +71,7 @@ import java.util.concurrent.TimeUnit;
         GetPowerCodeController.class,
         WorkFlowViewController.class
 })
-@Router(value=Constant.Router.RETENTION_VIEW,viewCode = "retentionEdit")
+@Router(value = Constant.Router.RETENTION_VIEW, viewCode = "retentionEdit")
 public class RetentionDetainActivity extends BaseRefreshActivity implements RetentionDetailContract.View {
 
     @BindByTag("leftBtn")
@@ -151,7 +151,8 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     }
 
     private boolean expand = false;
-    private int operate=-1;
+    private int operate = -1;
+
     @Override
     protected void initListener() {
         super.initListener();
@@ -159,7 +160,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         refreshController.setAutoPullDownRefresh(true);
 
         RxView.clicks(leftBtn)
-                .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .throttleFirst(2000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     back();
                 });
@@ -168,13 +169,13 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                 .subscribe(o -> {
                     expand = !expand;
                     if (expand) {
-                        expandTv.setText("收起全部");
+                        expandTv.setText(R.string.lims_shrink);
                         ll_other_info.setVisibility(View.VISIBLE);
                         imageUpDown.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_drop_up);
                     } else {
                         ll_other_info.setVisibility(View.GONE);
                         imageUpDown.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_drop_down);
-                        expandTv.setText("展开全部");
+                        expandTv.setText(R.string.lims_expand);
                     }
                 });
         refreshController.setOnRefreshListener(() -> {
@@ -188,36 +189,36 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         });
 
         RxView.clicks(ll_record_view)
-                .throttleFirst(2000,TimeUnit.MILLISECONDS)
-                .subscribe(o->{
-                        if (adapter.selectPosition<0)
-                            ToastUtils.show(context,"请选择一行记录进行查看");
+                .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (adapter.selectPosition < 0)
+                        ToastUtils.show(context, "请选择一行记录进行查看");
+                    else {
+                        RecordEntity recordEntity = adapter.getItem(adapter.selectPosition);
+                        if (!recordEntity.isStateObserved())
+                            ToastUtils.show(context, "状态非已观察，不允许查看！");
                         else {
-                            RecordEntity recordEntity=adapter.getItem(adapter.selectPosition);
-                            if (!recordEntity.isStateObserved())
-                                ToastUtils.show(context,"状态非已观察，不允许查看！");
-                            else{
-                                Bundle bundle=new Bundle();
-                                bundle.putLong("id",recordEntity.id);
-                                IntentRouter.go(context,Constant.Router.RETENTION_VIEW_RECORD,bundle);
-                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putLong("id", recordEntity.id);
+                            IntentRouter.go(context, Constant.Router.RETENTION_VIEW_RECORD, bundle);
                         }
-                    });
+                    }
+                });
         customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 WorkFlowVar workFlowVar = (WorkFlowVar) obj;
                 switch (action) {
                     case 0:
-                        operate=0;
+                        operate = 0;
                         doSave(workFlowVar);
                         break;
                     case 1:
-                        operate=1;
+                        operate = 1;
                         doSubmit(workFlowVar);
                         break;
                     case 2:
-                        operate=2;
+                        operate = 2;
                         doSubmit(workFlowVar);
                         break;
                 }
@@ -233,10 +234,10 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                 customWorkFlowView.setVisibility(View.VISIBLE);
                 getController(GetPowerCodeController.class).initPowerCode(pendingEntity.activityName);
                 getController(WorkFlowViewController.class).initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
-            }else if (pendingEntity.openUrl.contains("retentionEdit")){
+            } else if (pendingEntity.openUrl.contains("retentionEdit")) {
                 observePlanTv.setText(R.string.lims_observer_plan);
                 observePlanImg.setVisibility(View.GONE);
-                adapter.edit=true;
+                adapter.edit = true;
             }
         }
     }
@@ -253,7 +254,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         batchCodeTv.setValue(retentionEntity.batchCode);
         unitTv.setValue(retentionEntity.unitId != null ? retentionEntity.unitId.name : "");
         retainQtyTv.setValue(Util.big2(retentionEntity.retainQty));
-        retainDateTv.setValue(retentionEntity.remainDate != null ? DateUtil.dateFormat(retentionEntity.retainDate) : "");
+        retainDateTv.setValue(retentionEntity.retainDate != null ? DateUtil.dateFormat(retentionEntity.retainDate) : "");
         retainDaysTv.setValue(String.format("%s%s", retentionEntity.retainDays != null ? retentionEntity.retainDays.toString() : "", retentionEntity.retainUnit != null ? retentionEntity.retainUnit.getValue() : ""));
         validDateTv.setValue(retentionEntity.validDate != null ? DateUtil.dateFormat(retentionEntity.validDate) : "");
         staffTv.setValue(retentionEntity.staffId != null ? retentionEntity.staffId.getName() : "");
@@ -264,7 +265,8 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     }
 
     private void doSave(WorkFlowVar workFlowVar) {
-        onLoading("留单保存中...");
+        String tip = getString(R.string.lims_retention) + getString(R.string.lims_saving);
+        onLoading(tip);
         RetentionSubmitEntity entity = new RetentionSubmitEntity();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
@@ -272,13 +274,14 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         entity.operateType = Constant.Transition.SAVE;
         generateSaveOrSubmit(entity);
     }
+
     private void generateSaveOrSubmit(RetentionSubmitEntity entity) {
-        entity.deploymentId = pendingEntity.deploymentId+"";
+        entity.deploymentId = pendingEntity.deploymentId + "";
         entity.taskDescription = pendingEntity.taskDescription;
         entity.activityName = pendingEntity.activityName;
         entity.pendingId = pendingEntity.id.toString();
-        entity.retention=retentionEntity;
-        String viewCode="retentionView";
+        entity.retention = retentionEntity;
+        String viewCode = "retentionView";
         entity.viewCode = "LIMSRetain_5.0.4.1_retention_retentionView";
         String path = viewCode;
         String _pc_ = getController(GetPowerCodeController.class).getPowerCodeResult();
@@ -307,19 +310,22 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         }
 
         if ("驳回".equals(workFlowVar.dec)) {
-           onLoading("留样单驳回中...");
+            String tip = getString(R.string.lims_retention) + getString(R.string.lims_reject);
+            onLoading(tip);
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         } else {
-            onLoading("留样单提交中");
+            String tip = getString(R.string.lims_retention) + getString(R.string.lims_submitting);
+            onLoading(tip);
         }
         entity.operateType = Constant.Transition.SUBMIT;
         entity.workFlowVar = jsonObject;
         generateSaveOrSubmit(entity);
     }
+
     @Override
     public void getRetentionDetailByIdSuccess(RetentionEntity entity) {
-        if (retentionEntity==null)
-            pendingEntity=entity.pending;
+        if (retentionEntity == null)
+            pendingEntity = entity.pending;
         retentionEntity = entity;
         setRetentionEntity();
     }
@@ -345,11 +351,11 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
 
     @Override
     public void submitRetentionSuccess(SubmitResultEntity entity) {
-       onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
+        onLoadSuccessAndExit(getString(R.string.lims_deal), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
-                if(operate==0){
-                    pendingEntity.id=entity.data.pendingId;
+                if (operate == 0) {
+                    pendingEntity.id = entity.data.pendingId;
                     refreshController.setAutoPullDownRefresh(true);
                     refreshController.setPullDownRefreshEnabled(false);
                     refreshController.refreshBegin();
@@ -360,7 +366,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                             presenterRouter.create(RetentionDetailAPI.class).getRetentionDetailById(retentionEntity.id, null);
                         }
                     });
-                }else {
+                } else {
                     EventBus.getDefault().post(new RefreshEvent());
                     back();
                 }

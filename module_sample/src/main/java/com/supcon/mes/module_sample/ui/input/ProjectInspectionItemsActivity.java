@@ -88,6 +88,11 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     private ImageView ivProject;
 
     private SampleRecordResultSubmitController controller;
+    List<InspectionSubEntity> inspectionSubList;
+    List<TestDeviceEntity> testDeviceList ;
+    List<TestMaterialEntity> testMaterialList ;
+    String equipmentDelete;
+    String materialDelete ;
     @Override
     protected int getLayoutID() {
         return R.layout.activity_project_inspection_items;

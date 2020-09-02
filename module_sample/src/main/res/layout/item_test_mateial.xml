@@ -36,7 +36,7 @@
             app:content_size="15"
             app:editable="false"
             app:gravity="right|center_vertical"
-            app:key="编号" />
+            app:key="@string/lims_matCode" />
 
     </LinearLayout>
 
@@ -65,7 +65,7 @@
             app:content_size="15"
             app:editable="false"
             app:gravity="right|center_vertical"
-            app:key="物料" />
+            app:key="@string/lims_materiel" />
 
     </LinearLayout>
 
@@ -88,12 +88,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ceBatchNumber"
-            app:edit_hint="请输入批号"
             app:text_color="@color/font_333333"
             app:key_size="13"
             app:content_size="15"
             app:gravity="right|center_vertical"
-            app:key="批号" />
+            app:key="@string/lims_produce_batch" />
 
     </LinearLayout>
 
@@ -120,9 +119,8 @@
             app:text_color="@color/font_333333"
             app:key_size="13"
             app:content_size="15"
-            app:edit_hint="请输入用量"
             app:gravity="right|center_vertical"
-            app:key="用量" />
+            app:key="@string/lims_useQty" />
 
     </LinearLayout>
 

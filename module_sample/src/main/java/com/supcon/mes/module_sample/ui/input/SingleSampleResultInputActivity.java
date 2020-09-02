@@ -113,7 +113,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
             }
         });
         refreshListController.setAutoPullDownRefresh(true);
-        refreshListController.setPullDownRefreshEnabled(false);
+        refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
     }
 

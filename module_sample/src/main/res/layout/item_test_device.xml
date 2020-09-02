@@ -31,11 +31,10 @@
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctDeviceType"
             app:content_color="@color/font_333333"
-            app:content_hint="请选择设备类型"
             app:content_size="15"
             app:editable="true"
             app:gravity="right|center_vertical"
-            app:key="设备类型"
+            app:key="@string/lims_equipment_type"
             app:key_color="@color/font_666666"
             app:key_size="13" />
 
@@ -62,11 +61,10 @@
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ctDeviceCode"
             app:content_color="@color/font_333333"
-            app:content_hint="请选择设备编码"
             app:content_size="15"
             app:editable="true"
             app:gravity="right|center_vertical"
-            app:key="设备编码"
+            app:key="@string/lims_equipment_code"
             app:key_color="@color/font_666666"
             app:key_size="13" />
 
@@ -96,7 +94,7 @@
             app:content_size="15"
             app:editable="false"
             app:gravity="right|center_vertical"
-            app:key="设备名称"
+            app:key="@string/lims_equipment_name"
             app:key_color="@color/font_666666"
             app:key_size="13" />
 
