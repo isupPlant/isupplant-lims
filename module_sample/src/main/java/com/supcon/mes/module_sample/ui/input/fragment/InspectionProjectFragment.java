@@ -20,6 +20,7 @@ import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.listener.InspectionSubRefreshListener;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.contract.InspectionItemsApi;
 import com.supcon.mes.module_sample.presenter.InspectionItemsPresenter;
@@ -48,7 +49,10 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
 
     private Long mSampleId;
     private String mTitle;
-
+    private boolean isOutNotify = false;
+    private String notifyType = "";
+    private int position = 0;
+    private InspectionSubRefreshListener mInspectionSubRefreshListener;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -178,27 +182,31 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
     }
 
 
-    public boolean lookNext(){
+    public void refreshItem(int position){
+        itemClickListener(position);
+    }
+
+
+    public void lookNext(InspectionSubRefreshListener mInspectionSubRefreshListener){
+        this.mInspectionSubRefreshListener = mInspectionSubRefreshListener;
+        isOutNotify = true;
+        notifyType = "submit";
         for (int i = 0; i < adapter.getList().size(); i++) {
             if (adapter.getList().get(i).isSelect()){
-                if (i+1 <= adapter.getList().size()-1){
-                    itemClickListener(i+1);
-                    return true;
-                }else {
-                    return false;
-                }
-            }else {
-                return false;
+                position = i;
+                break;
             }
-
         }
-        return false;
+        goRefresh();
+
     }
 
     public void againRefresh(){
+        isOutNotify = true;
+        notifyType = "save";
         for (int i = 0; i < adapter.getList().size(); i++) {
             if (adapter.getList().get(i).isSelect()){
-                itemClickListener(i);
+                position = i;
                 break;
             }
         }
@@ -207,37 +215,51 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
     @Override
     public void getInspectionItemListSuccess(CommonListEntity entity) {
         //请求数据回来默认 第一个item 为选中状态
-        List<InspectionItemsEntity> list = entity.result;
-        for (int i = 0; i < list.size(); i++) {
-            if (i == 0){
-                list.get(i).setSelect(true);
+        if (isOutNotify){
+            List<InspectionItemsEntity> list = entity.result;
+            refreshListController.refreshComplete(list);
+            if (notifyType.equals("save")){  //保存
+                itemClickListener(position);
+            }else if (notifyType.equals("submit")){ //提交
+                if (null != mInspectionSubRefreshListener){
+                    mInspectionSubRefreshListener.refreshOver(position, list);
+                }
             }
-        }
-        refreshListController.refreshComplete(list);
-
-        //通知Activity 去刷新检验分项的数据
-        if (activity instanceof ProjectInspectionItemsActivity){
+        }else {
+            List<InspectionItemsEntity> list = entity.result;
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).isSelect()){
-                    String name;
-                    if (null ==  list.get(i).getTestId()){
-                        name = "--";
-                    }else {
-                        name = list.get(i).getTestId().getName();
+                if (i == 0){
+                    list.get(i).setSelect(true);
+                }
+            }
+            refreshListController.refreshComplete(list);
+
+            //通知Activity 去刷新检验分项的数据
+            if (activity instanceof ProjectInspectionItemsActivity){
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).isSelect()){
+                        String name;
+                        if (null ==  list.get(i).getTestId()){
+                            name = "--";
+                        }else {
+                            name = list.get(i).getTestId().getName();
+                        }
+                        ((ProjectInspectionItemsActivity) activity).notifyInspectionItemsRefresh(list.get(i).getId(),name);
+                        break;
                     }
-                    ((ProjectInspectionItemsActivity) activity).notifyInspectionItemsRefresh(list.get(i).getId(),name);
-                    break;
+
                 }
 
             }
-
         }
+
     }
 
     @Override
     public void getInspectionItemListFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
     }
+
 
 
 }
