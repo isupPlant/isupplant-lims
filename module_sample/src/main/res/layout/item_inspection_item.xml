@@ -44,7 +44,7 @@
                 app:key_color="@color/font_666666"
                 app:key_size="13"
                 app:content_size="15"
-                app:key="检验项目" />
+                app:key="@string/lims_inspect_project" />
         </LinearLayout>
 
         <LinearLayout
@@ -68,7 +68,7 @@
                 app:key_size="13"
                 app:content_size="15"
                 app:gravity="center|center_vertical"
-                app:key="重复号"
+                app:key="@string/lims_parallelNo"
                 />
         </LinearLayout>
 
@@ -93,7 +93,7 @@
                 app:key_size="13"
                 app:content_size="15"
                 app:gravity="center|center_vertical"
-                app:key="版本号"
+                app:key="@string/lims_version_number"
                 />
         </LinearLayout>
 

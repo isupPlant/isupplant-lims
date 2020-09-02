@@ -115,6 +115,7 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
         RxView.clicks(leftBtn)
                 .throttleFirst(2000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    EventBus.getDefault().post(new RefreshEvent());
                     back();
                 });
         RxView.clicks(rl_save)

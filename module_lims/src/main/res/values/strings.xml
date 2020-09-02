@@ -60,7 +60,7 @@
     <string name="lims_inspection_item">检测分项</string>
     <string name="lims_keeper">保管员</string>
     <string name="lims_retain_date">留样日期</string>
-    <string name="lims_retention">留样管理</string>
+    <string name="lims_retention">留样单</string>
     <string name="lims_retainqty">留样数量</string>
     <string name="lims_retain_days">留样期限</string>
     <string name="lims_valid_date">到期日期</string>
@@ -88,5 +88,24 @@
     <string name="lims_memo">备注</string>
     <string name="lims_retention_view_record">留样观察记录</string>
     <string name="lims_observer_plan">观察计划</string>
-
+    <string name="lims_expand">展开全部</string>
+    <string name="lims_shrink">收起全部</string>
+    <string name="lims_deal">处理成功</string>
+    <string name="lims_save">保存</string>
+    <string name="lims_submit">提交</string>
+    <string name="lims_saving">保存中...</string>
+    <string name="lims_submitting">提交中...</string>
+    <string name="lims_reject">驳回中...</string>
+    <string name="lims_calculation">计算</string>
+    <string name="lims_parallelNo">重复号</string>
+    <string name="lims_originValue">原始值</string>
+    <string name="lims_roundValue">修约值</string>
+    <string name="lims_dispValue">报出值</string>
+    <string name="lims_enclosure">附件</string>
+    <string name="lims_equipment_type">设备类型</string>
+    <string name="lims_equipment_code">设备编码</string>
+    <string name="lims_equipment_name">设备编码</string>
+    <string name="lims_matCode">编号</string>
+    <string name="lims_useQty">用量</string>
+    <string name="lims_produce_batch">生产批号</string>
 </resources>

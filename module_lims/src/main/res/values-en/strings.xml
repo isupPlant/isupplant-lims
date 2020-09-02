@@ -24,8 +24,8 @@
     <string name="lims_materiel">Materiel</string>
     <string name="lims_registration_time">Registration_time</string>
     <string name="lims_sampling_point">Sampling_point</string>
-    <string name="lims_sample_name">Sample_name</string>
-    <string name="lims_sample_code">Sample_code</string>
+    <string name="lims_sample_name">Sample name</string>
+    <string name="lims_sample_code">Sample code</string>
     <string name="lims_sampling">Sampling</string>
     <string name="lims_sample_collection">Sample_collection</string>
     <string name="lims_sample_inspection_report">Sample_inspection_report</string>
@@ -89,5 +89,25 @@
     <string name="lims_memo">Remarks</string>
     <string name="lims_retention_view_record">Retention observe record</string>
     <string name="lims_observer_plan">Observe plan</string>
+    <string name="lims_expand">Expand</string>
+    <string name="lims_shrink">Shrink</string>
+    <string name="lims_deal">Successfully processed</string>
+    <string name="lims_save">Save</string>
+    <string name="lims_submit">Submit</string>
+    <string name="lims_saving">Saving</string>
+    <string name="lims_submitting">Submitting</string>
+    <string name="lims_reject">Being rejected</string>
+    <string name="lims_calculation">Calculation</string>
+    <string name="lims_parallelNo">ParallelNo</string>
+    <string name="lims_originValue">OriginValue</string>
+    <string name="lims_roundValue">RoundValue</string>
+    <string name="lims_dispValue">DispValue</string>
+    <string name="lims_enclosure">Enclosure</string>
+    <string name="lims_equipment_type">Equipment type</string>
+    <string name="lims_equipment_code">Equipment Code</string>
+    <string name="lims_equipment_name">Equipment Name</string>
+    <string name="lims_matCode">Number</string>
+    <string name="lims_useQty">UseQty</string>
+    <string name="lims_produce_batch">Batch number</string>
 
 </resources>

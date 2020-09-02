@@ -182,17 +182,22 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         onItemChildViewClick(imageUpDown,2);
                     });
 
-//            //原始值数值变化监听
-//            RxTextView.textChanges(ceOriginalValue.editText())
-//                    .skipInitialValue()
-//                    .subscribe(new Consumer<CharSequence>() {
-//                        @Override
-//                        public void accept(CharSequence charSequence) throws Exception {
-//                            originalValue = charSequence.toString();
-//                            getList().get(getAdapterPosition()).setOriginValue(originalValue);
-//
-//                        }
-//                    });
+//            原始值数值变化监听
+            RxTextView.textChanges(ceOriginalValue.editText())
+                    .skipInitialValue()
+                    .subscribe(new Consumer<CharSequence>() {
+                        @Override
+                        public void accept(CharSequence charSequence) throws Exception {
+                            if (TextUtils.isEmpty(charSequence)){
+                                InspectionSubEntity subEntity=getItem(getAdapterPosition());
+                                subEntity.setRecordOriginValue(null);
+                                subEntity.setDispValue(null);
+                                ctRoundOffValue.setContent(null);
+                                ceReportedValue.setContent(null);
+                            }
+
+                        }
+                    });
 //            //原始值焦点监听
 //            ceOriginalValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //                @Override
@@ -282,7 +287,7 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                                 @Override
                                 public void onItemPicked(int index, Object item) {
                                     getItem(getAdapterPosition()).setOriginValue(list.get(index));
-                                    notifyItemChanged(getAdapterPosition());
+//                                    notifyItemChanged(getAdapterPosition());
                                     if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
                                         mOriginalValueChangeListener.originalValueChange(getItem(getAdapterPosition()).getOriginValue(),getAdapterPosition());
                                     }
@@ -353,9 +358,9 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             }
 
             if (data.isConclusionState()){
-                ctInspectionItems.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                ctInspectionItems.setContentTextColor(Color.parseColor("#FFFFFF"));
             }else {
-                ctInspectionItems.setBackgroundColor(Color.parseColor("#B20404"));
+                ctInspectionItems.setContentTextColor(Color.parseColor("#B20404"));
             }
 
             if (data.isOpen()){

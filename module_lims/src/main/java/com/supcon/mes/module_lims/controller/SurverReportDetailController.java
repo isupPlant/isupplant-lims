@@ -181,13 +181,13 @@ public class SurverReportDetailController extends BaseViewController implements 
                 .subscribe(o->{
                     expand=!expand;
                     if (expand){
-                        expandTv.setText("收起全部");
+                        expandTv.setText(R.string.lims_shrink);
                         ll_other_info.setVisibility(View.VISIBLE);
                         imageUpDown.setImageResource(R.drawable.ic_drop_up);
                     }else {
                         ll_other_info.setVisibility(View.GONE);
                         imageUpDown.setImageResource(R.drawable.ic_drop_down);
-                        expandTv.setText("展开全部");
+                        expandTv.setText(R.string.lims_expand);
                     }
                 });
         customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {

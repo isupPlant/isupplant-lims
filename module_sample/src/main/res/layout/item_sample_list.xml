@@ -70,7 +70,7 @@
             android:tag="ctMateriel"
             app:content_color="@color/font_333333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+              app:gravity="right|center_vertical"
             app:key="@string/lims_goods"
             app:key_color="@color/font_666666"
             app:key_size="13" />
@@ -99,7 +99,7 @@
             android:tag="ctBatchNumber"
             app:content_color="@color/font_333333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+              app:gravity="right|center_vertical"
             app:key="@string/lims_batch_number"
             app:key_color="@color/font_666666"
             app:key_size="13" />
@@ -128,7 +128,7 @@
             android:tag="ctSampleSeparationType"
             app:content_color="@color/font_333333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+              app:gravity="right|center_vertical"
             app:key="@string/lims_sample_separation_type"
             app:key_color="@color/font_666666"
             app:key_size="13" />
@@ -158,7 +158,7 @@
             android:tag="ctSamplingPoint"
             app:content_color="@color/fontBlack333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+              app:gravity="right|center_vertical"
             app:key="@string/lims_sampling_point"
             app:key_color="@color/font_666666"
             app:key_size="13" />
@@ -187,7 +187,7 @@
 <!--            android:tag="ctSampleType"-->
 <!--            app:content_color="@color/fontBlack333"-->
 <!--            app:content_size="15"-->
-<!--            app:gravity="center|center_vertical"-->
+<!--              app:gravity="right|center_vertical"-->
 <!--            app:key="@string/lims_sample_type"-->
 <!--            app:key_color="@color/c_scan_666"-->
 <!--            app:key_size="13" />-->
@@ -216,7 +216,7 @@
             android:tag="ctRegisterTime"
             app:content_color="@color/font_333333"
             app:content_size="15"
-            app:gravity="center|center_vertical"
+              app:gravity="right|center_vertical"
             app:key="@string/lims_registration_time"
             app:key_color="@color/font_666666"
             app:key_size="13" />
