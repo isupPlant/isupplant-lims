@@ -28,6 +28,8 @@ import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
+import com.supcon.mes.module_sample.listener.InspectionSubRefreshListener;
+import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
@@ -219,10 +221,19 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 if (result == 1){//保存
                     inspectionProjectFragment.againRefresh();
                 }else if (result == 2){//提交
-                    if (!inspectionProjectFragment.lookNext()){
-                        EventBus.getDefault().post("refersh");
-                        onBackPressed();
-                    }
+                    inspectionProjectFragment.lookNext(new InspectionSubRefreshListener() {
+                        @Override
+                        public void refreshOver(int position, List<InspectionItemsEntity> list) {
+                            if (position+1 <= list.size() -1){
+                                inspectionProjectFragment.refreshItem(position+1);
+                            }else {
+                                EventBus.getDefault().post("refersh");
+                                onBackPressed();
+                            }
+                        }
+                    });
+
+
                 }
             }
         });
