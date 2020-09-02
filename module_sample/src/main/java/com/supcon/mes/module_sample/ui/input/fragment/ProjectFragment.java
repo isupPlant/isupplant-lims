@@ -189,10 +189,6 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         adapter.setOriginalValueChangeListener(new ProjectAdapter.OriginalValueChangeListener() {
             @Override
             public void originalValueChange( String value, int position) {
-                if (adapter.getList().get(position).getOriginValue().equals(adapter.getList().get(position).getRecordOriginValue())) {
-                    return; //表示原始值输入的原始值还是原先的值
-                }
-
                 adapter.getList().get(position).setRecordOriginValue(value);
                 getController(CalculationController.class).originValOnChange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
                     @Override

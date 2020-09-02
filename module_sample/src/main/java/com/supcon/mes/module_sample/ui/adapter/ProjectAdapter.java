@@ -183,11 +183,17 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 //                    .subscribe(new Consumer<CharSequence>() {
 //                        @Override
 //                        public void accept(CharSequence charSequence) throws Exception {
-//                            originalValue = charSequence.toString();
-//                            getList().get(getAdapterPosition()).setOriginValue(originalValue);
+//                            if (StringUtil.isEmpty(charSequence.toString())){
+//                                getItem(getAdapterPosition()).setOriginValue("");
+//                                getItem(getAdapterPosition()).setRoundValue("");
+//                                getItem(getAdapterPosition()).setDispValue("");
+//
+//                            }
 //
 //                        }
 //                    });
+
+
 //            //原始值焦点监听
 //            ceOriginalValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //                @Override

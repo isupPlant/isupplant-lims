@@ -226,7 +226,6 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 }
             }
         });
-        Log.e("eeeeeeeeeeeeee","ProjectInspectionItemsActivity.initListener");
     }
 
 

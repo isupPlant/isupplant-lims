@@ -108,4 +108,6 @@
     <string name="lims_matCode">编号</string>
     <string name="lims_useQty">用量</string>
     <string name="lims_produce_batch">生产批号</string>
+    <string name="lims_device_check">设备中存在未选择的设备编码!</string>
+    <string name="lims_material_check">材料中存在未输入的用量！</string>
 </resources>

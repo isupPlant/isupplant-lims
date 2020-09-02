@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dp_15"
-                app:key="@string/lims_material_name"
+                app:key="@string/lims_goods"
                 app:key_color="@color/c_scan_666"
                 app:key_size="13"
                 app:content_size="15"
@@ -82,7 +82,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_specifications"
+                android:src="@drawable/ic_batch_number"
                 />
 
             <com.supcon.mes.mbap.view.CustomTextView

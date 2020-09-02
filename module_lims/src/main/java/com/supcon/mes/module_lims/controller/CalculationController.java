@@ -213,7 +213,7 @@ public class CalculationController extends BaseViewController {
                 Object roundValue = null;
                 try {
                     Invocable invoke = (Invocable) engine;
-                    roundValue = invoke.invokeFunction("roundingValue", parseFloat(value), sampleCom.getDigitType(), sampleCom.getCarrySpace(), sampleCom.getCarryType(), sampleCom.getCarryFormula());
+                    roundValue = invoke.invokeFunction("roundingValue", value, sampleCom.getDigitType(), sampleCom.getCarrySpace(), sampleCom.getCarryType(), sampleCom.getCarryFormula());
                     sampleCom.setOriginValue(value);
                     sampleCom.setRoundValue(roundValue + "");
                     sampleCom.setDispValue(roundValue + "");
@@ -225,7 +225,7 @@ public class CalculationController extends BaseViewController {
 
                     try {
                         Invocable invoke = (Invocable) engine;
-                        Object dispValue = invoke.invokeFunction("sectionJudgment", parseFloat(value), sampleCom.getLimitType().getId(), sampleCom.getMaxValue(), sampleCom.getMinValue());
+                        Object dispValue = invoke.invokeFunction("sectionJudgment", value, sampleCom.getLimitType().getId(), sampleCom.getMaxValue(), sampleCom.getMinValue());
                         if (dispValue != "reject") {
                             if (parseFloat(dispValue + "") != parseFloat(value)) {
                                 sampleCom.setDispValue(dispValue + "");
