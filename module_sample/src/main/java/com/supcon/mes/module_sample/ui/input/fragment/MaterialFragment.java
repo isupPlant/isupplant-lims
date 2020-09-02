@@ -230,7 +230,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     public boolean checkTestMater(){
         for (int i = 0; i < adapter.getList().size(); i++) {
             if (null == adapter.getList().get(i).getUseQty()){
-                ToastUtils.show(context,"材料中存在未输入的用量！");
+                ToastUtils.show(context,getResources().getString(R.string.lims_material_check));
                 return false;
             }
         }

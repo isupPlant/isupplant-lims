@@ -110,4 +110,6 @@
     <string name="lims_useQty">UseQty</string>
     <string name="lims_produce_batch">Batch number</string>
 
+    <string name="lims_device_check">There is an unselected device code in the device!</string>
+    <string name="lims_material_check">There is an amount not entered in the material！</string>
 </resources>

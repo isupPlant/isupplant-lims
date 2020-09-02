@@ -48,8 +48,6 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
 
     private Long mSampleId;
     private String mTitle;
-    int position = 0;
-    boolean isSave = false;
 
     @Override
     public void onAttach(Context context) {
@@ -183,12 +181,6 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
     public boolean lookNext(){
         for (int i = 0; i < adapter.getList().size(); i++) {
             if (adapter.getList().get(i).isSelect()){
-                position = i;
-                brea
-            }
-        }
-        for (int i = 0; i < adapter.getList().size(); i++) {
-            if (adapter.getList().get(i).isSelect()){
                 if (i+1 <= adapter.getList().size()-1){
                     itemClickListener(i+1);
                     return true;
@@ -204,34 +196,23 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
     }
 
     public void againRefresh(){
-        //当分项保存时  先记录之前选中的检测项目  然后通知重新刷新
-        isSave = true;
         for (int i = 0; i < adapter.getList().size(); i++) {
             if (adapter.getList().get(i).isSelect()){
-                position = i;
-                //itemClickListener(i);
+                itemClickListener(i);
                 break;
             }
         }
-
-        goRefresh();
-
     }
 
     @Override
     public void getInspectionItemListSuccess(CommonListEntity entity) {
         //请求数据回来默认 第一个item 为选中状态
         List<InspectionItemsEntity> list = entity.result;
-        if (!isSave){
-            for (int i = 0; i < list.size(); i++) {
-                if (i == 0){
-                    list.get(i).setSelect(true);
-                }
+        for (int i = 0; i < list.size(); i++) {
+            if (i == 0){
+                list.get(i).setSelect(true);
             }
-        }else {
-            list.get(position).setSelect(true);
         }
-
         refreshListController.refreshComplete(list);
 
         //通知Activity 去刷新检验分项的数据

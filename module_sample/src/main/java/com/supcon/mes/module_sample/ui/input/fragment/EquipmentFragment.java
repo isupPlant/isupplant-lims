@@ -251,7 +251,7 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     public boolean checkTestDevice(){
         for (int i = 0; i < adapter.getList().size(); i++) {
             if (null == adapter.getList().get(i).getEamId() || StringUtil.isEmpty(adapter.getList().get(i).getEamId().getCode())){
-                ToastUtils.show(context,"设备中存在未选择的设备编码!");
+                ToastUtils.show(context,getResources().getString(R.string.lims_device_check));
                 return false;
             }
         }
