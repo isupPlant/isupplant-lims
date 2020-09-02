@@ -221,17 +221,20 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 if (result == 1){//保存
                     inspectionProjectFragment.againRefresh();
                 }else if (result == 2){//提交
-                    inspectionProjectFragment.lookNext(new InspectionSubRefreshListener() {
-                        @Override
-                        public void refreshOver(int position, List<InspectionItemsEntity> list) {
-                            if (position+1 <= list.size() -1){
-                                inspectionProjectFragment.refreshItem(position+1);
-                            }else {
-                                EventBus.getDefault().post("refersh");
-                                onBackPressed();
+                    if (equipmentFragment.checkTestDevice() && materialFragment.checkTestMater()){ //检查设备材料的必填项是否已填写
+                        inspectionProjectFragment.lookNext(new InspectionSubRefreshListener() {
+                            @Override
+                            public void refreshOver(int position, List<InspectionItemsEntity> list) {
+                                if (position+1 <= list.size() -1){
+                                    inspectionProjectFragment.refreshItem(position+1);
+                                }else {
+                                    EventBus.getDefault().post("refersh");
+                                    onBackPressed();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+
 
 
                 }
