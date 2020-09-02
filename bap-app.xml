@@ -83,281 +83,118 @@
         <cid>1000</cid>
         <remark>其他检验申请编辑、查看功能</remark>
     </app>
-    <!--日常润滑-->
+    <!--其他检验报告-->
     <app>
-        <code>EAM_LubDaily</code>
-        <name>日常润滑</name>
+        <code>LIMS_OtherSurveyReport</code>
+        <name>其他检验报告</name>
         <appType>base_AppType/02</appType>
         <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>EAM_1.0.0</moduleCode>
+        <moduleCode>QCS_5.0.0.0</moduleCode>
         <url></url>
         <appIcon></appIcon>
         <powerFlag>true</powerFlag>
-        <menuCode>EAM_1.0.0_baseInfo_dailyLubricateWarn</menuCode>
+        <menuCode>QCS_5.0.0.0_inspectReport_otherInspReportList</menuCode>
         <isHidden>false</isHidden>
-        <sort>46</sort>
+        <sort>59</sort>
         <cid>1000</cid>
-        <remark>日常润滑查看、生成工单功能</remark>
+        <remark>其他检验报告查看功能</remark>
     </app>
-    <!--润滑预警-->
+    <!--样品取样-->
     <app>
-        <code>EAM_LubMonitor</code>
-        <name>润滑预警</name>
+        <code>LIMS_Sampling</code>
+        <name>样品取样</name>
         <appType>base_AppType/02</appType>
         <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>EAM_1.0.0</moduleCode>
+        <moduleCode>LIMSSample_5.0.0.0</moduleCode>
         <url></url>
         <appIcon></appIcon>
         <powerFlag>true</powerFlag>
-        <menuCode>EAM_1.0.0_baseInfo_lubricateWarnList</menuCode>
+        <menuCode>LIMSSample_5.0.0.0_sample_collectListLayoutNew</menuCode>
         <isHidden>false</isHidden>
-        <sort>47</sort>
+        <sort>60</sort>
         <cid>1000</cid>
-        <remark>润滑预警查看、生成工单功能</remark>
+        <remark>样品取样、查看功能</remark>
     </app>
-    <!--维保预警-->
+    <!--样品收样-->
     <app>
-        <code>EAM_MaintenanceMonitor</code>
-        <name>维保预警</name>
+        <code>LIMS_CollectSample</code>
+        <name>样品收样</name>
         <appType>base_AppType/02</appType>
         <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>EAM_1.0.0</moduleCode>
+        <moduleCode>LIMSSample_5.0.0.0</moduleCode>
         <url></url>
         <appIcon></appIcon>
         <powerFlag>true</powerFlag>
-        <menuCode>EAM_1.0.0_baseInfo_maintainWarnList</menuCode>
+        <menuCode>LIMSSample_5.0.0.0_sample_receiveListLayoutNew</menuCode>
         <isHidden>false</isHidden>
-        <sort>48</sort>
+        <sort>61</sort>
         <cid>1000</cid>
-        <remark>维保预警查看、生成工单功能</remark>
+        <remark>样品收样、查看功能</remark>
     </app>
-    <!--备件预警-->
+    <!--样品检验报告-->
     <app>
-        <code>EAM_SpareMonitor</code>
-        <name>备件预警</name>
+        <code>LIMS_SampleSurveyReport</code>
+        <name>样品检验报告</name>
         <appType>base_AppType/02</appType>
         <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>EAM_1.0.0</moduleCode>
+        <moduleCode>LIMSSample_5.0.0.0</moduleCode>
         <url></url>
         <appIcon></appIcon>
         <powerFlag>true</powerFlag>
-        <menuCode>EAM_1.0.0_baseInfo_sparePartWarnList</menuCode>
+        <menuCode>LIMSSample_5.0.0.0_sampleReport_sampleReportList</menuCode>
         <isHidden>false</isHidden>
-        <sort>49</sort>
+        <sort>62</sort>
         <cid>1000</cid>
-        <remark>备件预警查看、生成工单功能</remark>
-    </app>
-
-    <!--运行记录-->
-    <app>
-        <code>EAM_OperationRecord</code>
-        <name>运行记录</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>EQPTOperation_5.0.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>EQPTOperation_5.0.0.0_operationRecord_recordList</menuCode>
-        <isHidden>false</isHidden>
-        <sort>50</sort>
-        <cid>1000</cid>
-        <remark>运行记录查看功能</remark>
+        <remark>样品检验报告查看功能</remark>
     </app>
 
-    <!--停电申请列表-->
+    <!--按样品录入结果-->
     <app>
-        <code>EAM_PowerCut</code>
-        <name>停电申请</name>
+        <code>LIMS_SampleResultInput</code>
+        <name>按样品录入结果</name>
         <appType>base_AppType/02</appType>
         <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>outagManage_5.0.0.1</moduleCode>
+        <moduleCode>LIMSSample_5.0.0.0</moduleCode>
         <url></url>
         <appIcon></appIcon>
         <powerFlag>true</powerFlag>
-        <menuCode>outagManage_5.0.0.1_onOrOff_eleOffList</menuCode>
+        <menuCode>LIMSSample_5.0.0.0_sample_recordBySample</menuCode>
         <isHidden>false</isHidden>
-        <sort>44</sort>
+        <sort>63</sort>
         <cid>1000</cid>
-        <remark>停电申请查看、编辑功能</remark>
-    </app>
-    <!--送电申请列表-->
-    <app>
-        <code>EAM_PowerTrans</code>
-        <name>送电申请</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>outagManage_5.0.0.1</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>outagManage_5.0.0.1_onOrOff_eleOnList</menuCode>
-        <isHidden>false</isHidden>
-        <sort>49</sort>
-        <cid>1000</cid>
-        <remark>送电申请查看、编辑功能</remark>
+        <remark>样品查看、样品检测项目、设备、材料录入结果功能</remark>
     </app>
 
-
-    <!--作业票管理-->
+    <!--单样品录入结果-->
     <app>
-        <code>WTS_TicketManage</code>
-        <name>作业管理</name>
+        <code>LIMS_RecordBySingleSample</code>
+        <name>单样品录入结果</name>
         <appType>base_AppType/02</appType>
         <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
+        <moduleCode>LIMSSample_5.0.0.0</moduleCode>
         <url></url>
         <appIcon></appIcon>
         <powerFlag>true</powerFlag>
-        <menuCode>WTS</menuCode>
+        <menuCode>LIMSSample_5.0.0.0_sample_recordBySingleSample</menuCode>
         <isHidden>false</isHidden>
-        <sort>5</sort>
+        <sort>64</sort>
         <cid>1000</cid>
-        <remark>八大作业票、作业许可查看，编辑功能</remark>
+        <remark>样品查看、检测分项录入结果功能</remark>
     </app>
-    <!--作业许可-->
+    <!--LIMS_Retention-->
     <app>
-        <code>WTS_TicketManage</code>
-        <name>作业许可</name>
+        <code>LIMS_Retention</code>
+        <name>留样单</name>
         <appType>base_AppType/02</appType>
         <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
+        <moduleCode>LIMSRetain_5.0.4.1</moduleCode>
         <url></url>
         <appIcon></appIcon>
         <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workPermit_workPermitList</menuCode>
+        <menuCode>LIMSRetain_5.0.4.1_retention_retentionList</menuCode>
         <isHidden>false</isHidden>
-        <sort>5</sort>
+        <sort>65</sort>
         <cid>1000</cid>
-        <remark>作业许可查看，编辑功能</remark>
-    </app>
-    <!--动火作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>作业许可</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_firework</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>动火作业票查看，编辑功能</remark>
-    </app>
-    <!--受限空间作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>受限空间作业</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_limitSpaceWork</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>受限空间作业票查看，编辑功能</remark>
-    </app>
-    <!--盲板抽堵作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>盲板抽堵作业</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_blockWork</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>盲板抽堵作业票查看，编辑功能</remark>
-    </app>
-    <!--高处安全作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>高处安全作业</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_heightWork</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>高处安全作业票查看，编辑功能</remark>
-    </app>
-    <!--吊装安全作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>吊装安全作业</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_liftWork</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>吊装安全作业票查看，编辑功能</remark>
-    </app>
-    <!--临时用电作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>临时用电作业</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_electricityWork</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>临时用电作业票查看，编辑功能</remark>
-    </app>
-    <!--动土安全作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>动土安全作业</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_soilWork</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>动土安全作业票查看，编辑功能</remark>
-    </app>
-
-    <!--断路安全作业-->
-    <app>
-        <code>WTS_TicketManage</code>
-        <name>断路安全作业</name>
-        <appType>base_AppType/02</appType>
-        <screenType>SCREEN_TYPE/03</screenType>
-        <moduleCode>WTS_1.0.0</moduleCode>
-        <url></url>
-        <appIcon></appIcon>
-        <powerFlag>true</powerFlag>
-        <menuCode>WTS_1.0.0_workTicket_breakWork</menuCode>
-        <isHidden>false</isHidden>
-        <sort>5</sort>
-        <cid>1000</cid>
-        <remark>断路安全作业票查看，编辑功能</remark>
+        <remark>留样单查看功能</remark>
     </app>
 </appList>
