@@ -47,29 +47,15 @@ public class InspectionSubEntity extends BaseEntity {
     private String optionNames;
     private boolean conclusionState = true;  //结论状态，作用于 不合格为红色分项/合格为正常分项
     private boolean isOpen = false; //是否展开子项
-    private String fileUploadMultiFileIcons;//附件类型
-    private String fileUploadFileAddPaths;//上传的附件路径
-    private String fileUploadMultiFileIds;//附件id
-    private String fileUploadFileDeleteIds;
-    private String fileUploadMultiFileNames;//附件名称
-    private String filePath;
+    private String[] fileUploadMultiFileIcons;//附件类型
+    private String[] fileUploadFileAddPaths;//上传的附件路径
+    private String[] fileUploadMultiFileIds;//附件id
+    private String[] fileUploadFileDeleteIds;
+    private String[] fileUploadMultiFileNames;//附件名称
+    private String[] filePath;
 
 
-    public String getFileUploadFileAddPaths() {
-        return fileUploadFileAddPaths;
-    }
 
-    public void setFileUploadFileAddPaths(String fileUploadFileAddPaths) {
-        this.fileUploadFileAddPaths = fileUploadFileAddPaths;
-    }
-
-    public String getFileUploadFileDeleteIds() {
-        return fileUploadFileDeleteIds;
-    }
-
-    public void setFileUploadFileDeleteIds(String fileUploadFileDeleteIds) {
-        this.fileUploadFileDeleteIds = fileUploadFileDeleteIds;
-    }
 
     public String getCalcParamInfo() {
         return calcParamInfo;
@@ -351,37 +337,6 @@ public class InspectionSubEntity extends BaseEntity {
         isOpen = open;
     }
 
-    public String getFileUploadMultiFileIcons() {
-        return fileUploadMultiFileIcons;
-    }
-
-    public void setFileUploadMultiFileIcons(String fileUploadMultiFileIcons) {
-        this.fileUploadMultiFileIcons = fileUploadMultiFileIcons;
-    }
-
-    public String getFileUploadMultiFileIds() {
-        return fileUploadMultiFileIds;
-    }
-
-    public void setFileUploadMultiFileIds(String fileUploadMultiFileIds) {
-        this.fileUploadMultiFileIds = fileUploadMultiFileIds;
-    }
-
-    public String getFileUploadMultiFileNames() {
-        return fileUploadMultiFileNames;
-    }
-
-    public void setFileUploadMultiFileNames(String fileUploadMultiFileNames) {
-        this.fileUploadMultiFileNames = fileUploadMultiFileNames;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
 
     public String getOptionNames() {
         return optionNames;
