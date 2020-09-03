@@ -429,7 +429,11 @@ public class Util {
 
     public static boolean isNumeric(String str) {
         try {
-            Double.parseDouble(str);
+            if (str.equals("")){
+                return true;
+            }else {
+                Double.parseDouble(str);
+            }
         } catch (Exception e) {
             return false;
         }

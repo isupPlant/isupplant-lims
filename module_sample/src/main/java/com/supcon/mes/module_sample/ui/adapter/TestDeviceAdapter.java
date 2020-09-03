@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -100,12 +101,21 @@ public class TestDeviceAdapter extends BaseListDataRecyclerViewAdapter<TestDevic
                 ctDeviceName.setContent(data.getEamId() == null ? "" : StringUtil.isEmpty(data.getEamId().getName()) ? "" : data.getEamId().getName());
                 ctDeviceState.setContent(data.getEamId() == null ? "" : data.getEamId().getState() == null ? "" : StringUtil.isEmpty(data.getEamId().getState().getValue()) ? "" : data.getEamId().getState().getValue());
 
+                if (StringUtil.isEmpty(ctDeviceCode.getContent())){
+                    ctDeviceCode.setKeyColor(Color.parseColor("#B20404"));
+                }else {
+                    ctDeviceCode.setKeyColor(Color.parseColor("#666666"));
+                    ctDeviceCode.setContentTextColor(Color.parseColor("#333333"));
+                }
+
+
                 if (data.isSelect()){
                     item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_sel);
                 }else {
                     item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_nor);
                 }
             }
+
         }
     }
 }

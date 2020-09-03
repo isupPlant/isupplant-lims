@@ -125,9 +125,12 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                             }
 
                             if (s.length() > 0){
+                                ceConsumption.setKeyTextColor(Color.parseColor("#666666"));
+                                ceConsumption.setContentTextColor(Color.parseColor("#333333"));
                                 getList().get(getAdapterPosition()).setUseQty(new BigDecimal(s.toString()).setScale(2, BigDecimal.ROUND_DOWN));
 
                             }else {
+                                ceConsumption.setKeyTextColor(Color.parseColor("#B20404"));
                                 getList().get(getAdapterPosition()).setUseQty(null);
                             }
                         }
@@ -182,6 +185,8 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                 ctNumber.setContent(StringUtil.isEmpty(data.getMatCode()) ? "--" : data.getMatCode());
                 ceBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "" : data.getBatchCode());
                 ceConsumption.setContent(data.getUseQty() == null ? "" : data.getUseQty().setScale(2, BigDecimal.ROUND_DOWN)+"");
+
+
 
                 if (data.isSelect()){
                     item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_sel);
