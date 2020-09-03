@@ -4,6 +4,7 @@ package com.supcon.mes.module_sample.model.bean;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.module_lims.model.bean.SampleTestIdEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,9 +28,9 @@ public class SampleInspectItemEntity extends InspectionItemsEntity {
     private String optionValues;//原始值选择值
     private String minValue;//原始值最小值
     private String maxValue;//原始值最大值
-    private String fileUploadMultiFileIcons;//附件类型
-    private String fileUploadMultiFileIds;//附件id
-    private String fileUploadMultiFileNames;//附件名称
+    private List<String> fileUploadMultiFileIcons;//附件类型
+    private List<String> fileUploadMultiFileIds;//附件id
+    private List<String> fileUploadMultiFileNames;//附件名称
     private String executableFormula;
     private boolean isExpand;//扩展/收缩
     private BaseIdValueEntity limitType;
@@ -143,27 +144,27 @@ public class SampleInspectItemEntity extends InspectionItemsEntity {
         this.maxValue = maxValue;
     }
 
-    public String getFileUploadMultiFileIcons() {
+    public List<String> getFileUploadMultiFileIcons() {
         return fileUploadMultiFileIcons;
     }
 
-    public void setFileUploadMultiFileIcons(String fileUploadMultiFileIcons) {
+    public void setFileUploadMultiFileIcons(List<String> fileUploadMultiFileIcons) {
         this.fileUploadMultiFileIcons = fileUploadMultiFileIcons;
     }
 
-    public String getFileUploadMultiFileIds() {
+    public List<String> getFileUploadMultiFileIds() {
         return fileUploadMultiFileIds;
     }
 
-    public void setFileUploadMultiFileIds(String fileUploadMultiFileIds) {
+    public void setFileUploadMultiFileIds(List<String> fileUploadMultiFileIds) {
         this.fileUploadMultiFileIds = fileUploadMultiFileIds;
     }
 
-    public String getFileUploadMultiFileNames() {
+    public List<String> getFileUploadMultiFileNames() {
         return fileUploadMultiFileNames;
     }
 
-    public void setFileUploadMultiFileNames(String fileUploadMultiFileNames) {
+    public void setFileUploadMultiFileNames(List<String> fileUploadMultiFileNames) {
         this.fileUploadMultiFileNames = fileUploadMultiFileNames;
     }
 

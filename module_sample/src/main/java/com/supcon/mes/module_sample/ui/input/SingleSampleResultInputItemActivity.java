@@ -124,13 +124,11 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (!fragment.change()){
+                            ToastUtils.show(SingleSampleResultInputItemActivity.this,"您未修改任何数据，无需保存！");
+                            return;
+                        }
                         List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();
-//                        String OriginalInspectionSubList=fragment.getOriginalInspectionSubList().toString();
-//                        String newInspectionSubList=inspectionSubList.toString();
-//                        if (newInspectionSubList.equals(OriginalInspectionSubList)){
-//                            ToastUtils.show(SingleSampleResultInputItemActivity.this,"您未修改任何数据，无需保存！");
-//                            return;
-//                        }
                         SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("save",sampleEntity.getId(),inspectionSubList);
                         submitController.recordResultSubmit(SingleSampleResultInputItemActivity.this,1,submitEntity);
                     }

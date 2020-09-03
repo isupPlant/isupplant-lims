@@ -74,10 +74,10 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
 
     public Activity activity;
     public ScriptEngine engine;
-    Map<String,List<CustomEditText>>  calculateListMap=new HashMap<>();
-    Map<String,SampleInspectItemEntity> calculateMap=new HashMap<>();
-    Map<String,List<SampleInspectItemEntity>> calculateInspectItemEntityMap=new HashMap<>();
-    Map<String,CustomEditText> calculateTextMap=new HashMap<>();
+    Map<String, List<CustomEditText>> calculateListMap = new HashMap<>();
+    Map<String, SampleInspectItemEntity> calculateMap = new HashMap<>();
+    Map<String, List<SampleInspectItemEntity>> calculateInspectItemEntityMap = new HashMap<>();
+    Map<String, CustomEditText> calculateTextMap = new HashMap<>();
 
     class SingleSampleInspectViewHolder extends BaseRecyclerViewHolder<SampleInspectItemEntity> {
 
@@ -90,7 +90,7 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
         @BindByTag("ceOriginalValue")
         CustomEditText ceOriginalValue;//编辑的原始值
         @BindByTag("cpOriginalValue")//选择的原始值
-        CustomSpinner cpOriginalValue;
+                CustomSpinner cpOriginalValue;
         @BindByTag("ctRoundOffValue")
         CustomTextView ctRoundOffValue;
         @BindByTag("ceReportedValue")
@@ -194,7 +194,7 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(originalValue -> {
                         SampleInspectItemEntity detailEntity = (SampleInspectItemEntity) getItem(getAdapterPosition());
-                        editSampleInspectItem(detailEntity, originalValue, ceOriginalValue,ctRoundOffValue, ceReportedValue);
+                        editSampleInspectItem(detailEntity, originalValue, ceOriginalValue, ctRoundOffValue, ceReportedValue);
                     });
             RxTextView.textChanges(ceReportedValue.editText())
                     .skipInitialValue()
@@ -207,14 +207,14 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
                         editSampleInspectReportValue(dispValue, detailEntity);
                     });
             RxView.clicks(imageUpDown)
-                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .throttleFirst(2000, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
-                        onItemChildViewClick(imageUpDown,1);
+                        onItemChildViewClick(imageUpDown, 1);
                     });
             RxView.clicks(imageFileView)
-                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .throttleFirst(2000, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
-                        onItemChildViewClick(imageFileView,2);
+                        onItemChildViewClick(imageFileView, 2);
                     });
         }
 
@@ -225,8 +225,8 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
             testItemsTv.setValue(data.getComName());
             ctRoundOffValue.setValue(data.getRoundValue());
             ceReportedValue.setContent(data.getDispValue());
-            String busiVersion=data.getSampleTestId().getTestId().getBusiVersion();
-            if ("LIMSBasic_valueKind/enum".equals(data.getValueKind().getId())){
+            String busiVersion = data.getSampleTestId().getTestId().getBusiVersion();
+            if ("LIMSBasic_valueKind/enum".equals(data.getValueKind().getId())) {
                 String optionValues = data.getOptionValues();
                 String[] optionValuesArr = optionValues.split("@##@");
                 for (String optionValue : optionValuesArr) {
@@ -236,68 +236,59 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
                 cpOriginalValue.setVisibility(View.VISIBLE);
                 cpOriginalValue.setContent(data.getOriginValue());
                 cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-            }else if ("LIMSBasic_valueKind/calculate".equals(data.getValueKind().getId())){
+            } else if ("LIMSBasic_valueKind/calculate".equals(data.getValueKind().getId())) {
                 cpOriginalValue.setVisibility(View.GONE);
                 ceOriginalValue.setEditable(false);
                 ceOriginalValue.setVisibility(View.VISIBLE);
                 ceOriginalValue.setContent(data.getOriginValue());
-                calculateListMap.put(busiVersion,new ArrayList<>());
-                calculateInspectItemEntityMap.put(busiVersion,new ArrayList<>());
-                calculateTextMap.put(busiVersion,ceOriginalValue);
-                calculateMap.put(busiVersion,data);
-            }else if ("LIMSBasic_valueKind/number".equals(data.getValueKind().getId())){
+                calculateListMap.put(busiVersion, new ArrayList<>());
+                calculateInspectItemEntityMap.put(busiVersion, new ArrayList<>());
+                calculateTextMap.put(busiVersion, ceOriginalValue);
+                calculateMap.put(busiVersion, data);
+            } else if ("LIMSBasic_valueKind/number".equals(data.getValueKind().getId())) {
                 cpOriginalValue.setVisibility(View.GONE);
                 ceOriginalValue.setVisibility(View.VISIBLE);
                 ceOriginalValue.setContent(data.getOriginValue());
                 ceOriginalValue.setEditable(true);
                 ceOriginalValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                if (calculateListMap.containsKey(busiVersion)){
-                    List<CustomEditText> originalValueList=calculateListMap.get(busiVersion);
+                if (calculateListMap.containsKey(busiVersion)) {
+                    List<CustomEditText> originalValueList = calculateListMap.get(busiVersion);
                     originalValueList.add(ceOriginalValue);
-                    List<SampleInspectItemEntity> sampleInspectItemEntities=calculateInspectItemEntityMap.get(busiVersion);
+                    List<SampleInspectItemEntity> sampleInspectItemEntities = calculateInspectItemEntityMap.get(busiVersion);
                     sampleInspectItemEntities.add(data);
                 }
-            }else if ("LIMSBasic_valueKind/text".equals(data.getValueKind().getId())){
+            } else if ("LIMSBasic_valueKind/text".equals(data.getValueKind().getId())) {
                 cpOriginalValue.setVisibility(View.GONE);
                 ceOriginalValue.setVisibility(View.VISIBLE);
                 ceOriginalValue.setContent(data.getOriginValue());
                 ceOriginalValue.setEditable(true);
             }
-            if (!StringUtil.isEmpty(data.getFileUploadMultiFileIds())){
-                new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames()).setFileOnSuccessListener(new OnSuccessListener<File>() {
-                    @Override
-                    public void onSuccess(File result) {
-                        data.setFilePath(result.getPath());
-                    }
-                });
-            }
-
         }
     }
 
 
     //计算
-    public void calculate(String busiVersion,CustomEditText ceOriginalValue){
-        List<SampleInspectItemEntity> sampleInspectItemEntities=calculateInspectItemEntityMap.get(busiVersion);
-        for (int i = 0; i <sampleInspectItemEntities.size() ; i++) {
-            if (StringUtil.isEmpty(sampleInspectItemEntities.get(i).getCalcParamInfo())){
+    public void calculate(String busiVersion, CustomEditText ceOriginalValue) {
+        List<SampleInspectItemEntity> sampleInspectItemEntities = calculateInspectItemEntityMap.get(busiVersion);
+        for (int i = 0; i < sampleInspectItemEntities.size(); i++) {
+            if (StringUtil.isEmpty(sampleInspectItemEntities.get(i).getCalcParamInfo())) {
 //                ToastUtils.show(context,"暂无计算公式");
                 return;
             }
-            SampleInspectItemEntity itemEntity=calculateMap.get(busiVersion);
+            SampleInspectItemEntity itemEntity = calculateMap.get(busiVersion);
             StringBuffer script = new StringBuffer("function executeFunc(){");
             String calcParamInfo = sampleInspectItemEntities.get(i).getCalcParamInfo();
             List<CalcParamInfoEntity> calcParamInfoList = GsonUtil.jsonToList(calcParamInfo, CalcParamInfoEntity.class);
             for (int j = 0; j < calcParamInfoList.size(); j++) {
-                String calculateParamValue = getCalculateParamValue(true,calcParamInfoList.get(j).getParamType().getId(),
+                String calculateParamValue = getCalculateParamValue(true, calcParamInfoList.get(j).getParamType().getId(),
                         calcParamInfoList.get(j).getTestItemName(), calcParamInfoList.get(j).getTestComName(),
                         calcParamInfoList.get(j).getIncomeType().getId(), calcParamInfoList.get(j).getOutcomeType().getId(),
                         calcParamInfoList.get(j).getDealFunc().getId());
 
-                if (StringUtil.isEmpty(calculateParamValue)){
+                if (StringUtil.isEmpty(calculateParamValue)) {
                     return;
                 }
-                script.append("var "+calcParamInfoList.get(j).getParamName()+ "=" +calculateParamValue+ ";");
+                script.append("var " + calcParamInfoList.get(j).getParamName() + "=" + calculateParamValue + ";");
             }
             script.append(itemEntity.getCalculFormula() + "}");
 
@@ -313,7 +304,8 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
 
 
     }
-    private String getCalculateParamValue(boolean autoCalculate,String paramType, String testItem, String comName, String incomeType, String outcomeType, String dealFunc) {
+
+    private String getCalculateParamValue(boolean autoCalculate, String paramType, String testItem, String comName, String incomeType, String outcomeType, String dealFunc) {
         List<InspectionSubEntity> sampeComs = new ArrayList<>();
         if (null != sampeComs) {
             List<String> valueArr = new ArrayList<>();
@@ -369,29 +361,29 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
                 valueList.add(Double.valueOf(valueArr.get(i)));
             }
 
-            if(outcomeType.equals("LIMSBasic_outcomeType/dealFunc") ){
+            if (outcomeType.equals("LIMSBasic_outcomeType/dealFunc")) {
                 //输出类型为处理值
 
-                if(dealFunc.equals("LIMSBasic_dealFunc/avg")){
+                if (dealFunc.equals("LIMSBasic_dealFunc/avg")) {
                     //平均值
-                    return Util.getAvg(valueList)+"";
-                }else if(dealFunc.equals("LIMSBasic_dealFunc/sum") ){
+                    return Util.getAvg(valueList) + "";
+                } else if (dealFunc.equals("LIMSBasic_dealFunc/sum")) {
                     //求和
-                    return Util.getSum(valueList)+"";
-                }else if(dealFunc.equals("LIMSBasic_dealFunc/count") ){
+                    return Util.getSum(valueList) + "";
+                } else if (dealFunc.equals("LIMSBasic_dealFunc/count")) {
                     //个数
-                    return valueList.size()+"";
-                }else if(dealFunc.equals("LIMSBasic_dealFunc/max") ){
+                    return valueList.size() + "";
+                } else if (dealFunc.equals("LIMSBasic_dealFunc/max")) {
                     //最大值
-                    return Util.getMax(valueList)+"";
-                }else if(dealFunc.equals("LIMSBasic_dealFunc/min") ){
+                    return Util.getMax(valueList) + "";
+                } else if (dealFunc.equals("LIMSBasic_dealFunc/min")) {
                     //最小值
-                    return Util.getMin(valueList)+"";
-                }else if(dealFunc.equals("LIMSBasic_dealFunc/stdev") ){
+                    return Util.getMin(valueList) + "";
+                } else if (dealFunc.equals("LIMSBasic_dealFunc/stdev")) {
                     //标准方差
-                    return Util.standardDiviation(valueList)+"";
+                    return Util.standardDiviation(valueList) + "";
                 }
-            }else if(outcomeType.equals("LIMSBasic_outcomeType/arr") ){
+            } else if (outcomeType.equals("LIMSBasic_outcomeType/arr")) {
                 //输出类型为数组
                 return "[" + valueArr.toString() + "]";
             }
@@ -444,7 +436,7 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
         }
     }
 
-    private void editSampleInspectItem(SampleInspectItemEntity detailEntity, String originValue,CustomEditText ceOriginalValue, CustomTextView ctRoundOffValue, CustomEditText ceReportedValue) {
+    private void editSampleInspectItem(SampleInspectItemEntity detailEntity, String originValue, CustomEditText ceOriginalValue, CustomTextView ctRoundOffValue, CustomEditText ceReportedValue) {
         detailEntity.setOriginValue(originValue);
         detailEntity.setRoundValue(originValue);
         ctRoundOffValue.setValue(originValue);
@@ -466,7 +458,7 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
                 } else if (dispValue == minValue2) {
                     detailEntity.setDispValue(originValue);
                     ceReportedValue.setContent(originValue);
-                }else {
+                } else {
                     String[] maxValueArr = maxValue.split(",");
                     minValue2 = Double.parseDouble(maxValueArr[0]);
                     if (dispValue > minValue2) {
@@ -480,18 +472,18 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
             } else {
                 double minValue2 = Double.parseDouble(minValue);
                 if (dispValue < minValue2) {
-                    if (detailEntity.getLimitType()!=null && "LIMSBasic_limitType/reject".equals(detailEntity.getLimitType().getId())){
+                    if (detailEntity.getLimitType() != null && "LIMSBasic_limitType/reject".equals(detailEntity.getLimitType().getId())) {
                         detailEntity.setDispValue(null);
                         ceReportedValue.setContent(null);
                         ceOriginalValue.setContent(null);
-                    }else {
+                    } else {
                         detailEntity.setDispValue("<" + minValue);
                         ceReportedValue.setContent("<" + minValue);
                     }
                 } else if (dispValue == minValue2) {
                     detailEntity.setDispValue("");
                     ceReportedValue.setContent("");
-                }else {
+                } else {
                     minValue2 = Double.parseDouble(maxValue);
                     if (dispValue <= minValue2) {
                         detailEntity.setDispValue(originValue);
@@ -504,24 +496,25 @@ public class SingleSampleInpectAdapter extends BaseListDataRecyclerViewAdapter<S
             }
         }
 
-        String busiVersion=detailEntity.getSampleTestId().getTestId().getBusiVersion();
-        if (calculateListMap.containsKey(busiVersion)){
-            List<CustomEditText> originalValueList=calculateListMap.get(busiVersion);
-            boolean fillComplete=false;
-            for(CustomEditText customEditText:originalValueList){
-                fillComplete=!TextUtils.isEmpty(customEditText.getContent());
+        String busiVersion = detailEntity.getSampleTestId().getTestId().getBusiVersion();
+        if (calculateListMap.containsKey(busiVersion)) {
+            List<CustomEditText> originalValueList = calculateListMap.get(busiVersion);
+            boolean fillComplete = false;
+            for (CustomEditText customEditText : originalValueList) {
+                fillComplete = !TextUtils.isEmpty(customEditText.getContent());
             }
-            if (fillComplete){
-                calculFormula(calculateTextMap.get(busiVersion),originalValueList);
+            if (fillComplete) {
+                calculFormula(calculateTextMap.get(busiVersion), originalValueList);
             }
         }
     }
-    private void calculFormula(CustomEditText ceOriginalValue,List<CustomEditText> originalValueList){
-        float  calcul=0;
-        for(int i=0;i<originalValueList.size();i++){
-            calcul=Float.valueOf(originalValueList.get(i).getContent());
+
+    private void calculFormula(CustomEditText ceOriginalValue, List<CustomEditText> originalValueList) {
+        float calcul = 0;
+        for (int i = 0; i < originalValueList.size(); i++) {
+            calcul = Float.valueOf(originalValueList.get(i).getContent());
         }
-        ceOriginalValue.setContent(Util.big(calcul/originalValueList.size()));
+        ceOriginalValue.setContent(Util.big(calcul / originalValueList.size()));
     }
 
     /**

@@ -3,6 +3,8 @@ package com.supcon.mes.module_lims.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,15 +49,12 @@ public class InspectionSubEntity extends BaseEntity {
     private String optionNames;
     private boolean conclusionState = true;  //结论状态，作用于 不合格为红色分项/合格为正常分项
     private boolean isOpen = false; //是否展开子项
-    private String[] fileUploadMultiFileIcons;//附件类型
-    private String[] fileUploadFileAddPaths;//上传的附件路径
-    private String[] fileUploadMultiFileIds;//附件id
-    private String[] fileUploadFileDeleteIds;
-    private String[] fileUploadMultiFileNames;//附件名称
-    private String[] filePath;
-
-
-
+    private List<String> fileUploadMultiFileIcons;//附件类型
+    private List<String> fileUploadFileAddPaths;//上传的附件路径
+    private List<String> fileUploadMultiFileIds;//附件id
+    private List<String> fileUploadFileDeleteIds;
+    private List<String> fileUploadMultiFileNames;//附件名称
+    private List<AttachmentSampleInputEntity> attachmentSampleInputEntities;
 
     public String getCalcParamInfo() {
         return calcParamInfo;
@@ -344,5 +343,53 @@ public class InspectionSubEntity extends BaseEntity {
 
     public void setOptionNames(String optionNames) {
         this.optionNames = optionNames;
+    }
+
+    public List<String> getFileUploadMultiFileIcons() {
+        return fileUploadMultiFileIcons==null?new ArrayList<>():fileUploadMultiFileIcons;
+    }
+
+    public void setFileUploadMultiFileIcons(List<String> fileUploadMultiFileIcons) {
+        this.fileUploadMultiFileIcons = fileUploadMultiFileIcons;
+    }
+
+    public List<String> getFileUploadFileAddPaths() {
+        return fileUploadFileAddPaths==null?new ArrayList<>():fileUploadFileAddPaths;
+    }
+
+    public void setFileUploadFileAddPaths(List<String> fileUploadFileAddPaths) {
+        this.fileUploadFileAddPaths = fileUploadFileAddPaths;
+    }
+
+    public List<String> getFileUploadMultiFileIds() {
+        return fileUploadMultiFileIds;
+    }
+
+    public void setFileUploadMultiFileIds(List<String> fileUploadMultiFileIds) {
+        this.fileUploadMultiFileIds = fileUploadMultiFileIds;
+    }
+
+    public List<String> getFileUploadFileDeleteIds() {
+        return fileUploadFileDeleteIds==null?new ArrayList<>():fileUploadFileDeleteIds;
+    }
+
+    public void setFileUploadFileDeleteIds(List<String> fileUploadFileDeleteIds) {
+        this.fileUploadFileDeleteIds = fileUploadFileDeleteIds;
+    }
+
+    public List<String> getFileUploadMultiFileNames() {
+        return fileUploadMultiFileNames==null?new ArrayList<>():fileUploadMultiFileNames;
+    }
+
+    public void setFileUploadMultiFileNames(List<String> fileUploadMultiFileNames) {
+        this.fileUploadMultiFileNames = fileUploadMultiFileNames;
+    }
+
+    public List<AttachmentSampleInputEntity> getAttachmentSampleInputEntities() {
+        return attachmentSampleInputEntities;
+    }
+
+    public void setAttachmentSampleInputEntities(List<AttachmentSampleInputEntity> attachmentSampleInputEntities) {
+        this.attachmentSampleInputEntities = attachmentSampleInputEntities;
     }
 }

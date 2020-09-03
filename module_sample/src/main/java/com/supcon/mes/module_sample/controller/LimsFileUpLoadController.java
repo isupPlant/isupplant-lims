@@ -37,6 +37,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.ui.view.AddFileListView;
 import com.supcon.mes.module_lims.model.api.FileUpAPI;
+import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.model.contract.FileUpContract;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
@@ -46,6 +47,7 @@ import com.supcon.mes.module_sample.presenter.FileUpLoadPresenter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import utilcode.util.FileUtils;
@@ -68,7 +70,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
     File imageFile;
     Uri imageUri; //图片路径
     OnSuccessListener<FileDataEntity> onSuccessListener;
-    OnSuccessListener<File> fileOnSuccessListener;
+    OnSuccessListener<List<AttachmentSampleInputEntity>> fileOnSuccessListener;
     private Activity context;
     private String filePath;
     private BaseFragment fragment;
@@ -278,11 +280,11 @@ public class LimsFileUpLoadController extends BasePresenterController implements
 
     }
 
-    public OnSuccessListener<File> getFileOnSuccessListener() {
+    public OnSuccessListener<List<AttachmentSampleInputEntity>> getFileOnSuccessListener() {
         return fileOnSuccessListener;
     }
 
-    public void setFileOnSuccessListener(OnSuccessListener<File> fileOnSuccessListener) {
+    public void setFileOnSuccessListener(OnSuccessListener<List<AttachmentSampleInputEntity>> fileOnSuccessListener) {
         this.fileOnSuccessListener = fileOnSuccessListener;
     }
 
@@ -305,13 +307,13 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         }
     }
 
-    public LimsFileUpLoadController loadFile(String id, String fileName) {
+    public LimsFileUpLoadController loadFile(List<String> id, List<String> fileName) {
         presenterRouter.create(FileUpAPI.class).loadFile(id, fileName);
         return this;
     }
 
     @Override
-    public void loadFileSuccess(File entity) {
+    public void loadFileSuccess(List entity) {
         if (fileOnSuccessListener != null) {
             fileOnSuccessListener.onSuccess(entity);
         }

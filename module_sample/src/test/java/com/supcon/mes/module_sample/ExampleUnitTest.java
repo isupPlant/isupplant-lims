@@ -2,6 +2,9 @@ package com.supcon.mes.module_sample;
 
 import org.junit.Test;
 
+import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
+
 import static org.junit.Assert.*;
 
 /**
@@ -12,6 +15,13 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+        String[] ids={"1","2","3"};
+        Flowable.fromArray(ids)
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        System.out.println("id="+s);
+                    }
+                });
     }
 }
