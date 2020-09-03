@@ -34,7 +34,6 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import static java.lang.Float.parseFloat;
 
 /**
  * author huodongsheng
@@ -227,7 +226,7 @@ public class CalculationController extends BaseViewController {
                         Invocable invoke = (Invocable) engine;
                         Object dispValue = invoke.invokeFunction("sectionJudgment", value, sampleCom.getLimitType().getId(), sampleCom.getMaxValue(), sampleCom.getMinValue());
                         if (dispValue != "reject") {
-                            if (parseFloat(dispValue + "") != parseFloat(value)) {
+                            if ((dispValue + "").equals(value) ) {
                                 sampleCom.setDispValue(dispValue + "");
                             } else {
                                 sampleCom.setDispValue(roundValue + "");
@@ -349,6 +348,8 @@ public class CalculationController extends BaseViewController {
                 if (StringUtil.isEmpty(calculateParamValue)) {
                     return;
                 }
+
+                calculateParamValue = checkValue(calculateParamValue);
                 script.append("var " + calcParamInfoList.get(j).getParamName() + "=" + calculateParamValue + ";");
             }
             script.append(sampleComs.get(i).getCalculFormula() + "}");
@@ -357,10 +358,11 @@ public class CalculationController extends BaseViewController {
                 engine.eval(script.toString());
                 Invocable inv2 = (Invocable) engine;
                 Object res = inv2.invokeFunction("executeFunc");//执行计算公式
-                if (res instanceof Double && Util.isNumeric(String.valueOf(res))) {
+                String result = checkValue(String.valueOf(res));
+                if (Util.isNumeric(result)) {
                     for (int k = 0; k < adapterList.size(); k++) {
                         if (adapterList.get(k).getId().equals(sampleComs.get(i).getId())) {
-                            originValChange(String.valueOf(res), k, adapterList);
+                            originValChange(result, k, adapterList);
                             break;
                         }
                     }
@@ -395,7 +397,7 @@ public class CalculationController extends BaseViewController {
             for (int i = 0; i < sampeComs.size(); i++) {
                 if (incomeType.equals("LIMSBasic_incomeType/originValue")) {
                     if (StringUtil.isEmpty(sampeComs.get(i).getOriginValue())) {
-                        if (!autoCalculate) {
+                        if (!autoCalculate) { //手动计算
                             //原始值为空，非自动计算时报错
                             String string = context.getResources().getString(R.string.LIMSSample_sample_originValIsNull);
                             String format = String.format(string, sampeComs.get(i).getComName(), sampeComs.get(i).getParallelNo() + "");
@@ -438,33 +440,70 @@ public class CalculationController extends BaseViewController {
 
             }
 
-            //能进到该方法中的 一定是数值类型的 所以直接将String 转 Double
-            List<Double> valueList = new ArrayList<>();
-            for (int i = 0; i < valueArr.size(); i++) {
-                valueList.add(Double.valueOf(valueArr.get(i)));
-            }
+//            //能进到该方法中的 一定是数值类型的 所以直接将String 转 Double
+//            List<Double> valueList = new ArrayList<>();
+//            for (int i = 0; i < valueArr.size(); i++) {
+//                valueList.add(Double.valueOf(valueArr.get(i)));
+//            }
+
 
             if (outcomeType.equals("LIMSBasic_outcomeType/dealFunc")) {
                 //输出类型为处理值
-
+                    Object res = null;
                 if (dealFunc.equals("LIMSBasic_dealFunc/avg")) {
+
+                    try {
+                        Invocable invoke = (Invocable) engine;
+                        res = invoke.invokeFunction("ave", valueArr.toArray());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     //平均值
-                    return Util.getAvg(valueList) + "";
+                    return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/sum")) {
                     //求和
-                    return Util.getSum(valueList) + "";
+                    try {
+                        Invocable invoke = (Invocable) engine;
+                        res = invoke.invokeFunction("getSum", valueArr.toArray());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/count")) {
                     //个数
-                    return valueList.size() + "";
+                    return valueArr.size() + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/max")) {
                     //最大值
-                    return Util.getMax(valueList) + "";
+                    try {
+                        Invocable invoke = (Invocable) engine;
+                        res = invoke.invokeFunction("getMaxValue", valueArr.toArray());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/min")) {
                     //最小值
-                    return Util.getMin(valueList) + "";
+                    try {
+                        Invocable invoke = (Invocable) engine;
+                        res = invoke.invokeFunction("getMinValue", valueArr.toArray());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/stdev")) {
                     //标准方差
-                    return Util.standardDiviation(valueList) + "";
+                    try {
+                        Invocable invoke = (Invocable) engine;
+                        res = invoke.invokeFunction("stdev", valueArr.toArray());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return res + "";
                 }
             } else if (outcomeType.equals("LIMSBasic_outcomeType/arr")) {
                 //输出类型为数组
@@ -582,6 +621,23 @@ public class CalculationController extends BaseViewController {
         }
         return cacheFile.getAbsolutePath();
     }
+
+    public String checkValue(String str){
+        if (StringUtil.isEmpty(str)){
+            return "";
+        }
+        if (com.supcon.mes.middleware.util.Util.isNumeric(str)){
+            if (com.supcon.mes.middleware.util.Util.isContainPoint(str)){
+                return com.supcon.mes.middleware.util.Util.removePoint(str);
+            }else {
+                return str;
+            }
+        }else {
+            return str;
+        }
+
+    }
+
 
     public interface NotifyRefreshAdapterListener{
         void notifyRefreshAdapter(int position);

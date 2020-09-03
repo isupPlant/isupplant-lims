@@ -111,4 +111,5 @@
     <string name="lims_device_check">设备中存在未选择的设备编码!</string>
     <string name="lims_material_check">材料中存在未输入的用量！</string>
     <string name="lims_delete">删除</string>
+    <string name="lims_project_check">提交的分项中存在报出值为空的项目，是否继续提交并设置报出值为未检？</string>
 </resources>

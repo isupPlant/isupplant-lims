@@ -143,6 +143,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             });
 
             ceOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
+            ctRoundOffValue.setKeyColor(Color.parseColor("#666666"));
             cpOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
 
         }
@@ -225,6 +226,23 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     return false;
                 }
             });
+
+            ceOriginalValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ceOriginalValue.setContent("");
+                    getItem(getAdapterPosition()).setOriginValue("");
+                }
+            });
+
+            ceReportedValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ceReportedValue.setContent("");
+                    getItem(getAdapterPosition()).setDispValue("");
+                }
+            });
+
 
 
 //            //报出值数值变化监听
@@ -318,6 +336,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     }else {
                         setVisible(true);
                         ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
+                        ceOriginalValue.setHint("请输入原始值");
                     }
                 }else {
                     setVisible(true);
@@ -326,7 +345,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 setVisible(true);
             }
             ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "--" : data.getRoundValue()); //修约值
-            ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "--" : data.getDispValue()); //报出值
+            ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "" : data.getDispValue()); //报出值
 
             //判断当前分项中有没有 不合格的结论  有的话 为false
             //HashMap<String, Object> dispMap = data.getDispMap();

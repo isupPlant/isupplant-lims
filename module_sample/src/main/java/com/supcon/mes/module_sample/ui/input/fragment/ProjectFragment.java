@@ -6,8 +6,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
+import com.afollestad.materialdialogs.util.DialogUtils;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
@@ -18,6 +20,7 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
@@ -46,6 +49,7 @@ import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
+import com.supcon.mes.module_scan.util.DialogUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -201,9 +205,6 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         adapter.setDispValueChangeListener(new ProjectAdapter.DispValueChangeListener() {
             @Override
             public void dispValueChange( String value, int position) {
-                    if (adapter.getList().get(position).getDispValue().equals(adapter.getList().get(position).getRecordDispValue())) {
-                        return; //表示原始值跟上次的值一样
-                    }
                     adapter.getList().get(position).setRecordDispValue(value);
                     getController(CalculationController.class).dispValueOnchange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
                         @Override
@@ -372,7 +373,16 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     public List<InspectionSubEntity> getInspectionSubList(){
         return adapter.getList();
-
     }
+
+    public boolean checkProject(){
+        for (int i = 0; i < adapter.getList().size(); i++) {
+            if (StringUtil.isEmpty(adapter.getList().get(i).getDispValue())){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 

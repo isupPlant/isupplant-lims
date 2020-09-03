@@ -22,6 +22,7 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
@@ -142,7 +143,6 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .commit();
 
         controller = new SampleRecordResultSubmitController();
-        Log.e("eeeeeeeeeeeeee","ProjectInspectionItemsActivity.initView");
     }
 
     @SuppressLint("CheckResult")
@@ -204,15 +204,46 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
-                        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
-                        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
-                        String equipmentDelete = equipmentFragment.getDeleteList();
-                        String materialDelete = materialFragment.getDeleteList();
 
-                        SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
-                                sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
-                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
+                        if (!projectFragment.checkProject()){
+                            new CustomDialog(context)
+                                    .twoButtonAlertDialog( context.getResources().getString(R.string.lims_project_check))
+                                    .bindView(R.id.grayBtn, context.getResources().getString(R.string.home_cancel))
+                                    .bindView(R.id.redBtn, context.getResources().getString(R.string.home_confirm))
+                                    .bindClickListener(R.id.grayBtn, v -> {
+                                    }, true)
+                                    .bindClickListener(R.id.redBtn, v -> {
+
+                                        if (equipmentFragment.checkTestDevice() && materialFragment.checkTestMater()){
+                                            List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+                                            List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+                                            List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+                                            String equipmentDelete = equipmentFragment.getDeleteList();
+                                            String materialDelete = materialFragment.getDeleteList();
+
+                                            SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
+                                                    sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
+                                            controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
+                                        }
+
+                                    }, true)
+                                    .show();
+
+                        }else {
+                            if (equipmentFragment.checkTestDevice() && materialFragment.checkTestMater()){
+                                List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+                                List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+                                List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+                                String equipmentDelete = equipmentFragment.getDeleteList();
+                                String materialDelete = materialFragment.getDeleteList();
+
+                                SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
+                                        sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
+                                controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
+                            }
+                        }
+
+
                     }
                 });
         controller.setSubmitOnSuccessListener(new OnSuccessListener<Integer>() {
@@ -221,7 +252,6 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 if (result == 1){//保存
                     inspectionProjectFragment.againRefresh();
                 }else if (result == 2){//提交
-                    if (equipmentFragment.checkTestDevice() && materialFragment.checkTestMater()){ //检查设备材料的必填项是否已填写
                         inspectionProjectFragment.lookNext(new InspectionSubRefreshListener() {
                             @Override
                             public void refreshOver(int position, List<InspectionItemsEntity> list) {
@@ -235,9 +265,6 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                         });
                     }
 
-
-
-                }
             }
         });
     }

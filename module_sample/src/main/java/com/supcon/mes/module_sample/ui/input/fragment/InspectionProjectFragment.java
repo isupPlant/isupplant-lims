@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -197,6 +198,9 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 break;
             }
         }
+        if (position+1 == adapter.getList().size()){  //表示上次选中的已经是最后一条了
+            mInspectionSubRefreshListener.refreshOver(position, adapter.getList());
+        }
         goRefresh();
 
     }
@@ -210,6 +214,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 break;
             }
         }
+        goRefresh();
     }
 
     @Override
