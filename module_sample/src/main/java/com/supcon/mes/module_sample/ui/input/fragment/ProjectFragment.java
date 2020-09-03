@@ -25,11 +25,13 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.controller.CalculationController;
 
+import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.utils.FileUtils;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.IntentRouter;
@@ -51,7 +53,12 @@ import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
 import com.supcon.mes.module_scan.util.DialogUtil;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +117,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(false);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -143,6 +151,24 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDataEvent(SelectDataEvent dataEvent){
+        if ("deleteIds".equals(dataEvent.getSelectTag())){
+            List<AttachmentSampleInputEntity> attachmentEntitys= (List<AttachmentSampleInputEntity>) dataEvent.getEntity();
+            if (attachmentEntitys!=null && !attachmentEntitys.isEmpty()){
+                List<String> deleteIds=itemEntity.getFileUploadFileDeleteIds();
+                for(AttachmentSampleInputEntity attachmentEntity:attachmentEntitys){
+                    if (!TextUtils.isEmpty(attachmentEntity.getId())){
+                        deleteIds.add(attachmentEntity.getId());
+                    }
+                }
+                itemEntity.setFileUploadFileDeleteIds(deleteIds);
+                itemEntity.getAttachmentSampleInputEntities().removeAll(attachmentEntitys);
+
+            }
+        }
+    }
+    InspectionSubEntity itemEntity;
     @Override
     protected void initListener() {
         super.initListener();
@@ -153,41 +179,45 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             }
         });
 
-//        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-//            @Override
-//            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-//                InspectionSubEntity itemEntity = adapter.getItem(position);
-//                if (action == 1) {
-//                    getController(LimsFileUpLoadController.class).
-//                            showPopup(getActivity(), ProjectFragment.this)
-//                            .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
-//                                @Override
-//                                public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
-//                                    filePath=fileDataEntity.getLocalPath();
-//                                    itemEntity.setFileUploadFileAddPaths(fileDataEntity.getPath());
-//                                    itemEntity.setFileUploadFileDeleteIds(itemEntity.getFileUploadMultiFileIds());
-//                                    itemEntity.setFileUploadMultiFileNames(filePath.substring(filePath.lastIndexOf("/")+1));
-//                                    itemEntity.setFilePath(filePath);
-//                                }
-//                            });
-//                }else if (action==2){
-//
-//                    if (!TextUtils.isEmpty(itemEntity.getFilePath())){
-//                        File file=new File(itemEntity.getFilePath());
-//                        if (FileUtils.imageFile(file) || FileUtils.videoFile(file)) {
-//                            Bundle bundle = new Bundle();
-//                            bundle.putSerializable("file", file);
-//                            IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
-//                        }else {
-//                            Util.openFile(getActivity(),itemEntity.getFilePath());
-//                        }
-//                    }else {
-//                        ToastUtils.show(context,"没有可查看的文件");
-//                    }
-//
-//                }
-//            }
-//        });
+        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+            @Override
+            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                itemEntity = adapter.getItem(position);
+                if (action == 1) {
+                    getController(LimsFileUpLoadController.class).
+                            showPopup(getActivity(), ProjectFragment.this)
+                            .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
+                                @Override
+                                public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
+                                    filePath = fileDataEntity.getLocalPath();
+                                    File file=new File(fileDataEntity.getLocalPath());
+                                    String name=file.getName();
+                                    itemEntity.getFileUploadMultiFileNames().add(name);
+                                    String path=fileDataEntity.getPath();
+                                    List<String> addPaths=itemEntity.getFileUploadFileAddPaths();
+                                    addPaths.add(path);
+                                    itemEntity.setFileUploadFileAddPaths(addPaths);
+                                    itemEntity.getFileUploadMultiFileIcons().add(fileDataEntity.getFileIcon());
+
+                                    List<AttachmentSampleInputEntity> attachmentEntities=itemEntity.getAttachmentSampleInputEntities();
+                                    AttachmentSampleInputEntity attachmentSampleInputEntity=new AttachmentSampleInputEntity();
+                                    attachmentSampleInputEntity.setName(name);
+                                    attachmentSampleInputEntity.setFile(file);
+                                    attachmentEntities.add(attachmentSampleInputEntity);
+                                }
+                            });
+                } else if (action == 2) {
+                    if (itemEntity.getAttachmentSampleInputEntities() != null && !itemEntity.getAttachmentSampleInputEntities().isEmpty()) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("attachments", (Serializable) itemEntity.getAttachmentSampleInputEntities());
+                        IntentRouter.go(context, Constant.Router.FILE_LIST_VIEW, bundle);
+                    } else {
+                        ToastUtils.show(context, "没有可查看的文件");
+                    }
+                }
+            }
+        });
+
 
 
         adapter.setOriginalValueChangeListener(new ProjectAdapter.OriginalValueChangeListener() {
@@ -384,5 +414,10 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         return true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }
 

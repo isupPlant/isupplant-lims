@@ -32,6 +32,7 @@ import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
@@ -154,16 +155,16 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             super.initListener();
 
 
-//            RxView.clicks(imageUpDown)
-//                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
-//                    .subscribe(o->{
-//                        onItemChildViewClick(imageUpDown,1);
-//                    });
-//            RxView.clicks(imageFileView)
-//                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
-//                    .subscribe(o->{
-//                        onItemChildViewClick(imageUpDown,2);
-//                    });
+            RxView.clicks(imageUpDown)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o->{
+                        onItemChildViewClick(imageUpDown,1);
+                    });
+            RxView.clicks(imageFileView)
+                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                    .subscribe(o->{
+                        onItemChildViewClick(imageFileView,2);
+                    });
 
             RxView.clicks(llQualityStandard)
                     .throttleFirst(300, TimeUnit.MILLISECONDS)
@@ -392,14 +393,17 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     notifyItemChanged(getAdapterPosition());
                 }
             });
-//            if (!TextUtils.isEmpty(data.getFileUploadMultiFileIds())){
-//                new LimsFileUpLoadController().loadFile(data.getFileUploadMultiFileIds(),data.getFileUploadMultiFileNames()).setFileOnSuccessListener(new OnSuccessListener<File>() {
-//                    @Override
-//                    public void onSuccess(File result) {
-//                        data.setFilePath(result.getPath());
-//                    }
-//                });
-//            }
+            if (data.getFileUploadMultiFileIds() != null && !data.getFileUploadMultiFileIds().isEmpty()) {
+                new LimsFileUpLoadController()
+                        .loadFile(data.getFileUploadMultiFileIds(), data.getFileUploadMultiFileNames())
+                        .setFileOnSuccessListener(new OnSuccessListener<List<AttachmentSampleInputEntity>>() {
+                            @Override
+                            public void onSuccess(List<AttachmentSampleInputEntity> result) {
+                                data.setAttachmentSampleInputEntities(result);
+                            }
+                        });
+            }
+
 
             rvConclusion.setAdapter(conclusionAdapter);
             conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());
