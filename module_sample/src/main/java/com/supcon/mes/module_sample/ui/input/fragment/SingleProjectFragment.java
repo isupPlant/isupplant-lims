@@ -193,6 +193,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                             .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
                                 @Override
                                 public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
+                                    adapter.change=true;
                                     filePath = fileDataEntity.getLocalPath();
                                     File file=new File(fileDataEntity.getLocalPath());
                                     String name=file.getName();
