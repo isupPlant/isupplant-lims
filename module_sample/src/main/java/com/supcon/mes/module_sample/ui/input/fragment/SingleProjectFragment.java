@@ -217,7 +217,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                         bundle.putSerializable("attachments", (Serializable) itemEntity.getAttachmentSampleInputEntities());
                         IntentRouter.go(context, Constant.Router.FILE_LIST_VIEW, bundle);
                     } else {
-                        ToastUtils.show(context, "没有可查看的文件");
+                        ToastUtils.show(context, context.getResources().getString(R.string.lims_not_file));
                     }
                 }
             }

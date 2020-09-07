@@ -90,6 +90,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     private List<InspectionItemColumnEntity> columnList = new ArrayList<>();
     private List<ConclusionEntity> conclusionList = new ArrayList<>();
     private List<InspectionSubEntity> myInspectionSubList = new ArrayList<>();
+    private List<InspectionSubEntity> recordList = new ArrayList<>();
 
 
     @Override
@@ -212,7 +213,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                         bundle.putSerializable("attachments", (Serializable) itemEntity.getAttachmentSampleInputEntities());
                         IntentRouter.go(context, Constant.Router.FILE_LIST_VIEW, bundle);
                     } else {
-                        ToastUtils.show(context, "没有可查看的文件");
+                        ToastUtils.show(context, context.getResources().getString(R.string.lims_not_file));
                     }
                 }
             }
@@ -309,6 +310,9 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         myInspectionSubList.clear();
         myInspectionSubList.addAll(entity.result);
 
+        recordList.clear();
+
+
         for (int i = 0; i < myInspectionSubList.size(); i++) {
             List<ConclusionEntity> conclusionListLocal = GsonUtil.jsonToList(GsonUtil.gsonString(conclusionList), ConclusionEntity.class);
             myInspectionSubList.get(i).setConclusionList(conclusionListLocal);
@@ -334,6 +338,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
             }
         }
+        recordList = GsonUtil.jsonToList(GsonUtil.gsonString(myInspectionSubList),InspectionSubEntity.class);
         refreshListController.refreshComplete(myInspectionSubList);
     }
 
@@ -403,6 +408,10 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     public List<InspectionSubEntity> getInspectionSubList(){
         return adapter.getList();
+    }
+
+    public List<InspectionSubEntity> getRecordList(){
+        return recordList;
     }
 
     public boolean checkProject(){

@@ -32,7 +32,7 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
  */
 public class SingleSamplePresenter extends SampleListApi.Presenter {
     @Override
-    public void getSampleList(int pageNo, Map<String, Object> params) {
+    public void getSampleList( Map<String, Object> params) {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordBySingleSample";
         String modelAlias = "sampleInfo";
         Map<String, Object> map = new HashMap<>();
@@ -43,7 +43,7 @@ public class SingleSamplePresenter extends SampleListApi.Presenter {
             map.put("fastQueryCond",fastQueryCondEntity.toString());
         }
         map.put("datagridCode","LIMSSample_5.0.0.0_sample_recordBySingleSampledg1592183350560");
-        map.put("pageNo",pageNo);
+        map.put("pageNo",1);
         map.put("pageSize",65535);
 
         mCompositeSubscription.add(SampleHttpClient.getSampleList("recordBySingleSample",map).onErrorReturn(new Function<Throwable, BAP5CommonEntity<CommonListEntity<SampleEntity>>>() {

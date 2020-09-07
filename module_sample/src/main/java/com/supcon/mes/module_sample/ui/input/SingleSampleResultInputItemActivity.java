@@ -125,7 +125,7 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
                     @Override
                     public void accept(Object o) throws Exception {
                         if (!fragment.change()){
-                            ToastUtils.show(SingleSampleResultInputItemActivity.this,"您未修改任何数据，无需保存！");
+                            ToastUtils.show(SingleSampleResultInputItemActivity.this,context.getResources().getString(R.string.lims_project_check_change));
                             return;
                         }
                         List<InspectionSubEntity> inspectionSubList = fragment.getInspectionSubList();

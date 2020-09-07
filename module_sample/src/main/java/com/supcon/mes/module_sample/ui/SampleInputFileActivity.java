@@ -57,7 +57,7 @@ public class SampleInputFileActivity extends BaseActivity {
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this,R.color.themeColor);
-        titleText.setText("附件列表");
+        titleText.setText(context.getResources().getString(R.string.lims_enclosure_list));
         adapter=new SampleInputFileAdapter(context);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(1, context)));

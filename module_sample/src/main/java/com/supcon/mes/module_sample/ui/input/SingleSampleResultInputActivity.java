@@ -141,7 +141,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(1,queryParam);
+                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(queryParam);
 
             }
         });
@@ -169,7 +169,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
             Map<String,Object> params=new HashMap<>();
             params.put(Constant.BAPQuery.CODE,codeResultEvent.ruleContent);
             onLoading("正在加载样品...");
-            presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(1,params);
+            presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(params);
         }
     }
     @Override

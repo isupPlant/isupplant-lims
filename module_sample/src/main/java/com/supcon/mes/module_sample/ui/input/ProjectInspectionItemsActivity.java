@@ -22,6 +22,7 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
@@ -43,6 +44,7 @@ import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -109,7 +111,6 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
         sampleId = getIntent().getLongExtra("sampleId",0);
         mTitle = getIntent().getStringExtra("title");
-        Log.e("eeeeeeeeeeeeee","ProjectInspectionItemsActivity.onInit");
     }
 
     @Override
@@ -187,7 +188,14 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        List<InspectionSubEntity> recordList = projectFragment.getRecordList();
                         List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+
+                        if (recordList.toString().equals(inspectionSubList.toString())){
+                            ToastUtils.show(context,getResources().getString(R.string.lims_project_check_change));
+                            return;
+                        }
+
                         List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
                         List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
                         String equipmentDelete = equipmentFragment.getDeleteList();

@@ -217,12 +217,12 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 //                                    })
 //                                    .setNegativeButton("取消", null)
 //                                    .show();
-                            onLoading("收样中...");
+                            onLoading(context.getResources().getString(R.string.lims_sample_collection_process));
                             String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
                             presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(BusinessType.Sample.SAMPLE_COLLECTION,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
 
                         }else {
-                            ToastUtils.show(context,"请选择要收样的样品");
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample));
                         }
                     }
                 });
@@ -257,7 +257,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 
     @Override
     public void sampleSubmitSuccess(BAP5CommonEntity entity) {
-        onLoadSuccessAndExit("提交成功", new OnLoaderFinishListener() {
+        onLoadSuccessAndExit(context.getResources().getString(R.string.lims_submit_succeed), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 goRefresh();

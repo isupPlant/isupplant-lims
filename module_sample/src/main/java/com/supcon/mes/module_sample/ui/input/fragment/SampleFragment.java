@@ -24,6 +24,7 @@ import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
+import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
@@ -156,10 +157,10 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     @Override
     protected void initListener() {
         super.initListener();
-        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
+        refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(pageIndex,mParams);
+            public void onRefresh() {
+                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(mParams);
             }
         });
 
@@ -292,7 +293,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 adapter.notifyDataSetChanged();
 
                 if (position == -1){
-                    ToastUtils.show(context,"并未扫描到匹配的编码");
+                    ToastUtils.show(context,context.getResources().getString(R.string.lims_not_scanned_code));
                     return;
                 }
 

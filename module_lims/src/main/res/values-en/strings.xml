@@ -114,4 +114,16 @@
     <string name="lims_material_check">There is an amount not entered in the material！</string>
     <string name="lims_delete">Delete</string>
     <string name="lims_project_check">There are items with blank report value in the submitted item. Do you want to continue to submit and set the reported value as not checked?</string>
+    <string name="lims_project_check_change">You have not modified any data and do not need to be saved！</string>
+    <string name="lims_not_calculation_formula">No calculation formula</string>
+    <string name="lims_not_file">There are no files to view</string>
+    <string name="lims_not_scanned_code">No matching code was scanned</string>
+    <string name="lims_select_one_operate">Please select a record to operate!</string>
+    <string name="lims_project">project</string>
+    <string name="lims_equipment">equipment</string>
+    <string name="lims_material">material</string>
+    <string name="lims_select_sample">Please select the sample to receive</string>
+    <string name="lims_sample_collection_process">Sample collection...</string>
+    <string name="lims_submit_succeed">Submitted successfully</string>
+    <string name="lims_enclosure_list">List of attachments</string>
 </resources>

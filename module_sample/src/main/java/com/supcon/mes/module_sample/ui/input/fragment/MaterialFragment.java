@@ -153,7 +153,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
                             }
                         }
                         if (a == 0){
-                            ToastUtils.show(context,"请先选中一条记录进行操作！");
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_one_operate));
                         }
                     }
                 });

@@ -27,7 +27,7 @@ public class InspectionItemsFragment extends BaseFragment {
     @BindByTag("viewPage")
     ViewPager viewPage;
 
-    private String[] title = new String[]{"项目", "设备", "材料"};
+    private String[] title = new String[]{context.getResources().getString(R.string.lims_project), context.getResources().getString(R.string.lims_equipment), context.getResources().getString(R.string.lims_material)};
     private List<Fragment> fragmentList = new ArrayList<>();
     SampleResultInputActivity activity;
 

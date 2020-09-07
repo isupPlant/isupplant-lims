@@ -332,7 +332,7 @@ public class CalculationController extends BaseViewController {
     public void calculate(List<InspectionSubEntity> sampleComs, List<InspectionSubEntity> adapterList) {
         for (int i = 0; i < sampleComs.size(); i++) {
             if (StringUtil.isEmpty(sampleComs.get(i).getCalcParamInfo())) {
-                ToastUtils.show(context, "暂无计算公式");
+                ToastUtils.show(context, context.getResources().getString(R.string.lims_not_calculation_formula));
                 return;
             }
 
@@ -344,10 +344,6 @@ public class CalculationController extends BaseViewController {
                         calcParamInfoList.get(j).getTestItemName(), calcParamInfoList.get(j).getTestComName(),
                         calcParamInfoList.get(j).getIncomeType().getId(), calcParamInfoList.get(j).getOutcomeType().getId(),
                         calcParamInfoList.get(j).getDealFunc().getId());
-
-                if (StringUtil.isEmpty(calculateParamValue)) {
-                    return;
-                }
 
                 calculateParamValue = checkValue(calculateParamValue);
                 script.append("var " + calcParamInfoList.get(j).getParamName() + "=" + calculateParamValue + ";");
@@ -377,7 +373,12 @@ public class CalculationController extends BaseViewController {
 
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                for (int k = 0; k < adapterList.size(); k++) {
+                    if (adapterList.get(k).getId().equals(sampleComs.get(i).getId())) {
+                        originValChange(null, k, adapterList);
+                        break;
+                    }
+                }
             }
         }
     }

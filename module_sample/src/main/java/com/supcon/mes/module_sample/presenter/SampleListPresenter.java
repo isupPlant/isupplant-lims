@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.presenter;
 
 
+import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
@@ -32,7 +33,7 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
  */
 public class SampleListPresenter extends SampleListApi.Presenter {
     @Override
-    public void getSampleList(int pageNo, Map<String, Object> params) {
+    public void getSampleList( Map<String, Object> params) {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordBySample";
         String modelAlias = "sampleInfo";
 
@@ -44,8 +45,8 @@ public class SampleListPresenter extends SampleListApi.Presenter {
             map.put("fastQueryCond",fastQueryCondEntity.toString());
         }
 
-        map.put("datagridCode","LIMSSample_5.0.0.0_sample_recordBySampledg1592378259080");
-        map.put("pageNo",pageNo);
+        map.put("permissionCode","LIMSSample_5.0.0.0_sample_recordBySample");
+        map.put("pageNo",1);
         map.put("pageSize",10);
 
         mCompositeSubscription.add(SampleHttpClient.getSampleList("recordBySample",map).onErrorReturn(new Function<Throwable, BAP5CommonEntity<CommonListEntity<SampleEntity>>>() {
@@ -79,14 +80,6 @@ public class SampleListPresenter extends SampleListApi.Presenter {
         SubcondEntity subcondEntity = null;
         switch (key) {
             case Constant.BAPQuery.CODE:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = key;
-                subcondEntity.dbColumnType = Constant.BAPQuery.BAPCODE;
-                subcondEntity.operator = BE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
             case Constant.BAPQuery.NAME:
             case Constant.BAPQuery.BATCH_CODE:
                 subcondEntity = new SubcondEntity();
