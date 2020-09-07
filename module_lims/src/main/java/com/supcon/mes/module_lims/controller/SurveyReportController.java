@@ -185,22 +185,17 @@ public class SurveyReportController extends BaseViewController {
                 searchTitle.showSearchBtn(title, searchKey);
             }
             cleanParams();
-            switch (resultEntity.key) {
-                case "物料名称":
-                    params.put(Constant.BAPQuery.NAME, resultEntity.result);
-                    break;
-                case "物料编码":
-                    params.put(Constant.BAPQuery.CODE, resultEntity.result);
-                    break;
-                case "批号":
-                    params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
-                    break;
-                case "单据编号":
-                    params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
-                    break;
-                case "检验申请":
-                    params.put("INSPECT_TABLE_NO", resultEntity.result);
-                    break;
+            String resultSearch=resultEntity.key;
+            if (getRootView().getResources().getString(R.string.lims_materiel_name).equals(resultSearch)){
+                params.put(Constant.BAPQuery.NAME, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_materiel_code).equals(resultSearch)){
+                params.put(Constant.BAPQuery.CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_batch_number).equals(resultSearch)){
+                params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_document_number).equals(resultSearch)){
+                params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_request_no).equals(resultSearch)){
+                params.put("INSPECT_TABLE_NO", resultEntity.result);
             }
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);
