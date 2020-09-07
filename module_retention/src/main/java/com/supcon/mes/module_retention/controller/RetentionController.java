@@ -187,28 +187,20 @@ public class RetentionController extends BaseViewController {
                 searchTitle.showSearchBtn(title, searchKey);
             }
             cleanParams();
-            switch (resultEntity.key) {
-                case "样品编码":
-                    params.put(Constant.BAPQuery.CODE, resultEntity.result);
-                    break;
-                case "批号":
-                    params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
-                    break;
-                case "单据编号":
-                    params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
-                    break;
-                case "物料名称":
-                    params.put("MATER_NAME",resultEntity.result);
-                    break;
-                case "物料编码":
-                    params.put("MATER_CODE",resultEntity.result);
-                    break;
-                case "采样点":
-                    params.put(Constant.BAPQuery.PICKSITE, resultEntity.result);
-                    break;
-                case "保管员":
-                    params.put(Constant.BAPQuery.STAFF_NAME,resultEntity.result);
-                    break;
+            if (getRootView().getResources().getString(R.string.lims_sample_code).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_batch_number).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_materiel_name).equals(resultEntity.key)){
+                params.put("MATER_NAME",resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_materiel_code).equals(resultEntity.key)){
+                params.put("MATER_CODE",resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_document_number).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_sampling_point).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.PICKSITE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_keeper).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.STAFF_NAME,resultEntity.result);
             }
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);

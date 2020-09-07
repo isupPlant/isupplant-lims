@@ -183,26 +183,27 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         onItemChildViewClick(imageFileView,2);
                     });
 
-//            原始值数值变化监听
-            RxTextView.textChanges(ceOriginalValue.editText())
-                    .skipInitialValue()
-                    .subscribe(new Consumer<CharSequence>() {
-                        @Override
-                        public void accept(CharSequence charSequence) throws Exception {
-                            if (TextUtils.isEmpty(charSequence)) {
-                                InspectionSubEntity subEntity = getItem(getAdapterPosition());
-                                if (!TextUtils.isEmpty(subEntity.getOriginValue()))
-                                    change = true;
-                                subEntity.setOriginValue(null);
-                                subEntity.setRoundValue(null);
-                                subEntity.setDispValue(null);
 
-                                ctRoundOffValue.setContent(null);
-                                ceReportedValue.setContent(null);
-                            }
+            ceOriginalValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ceOriginalValue.setContent("");
+                    ctRoundOffValue.setContent(null);
+                    InspectionSubEntity subEntity = getItem(getAdapterPosition());
+                    change = true;
+                    subEntity.setOriginValue(null);
+                    subEntity.setRoundValue(null);
+                }
+            });
 
-                        }
-                    });
+            ceReportedValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    change = true;
+                    ceReportedValue.setContent("");
+                    getItem(getAdapterPosition()).setDispValue("");
+                }
+            });
 //            //原始值焦点监听
 //            ceOriginalValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //                @Override

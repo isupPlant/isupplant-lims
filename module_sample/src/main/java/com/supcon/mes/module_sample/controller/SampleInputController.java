@@ -139,16 +139,13 @@ public class SampleInputController extends BaseViewController {
                 searchTitle.showSearchBtn(title, searchKey);
             }
             cleanParams();
-            switch (resultEntity.key) {
-                case "样品编码":
-                    params.put(Constant.BAPQuery.CODE, resultEntity.result);
-                    break;
-                case "样品名称":
-                    params.put(Constant.BAPQuery.NAME, resultEntity.result);
-                    break;
-                case "批号":
-                    params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
-                    break;
+
+            if (getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_code).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_name).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.NAME, resultEntity.result);
+            }else if (getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_batch_number).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
             }
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);
