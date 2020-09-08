@@ -170,19 +170,15 @@ public class SampleInquiryController extends BaseViewController {
                 searchTitle.showSearchBtn(title, searchKey);
             }
             cleanParams();
-            switch (resultEntity.key) {
-                case "样品名称":
-                    params.put(Constant.BAPQuery.NAME, resultEntity.result);
-                    break;
-                case "样品编码":
-                    params.put(Constant.BAPQuery.CODE, resultEntity.result);
-                    break;
-                case "批号":
-                    params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
-                    break;
-                case "采样点":
-                    params.put(Constant.BAPQuery.PICKSITE, resultEntity.result);
-                    break;
+            String resultSearch=resultEntity.key;
+            if (getRootView().getResources().getString(R.string.lims_sample_name).equals(resultSearch)){
+                params.put(Constant.BAPQuery.NAME, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_sample_code).equals(resultSearch)){
+                params.put(Constant.BAPQuery.CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_batch_number).equals(resultSearch)){
+                params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_sampling_point).equals(resultSearch)){
+                params.put(Constant.BAPQuery.PICKSITE, resultEntity.result);
             }
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);
