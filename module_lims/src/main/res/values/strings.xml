@@ -7,6 +7,10 @@
     <string name="lims_examiner">请检人</string>
     <string name="lims_inspection_department">请检部门</string>
     <string name="lims_time">请检时间</string>
+    <string name="lims_name">名称</string>
+    <string name="lims_code">编码</string>
+    <string name="lims_device_name">设备名称</string>
+    <string name="lims_supplier_code">客商编码</string>
     <string name="lims_materiel_name">物料名称</string>
     <string name="lims_materiel_code">物料编码</string>
     <string name="lims_document_number">单据编号</string>
@@ -35,6 +39,7 @@
     <string name="lims_version_number">版本号</string>
     <string name="lims_executive_standards">执行标准</string>
     <string name="lims_application_scheme">请检方案</string>
+    <string name="lims_customer_name">客商名称</string>
     <string name="lims_quality_standard_reference">质量标准参照</string>
     <string name="lims_sampling_point_reference">采样点参照</string>
     <string name="lims_supplier_reference">供应商参照</string>
@@ -164,5 +169,7 @@
     <string name="lims_upload_file">正在上传文件...</string>
     <string name="lims_upload_succeed">上传成功</string>
     <string name="lims_unqualified">不合格</string>
+    <string name="lims_specifications">规格</string>
+    <string name="lims_model">型号</string>
 
 </resources>

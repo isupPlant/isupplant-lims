@@ -169,36 +169,20 @@ public class ReferenceController extends BaseViewController {
 
     // 将搜索页面回传的数据进行比对 并放入集合
     public Map<String, Object> screenSearchResult(SearchResultEntity entity){
-        switch (entity.key){
-            case "质量标准":
-            case "物料名称":
-            case "采样点":
-            case "请检方案":
-            case "客商名称":
-            case "名称":
-            case "设备名称":
-                params.put(Constant.BAPQuery.NAME, entity.result);
-                break;
-            case "客商编码":
-            case "物料编码":
-            case "编码":
-            case "设备编码":
-            case "编号":
-                params.put(Constant.BAPQuery.CODE, entity.result);
-                break;
-            case "规格":
-                params.put(Constant.BAPQuery.SPECIFICATIONS, entity.result);
-                break;
-            case "型号":
-                params.put(Constant.BAPQuery.MODEL, entity.result);
-            case "版本号":
-                params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
-                break;
-            case "生产批号":
-                params.put(Constant.BAPQuery.BATCH_CODE, entity.result);
-                break;
+        if (context.getResources().getString(R.string.lims_quality_standard).equals(entity.key) || context.getResources().getString(R.string.lims_materiel_name).equals(entity.key) || context.getResources().getString(R.string.lims_sampling_point).equals(entity.key) || context.getResources().getString(R.string.lims_application_scheme).equals(entity.key) || context.getResources().getString(R.string.lims_customer_name).equals(entity.key) || context.getResources().getString(R.string.lims_name).equals(entity.key) || context.getResources().getString(R.string.lims_device_name).equals(entity.key)) {
+            params.put(Constant.BAPQuery.NAME, entity.result);
+        } else if (context.getResources().getString(R.string.lims_supplier_code).equals(entity.key) || context.getResources().getString(R.string.lims_materiel_code).equals(entity.key) || context.getResources().getString(R.string.lims_code).equals(entity.key) || context.getResources().getString(R.string.lims_equipment_code).equals(entity.key) || context.getResources().getString(R.string.lims_matCode).equals(entity.key)) {
+            params.put(Constant.BAPQuery.CODE, entity.result);
+        } else if (context.getResources().getString(R.string.lims_specifications).equals(entity.key)) {
+            params.put(Constant.BAPQuery.SPECIFICATIONS, entity.result);
+        } else if (context.getResources().getString(R.string.lims_model).equals(entity.key)) {
+            params.put(Constant.BAPQuery.MODEL, entity.result);
 
-
+            params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
+        } else if (context.getResources().getString(R.string.lims_version_number).equals(entity.key)) {
+            params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
+        } else if (context.getResources().getString(R.string.lims_produce_batch).equals(entity.key)) {
+            params.put(Constant.BAPQuery.BATCH_CODE, entity.result);
         }
         return params;
     }

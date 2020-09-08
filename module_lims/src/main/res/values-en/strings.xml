@@ -10,6 +10,8 @@
     <string name="lims_materiel_name">Materiel_name</string>
     <string name="lims_materiel_code">Materiel_code</string>
     <string name="lims_document_number">Document_number</string>
+    <string name="lims_name">name</string>
+    <string name="lims_device_name">Device name</string>
     <string name="lims_product_inspection_application">Product_inspection_application</string>
     <string name="lims_incoming_inspection_application">Incoming_inspection_application</string>
     <string name="lims_other_inspection_application">Other_inspection_application</string>
@@ -165,5 +167,10 @@
     <string name="lims_upload_file">Uploading files...</string>
     <string name="lims_upload_succeed">Upload successful</string>
     <string name="lims_unqualified">unqualified</string>
+    <string name="lims_customer_name">Customer name</string>
+    <string name="lims_supplier_code">Supplier code</string>
+    <string name="lims_code">Code</string>
+    <string name="lims_specifications">Specifications</string>
+    <string name="lims_model">Model</string>
 
 </resources>
