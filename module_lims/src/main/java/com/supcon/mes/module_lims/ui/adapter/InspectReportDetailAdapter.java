@@ -95,7 +95,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
                                 detailEntity.isExpand = !detailEntity.isExpand;
                                 notifyDataSetChanged();
                             } else {
-                                ToastUtils.show(context, "没有更多展开的内容了！");
+                                ToastUtils.show(context, context.getResources().getString(R.string.lims_not_content));
                             }
                         }
                     });
@@ -135,7 +135,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
 
         @Override
         protected void update(StdJudgeEntity data) {
-            judgeRangeTv.setKey(data.resultValue + "范围");
+            judgeRangeTv.setKey(data.resultValue + context.getResources().getString(R.string.lims_range));
             judgeRangeTv.setValue(data.dispValue);
         }
     }

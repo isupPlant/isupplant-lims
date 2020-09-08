@@ -482,7 +482,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                     @Override
                     public void accept(Object o) throws Exception {
                         if (null == mHeadEntity.getProdId() || null == mHeadEntity.getProdId().getId()){
-                            ToastUtils.show(context,"请选择物料!");
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_please_select_material));
                             return;
                         }
                         //先请求一个接口
@@ -549,7 +549,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                             bundle.putBoolean("inspectProjIdIsValuable",StringUtil.isEmpty(ctApplicationScheme.getContent()) || ctApplicationScheme.getContent().equals("--") ? false : true);
                             IntentRouter.go(context,Constant.AppCode.LIMS_InspectComDataByStdVerId,bundle);
                         }else {
-                            ToastUtils.show(context,"请先选择一项质量标准");
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_please_select_quality_standard));
                         }
                     }
                 });
@@ -566,11 +566,11 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         break;
                     case 1:
                         workFlowType = 1;
-                        if (workFlowVar.dec.equals("作废")){
+                        if (workFlowVar.dec.equals(context.getResources().getString(R.string.lims_to_void))){
                             new CustomDialog(context)
-                                    .twoButtonAlertDialog("确认要作废单据吗？")
-                                    .bindView(R.id.grayBtn, "取消")
-                                    .bindView(R.id.redBtn, "确定")
+                                    .twoButtonAlertDialog(context.getResources().getString(R.string.lims_to_void_bill))
+                                    .bindView(R.id.grayBtn, context.getResources().getString(com.supcon.mes.middleware.R.string.common_cancel))
+                                    .bindView(R.id.redBtn, context.getResources().getString(com.supcon.mes.middleware.R.string.common_sure))
                                     .bindClickListener(R.id.grayBtn, v -> {
                                     }, true)
                                     .bindClickListener(R.id.redBtn, v -> doSubmit(workFlowVar), true)
@@ -581,7 +581,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         break;
                     case 2:
                         workFlowType = 1;
-                        if (workFlowVar.dec.equals("通过")){
+                        if (workFlowVar.dec.equals(context.getResources().getString(R.string.lims_adopt))){
                             doSubmit(workFlowVar);
                         }else {
                             if (checkSubmit()){
@@ -834,7 +834,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
     //工作流--保存
     private void doSave(WorkFlowVar workFlowVar){
         String view=getView();
-        ((BaseActivity)context).onLoading(view+"保存中...");
+        ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_saving));
         InspectApplicationSubmitEntity entity = new InspectApplicationSubmitEntity();
 
         JsonObject jsonObject = new JsonObject();
@@ -904,14 +904,14 @@ public class InspectionApplicationDetailController extends BaseViewController im
         }
 
         String view=getView();
-        if ("驳回".equals(workFlowVar.dec)) {
-            ((BaseActivity)context).onLoading(view+"驳回中...");
+        if (context.getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
+            ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_reject));
             jsonObject.addProperty("workFlowVarStatus", "cancel");
-        }else if ("作废".equals(workFlowVar.dec)){
-            ((BaseActivity)context).onLoading(view+"作废中...");
+        }else if (context.getResources().getString(R.string.lims_to_void).equals(workFlowVar.dec)){
+            ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_cancellation));
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         }else {
-            ((BaseActivity)context).onLoading(view+"提交中...");
+            ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_submitting));
         }
         entity.operateType = Constant.Transition.SUBMIT;
         entity.workFlowVar = jsonObject;
@@ -1096,11 +1096,11 @@ public class InspectionApplicationDetailController extends BaseViewController im
     String getView(){
         String view="";
         if (type==1){
-            view="产品检验申请单";
+            view=context.getResources().getString(R.string.lims_product_test_apply_bill);
         }else if (type==2){
-            view="来料检验申请单";
+            view=context.getResources().getString(R.string.lims_incoming_text_apply_bill);
         }else if (type==3){
-            view="其他检验申请单";
+            view=context.getResources().getString(R.string.lims_other_text_apply_bill);
         }
         return view;
     }
@@ -1146,22 +1146,22 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     private boolean checkSubmit(){
         if (StringUtil.isEmpty(ctBusinessType.getContent().trim()) || ctBusinessType.getContent().equals("--")){
-            setToast("业务类型不允许为空");
+            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_12));
             return false;
         }
 
         if (StringUtil.isEmpty(ctCheckPeople.getContent().trim()) || ctCheckPeople.getContent().equals("--")){
-            setToast("请检人不允许为空");
+            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_11));
             return false;
         }
 
         if (StringUtil.isEmpty(ctCheckDepartment.getContent().trim()) || ctCheckDepartment.getContent().equals("--")){
-            setToast("请检部门不允许为空");
+            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_10));
             return false;
         }
 
         if (StringUtil.isEmpty(cdCheckTime.getContent().trim()) || cdCheckTime.getContent().equals("--")){
-            setToast("请检时间不允许为空");
+            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_9));
             return false;
         }
 //        if (type == 2) {
@@ -1172,29 +1172,33 @@ public class InspectionApplicationDetailController extends BaseViewController im
 //        }
 
         if (StringUtil.isEmpty(ctMateriel.getContent().trim()) || ctMateriel.getContent().equals("--")){
-            setToast("物料不允许为空");
+            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_8));
             return false;
         }
 
         if (mHeadEntity.getProdId().isEnableBatch()){ //是否启用批次
             if (StringUtil.isEmpty(ceMaterielBatchNumber.getContent().trim()) || ceMaterielBatchNumber.getContent().equals("--")){
-                setToast("批号不允许为空");
+                setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_7));
                 return false;
             }
         }
 
         if (ptList.size() <= 0){
-            setToast("质量标准不允许为空");
+            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_6));
             return false;
         }else {
             for (int i = 0; i < ptList.size(); i++) {
                 if (ptList.get(i).getInspStdVerCom() == null){
-                    setToast("第"+(i+1)+"条质量标准中的检验项目不允许为空");
+                    String string = context.getResources().getString(R.string.lims_inspection_application_detail_tips_13);
+                    String format = String.format(string, (i + 1)+"");
+                    setToast(format);
                     return false;
                 }else {
                     List<StdVerComIdEntity> stdVerComIdList = GsonUtil.jsonToList(ptList.get(i).getInspStdVerCom(), StdVerComIdEntity.class);
                     if (stdVerComIdList.size() <= 0){
-                        setToast("第"+(i+1)+"条质量标准中的检验项目不允许为空");
+                        String string = context.getResources().getString(R.string.lims_inspection_application_detail_tips_13);
+                        String format = String.format(string, (i + 1)+"");
+                        setToast(format);
                         return false;
                     }
                 }
@@ -1234,7 +1238,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                 bundle.putString(Constant.IntentKey.SELECT_TAG, llStandardReference.getTag() + "");
                 IntentRouter.go(context, Constant.AppCode.LIMS_QualityStdVerRef, bundle);
             }else {
-                ToastUtils.show(context,"物料未被样品模板关联，无法参照!");
+                ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_5));
             }
         }
 
@@ -1242,7 +1246,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void getAvailableStdIdFailed(String errorMsg) {
-        ToastUtils.show(context,"获取可用标准失败");
+        ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_4));
     }
 
     @Override
@@ -1265,7 +1269,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void getDefaultStandardByIdFailed(String errorMsg) {
-        ToastUtils.show(context,"无法获取默认质量标准");
+        ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_3));
     }
 
     @Override
@@ -1304,7 +1308,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void getDefaultItemsFailed(String errorMsg) {
-        ToastUtils.show(context,"无法获取默认质量标准对应的检验项目");
+        ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_2));
     }
 
     @Override
@@ -1316,12 +1320,12 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void getDefaultInspProjByStdVerIdFailed(String errorMsg) {
-        ToastUtils.show(context,"获取质量标准对应的检验方案失败");
+        ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_1));
     }
 
     @Override
     public void submitInspectApplicationSuccess(BAP5CommonEntity entity) {
-        ((BaseActivity)context).onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
+        ((BaseActivity)context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_deal), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 deletePtIds.clear();

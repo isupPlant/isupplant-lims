@@ -46,7 +46,7 @@ public class ProductSurveyReportDetailActivity extends BaseRefreshActivity {
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText("产品检验报告单");
+        titleText.setText(getString(R.string.lims_product_inspection_report));
         getController(SurverReportDetailController.class).setRefreshController(this,refreshController);
     }
 

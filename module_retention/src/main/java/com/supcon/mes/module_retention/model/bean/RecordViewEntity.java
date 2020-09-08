@@ -11,6 +11,6 @@ public class RecordViewEntity extends BaseEntity {
     public Long id;
     public String memoField;
     public String observeItem;
-    public String observeResult;
+    public BaseIdValueEntity observeResult;
     public String observeValue;
 }

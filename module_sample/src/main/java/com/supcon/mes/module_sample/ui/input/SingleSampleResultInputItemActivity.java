@@ -101,7 +101,7 @@ public class SingleSampleResultInputItemActivity extends BaseFragmentActivity {
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(R.string.lims_single_sample_result_input);
+        titleText.setText(R.string.lims_result_input);
         fragment=new SingleProjectFragment();
         Bundle bundle=new Bundle();
         bundle.putLong("sampleId",sampleEntity.getId());

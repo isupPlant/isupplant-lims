@@ -71,7 +71,7 @@ public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("采样点");
+        getController(ReferenceController.class).setSearchTypeList(getResources().getString(R.string.lims_sampling_point));
 
         selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
 

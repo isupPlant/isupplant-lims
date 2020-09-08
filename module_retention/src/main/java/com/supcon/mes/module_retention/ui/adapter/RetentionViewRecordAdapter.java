@@ -52,7 +52,7 @@ public class RetentionViewRecordAdapter extends BaseListDataRecyclerViewAdapter<
             }else {
                 observeResultTv.setValueColor(Color.parseColor("#0BC8C1"));
             }
-            observeResultTv.setValue(data.observeResult);
+            observeResultTv.setValue(data.observeResult.getValue());
             memoFieldTv.setValue(data.memoField);
         }
     }

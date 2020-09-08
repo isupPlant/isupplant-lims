@@ -12,6 +12,7 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 
@@ -84,19 +85,19 @@ public class InspectionItemsListAdapter extends BaseListDataRecyclerViewAdapter<
                     StringUtil.isEmpty(data.getTestState().getValue()) ? "--" : data.getTestState().getValue());
 
             if (null != data.getTestState()){
-                if (data.getTestState().getValue().equals("待检验")){
+                if (data.getTestState().getId().equals(BusinessType.SampleTestState.NOT_TESTED)){
                     tvState.setTextColor(Color.parseColor("#1F82D2"));
-                }else if (data.getTestState().getValue().equals("部分已检")){
+                }else if (data.getTestState().getId().equals(BusinessType.SampleTestState.HALF_TESTED)){
                     tvState.setTextColor(Color.parseColor("#15B9B8"));
-                } else if (data.getTestState().getValue().equals("已检验")){
+                } else if (data.getTestState().getId().equals(BusinessType.SampleTestState.TESTED)){
                     tvState.setTextColor(Color.parseColor("#1A9D17"));
-                }else if (data.getTestState().getValue().equals("待复核")){
+                }else if (data.getTestState().getId().equals(BusinessType.SampleTestState.NOT_CHECKED)){
                     tvState.setTextColor(Color.parseColor("#D2881F"));
-                }else if (data.getTestState().getValue().equals("已复核")){
+                }else if (data.getTestState().getId().equals(BusinessType.SampleTestState.CHECKED)){
                     tvState.setTextColor(Color.parseColor("#3634A3"));
-                }else if (data.getTestState().getValue().equals("已拒绝")){
+                }else if (data.getTestState().getId().equals(BusinessType.SampleTestState.REFUSED)){
                     tvState.setTextColor(Color.parseColor("#D25A1F"));
-                }else if (data.getTestState().getValue().equals("已取消")){
+                }else if (data.getTestState().getId().equals(BusinessType.SampleTestState.CANCELED)){
                     tvState.setTextColor(Color.parseColor("#E15774"));
                 }
 

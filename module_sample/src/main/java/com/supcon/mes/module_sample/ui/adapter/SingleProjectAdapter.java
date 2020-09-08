@@ -32,6 +32,7 @@ import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
@@ -320,11 +321,11 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             tvRepeatNumber.setValue(data.getParallelNo() != null ? data.getParallelNo().toString() : "");
             //原始值
             if (null != data.getValueKind()) { // 值类型
-                if (!StringUtil.isEmpty(data.getValueKind().getValue())) { // 值类型不为空
-                    if (data.getValueKind().getValue().equals("枚举")) {
+                if (!StringUtil.isEmpty(data.getValueKind().getId())) { // 值类型不为空
+                    if (data.getValueKind().getId().equals(BusinessType.ValueType.ENUM)) {
                         setVisible(false);
                         cpOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
-                    } else if (data.getValueKind().getValue().equals("计算")) {
+                    } else if (data.getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)) {
                         setVisible(true);
                         ceOriginalValue.setEditable(false);
                         ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());

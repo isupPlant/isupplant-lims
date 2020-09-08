@@ -13,6 +13,7 @@ import com.supcon.common.view.base.controller.BasePresenterController;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomDialog;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
@@ -77,11 +78,11 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
         }
         paramsMap.put("signatureInfo","");
         if ("save".equals(submitEntity.getDealMode())){
-            activity.onLoading("正在保存，请稍后...");
+            activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_saving));
             presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
         }else if ("submit".equals(submitEntity.getDealMode())){
             if (checkSubmit(submitEntity.getSampleComListJson())) {
-                activity.onLoading("正在提交，请稍后...");
+                activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_submitting));
                 presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
             }
         }
@@ -133,7 +134,7 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
 
     @Override
     public void recordResultSubmitSuccess(BAP5CommonEntity entity) {
-        activity.onLoadSuccessAndExit("处理成功", new OnLoaderFinishListener() {
+        activity.onLoadSuccessAndExit(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_deal), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 if ("submit".equals(paramsMap.get("dealMode"))){
@@ -156,7 +157,7 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
 
     @Override
     public void getSignatureEnabledSuccess(SampleSignatureEntity entity) {
-        activity.onLoading("正在提交，请稍后...");
+        activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_submitting));
 //        SampleRecordResultSignEntity signEntity=new SampleRecordResultSignEntity();
 //        signEntity.setButtonCode(buttonCode);
 //        signEntity.setSignatureType(entity.getSignatureType());

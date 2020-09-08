@@ -118,7 +118,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                         //android 6.0权限问题
                         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                                 ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ToastUtils.show(context, "请打开相机权限");
+                            ToastUtils.show(context, context.getResources().getString(R.string.lims_open_camera));
                             ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERAPRESS);
 
                         } else {
@@ -203,11 +203,11 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         if (requestCode == CAMERA && resultCode == Activity.RESULT_OK) {
             try {
                 if (context instanceof BaseActivity){
-                    ((BaseActivity) context).onLoading("正在上传文件...");
+                    ((BaseActivity) context).onLoading(context.getResources().getString(R.string.lims_upload_file));
                 }
 
                 if (context instanceof BaseFragmentActivity){
-                    ((BaseFragmentActivity) context).onLoading("正在上传文件...");
+                    ((BaseFragmentActivity) context).onLoading(context.getResources().getString(R.string.lims_upload_file));
                 }
 
                 filePath = AddFileListView.getPath(context, imageUri);
@@ -230,11 +230,11 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                 filePath = AddFileListView.getPath(context, uri);
                 File file = new File(filePath);
                 if (context instanceof BaseActivity){
-                    ((BaseActivity) context).onLoading("正在上传文件...");
+                    ((BaseActivity) context).onLoading(context.getResources().getString(R.string.lims_upload_file));
                 }
 
                 if (context instanceof BaseFragmentActivity){
-                    ((BaseFragmentActivity) context).onLoading("正在上传文件...");
+                    ((BaseFragmentActivity) context).onLoading(context.getResources().getString(R.string.lims_upload_file));
                 }
                 presenterRouter.create(FileUpAPI.class).upFile(file);
             } catch (Exception e) {
@@ -253,7 +253,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
     @Override
     public void upFileSuccess(BAP5CommonEntity entity) {
         if (context instanceof BaseActivity){
-            ((BaseActivity) context).onLoadSuccessAndExit("上传成功", new OnLoaderFinishListener() {
+            ((BaseActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
                 @Override
                 public void onLoaderFinished() {
                     if (onSuccessListener != null) {
@@ -266,7 +266,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         }
 
         if (context instanceof BaseFragmentActivity){
-            ((BaseFragmentActivity) context).onLoadSuccessAndExit("上传成功", new OnLoaderFinishListener() {
+            ((BaseFragmentActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
                 @Override
                 public void onLoaderFinished() {
                     if (onSuccessListener != null) {

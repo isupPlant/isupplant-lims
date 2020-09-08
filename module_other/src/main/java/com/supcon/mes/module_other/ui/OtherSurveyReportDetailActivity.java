@@ -45,7 +45,7 @@ public class OtherSurveyReportDetailActivity extends BaseRefreshActivity {
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText("其他检验报告单");
+        titleText.setText(getString(R.string.lims_other_inspection_report));
         getController(SurverReportDetailController.class).setRefreshController(this,refreshController);
     }
 

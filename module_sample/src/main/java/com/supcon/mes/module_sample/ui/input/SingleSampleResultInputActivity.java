@@ -98,7 +98,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_single_sample_result_input));
+        titleText.setText(getString(R.string.lims_result_input));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -168,7 +168,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
             scan=true;
             Map<String,Object> params=new HashMap<>();
             params.put(Constant.BAPQuery.CODE,codeResultEvent.ruleContent);
-            onLoading("正在加载样品...");
+            onLoading(getResources().getString(R.string.lims_loading_sample));
             presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(params);
         }
     }
@@ -182,7 +182,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
     public void getSampleListSuccess(CommonListEntity entity) {
         if (scan){
             scan=false;
-            onLoadSuccessAndExit("加载成功", new OnLoaderFinishListener() {
+            onLoadSuccessAndExit(getResources().getString(R.string.lims_loading_succeed), new OnLoaderFinishListener() {
                 @Override
                 public void onLoaderFinished() {
                     List<SampleEntity> sampleEntities=entity.result;

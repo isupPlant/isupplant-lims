@@ -356,7 +356,7 @@ public class SurverReportDetailController extends BaseViewController implements 
      */
     @Override
     public void submitInspectReportSuccess(SubmitResultEntity entity) {
-        baseActivity.onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
+        baseActivity.onLoadSuccessAndExit(context.getResources().getString(R.string.lims_deal), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 if(operate==0){
@@ -414,7 +414,7 @@ public class SurverReportDetailController extends BaseViewController implements 
 
     private void doSave(WorkFlowVar workFlowVar) {
         String view=getView();
-        baseActivity.onLoading(view+"保存中...");
+        baseActivity.onLoading(view+context.getResources().getString(R.string.lims_saving));
         InspectReportSubmitEntity entity = new InspectReportSubmitEntity();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
@@ -457,11 +457,11 @@ public class SurverReportDetailController extends BaseViewController implements 
         }
 
         String view=getView();
-        if ("驳回".equals(workFlowVar.dec)) {
-            baseActivity.onLoading(view+"驳回中...");
+        if (context.getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
+            baseActivity.onLoading(view+context.getResources().getString(R.string.lims_reject));
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         } else {
-            baseActivity.onLoading(view+"提交中");
+            baseActivity.onLoading(view+context.getResources().getString(R.string.lims_submitting));
         }
         entity.operateType = Constant.Transition.SUBMIT;
         entity.workFlowVar = jsonObject;
@@ -470,11 +470,11 @@ public class SurverReportDetailController extends BaseViewController implements 
     String getView(){
         String view="";
         if (type==1){
-            view="产品检验报告单";
+            view=context.getResources().getString(R.string.lims_product_test_report);
         }else if (type==2){
-            view="来料检验报告单";
+            view=context.getResources().getString(R.string.lims_incoming_test_report);
         }else if (type==3){
-            view="其他检验报告单";
+            view=context.getResources().getString(R.string.lims_other_test_report);
         }
         return view;
     }

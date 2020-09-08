@@ -54,7 +54,7 @@
     <string name="lims_test_result">检验结论</string>
     <string name="lims_range">范围</string>
     <string name="lims_sample_com">检测分项</string>
-    <string name="lims_sample_result_input">按样品录入结果</string>
+    <string name="lims_result_input">录入结果</string>
     <string name="lims_sample_separation_type">分样类型</string>
     <string name="lims_sample_type">样品类型</string>
     <string name="lims_inspection_item">检测分项</string>
@@ -72,7 +72,7 @@
     <string name="lims_real_date">实际观察日期</string>
     <string name="lims_state">状态</string>
 
-    <string name="lims_single_sample_result_input">单样品录入结果</string>
+<!--    <string name="lims_single_sample_result_input">单样品录入结果</string>-->
     <string name="lims_inspect_project">检测项目</string>
     <string name="lims_inspect_method">检测方法</string>
 
@@ -96,6 +96,7 @@
     <string name="lims_saving">保存中...</string>
     <string name="lims_submitting">提交中...</string>
     <string name="lims_reject">驳回中...</string>
+    <string name="lims_cancellation">作废中...</string>
     <string name="lims_calculation">计算</string>
     <string name="lims_parallelNo">重复号</string>
     <string name="lims_originValue">原始值</string>
@@ -124,4 +125,44 @@
     <string name="lims_sample_collection_process">收样中...</string>
     <string name="lims_submit_succeed">提交成功</string>
     <string name="lims_enclosure_list">附件列表</string>
+    <string name="lims_sample_report">样品报告单</string>
+    <string name="lims_sampling_process">取样中...</string>
+    <string name="lims_select_sampling_sample">请选择要取样的样品</string>
+    <string name="lims_input_original_value">请输入原始值</string>
+    <string name="lims_not_content">没有更多展开的内容了!</string>
+    <string name="lims_material_reagent_reference">材料试剂参照</string>
+    <string name="lims_loading_succeed">加载成功</string>
+    <string name="lims_loading_sample">正在加载样品...</string>
+    <string name="lims_please_select_material">请选择物料!</string>
+    <string name="lims_please_select_quality_standard">请选择质量标准</string>
+    <string name="lims_to_void">作废</string>
+    <string name="lims_to_void_bill">确认要作废单据单据吗？</string>
+    <string name="lims_adopt">通过</string>
+    <string name="reject">驳回</string>
+    <string name="lims_product_test_apply_bill">产品检验申请单</string>
+    <string name="lims_incoming_text_apply_bill">来料检验申请单</string>
+    <string name="lims_other_text_apply_bill">其他检验申请单</string>
+    <string name="lims_product_test_report">产品检验报告单</string>
+    <string name="lims_incoming_test_report">来料检验报告单</string>
+    <string name="lims_other_test_report">其他检验报告单</string>
+
+    <string name="lims_inspection_application_detail_tips_1">获取质量标准对应的检验方案失败</string>
+    <string name="lims_inspection_application_detail_tips_2">无法获取默认质量标准对应的检验项目</string>
+    <string name="lims_inspection_application_detail_tips_3">无法获取默认质量标准</string>
+    <string name="lims_inspection_application_detail_tips_4">获取可用标准失败</string>
+    <string name="lims_inspection_application_detail_tips_5">物料未被样品模板关联，无法参照!</string>
+    <string name="lims_inspection_application_detail_tips_6">质量标准不允许为空</string>
+    <string name="lims_inspection_application_detail_tips_7">批号不允许为空</string>
+    <string name="lims_inspection_application_detail_tips_8">物料不允许为空</string>
+    <string name="lims_inspection_application_detail_tips_9">请检时间不允许为空</string>
+    <string name="lims_inspection_application_detail_tips_10">请检部门不允许为空</string>
+    <string name="lims_inspection_application_detail_tips_11">请检人不允许为空</string>
+    <string name="lims_inspection_application_detail_tips_12">业务类型不允许为空</string>
+    <string name="lims_inspection_application_detail_tips_13">第【%1$s】条质量标准中的检验项目不允许为空</string>
+    <string name="lims_service_not_exist">抱歉，服务不存在或者未启动</string>
+    <string name="lims_open_camera">请打开相机权限</string>
+    <string name="lims_upload_file">正在上传文件...</string>
+    <string name="lims_upload_succeed">上传成功</string>
+    <string name="lims_unqualified">不合格</string>
+
 </resources>

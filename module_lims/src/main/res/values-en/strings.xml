@@ -54,7 +54,7 @@
     <string name="lims_test_result">Check_result</string>
     <string name="lims_range">Range</string>
     <string name="lims_sample_com">SampleComId</string>
-    <string name="lims_sample_result_input">Sample_input_result</string>
+    <string name="lims_result_input">Input_result</string>
     <string name="lims_sample_separation_type">Sample_separation_type</string>
     <string name="lims_sample_type">Sample_type</string>
     <string name="lims_inspection_item">Inspection_item</string>
@@ -72,7 +72,7 @@
     <string name="lims_real_date">Real date</string>
     <string name="lims_state">State</string>
 
-    <string name="lims_single_sample_result_input">Single_sample_result_input</string>
+<!--    <string name="lims_single_sample_result_input">Single_sample_result_input</string>-->
     <string name="lims_inspect_project">Test items</string>
     <string name="lims_inspect_method">Test method</string>
 
@@ -126,4 +126,44 @@
     <string name="lims_sample_collection_process">Sample collection...</string>
     <string name="lims_submit_succeed">Submitted successfully</string>
     <string name="lims_enclosure_list">List of attachments</string>
+    <string name="lims_sample_report">Sample report</string>
+    <string name="lims_sampling_process">Sampling...</string>
+    <string name="lims_select_sampling_sample">Please select the sample to be sampled</string>
+    <string name="lims_input_original_value">Please enter the original value</string>
+    <string name="lims_not_content">There is no more to expand on!</string>
+    <string name="lims_material_reagent_reference">Material reagent reference</string>
+    <string name="lims_loading_succeed">Loading succeeded</string>
+    <string name="lims_loading_sample">Loading sample...</string>
+    <string name="lims_please_select_material">Please select material!</string>
+    <string name="lims_cancellation">cancellation...</string>
+    <string name="lims_please_select_quality_standard">Please select quality standard</string>
+    <string name="lims_to_void">To void</string>
+    <string name="lims_to_void_bill">Are you sure you want to void the document？</string>
+    <string name="lims_adopt">adopt</string>
+    <string name="reject">reject</string>
+    <string name="lims_product_test_apply_bill">Product inspection application form</string>
+    <string name="lims_incoming_text_apply_bill">Application form for incoming inspection</string>
+    <string name="lims_other_text_apply_bill">Other inspection application form</string>
+    <string name="lims_product_test_report">Product inspection report</string>
+    <string name="lims_incoming_test_report">Incoming inspection report</string>
+    <string name="lims_other_test_report">Other inspection reports</string>
+    <string name="lims_inspection_application_detail_tips_1">Failed to obtain the inspection scheme corresponding to the quality standard</string>
+    <string name="lims_inspection_application_detail_tips_2">Unable to obtain the inspection items corresponding to the default quality standard</string>
+    <string name="lims_inspection_application_detail_tips_3">Unable to get default quality standard</string>
+    <string name="lims_inspection_application_detail_tips_4">Failed to get available standards</string>
+    <string name="lims_inspection_application_detail_tips_5">The material is not associated with the sample template and cannot be referenced!</string>
+    <string name="lims_inspection_application_detail_tips_6">Quality standard cannot be empty</string>
+    <string name="lims_inspection_application_detail_tips_7">Batch number cannot be empty</string>
+    <string name="lims_inspection_application_detail_tips_8">Material cannot be empty</string>
+    <string name="lims_inspection_application_detail_tips_9">Please check time cannot be empty</string>
+    <string name="lims_inspection_application_detail_tips_10">Inspection department cannot be empty</string>
+    <string name="lims_inspection_application_detail_tips_11">The inspector is not allowed to be empty</string>
+    <string name="lims_inspection_application_detail_tips_12">Business type cannot be empty</string>
+    <string name="lims_inspection_application_detail_tips_13">Article 【%1$s】 the inspection items in the quality standard cannot be blank</string>
+    <string name="lims_service_not_exist">Sorry, the service does not exist or is not started</string>
+    <string name="lims_open_camera">Please turn on camera permission</string>
+    <string name="lims_upload_file">Uploading files...</string>
+    <string name="lims_upload_succeed">Upload successful</string>
+    <string name="lims_unqualified">unqualified</string>
+
 </resources>

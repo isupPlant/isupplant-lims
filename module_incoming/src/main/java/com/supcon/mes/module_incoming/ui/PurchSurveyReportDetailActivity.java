@@ -44,7 +44,7 @@ public class PurchSurveyReportDetailActivity extends BaseRefreshActivity {
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText("来料检验报告单");
+        titleText.setText(getResources().getString(R.string.lims_incoming_inspection_report));
         getController(SurverReportDetailController.class).setRefreshController(this,refreshController);
     }
 

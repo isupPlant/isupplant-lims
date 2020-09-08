@@ -78,7 +78,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     RelativeLayout rl_calculation;
 
 
-    private String[] title = new String[]{"项目", "设备", "材料"};
+    private String[] title = new String[]{getResources().getString(R.string.lims_project), getResources().getString(R.string.lims_equipment), getResources().getString(R.string.lims_material)};
     private List<Fragment> fragmentList = new ArrayList<>();
 
     private ProjectFragment projectFragment;

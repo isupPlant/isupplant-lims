@@ -123,7 +123,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        titleText.setText(getString(R.string.lims_sample_result_input));
+        titleText.setText(getString(R.string.lims_result_input));
 
         searchTypeList.add(getString(R.string.lims_sample_code));
         searchTypeList.add(getString(R.string.lims_sample_name));

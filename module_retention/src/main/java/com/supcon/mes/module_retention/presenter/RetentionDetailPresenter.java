@@ -1,5 +1,6 @@
 package com.supcon.mes.module_retention.presenter;
 
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
@@ -100,7 +101,7 @@ public class RetentionDetailPresenter extends RetentionDetailContract.Presenter 
                         .onErrorReturn(error -> {
                             SubmitResultEntity entity = new SubmitResultEntity();
                             if (error.getMessage().contains("503")) {
-                                entity.msg = "抱歉，服务不存在或者未启动";
+                                entity.msg = SupPlantApplication.getAppContext().getResources().getString(com.supcon.mes.module_lims.R.string.lims_service_not_exist);
                             } else {
                                 entity.msg = error.getMessage();
                             }

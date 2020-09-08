@@ -130,7 +130,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText("样品检验报告单");
+        titleText.setText(context.getResources().getString(R.string.lims_sample_inspection_report));
         contentView.setLayoutManager(new LinearLayoutManager(context));
 //        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
 
@@ -157,13 +157,13 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
                 .subscribe(o->{
                     expand=!expand;
                     if (expand){
-                        expandTv.setText("收起全部");
+                        expandTv.setText(context.getResources().getString(R.string.lims_shrink));
                         ll_other_info.setVisibility(View.VISIBLE);
                         imageUpDown.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_drop_up);
                     }else {
                         ll_other_info.setVisibility(View.GONE);
                         imageUpDown.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_drop_down);
-                        expandTv.setText("展开全部");
+                        expandTv.setText(context.getResources().getString(R.string.lims_expand));
                     }
                 });
 
@@ -245,7 +245,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         executeStdTv.setValue(sampleReport.getStdVerId()!=null && sampleReport.getStdVerId().getStdId()!=null?sampleReport.getStdVerId().getStdId().getStandard():"");
         versionNumberTv.setValue(sampleReport.getStdVerId()!=null?sampleReport.getStdVerId().getBusiVersion():"");
         inspectCheckResultTv.setValue(sampleReport.getTestResult());
-        if ("不合格".equals(sampleReport.getTestResult())){
+        if (getResources().getString(R.string.lims_unqualified).equals(sampleReport.getTestResult())){
             inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
         }else {
             inspectCheckResultTv.setValueColor(Color.parseColor("#0BC8C1"));
@@ -254,7 +254,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     }
     private void doSave(WorkFlowVar workFlowVar) {
 
-        onLoading("样品报告单保存中...");
+        onLoading(context.getResources().getString(R.string.lims_sample_report)+context.getResources().getString(R.string.lims_saving));
         SampleReportSubmitEntity entity = new SampleReportSubmitEntity();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
@@ -297,11 +297,11 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         }
 
 
-        if ("驳回".equals(workFlowVar.dec)) {
-            onLoading("样品检验报告单驳回中...");
+        if (getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
+            onLoading(context.getResources().getString(R.string.lims_sample_inspection_report)+context.getResources().getString(R.string.lims_reject));
             jsonObject.addProperty("workFlowVarStatus", "cancel");
         } else {
-            onLoading("样品检验报告单提交中");
+            onLoading(context.getResources().getString(R.string.lims_sample_inspection_report)+context.getResources().getString(R.string.lims_submitting));
         }
         entity.operateType = Constant.Transition.SUBMIT;
         entity.workFlowVar = jsonObject;
@@ -339,7 +339,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     @Override
     public void submitSampleReportSuccess(SubmitResultEntity entity) {
 
-        onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
+        onLoadSuccessAndExit(context.getResources().getString(R.string.lims_deal), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 if(operate==0){

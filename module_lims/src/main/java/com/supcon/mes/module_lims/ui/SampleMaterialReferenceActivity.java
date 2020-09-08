@@ -114,7 +114,7 @@ public class SampleMaterialReferenceActivity extends BaseRefreshRecyclerActivity
         super.initView();
 
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText("材料试剂参照");
+        titleText.setText(getResources().getString(R.string.lims_material_reagent_reference));
         setIsRadio();
         adapter.isRadio(radio);
         contentView.setLayoutManager(new LinearLayoutManager(context));
