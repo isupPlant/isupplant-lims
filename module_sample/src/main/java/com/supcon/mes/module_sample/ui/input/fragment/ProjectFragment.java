@@ -352,6 +352,8 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     @Override
     public void getInspectionSubProjectColumnSuccess(BAP5CommonListEntity entity) {
+        //此处，多质量标准有问题，原因是  拿到数据后 进行组装 1结论--List<范围1>    2结论--List<范围1>
+        //应当改成 1结论 --List<范围1>  2结论--List<范围2>
         conclusionList.clear();
 
         columnList.clear();
