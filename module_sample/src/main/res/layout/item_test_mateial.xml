@@ -8,6 +8,8 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/dp_5"
     android:paddingBottom="@dimen/dp_5"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:tag="item"
     android:translationZ="2dp">
 
@@ -82,14 +84,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_batch_number" />
 
-        <com.supcon.mes.mbap.view.CustomEditText
+        <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ceBatchNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_9"
             android:tag="ceBatchNumber"
-            app:edit_hint="请输入生产批号"
-            app:text_color="@color/font_333333"
+            app:editable="false"
+            app:content_color="@color/font_333333"
             app:key_size="13"
             app:content_size="15"
             app:gravity="right|center_vertical"

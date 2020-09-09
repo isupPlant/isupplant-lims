@@ -386,7 +386,7 @@ public class InspectionSubEntity extends BaseEntity {
     }
 
     public List<AttachmentSampleInputEntity> getAttachmentSampleInputEntities() {
-        return attachmentSampleInputEntities;
+        return attachmentSampleInputEntities==null?new ArrayList<>():attachmentSampleInputEntities;
     }
 
     public void setAttachmentSampleInputEntities(List<AttachmentSampleInputEntity> attachmentSampleInputEntities) {

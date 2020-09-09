@@ -167,7 +167,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
         if (!TextUtils.isEmpty(codeResultEvent.scanResult)){
             scan=true;
             Map<String,Object> params=new HashMap<>();
-            params.put(Constant.BAPQuery.CODE,codeResultEvent.ruleContent);
+            params.put(Constant.BAPQuery.CODE,codeResultEvent.scanResult);
             onLoading(getResources().getString(R.string.lims_loading_sample));
             presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(params);
         }

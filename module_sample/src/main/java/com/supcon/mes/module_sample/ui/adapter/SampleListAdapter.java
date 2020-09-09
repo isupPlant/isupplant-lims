@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 
@@ -33,7 +35,7 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
         @BindByTag("item")
         LinearLayout item;
         @BindByTag("tvSample")
-        TextView tvSample;
+        CustomTextView tvSample;
         @BindByTag("ctMateriel")
         CustomTextView ctMateriel;
         @BindByTag("ctBatchNumber")
@@ -63,18 +65,24 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
         }
 
         @Override
+        protected void initView() {
+            super.initView();
+            tvSample.contentView().setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        }
+
+        @Override
         protected void update(SampleEntity data) {
             //样品名称 & 样品编码
             if (!StringUtil.isEmpty(data.getName()) && !StringUtil.isEmpty(data.getCode())){
-                tvSample.setText(data.getName()+"("+data.getCode()+")");
+                tvSample.setContent(data.getName()+"("+data.getCode()+")");
             }else {
                 if (StringUtil.isEmpty(data.getName()) && StringUtil.isEmpty(data.getCode())){
-                    tvSample.setText("--");
+                    tvSample.setContent("--");
                 }else {
                     if (StringUtil.isEmpty(data.getName())){
-                        tvSample.setText(data.getCode());
+                        tvSample.setContent(data.getCode());
                     }else {
-                        tvSample.setText(data.getName());
+                        tvSample.setContent(data.getName());
                     }
                 }
             }
@@ -118,7 +126,7 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
 //                    StringUtil.isEmpty(data.getSampleType().getValue()) ? "--" : data.getSampleType().getValue());
 
             //登记时间
-            ctRegisterTime.setContent(StringUtil.isEmpty(data.getRegisterTime()) ? "--" : data.getRegisterTime());
+            ctRegisterTime.setContent(StringUtil.isEmpty(data.getRegisterTime()) ? "--" : handleTime(data.getRegisterTime()));
 
             if (data.isSelect()){
                 item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_sel);
@@ -126,5 +134,17 @@ public class SampleListAdapter extends BaseListDataRecyclerViewAdapter<SampleEnt
                 item.setBackgroundResource(com.supcon.mes.module_lims.R.drawable.shape_quality_standard_nor);
             }
         }
+    }
+
+    private String handleTime(String time){
+        if (Util.isContainPoint(time)){
+            if (!StringUtil.isEmpty(time)){
+                int i = time.indexOf(".");
+                String substring = time.substring(0, i);
+                return substring;
+            }
+            return "";
+        }
+        return time;
     }
 }

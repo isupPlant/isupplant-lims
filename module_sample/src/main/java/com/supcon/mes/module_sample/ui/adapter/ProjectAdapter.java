@@ -337,6 +337,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                     }else {
                         setVisible(true);
+                        ceOriginalValue.setEditable(true);
                         ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                         ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
                     }
@@ -354,7 +355,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             List<ConclusionEntity> conclusionList = data.getConclusionList();
             for (int i = 0; i < conclusionList.size(); i++) {
                 if (null != conclusionList.get(i).getFinalResult()){
-                    if (conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(0).getResult())){
+                    if (conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(conclusionList.get(i).getColumnList().size()-1).getResult())){
                         data.setConclusionState(false);
                     }else {
                         data.setConclusionState(true);

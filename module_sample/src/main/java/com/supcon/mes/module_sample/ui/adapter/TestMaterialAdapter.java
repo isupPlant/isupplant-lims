@@ -45,7 +45,7 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
         @BindByTag("ctMateriel")
         CustomTextView ctMateriel;
         @BindByTag("ceBatchNumber")
-        CustomEditText ceBatchNumber;
+        CustomTextView ceBatchNumber;
         @BindByTag("ceConsumption")
         CustomEditText ceConsumption;
         @BindByTag("item")
@@ -74,22 +74,22 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
             super.initListener();
             item.setOnClickListener(v -> onItemChildViewClick(v,0));
 
-            RxTextView.textChanges(ceBatchNumber.editText())
-                    .skipInitialValue()
-                    .subscribe(new Consumer<CharSequence>() {
-                        @Override
-                        public void accept(CharSequence charSequence) throws Exception {
-                            getList().get(getAdapterPosition()).setBatchCode(charSequence.toString());
-                        }
-                    });
-            ceBatchNumber.setOnChildViewClickListener(new OnChildViewClickListener() {
-                @Override
-                public void onChildViewClick(View childView, int action, Object obj) {
-                    if (action == -1){
-                        getList().get(getAdapterPosition()).setBatchCode("");
-                    }
-                }
-            });
+//            RxTextView.textChanges(ceBatchNumber.editText())
+//                    .skipInitialValue()
+//                    .subscribe(new Consumer<CharSequence>() {
+//                        @Override
+//                        public void accept(CharSequence charSequence) throws Exception {
+//                            getList().get(getAdapterPosition()).setBatchCode(charSequence.toString());
+//                        }
+//                    });
+//            ceBatchNumber.setOnChildViewClickListener(new OnChildViewClickListener() {
+//                @Override
+//                public void onChildViewClick(View childView, int action, Object obj) {
+//                    if (action == -1){
+//                        getList().get(getAdapterPosition()).setBatchCode("");
+//                    }
+//                }
+//            });
 
             //用量输入监听
             ceConsumption.editText().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -136,19 +136,19 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                         }
                     });
 
-            ceConsumption.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus){
-                        ceConsumption.setContent("");
-                    }
-//                    else {
-//                        if (TextUtils.isEmpty(ceConsumption.getContent())){
-//                            ceConsumption.setContent(0);
-//                        }
+//            ceConsumption.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    if (hasFocus){
+//                        ceConsumption.setContent("");
 //                    }
-                }
-            });
+////                    else {
+////                        if (TextUtils.isEmpty(ceConsumption.getContent())){
+////                            ceConsumption.setContent(0);
+////                        }
+////                    }
+//                }
+//            });
 
 
         }
@@ -172,13 +172,13 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                         }
                     }
 
-                    //是否启用批次
-                    if (data.getProductId().isEnableBatch()){
-                        ceBatchNumber.setEditable(true);
-                    }else {
-                        ceBatchNumber.setEditable(false);
-                        ceBatchNumber.setHint("");
-                    }
+//                    //是否启用批次
+//                    if (data.getProductId().isEnableBatch()){
+//                        ceBatchNumber.setEditable(true);
+//                    }else {
+//                        ceBatchNumber.setEditable(false);
+//                        ceBatchNumber.setHint("");
+//                    }
                 }else {
                     ctMateriel.setContent("--");
                 }

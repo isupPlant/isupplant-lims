@@ -366,9 +366,11 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             }
 
             if (data.isConclusionState()) {
-                ctInspectionItems.setContentTextColor(Color.parseColor("#FFFFFF"));
+                ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
+                ceReportedValue.setContentTextColor(Color.parseColor("#333333"));
             } else {
-                ctInspectionItems.setContentTextColor(Color.parseColor("#B20404"));
+                ceReportedValue.setKeyTextColor(Color.parseColor("#B20404"));
+                ceReportedValue.setContentTextColor(Color.parseColor("#B20404"));
             }
 
             if (data.isOpen()) {

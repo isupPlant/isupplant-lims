@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,14 +18,17 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
+import com.supcon.mes.module_lims.model.bean.SampleComResEntity;
 import com.supcon.mes.module_sample.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -138,10 +142,17 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
                                 for (String key : hashMap.keySet()) {
                                     if (key.equals(list.get(getAdapterPosition()).getColumnKey())) {
                                         hashMap.put(key, spinnerList.get(index));
-                                        break;
+                                    }
+                                    if (key.equals("sampleComRes")){
+                                        List<SampleComResEntity> sampleComResList = GsonUtil.jsonToList((String) hashMap.get(key),SampleComResEntity.class);
+                                        for (int i = 0; i < sampleComResList.size(); i++) {
+                                            if (sampleComResList.get(i).getResultKey().equals(list.get(getAdapterPosition()).getColumnKey())){
+                                                sampleComResList.get(i).setTestResult(spinnerList.get(index));
+                                            }
+                                        }
+                                        hashMap.put("sampleComRes",GsonUtil.gsonString(sampleComResList));
                                     }
                                 }
-                                //notifyItemChanged(getAdapterPosition());
 
                                 if (null != mOnConclusionChangeListener){
                                     mOnConclusionChangeListener.onConclusionChange(getAdapterPosition());
@@ -162,7 +173,7 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
             tsConclusionColumnName.setKey(StringUtil.isEmpty(data.getColumnName()) ? "" : data.getColumnName());
             tsConclusionColumnName.setContent(StringUtil.isEmpty(data.getFinalResult()) ? "" : data.getFinalResult());
 
-            if (data.getFinalResult() !=null && data.getFinalResult().equals(data.getColumnList().get(0).getResult())) {
+            if (data.getFinalResult() !=null && data.getFinalResult().equals(data.getColumnList().get(data.getColumnList().size()-1).getResult())) {
                 data.setQualified(false);
             } else {
                 data.setQualified(true);

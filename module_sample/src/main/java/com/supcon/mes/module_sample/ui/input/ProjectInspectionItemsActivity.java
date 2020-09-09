@@ -24,6 +24,7 @@ import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomDialog;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
@@ -78,7 +79,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     RelativeLayout rl_calculation;
 
 
-    private String[] title = new String[]{getResources().getString(R.string.lims_project), getResources().getString(R.string.lims_equipment), getResources().getString(R.string.lims_material)};
+    private String[] title = new String[]{SupPlantApplication.getAppContext().getResources().getString(R.string.lims_project), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_equipment), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_material)};
     private List<Fragment> fragmentList = new ArrayList<>();
 
     private ProjectFragment projectFragment;
@@ -212,46 +213,15 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+                        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+                        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+                        String equipmentDelete = equipmentFragment.getDeleteList();
+                        String materialDelete = materialFragment.getDeleteList();
 
-                        if (!projectFragment.checkProject()){
-                            new CustomDialog(context)
-                                    .twoButtonAlertDialog( context.getResources().getString(R.string.lims_project_check))
-                                    .bindView(R.id.grayBtn, context.getResources().getString(R.string.home_cancel))
-                                    .bindView(R.id.redBtn, context.getResources().getString(R.string.home_confirm))
-                                    .bindClickListener(R.id.grayBtn, v -> {
-                                    }, true)
-                                    .bindClickListener(R.id.redBtn, v -> {
-
-                                        if (equipmentFragment.checkTestDevice() && materialFragment.checkTestMater()){
-                                            List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
-                                            List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
-                                            List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
-                                            String equipmentDelete = equipmentFragment.getDeleteList();
-                                            String materialDelete = materialFragment.getDeleteList();
-
-                                            SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
-                                                    sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
-                                            controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
-                                        }
-
-                                    }, true)
-                                    .show();
-
-                        }else {
-                            if (equipmentFragment.checkTestDevice() && materialFragment.checkTestMater()){
-                                List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
-                                List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
-                                List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
-                                String equipmentDelete = equipmentFragment.getDeleteList();
-                                String materialDelete = materialFragment.getDeleteList();
-
-                                SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
-                                        sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
-                                controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
-                            }
-                        }
-
-
+                        SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
+                                sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
+                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
                     }
                 });
         controller.setSubmitOnSuccessListener(new OnSuccessListener<Integer>() {

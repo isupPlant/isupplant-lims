@@ -211,6 +211,10 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
                 bean.setCode(deviceReferenceEntity.getCode());
                 bean.setState(deviceReferenceEntity.getState());
                 bean.setId(deviceReferenceEntity.getId());
+                BaseLongIdNameEntity typeEntity = new BaseLongIdNameEntity();
+                typeEntity.setId(deviceReferenceEntity.getEamType() == null ? null : deviceReferenceEntity.getEamType().getId());
+                typeEntity.setName(deviceReferenceEntity.getEamType() == null ? null : deviceReferenceEntity.getEamType().getName());
+                adapter.getList().get(mPosition).setEamTypeId(typeEntity);
                 adapter.getList().get(mPosition).setEamId(bean);
                 adapter.notifyItemChanged(mPosition);
             }
@@ -248,15 +252,6 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
         return sb.toString();
     }
 
-    public boolean checkTestDevice(){
-        for (int i = 0; i < adapter.getList().size(); i++) {
-            if (null == adapter.getList().get(i).getEamId() || StringUtil.isEmpty(adapter.getList().get(i).getEamId().getCode())){
-                ToastUtils.show(context,getResources().getString(R.string.lims_device_check));
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public void onDestroy() {

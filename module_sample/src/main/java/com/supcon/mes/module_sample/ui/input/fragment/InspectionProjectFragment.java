@@ -201,7 +201,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
         if (position+1 == adapter.getList().size()){  //表示上次选中的已经是最后一条了
             mInspectionSubRefreshListener.refreshOver(position, adapter.getList());
         }
-        goRefresh();
+        presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
 
     }
 
@@ -214,7 +214,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 break;
             }
         }
-        goRefresh();
+        presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
     }
 
     @Override

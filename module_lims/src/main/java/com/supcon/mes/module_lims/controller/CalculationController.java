@@ -17,8 +17,11 @@ import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.CalcParamInfoEntity;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.model.bean.SampleComResEntity;
 import com.supcon.mes.module_lims.model.bean.SpecLimitEntity;
 import com.supcon.mes.module_lims.utils.Util;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -165,7 +168,16 @@ public class CalculationController extends BaseViewController {
                 for (String key : adapterList.get(nRow).getDispMap().keySet()) {
                     if (key.equals(specLimits.get(0).getResultKey())) {
                         adapterList.get(nRow).getDispMap().put(key, resultGrade);
-                        break;
+
+                    }
+                    if (key.equals("sampleComRes")){
+                        List<SampleComResEntity> sampleComResList = GsonUtil.jsonToList((String) adapterList.get(nRow).getDispMap().get(key),SampleComResEntity.class);
+                        for (int h = 0; h < sampleComResList.size(); h++) {
+                            if (sampleComResList.get(h).getResultKey().equals(specLimits.get(0).getResultKey())){
+                                sampleComResList.get(h).setTestResult(resultGrade);
+                            }
+                        }
+                        adapterList.get(nRow).getDispMap().put("sampleComRes",GsonUtil.gsonString(sampleComResList));
                     }
                 }
 
@@ -214,6 +226,7 @@ public class CalculationController extends BaseViewController {
                 try {
                     Invocable invoke = (Invocable) engine;
                     roundValue = invoke.invokeFunction("roundingValue", value, sampleCom.getDigitType(), sampleCom.getCarrySpace(), sampleCom.getCarryType(), sampleCom.getCarryFormula());
+                    roundValue = checkValue(roundValue+"");
                     sampleCom.setOriginValue(value);
                     sampleCom.setRoundValue(roundValue + "");
                     sampleCom.setDispValue(roundValue + "");
@@ -455,8 +468,11 @@ public class CalculationController extends BaseViewController {
                 if (dealFunc.equals("LIMSBasic_dealFunc/avg")) {
 
                     try {
-                        Invocable invoke = (Invocable) engine;
-                        res = invoke.invokeFunction("ave", valueArr.toArray());
+                        List<Double> list = new ArrayList<>();
+                        for (int i = 0; i < valueArr.size(); i++) {
+                            list.add(Double.valueOf(valueArr.get(i)));
+                        }
+                        res = Util.getAvg(list);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }

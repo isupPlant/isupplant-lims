@@ -60,6 +60,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -205,6 +206,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                                     attachmentSampleInputEntity.setName(name);
                                     attachmentSampleInputEntity.setFile(file);
                                     attachmentEntities.add(attachmentSampleInputEntity);
+                                    itemEntity.setAttachmentSampleInputEntities(attachmentEntities);
                                 }
                             });
                 } else if (action == 2) {
@@ -379,6 +381,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                             InspectionItemColumnEntity inspectionItemColumnEntity = columnList.get(a);
                             recordList.add(inspectionItemColumnEntity);
                         }
+                        Collections.reverse(recordList);
                         conclusionList.get(i).setColumnList(recordList);
                         k = j + 1;
                     }
@@ -414,14 +417,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         return recordList;
     }
 
-    public boolean checkProject(){
-        for (int i = 0; i < adapter.getList().size(); i++) {
-            if (StringUtil.isEmpty(adapter.getList().get(i).getDispValue())){
-                return false;
-            }
-        }
-        return true;
-    }
+
 
     @Override
     public void onDestroy() {

@@ -110,7 +110,7 @@
     <string name="lims_enclosure">附件</string>
     <string name="lims_equipment_type">设备类型</string>
     <string name="lims_equipment_code">设备编码</string>
-    <string name="lims_equipment_name">设备编码</string>
+    <string name="lims_equipment_name">设备名称</string>
     <string name="lims_matCode">编号</string>
     <string name="lims_useQty">用量</string>
     <string name="lims_produce_batch">生产批号</string>

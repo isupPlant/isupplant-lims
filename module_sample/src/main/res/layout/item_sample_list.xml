@@ -17,16 +17,18 @@
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_16">
 
-        <TextView
+        <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/tvSample"
             android:layout_weight="1"
             android:tag="tvSample"
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/fontSize_15sp"
-            android:textColor="@color/font_333333"/>
+            app:key_width="0dp"
+            app:gravity="left|center"
+            app:content_value=""
+            app:text_size="15"
+            app:content_color="@color/font_333333"/>
 
         <TextView
             android:id="@+id/tvSampleType"

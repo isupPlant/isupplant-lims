@@ -17,6 +17,7 @@ import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.custom.EnsureDialog;
 import com.supcon.mes.module_sample.model.api.SampleRecordResultSubmitAPI;
@@ -24,6 +25,8 @@ import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSignEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.SampleSignatureEntity;
+import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
+import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 import com.supcon.mes.module_sample.model.contract.SampleRecordResultSubmitContract;
 import com.supcon.mes.module_sample.presenter.SampleRecordResultSubmitPresenter;
 
@@ -81,7 +84,7 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
             activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_saving));
             presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
         }else if ("submit".equals(submitEntity.getDealMode())){
-            if (checkSubmit(submitEntity.getSampleComListJson())) {
+            if (checkSubmit(submitEntity.getSampleComListJson()) && checkTestDevice(submitEntity.getTestDeviceListJson()) && checkTestMater(submitEntity.getTestMaterialListJson())) {
                 activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_submitting));
                 presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
             }
@@ -92,6 +95,30 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
         for (InspectionSubEntity inspectionSubEntity:inspectionSubEntities){
             if (TextUtils.isEmpty(inspectionSubEntity.getDispValue())){
                 setLoadDialog();
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean checkTestDevice(List<TestDeviceEntity> deviceEntities){
+        if (deviceEntities==null || deviceEntities.isEmpty()){
+            return true;
+        }
+        for (int i = 0; i < deviceEntities.size(); i++) {
+            if (null == deviceEntities.get(i).getEamId() || StringUtil.isEmpty(deviceEntities.get(i).getEamId().getCode())){
+                ToastUtils.show(activity,activity.getResources().getString(R.string.lims_device_check));
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean checkTestMater(List<TestMaterialEntity> materialEntities){
+        if (materialEntities==null || materialEntities.isEmpty()){
+            return true;
+        }
+        for (int i = 0; i < materialEntities.size(); i++) {
+            if (null ==materialEntities.get(i).getUseQty()){
+                ToastUtils.show(activity,activity.getResources().getString(R.string.lims_material_check));
                 return false;
             }
         }
@@ -157,7 +184,7 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
 
     @Override
     public void getSignatureEnabledSuccess(SampleSignatureEntity entity) {
-        activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_submitting));
+
 //        SampleRecordResultSignEntity signEntity=new SampleRecordResultSignEntity();
 //        signEntity.setButtonCode(buttonCode);
 //        signEntity.setSignatureType(entity.getSignatureType());
@@ -175,7 +202,18 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
             }
         }
         paramsMap.put("sampleComListJson",inspectionSubEntities);
-        presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
+        if (type==2){
+            List<TestDeviceEntity> deviceEntities= (List<TestDeviceEntity>) paramsMap.get("testDeviceListJson");
+            List<TestMaterialEntity>  materialEntities= (List<TestMaterialEntity>) paramsMap.get("testMaterialListJson");
+            if (checkTestDevice(deviceEntities) && checkTestMater(materialEntities)){
+                activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_submitting));
+                presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
+            }
+        }else {
+            activity.onLoading(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_submitting));
+            presenterRouter.create(SampleRecordResultSubmitAPI.class).recordResultSubmit(paramsMap);
+        }
+
     }
 
     @Override

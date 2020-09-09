@@ -227,15 +227,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
         return sb.toString();
     }
 
-    public boolean checkTestMater(){
-        for (int i = 0; i < adapter.getList().size(); i++) {
-            if (null == adapter.getList().get(i).getUseQty()){
-                ToastUtils.show(context,getResources().getString(R.string.lims_material_check));
-                return false;
-            }
-        }
-        return true;
-    }
+
 
     @Override
     public void onDestroy() {
