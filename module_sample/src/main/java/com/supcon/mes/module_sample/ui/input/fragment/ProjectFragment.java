@@ -191,15 +191,22 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                             .setOnSuccessListener(new OnSuccessListener<FileDataEntity>() {
                                 @Override
                                 public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
+
                                     filePath = fileDataEntity.getLocalPath();
                                     File file=new File(fileDataEntity.getLocalPath());
                                     String name=file.getName();
-                                    itemEntity.getFileUploadMultiFileNames().add(name);
+                                    List<String> fileUploadMultiFileNames=itemEntity.getFileUploadMultiFileNames();
+                                    fileUploadMultiFileNames.add(name);
+                                    itemEntity.setFileUploadMultiFileNames(fileUploadMultiFileNames);
+
                                     String path=fileDataEntity.getPath();
                                     List<String> addPaths=itemEntity.getFileUploadFileAddPaths();
                                     addPaths.add(path);
                                     itemEntity.setFileUploadFileAddPaths(addPaths);
-                                    itemEntity.getFileUploadMultiFileIcons().add(fileDataEntity.getFileIcon());
+
+                                    List<String> fileUploadMultiFileIcons=itemEntity.getFileUploadMultiFileIcons();
+                                    fileUploadMultiFileIcons.add(fileDataEntity.getFileIcon());
+                                    itemEntity.setFileUploadMultiFileIcons(fileUploadMultiFileIcons);
 
                                     List<AttachmentSampleInputEntity> attachmentEntities=itemEntity.getAttachmentSampleInputEntities();
                                     AttachmentSampleInputEntity attachmentSampleInputEntity=new AttachmentSampleInputEntity();

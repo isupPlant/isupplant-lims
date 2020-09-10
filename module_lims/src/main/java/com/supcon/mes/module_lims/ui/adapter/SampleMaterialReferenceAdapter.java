@@ -72,13 +72,13 @@ public class SampleMaterialReferenceAdapter extends BaseListDataRecyclerViewAdap
 
             //物料名称 || 物料编码
             if (null == data.getProductId()){
-                tvMaterialName.setContent("--");
+                tvMaterialName.setContent("");
             }else {
                 if (!StringUtil.isEmpty(data.getProductId().getName()) && !StringUtil.isEmpty(data.getProductId().getCode())){
                     tvMaterialName.setContent(data.getProductId().getName()+"("+data.getProductId().getCode()+")");
                 }else {
                     if (StringUtil.isEmpty(data.getProductId().getName()) && StringUtil.isEmpty(data.getProductId().getCode())){
-                        tvMaterialName.setContent("--");
+                        tvMaterialName.setContent("");
                     }else {
                         if (StringUtil.isEmpty(data.getProductId().getName())){
                             tvMaterialName.setContent(data.getProductId().getCode());
@@ -91,9 +91,9 @@ public class SampleMaterialReferenceAdapter extends BaseListDataRecyclerViewAdap
 
 
             //编号
-            tvNumber.setContent(StringUtil.isEmpty(data.getCode()) ? "--" : data.getCode());
+            tvNumber.setContent(StringUtil.isEmpty(data.getCode()) ? "" : data.getCode());
             //生产批号
-            tvBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "--" : data.getBatchCode());
+            tvBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "" : data.getBatchCode());
 
             if (isRadio){
                 iv_select.setVisibility(View.GONE);

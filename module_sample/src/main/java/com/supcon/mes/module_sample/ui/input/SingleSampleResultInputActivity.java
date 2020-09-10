@@ -28,9 +28,11 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.DateFilterController;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.TimeUtil;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
@@ -44,6 +46,7 @@ import com.supcon.mes.module_scan.controller.CommonScanController;
 import com.supcon.mes.module_scan.model.event.CodeResultEvent;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 import com.supcon.mes.module_sample.model.contract.SampleListApi;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -59,7 +62,7 @@ import io.reactivex.functions.Consumer;
  * Created by wanghaidong on 2020/8/13
  * Email:wanghaidong1@supcon.com
  */
-@Controller(value = {SampleInputController.class, CommonScanController.class})
+@Controller(value = {SampleInputController.class, CommonScanController.class, DateFilterController.class})
 @Presenter(value = SingleSamplePresenter.class)
 @Router(Constant.AppCode.LIMS_RecordBySingleSample)
 public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity<SampleEntity> implements SampleListApi.View {
@@ -75,7 +78,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
 
     @BindByTag("leftBtn")
     CustomImageButton leftBtn;
-    Map<String,Object> queryParam=new HashMap<>();
+    Map<String, Object> queryParam = new HashMap<>();
     SampleListAdapter adapter;
 
     @Override
@@ -85,7 +88,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
 
     @Override
     protected IListAdapter createAdapter() {
-        return adapter=new SampleListAdapter(context);
+        return adapter = new SampleListAdapter(context);
     }
 
     @Override
@@ -117,10 +120,30 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
     }
 
+    Map<String, Object> timeMap = new HashMap<>();
+
     @Override
     protected void initListener() {
         super.initListener();
 
+        getController(DateFilterController.class).setDateChecked(Constant.Date.TODAY);
+        String[] dates = TimeUtil.getTimePeriod(Constant.Date.TODAY);
+        String startTime = dates[0];
+        String endTime = dates[1];
+        timeMap.put(Constant.BAPQuery.IN_DATE_START, startTime);
+        timeMap.put(Constant.BAPQuery.IN_DATE_END, endTime);
+
+
+        getController(DateFilterController.class).setDateSelectListener((start, end) -> {
+            if (start.isEmpty() && start.isEmpty()) {
+                timeMap.remove(Constant.BAPQuery.IN_DATE_START);
+                timeMap.remove(Constant.BAPQuery.IN_DATE_END);
+            } else {
+                timeMap.put(Constant.BAPQuery.IN_DATE_START, start);
+                timeMap.put(Constant.BAPQuery.IN_DATE_END, end);
+            }
+            refreshListController.refreshBegin();
+        });
         getController(SampleInputController.class).setSearchOverListener(new OnSearchOverListener() {
             @Override
             public void onSearchOverClick(Map<String, Object> map) {
@@ -141,17 +164,18 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(queryParam);
+
+                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap, queryParam);
 
             }
         });
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                SampleEntity sampleEntity=adapter.getItem(position);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("sampleEntity",sampleEntity);
-                IntentRouter.go(context,Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM,bundle);
+                SampleEntity sampleEntity = adapter.getItem(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("sampleEntity", sampleEntity);
+                IntentRouter.go(context, Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM, bundle);
             }
         });
     }
@@ -161,17 +185,19 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
         refreshListController.refreshBegin();
     }
 
-    boolean scan=false;
+    boolean scan = false;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCodeReciver(CodeResultEvent codeResultEvent) {
-        if (!TextUtils.isEmpty(codeResultEvent.scanResult)){
-            scan=true;
-            Map<String,Object> params=new HashMap<>();
-            params.put(Constant.BAPQuery.CODE,codeResultEvent.scanResult);
+        if (!TextUtils.isEmpty(codeResultEvent.scanResult)) {
+            scan = true;
+            Map<String, Object> params = new HashMap<>();
+            params.put(Constant.BAPQuery.CODE, codeResultEvent.scanResult);
             onLoading(getResources().getString(R.string.lims_loading_sample));
-            presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(params);
+            presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap, params);
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -180,19 +206,24 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
 
     @Override
     public void getSampleListSuccess(CommonListEntity entity) {
-        if (scan){
-            scan=false;
-            onLoadSuccessAndExit(getResources().getString(R.string.lims_loading_succeed), new OnLoaderFinishListener() {
-                @Override
-                public void onLoaderFinished() {
-                    List<SampleEntity> sampleEntities=entity.result;
-                    SampleEntity sampleEntity=sampleEntities.get(0);
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("sampleEntity",sampleEntity);
-                    IntentRouter.go(context,Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM,bundle);
-                }
-            });
-        }else {
+        if (scan) {
+            scan = false;
+            List<SampleEntity> sampleEntities = entity.result;
+            if (!sampleEntities.isEmpty()) {
+                onLoadSuccessAndExit(getResources().getString(R.string.lims_loading_succeed), new OnLoaderFinishListener() {
+                    @Override
+                    public void onLoaderFinished() {
+                        SampleEntity sampleEntity = sampleEntities.get(0);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("sampleEntity", sampleEntity);
+                        IntentRouter.go(context, Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM, bundle);
+                    }
+                });
+            }else {
+                onLoading(getResources().getString(R.string.lims_load_fail));
+            }
+
+        } else {
             refreshListController.refreshComplete(entity.result);
         }
     }
@@ -200,6 +231,9 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
     @Override
     public void getSampleListFailed(String errorMsg) {
         refreshListController.refreshComplete();
-        ToastUtils.show(context,errorMsg);
+        if (scan) {
+            onLoadFailed(errorMsg);
+        } else
+            ToastUtils.show(context, errorMsg);
     }
 }

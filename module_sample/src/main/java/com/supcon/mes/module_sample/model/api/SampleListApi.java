@@ -12,5 +12,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {CommonListEntity.class})
 public interface SampleListApi {
-    void getSampleList( Map<String, Object> params);
+    void getSampleList(Map<String,Object> timeMap,Map<String, Object> params);
 }

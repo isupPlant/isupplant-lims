@@ -188,12 +188,13 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             ceOriginalValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ceOriginalValue.setContent("");
+                    ceOriginalValue.setContent(null);
                     ctRoundOffValue.setContent(null);
                     InspectionSubEntity subEntity = getItem(getAdapterPosition());
                     change = true;
                     subEntity.setOriginValue(null);
                     subEntity.setRoundValue(null);
+                    subEntity.setDispValue(null);
                 }
             });
 

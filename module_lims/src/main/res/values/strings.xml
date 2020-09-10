@@ -72,7 +72,7 @@
     <string name="lims_retain_staff">留样人</string>
     <string name="lims_retain_dept">留样部门</string>
     <string name="lims_storeset">存放位置</string>
-    <string name="lims_record">记录查看</string>
+    <string name="lims_record">观察记录</string>
     <string name="lims_plan_date">计划观察日期</string>
     <string name="lims_real_date">实际观察日期</string>
     <string name="lims_state">状态</string>
@@ -171,5 +171,6 @@
     <string name="lims_unqualified">不合格</string>
     <string name="lims_specifications">规格</string>
     <string name="lims_model">型号</string>
+    <string name="lims_load_fail">未加载到该样品</string>
 
 </resources>

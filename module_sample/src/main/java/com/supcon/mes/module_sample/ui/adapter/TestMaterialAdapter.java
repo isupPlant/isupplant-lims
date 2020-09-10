@@ -162,7 +162,7 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                         ctMateriel.setContent(data.getProductId().getName()+"("+data.getProductId().getCode()+")");
                     }else {
                         if (StringUtil.isEmpty(data.getProductId().getName()) && StringUtil.isEmpty(data.getProductId().getCode())){
-                            ctMateriel.setContent("--");
+                            ctMateriel.setContent("");
                         }else {
                             if (StringUtil.isEmpty(data.getProductId().getCode())){
                                 ctMateriel.setContent(data.getProductId().getName());
@@ -182,7 +182,7 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                 }else {
                     ctMateriel.setContent("--");
                 }
-                ctNumber.setContent(StringUtil.isEmpty(data.getMatCode()) ? "--" : data.getMatCode());
+                ctNumber.setContent(StringUtil.isEmpty(data.getMatCode()) ? "" : data.getMatCode());
                 ceBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "" : data.getBatchCode());
                 ceConsumption.setContent(data.getUseQty() == null ? "" : data.getUseQty().setScale(2, BigDecimal.ROUND_DOWN)+"");
 

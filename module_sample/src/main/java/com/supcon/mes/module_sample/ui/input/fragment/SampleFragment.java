@@ -32,12 +32,14 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.DateFilterController;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
 import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.middleware.util.TimeUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
@@ -57,6 +59,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +72,7 @@ import io.reactivex.functions.Consumer;
  * on 2020/7/29
  * class name
  */
-@Controller(value = {CommonScanController.class})
+@Controller(value = {CommonScanController.class,  DateFilterController.class})
 @Presenter(value = {SampleListPresenter.class})
 public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> implements SampleListApi.View {
 
@@ -152,7 +155,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         });
         goRefresh();
     }
-
+    Map<String,Object> timeMap=new HashMap<>();
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
@@ -160,12 +163,29 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(mParams);
+                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap,mParams);
             }
         });
 
         leftBtn.setOnClickListener(v -> activity.onBackPressed());
 
+        getController(DateFilterController.class).setDateChecked(Constant.Date.TODAY);
+        String[] dates= TimeUtil.getTimePeriod(Constant.Date.TODAY);
+        String startTime = dates[0];
+        String endTime = dates[1];
+        timeMap.put(Constant.BAPQuery.IN_DATE_START, startTime);
+        timeMap.put(Constant.BAPQuery.IN_DATE_END, endTime);
+
+        getController(DateFilterController.class).setDateSelectListener((start, end) -> {
+            if (start.isEmpty() && start.isEmpty()){
+                timeMap.remove(Constant.BAPQuery.IN_DATE_START);
+                timeMap.remove(Constant.BAPQuery.IN_DATE_END);
+            }else {
+                timeMap.put(Constant.BAPQuery.IN_DATE_START, start);
+                timeMap.put(Constant.BAPQuery.IN_DATE_END, end);
+            }
+            refreshListController.refreshBegin();
+        });
         //当前页面搜索图标的的点击事件
         RxView.clicks(searchTitle.getSearchBtn())
                 .throttleFirst(200, TimeUnit.MILLISECONDS)

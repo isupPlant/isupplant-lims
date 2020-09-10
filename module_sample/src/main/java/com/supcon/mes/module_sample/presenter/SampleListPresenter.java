@@ -9,6 +9,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.SubcondEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
+import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.contract.SampleListApi;
@@ -22,8 +23,11 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.BE;
+import static com.supcon.mes.middleware.constant.Constant.BAPQuery.GE;
+import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LE;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LIKE;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LIKE_OPT_BLUR;
+import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LIKE_OPT_Q;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
 
 /**
@@ -33,18 +37,26 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
  */
 public class SampleListPresenter extends SampleListApi.Presenter {
     @Override
-    public void getSampleList( Map<String, Object> params) {
+    public void getSampleList(Map<String,Object> timeMap,Map<String, Object> params) {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordBySample";
         String modelAlias = "sampleInfo";
-
+        FastQueryCondEntity fastQueryCondEntity=null;
         Map<String, Object> map = new HashMap<>();
         if (!params.isEmpty()){
-            FastQueryCondEntity fastQueryCondEntity=getFastQueryEntity(params);
+            fastQueryCondEntity=getFastQueryEntity(params);
             fastQueryCondEntity.viewCode = viewCode;
             fastQueryCondEntity.modelAlias = modelAlias;
             map.put("fastQueryCond",fastQueryCondEntity.toString());
         }
-
+        if (!timeMap.isEmpty()){
+            fastQueryCondEntity=getFastQueryEntity(timeMap);
+            if (fastQueryCondEntity!=null){
+            }else {
+                fastQueryCondEntity.viewCode = viewCode;
+                fastQueryCondEntity.modelAlias = modelAlias;
+            }
+            map.put("fastQueryCond",fastQueryCondEntity.toString());
+        }
         map.put("permissionCode","LIMSSample_5.0.0.0_sample_recordBySample");
         map.put("pageNo",1);
         map.put("pageSize",10);
@@ -79,6 +91,24 @@ public class SampleListPresenter extends SampleListApi.Presenter {
     private static BaseSubcondEntity parseKey(String key, Object value) {
         SubcondEntity subcondEntity = null;
         switch (key) {
+            case Constant.BAPQuery.IN_DATE_START:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.columnName = BusinessType.BAPQuery.REGISTER_TIME;
+                subcondEntity.dbColumnType = Constant.BAPQuery.DATETIME;
+                subcondEntity.operator = GE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
+            case Constant.BAPQuery.IN_DATE_END:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.columnName = BusinessType.BAPQuery.REGISTER_TIME;
+                subcondEntity.dbColumnType = Constant.BAPQuery.DATETIME;
+                subcondEntity.operator = LE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
             case Constant.BAPQuery.CODE:
             case Constant.BAPQuery.NAME:
             case Constant.BAPQuery.BATCH_CODE:
@@ -90,6 +120,7 @@ public class SampleListPresenter extends SampleListApi.Presenter {
                 subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
                 break;
+
         }
         return subcondEntity;
     }

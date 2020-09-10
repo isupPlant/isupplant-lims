@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:tag="searchTitle" />
+    <include layout="@layout/ly_filter_date_radio"/>
     <include
         layout="@layout/ly_recyclerview_with_scrollbar"
         android:layout_width="match_parent"

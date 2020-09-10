@@ -27,6 +27,9 @@ public interface BusinessType {
         String PRODUCT_INSPECT_EDIT = "InspectEdit";
         String PRODUCT_INSPECT_VIEW = "InspectView";
     }
+    interface BAPQuery{
+        String REGISTER_TIME="REGISTER_TIME";//注册时间
+    }
 
 
     //notTested,halfTested,tested,checked,refused,canceled,notChecked

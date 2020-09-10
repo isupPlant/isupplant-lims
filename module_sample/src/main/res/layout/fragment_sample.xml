@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:tag="searchTitle" />
+    <include layout="@layout/ly_filter_date_radio"/>
 
     <com.supcon.common.view.ptr.PtrFrameLayout
             android:id="@+id/refreshFrameLayout"

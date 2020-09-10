@@ -232,10 +232,16 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ceOriginalValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ceOriginalValue.setContent("");
-                    getItem(getAdapterPosition()).setOriginValue("");
+                    ceOriginalValue.setContent(null);
+                    ctRoundOffValue.setValue(null);
+                    ceReportedValue.setContent(null);
+                    InspectionSubEntity subEntity=getItem(getAdapterPosition());
+                    subEntity.setOriginValue(null);
+                    subEntity.setRoundValue(null);
+                    subEntity.setDispValue(null);
                 }
             });
+
 
             ceReportedValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
                 @Override

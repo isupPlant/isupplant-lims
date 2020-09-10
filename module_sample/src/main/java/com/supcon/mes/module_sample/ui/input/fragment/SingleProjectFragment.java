@@ -198,12 +198,18 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                                     filePath = fileDataEntity.getLocalPath();
                                     File file=new File(fileDataEntity.getLocalPath());
                                     String name=file.getName();
-                                    itemEntity.getFileUploadMultiFileNames().add(name);
+                                    List<String> fileUploadMultiFileNames=itemEntity.getFileUploadMultiFileNames();
+                                    fileUploadMultiFileNames.add(name);
+                                    itemEntity.setFileUploadMultiFileNames(fileUploadMultiFileNames);
+
                                     String path=fileDataEntity.getPath();
                                     List<String> addPaths=itemEntity.getFileUploadFileAddPaths();
                                     addPaths.add(path);
                                     itemEntity.setFileUploadFileAddPaths(addPaths);
-                                    itemEntity.getFileUploadMultiFileIcons().add(fileDataEntity.getFileIcon());
+
+                                    List<String> fileUploadMultiFileIcons=itemEntity.getFileUploadMultiFileIcons();
+                                    fileUploadMultiFileIcons.add(fileDataEntity.getFileIcon());
+                                    itemEntity.setFileUploadMultiFileIcons(fileUploadMultiFileIcons);
 
                                     List<AttachmentSampleInputEntity> attachmentEntities=itemEntity.getAttachmentSampleInputEntities();
                                     AttachmentSampleInputEntity attachmentSampleInputEntity=new AttachmentSampleInputEntity();
