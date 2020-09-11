@@ -45,6 +45,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+
 import io.reactivex.functions.Consumer;
 
 /**
@@ -324,7 +327,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         @Override
         protected void update(InspectionSubEntity data) {
             //检验项目
-            ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "--" : data.getComName());
+            ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "" : data.getComName());
             ceOriginalValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
             ceOriginalValue.editText().setSingleLine();
 
@@ -353,7 +356,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             }else {
                 setVisible(true);
             }
-            ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "--" : data.getRoundValue()); //修约值
+            ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "" : data.getRoundValue()); //修约值
             ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "" : data.getDispValue()); //报出值
 
             //判断当前分项中有没有 不合格的结论  有的话 为false
@@ -401,6 +404,9 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     notifyItemChanged(getAdapterPosition());
                 }
             });
+
+
+
             if (data.getFileUploadMultiFileIds() != null && !data.getFileUploadMultiFileIds().isEmpty()) {
                 new LimsFileUpLoadController()
                         .loadFile(data.getFileUploadMultiFileIds(), data.getFileUploadMultiFileNames())
@@ -416,7 +422,14 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             rvConclusion.setAdapter(conclusionAdapter);
             conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());
             conclusionAdapter.setList(data.getConclusionList());
+            ceOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+            cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+            ceReportedValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
             conclusionAdapter.notifyDataSetChanged();
+            if (TextUtils.isEmpty(data.getOriginValue()) && !TextUtils.isEmpty(data.getDefaultValue())){
+                data.setOriginValue(data.getDefaultValue());
+                originValChange(data,ceOriginalValue,ctRoundOffValue,ceReportedValue,cpOriginalValue);
+            }
         }
 
         private void setVisible(boolean visible){
@@ -429,7 +442,86 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             }
         }
     }
+    ScriptEngine engine;
 
+    public void setEngine(ScriptEngine engine) {
+        this.engine = engine;
+    }
+
+    public void originValChange(InspectionSubEntity inspectionSubEntity,CustomEditText ceOriginalValue,CustomTextView ctRoundOffValue,CustomEditText ceReportedValue,CustomSpinner cpOriginalValue) {
+        boolean clearFalg = false;
+        if (!StringUtil.isEmpty(inspectionSubEntity.getOriginValue())) {
+            if (inspectionSubEntity.getValueKind().getId().equals(BusinessType.ValueType.NUMBER) || inspectionSubEntity.getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)) {
+                //数值、计算类型
+                //获取修约值
+                Object roundValue = null;
+                try {
+                    Invocable invoke = (Invocable) engine;
+                    roundValue = invoke.invokeFunction("roundingValue", inspectionSubEntity.getOriginValue(), inspectionSubEntity.getDigitType(), inspectionSubEntity.getCarrySpace(), inspectionSubEntity.getCarryType(), inspectionSubEntity.getCarryFormula());
+                    roundValue = checkValue(roundValue+"");
+                    inspectionSubEntity.setRoundValue(roundValue + "");
+                    inspectionSubEntity.setDispValue(roundValue + "");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //高低限判断
+                if (inspectionSubEntity.getLimitType() != null) {
+                    try {
+                        Invocable invoke = (Invocable) engine;
+                        Object dispValue = invoke.invokeFunction("sectionJudgment", inspectionSubEntity.getOriginValue(), inspectionSubEntity.getLimitType().getId(), inspectionSubEntity.getMaxValue(), inspectionSubEntity.getMinValue());
+                        if (dispValue != "reject") {
+                            if ((dispValue + "").equals(inspectionSubEntity.getOriginValue()) ) {
+                                inspectionSubEntity.setDispValue(dispValue + "");
+                            } else {
+                                inspectionSubEntity.setDispValue(roundValue + "");
+                            }
+                        } else {
+                            clearFalg = true;
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                inspectionSubEntity.setOriginValue(inspectionSubEntity.getOriginValue());
+                inspectionSubEntity.setRoundValue(inspectionSubEntity.getOriginValue());
+                inspectionSubEntity.setDispValue(inspectionSubEntity.getOriginValue());
+            }
+        } else {
+            clearFalg = true;
+        }
+
+        if (clearFalg) {
+            inspectionSubEntity.setOriginValue(null);
+            inspectionSubEntity.setRoundValue(null);
+            inspectionSubEntity.setDispValue(null);
+        }
+        ceOriginalValue.setContent(inspectionSubEntity.getOriginValue());
+        ctRoundOffValue.setContent(inspectionSubEntity.getRoundValue());
+        ceReportedValue.setContent(inspectionSubEntity.getOriginValue());
+        if (inspectionSubEntity.getValueKind().getId().equals(BusinessType.ValueType.ENUM)){
+            cpOriginalValue.setContent(inspectionSubEntity.getOriginValue());
+            cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+        }
+        ceOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+        ceReportedValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+    }
+    public String checkValue(String str){
+        if (StringUtil.isEmpty(str)){
+            return "";
+        }
+        if (com.supcon.mes.middleware.util.Util.isNumeric(str)){
+            if (com.supcon.mes.middleware.util.Util.isContainPoint(str)){
+                return com.supcon.mes.middleware.util.Util.removePoint(str);
+            }else {
+                return str;
+            }
+        }else {
+            return str;
+        }
+
+    }
     public void setOriginalValueChangeListener(OriginalValueChangeListener mOriginalValueChangeListener){
         this.mOriginalValueChangeListener = mOriginalValueChangeListener;
     }

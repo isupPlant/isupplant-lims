@@ -24,7 +24,7 @@
         android:layout_marginLeft="@dimen/dp_6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="物料列表"
+        android:text="@string/lims_materils"
         android:textColor="@color/font_333333"
         android:textSize="@dimen/fontSize_14sp" />
 
@@ -53,7 +53,7 @@
                     android:textColor="@color/font_333333"
                     android:textSize="@dimen/fontSize_12sp"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:text="删除" />
+                    android:text="@string/delete" />
             </LinearLayout>
 
             <LinearLayout
@@ -76,7 +76,7 @@
                     android:textColor="@color/font_333333"
                     android:textSize="@dimen/fontSize_12sp"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:text="参照" />
+                    android:text="@string/lims_refresnce" />
             </LinearLayout>
 
         </LinearLayout>

@@ -125,7 +125,7 @@
             app:content_size="15"
             app:editable="false"
             app:gravity="right|center_vertical"
-            app:key="设备状态"
+            app:key="@string/lime_device_status"
             app:key_color="@color/font_666666"
             app:key_size="13" />
 

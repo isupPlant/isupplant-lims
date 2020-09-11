@@ -59,7 +59,7 @@ public class SampleInputFileAdapter extends BaseListDataRecyclerViewAdapter<Atta
                             bundle.putSerializable("file", file);
                             IntentRouter.go(context, Constant.Router.FILE_LOOK, bundle);
                         } else {
-                            Util.openFile(context, file.getPath());
+                            context.startActivity(Util.openFile(context, file.getPath()));
                         }
                     });
             RxView.clicks(itemViewDelBtn)

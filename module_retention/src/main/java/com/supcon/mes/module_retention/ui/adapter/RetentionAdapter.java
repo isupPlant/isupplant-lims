@@ -3,6 +3,7 @@ package com.supcon.mes.module_retention.ui.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -32,7 +33,8 @@ public class RetentionAdapter extends BaseListDataRecyclerViewAdapter<RetentionE
     protected BaseRecyclerViewHolder<RetentionEntity> getViewHolder(int viewType) {
         return new RetentionViewHolder(context);
     }
-    class RetentionViewHolder extends BaseRecyclerViewHolder<RetentionEntity>{
+
+    class RetentionViewHolder extends BaseRecyclerViewHolder<RetentionEntity> {
 
         @BindByTag("tvOddNumbers")
         TextView tvOddNumbers;
@@ -50,6 +52,7 @@ public class RetentionAdapter extends BaseListDataRecyclerViewAdapter<RetentionE
         CustomTextView pSiteTv;
         @BindByTag("retainDateTv")
         CustomTextView retainDateTv;
+
         public RetentionViewHolder(Context context) {
             super(context);
         }
@@ -71,26 +74,34 @@ public class RetentionAdapter extends BaseListDataRecyclerViewAdapter<RetentionE
             RxView.clicks(itemView)
                     .throttleFirst(2000, TimeUnit.MICROSECONDS)
                     .subscribe(o -> {
-                        Bundle bundle=new Bundle();
-                        bundle.putSerializable("retentionEntity",getItem(getAdapterPosition()));
-                        IntentRouter.go(context, Constant.Router.RETENTION_VIEW,bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("retentionEntity", getItem(getAdapterPosition()));
+                        IntentRouter.go(context, Constant.Router.RETENTION_VIEW, bundle);
                     });
         }
 
         @Override
         protected void update(RetentionEntity data) {
             tvOddNumbers.setText(data.tableNo);
-            if (data.sampleId!=null && data.sampleId.getId()!=null){
-                sampleTv.setValue(String.format("%s(%s)",data.sampleId.getName(),data.sampleId.getCode()));
-                pSiteTv.setValue(data.sampleId.getPsId()!=null && data.sampleId.getPsId().getId()!=null?data.sampleId.getPsId().getName():"");
+            if (data.sampleId != null && data.sampleId.getId() != null) {
+                sampleTv.setValue(String.format("%s(%s)", data.sampleId.getName(), data.sampleId.getCode()));
+                pSiteTv.setValue(data.sampleId.getPsId() != null && data.sampleId.getPsId().getId() != null ? data.sampleId.getPsId().getName() : "");
             }
-            if (data.productId!=null && data.productId.getId()!=null){
-                materialTv.setValue(String.format("%s(%s)",data.productId.getName(),data.productId.getCode()));
+            if (data.productId != null && data.productId.getId() != null) {
+                materialTv.setValue(String.format("%s(%s)", data.productId.getName(), data.productId.getCode()));
             }
             batchCodeTv.setValue(data.batchCode);
-            keeperTv.setValue(data.keeperId!=null && data.keeperId.getId()!=null?data.keeperId.getName():"");
-            retainDateTv.setValue(data.retainDate!=null? DateUtil.dateFormat(data.retainDate):"");
-            tvEdit.setText(data.pending.taskDescription);
+            keeperTv.setValue(data.keeperId != null && data.keeperId.getId() != null ? data.keeperId.getName() : "");
+            retainDateTv.setValue(data.retainDate != null ? DateUtil.dateFormat(data.retainDate) : "");
+            if (!TextUtils.isEmpty(data.pending.openUrl)) {
+                if (data.pending.openUrl.contains("retentionEdit")) {
+                    tvEdit.setText(context.getResources().getString(R.string.lims_edit));
+                } else if (data.pending.openUrl.contains("retentionView")) {
+                    tvEdit.setText(context.getResources().getString(R.string.lims_approve));
+                }
+            }else {
+                tvEdit.setText(data.pending.taskDescription);
+            }
         }
     }
 }

@@ -193,6 +193,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
                     testMaterialEntity.setBatchCode(list.get(i).getBatchCode());
                     testMaterialEntity.setMatCode(list.get(i).getCode());
                     testMaterialEntity.setProductId(list.get(i).getProductId());
+                    testMaterialEntity.setUnitId(list.get(i).getUnitId());
                     adapter.getList().add(testMaterialEntity);
                 }
                 refreshListController.refreshComplete(adapter.getList());

@@ -70,6 +70,35 @@
             app:key="@string/lims_materiel" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_16">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_materiel" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctMaterielUnit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="ctMaterielUnit"
+            app:content_color="@color/font_333333"
+            app:key_color="@color/font_666666"
+            app:key_size="13"
+            app:content_size="15"
+            app:editable="false"
+            app:gravity="right|center_vertical"
+            app:key="@string/lims_material_unit" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

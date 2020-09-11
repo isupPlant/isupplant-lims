@@ -50,6 +50,8 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
         CustomEditText ceConsumption;
         @BindByTag("item")
         LinearLayout item;
+        @BindByTag("ctMaterielUnit")
+        CustomTextView ctMaterielUnit;
 
         public ViewHolder(Context context) {
             super(context);
@@ -160,6 +162,7 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                 if (null != data.getProductId()){
                     if (!StringUtil.isEmpty(data.getProductId().getName()) && !StringUtil.isEmpty(data.getProductId().getCode())){
                         ctMateriel.setContent(data.getProductId().getName()+"("+data.getProductId().getCode()+")");
+
                     }else {
                         if (StringUtil.isEmpty(data.getProductId().getName()) && StringUtil.isEmpty(data.getProductId().getCode())){
                             ctMateriel.setContent("");
@@ -171,6 +174,7 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                             }
                         }
                     }
+                    ctMaterielUnit.setValue(data.getUnitId()!=null?data.getUnitId().getName():"");
 
 //                    //是否启用批次
 //                    if (data.getProductId().isEnableBatch()){

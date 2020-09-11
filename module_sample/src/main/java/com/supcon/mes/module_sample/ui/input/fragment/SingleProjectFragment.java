@@ -177,6 +177,8 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         super.initListener();
         Bundle bundle = getArguments();
         sampleTesId = bundle.getLong("sampleId");
+
+        adapter.setEngine(getController(CalculationController.class).getEngine());
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {

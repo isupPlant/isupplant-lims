@@ -90,6 +90,10 @@ public class CalculationController extends BaseViewController {
         }
     }
 
+    public ScriptEngine getEngine() {
+        return engine;
+    }
+
     @Override
     public void initListener() {
         super.initListener();
@@ -98,9 +102,13 @@ public class CalculationController extends BaseViewController {
             @Override
             public void systemConfigResult(boolean isSuccess, JsonObject jsonObject, String msg) {
                 if (isSuccess) {
-                    JsonElement jsonElement = jsonObject.get("LIMSBasic.specialResult");
-                    String asString = jsonElement.getAsString();
-                    specialResultStr = asString;
+                    try {
+                        JsonElement jsonElement = jsonObject.get("LIMSBasic.specialResult");
+                        String asString = jsonElement.getAsString();
+                        specialResultStr = asString;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

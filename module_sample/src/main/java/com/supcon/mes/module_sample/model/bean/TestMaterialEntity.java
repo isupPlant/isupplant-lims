@@ -24,6 +24,7 @@ public class TestMaterialEntity extends BaseEntity {
     private BigDecimal useQty;
     private Long version;
     private boolean isSelect;
+    private BaseLongIdNameEntity unitId;
 
     public Long getId() {
         return id;
@@ -121,5 +122,11 @@ public class TestMaterialEntity extends BaseEntity {
         isSelect = select;
     }
 
+    public BaseLongIdNameEntity getUnitId() {
+        return unitId;
+    }
 
+    public void setUnitId(BaseLongIdNameEntity unitId) {
+        this.unitId = unitId;
+    }
 }

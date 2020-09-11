@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -46,6 +47,8 @@ public class SampleMaterialReferenceAdapter extends BaseListDataRecyclerViewAdap
         ImageView iv_select;
         @BindByTag("ll_item")
         LinearLayout ll_item;
+        @BindByTag("tvMaterialUnit")
+        CustomTextView tvMaterialUnit;
 
         public ViewHolder(Context context) {
             super(context);
@@ -87,6 +90,7 @@ public class SampleMaterialReferenceAdapter extends BaseListDataRecyclerViewAdap
                         }
                     }
                 }
+
             }
 
 
@@ -100,7 +104,7 @@ public class SampleMaterialReferenceAdapter extends BaseListDataRecyclerViewAdap
             }else {
                 iv_select.setVisibility(View.VISIBLE);
             }
-
+            tvMaterialUnit.setValue(data.getUnitId()!=null?data.getUnitId().getName():"");
             if (data.isSelect()){
                 iv_select.setImageResource(R.drawable.ic_check_yes);
             }else {

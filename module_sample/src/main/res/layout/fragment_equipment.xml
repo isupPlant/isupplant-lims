@@ -25,7 +25,7 @@
             android:layout_marginLeft="@dimen/dp_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="设备列表"
+            android:text="@string/lims_devies"
             android:textColor="@color/font_333333"
             android:textSize="@dimen/fontSize_14sp" />
 
@@ -56,7 +56,7 @@
                     android:textColor="@color/font_333333"
                     android:textSize="@dimen/fontSize_12sp"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:text="删除" />
+                    android:text="@string/delete" />
             </LinearLayout>
 
             <LinearLayout
@@ -79,11 +79,9 @@
                     android:textColor="@color/font_333333"
                     android:textSize="@dimen/fontSize_12sp"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:text="增加" />
+                    android:text="@string/lims_add" />
             </LinearLayout>
-
         </LinearLayout>
-
     </RelativeLayout>
 
     <View

@@ -26,6 +26,7 @@ public class InspectionSubEntity extends BaseEntity {
     private BaseIdValueEntity comState;
     private HashMap<String, Object> dispMap;
     private List<ConclusionEntity> conclusionList; // 多结论集合
+    private String defaultValue;//默认值
     private String dispValue;
     private Long id;
     private Boolean isReport;
@@ -336,6 +337,14 @@ public class InspectionSubEntity extends BaseEntity {
         isOpen = open;
     }
 
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 
     public String getOptionNames() {
         return optionNames;

@@ -3,6 +3,7 @@ package com.supcon.mes.module_lims.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
+import com.supcon.mes.middleware.model.bean.Unit;
 
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class ProdIdEntity extends BaseSystemBackEntity {
     private String specifications;
     private String model;
     private boolean isSelect;
+    private BaseIntIdNameEntity unitId;
 
     public BaseIntIdNameEntity getSampleUnit() {
         return sampleUnit;
@@ -77,4 +79,11 @@ public class ProdIdEntity extends BaseSystemBackEntity {
         return true;
     }
 
+    public BaseIntIdNameEntity getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(BaseIntIdNameEntity unitId) {
+        this.unitId = unitId;
+    }
 }

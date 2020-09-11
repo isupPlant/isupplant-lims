@@ -174,12 +174,14 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     @Override
     protected void initListener() {
         super.initListener();
+        adapter.setEngine(getController(CalculationController.class).getEngine());
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionSubProjectApi.class).getInspectionSubProjectList(sampleTesId + "");
             }
         });
+
 
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override

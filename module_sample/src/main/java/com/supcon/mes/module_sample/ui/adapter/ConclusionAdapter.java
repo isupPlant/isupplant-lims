@@ -130,9 +130,10 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
                 public void onChildViewClick(View childView, int action, Object obj) {
                     spinnerList.clear();
                     List<InspectionItemColumnEntity> columnList = getList().get(getAdapterPosition()).getColumnList();
-                    for (int i = 0; i < columnList.size(); i++) {
+                    for (int i = columnList.size()-1; i >= 0; i--) {
                         spinnerList.add(columnList.get(i).getResult());
                     }
+
                     mSinglePickController.list(spinnerList)
                             .listener((index, item) -> {
                                 //供展示
@@ -172,7 +173,7 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
         protected void update(ConclusionEntity data) {
             tsConclusionColumnName.setKey(StringUtil.isEmpty(data.getColumnName()) ? "" : data.getColumnName());
             tsConclusionColumnName.setContent(StringUtil.isEmpty(data.getFinalResult()) ? "" : data.getFinalResult());
-
+            tsConclusionColumnName.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
             if (data.getFinalResult() !=null && data.getFinalResult().equals(data.getColumnList().get(data.getColumnList().size()-1).getResult())) {
                 data.setQualified(false);
             } else {

@@ -172,5 +172,12 @@
     <string name="lims_specifications">规格</string>
     <string name="lims_model">型号</string>
     <string name="lims_load_fail">未加载到该样品</string>
-
+    <string name="lims_edit">编辑</string>
+    <string name="lims_approve">审核</string>
+    <string name="lims_effect">生效</string>
+    <string name="lims_refresnce">参照</string>
+    <string name="lims_add">增加</string>
+    <string name="lime_device_status">设备状态</string>
+    <string name="lims_devies">设备列表</string>
+    <string name="lims_materils">物料列表</string>
 </resources>

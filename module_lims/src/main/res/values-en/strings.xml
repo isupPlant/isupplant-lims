@@ -25,7 +25,7 @@
     <string name="lims_sample">Sample</string>
     <string name="lims_materiel">Materiel</string>
     <string name="lims_registration_time">Registration time</string>
-    <string name="lims_sampling_point">Sampling point</string>
+    <string name="lims_sampling_point">Sample Point</string>
     <string name="lims_sample_name">Sample name</string>
     <string name="lims_sample_code">Sample code</string>
     <string name="lims_sampling">Sample receive</string>
@@ -46,14 +46,14 @@
     <string name="lims_busitype">Business type</string>
     <string name="lims_inspect_quantity">Inspection quantity</string>
     <string name="lims_material_unit">Unit</string>
-    <string name="lims_check_staff">Check staff</string>
-    <string name="lims_check_dept">Check dept</string>
-    <string name="lims_check_time">Check time</string>
+    <string name="lims_check_staff">Check Staff</string>
+    <string name="lims_check_dept">Check Dept</string>
+    <string name="lims_check_time">Check Time</string>
     <string name="lims_vendor">Vendor</string>
     <string name="lims_report_name">Report name</string>
     <string name="lims_dispvalue">Disp value</string>
-    <string name="lims_check_result">Check result</string>
-    <string name="lims_test_result">Check result</string>
+    <string name="lims_check_result">Check Result</string>
+    <string name="lims_test_result">Check Result</string>
     <string name="lims_range">Range</string>
     <string name="lims_sample_com">SampleComId</string>
     <string name="lims_result_input">Input_result</string>
@@ -61,9 +61,9 @@
     <string name="lims_sample_type">Sample_type</string>
     <string name="lims_inspection_item">Inspection item</string>
     <string name="lims_keeper">Keeper</string>
-    <string name="lims_retain_date">Retain date</string>
+    <string name="lims_retain_date">Retain Date</string>
     <string name="lims_retention">Retention</string>
-    <string name="lims_retainqty">Quality</string>
+    <string name="lims_retainqty">Quantity</string>
     <string name="lims_retain_days">Retain days</string>
     <string name="lims_valid_date">Expiration Date</string>
     <string name="lims_retain_staff">Retain staff</string>
@@ -108,7 +108,7 @@
     <string name="lims_equipment_type">Equipment type</string>
     <string name="lims_equipment_code">Equipment Code</string>
     <string name="lims_equipment_name">Equipment Name</string>
-    <string name="lims_matCode">Number</string>
+    <string name="lims_matCode">No.</string>
     <string name="lims_useQty">UseQty</string>
     <string name="lims_produce_batch">Batch number</string>
 
@@ -141,8 +141,8 @@
     <string name="lims_please_select_quality_standard">Please select quality standard</string>
     <string name="lims_to_void">To void</string>
     <string name="lims_to_void_bill">Are you sure you want to void the document？</string>
-    <string name="lims_adopt">adopt</string>
-    <string name="reject">reject</string>
+    <string name="lims_adopt">Adopt</string>
+    <string name="reject">Reject</string>
     <string name="lims_product_test_apply_bill">Product inspection application form</string>
     <string name="lims_incoming_text_apply_bill">Application form for incoming inspection</string>
     <string name="lims_other_text_apply_bill">Other inspection application form</string>
@@ -167,10 +167,18 @@
     <string name="lims_upload_file">Uploading files...</string>
     <string name="lims_upload_succeed">Upload successful</string>
     <string name="lims_unqualified">unqualified</string>
-    <string name="lims_customer_name">Customer name</string>
-    <string name="lims_supplier_code">Supplier code</string>
+    <string name="lims_customer_name">Customer Name</string>
+    <string name="lims_supplier_code">Supplier Code</string>
     <string name="lims_code">Code</string>
     <string name="lims_specifications">Specifications</string>
     <string name="lims_model">Model</string>
     <string name="lims_load_fail">Not loaded to the sample</string>
+    <string name="lims_edit">Edit</string>
+    <string name="lims_approve">Approve</string>
+    <string name="lims_effect">Effect</string>
+    <string name="lims_refresnce">Reference</string>
+    <string name="lims_add">Add</string>
+    <string name="lime_device_status">Status</string>
+    <string name="lims_devies">Equipment List</string>
+    <string name="lims_materils">Material List</string>
 </resources>
