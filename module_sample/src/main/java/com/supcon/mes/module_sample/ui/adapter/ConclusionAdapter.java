@@ -130,9 +130,10 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
                 public void onChildViewClick(View childView, int action, Object obj) {
                     spinnerList.clear();
                     List<InspectionItemColumnEntity> columnList = getList().get(getAdapterPosition()).getColumnList();
-                    for (int i = columnList.size()-1; i >= 0; i--) {
+                    for (int i = 0; i <columnList.size(); i++) {
                         spinnerList.add(columnList.get(i).getResult());
                     }
+
 
                     mSinglePickController.list(spinnerList)
                             .listener((index, item) -> {
@@ -145,6 +146,7 @@ public class ConclusionAdapter extends BaseListDataRecyclerViewAdapter<Conclusio
                                         hashMap.put(key, spinnerList.get(index));
                                     }
                                     if (key.equals("sampleComRes")){
+
                                         List<SampleComResEntity> sampleComResList = GsonUtil.jsonToList((String) hashMap.get(key),SampleComResEntity.class);
                                         for (int i = 0; i < sampleComResList.size(); i++) {
                                             if (sampleComResList.get(i).getResultKey().equals(list.get(getAdapterPosition()).getColumnKey())){
