@@ -34,7 +34,7 @@
     <string name="lims_material_name">Material name</string>
     <string name="lims_material_reference">Material reference</string>
     <string name="lims_quality_standard">Quality standard</string>
-    <string name="lims_version_number">Version number</string>
+    <string name="lims_version_number">Version</string>
     <string name="lims_executive_standards">Executive standards</string>
     <string name="lims_application_scheme">Application scheme</string>
     <string name="lims_quality_standard_reference">Quality standard_reference</string>
@@ -42,7 +42,7 @@
     <string name="lims_supplier_reference">Supplier reference</string>
     <string name="lims_device_type_reference">Device type reference</string>
     <string name="lims_device_reference">Device reference</string>
-    <string name="lims_inspection_items">Inspection items</string>
+    <string name="lims_inspection_items">Component</string>
     <string name="lims_busitype">Business type</string>
     <string name="lims_inspect_quantity">Inspection quantity</string>
     <string name="lims_material_unit">Unit</string>
@@ -57,9 +57,9 @@
     <string name="lims_range">Range</string>
     <string name="lims_sample_com">SampleComId</string>
     <string name="lims_result_input">Input_result</string>
-    <string name="lims_sample_separation_type">Sample separation type</string>
+    <string name="lims_sample_separation_type">Separate Type</string>
     <string name="lims_sample_type">Sample_type</string>
-    <string name="lims_inspection_item">Inspection item</string>
+    <string name="lims_inspection_item">Component</string>
     <string name="lims_keeper">Keeper</string>
     <string name="lims_retain_date">Retain Date</string>
     <string name="lims_retention">Retention</string>
@@ -75,7 +75,7 @@
     <string name="lims_state">Status</string>
 
 <!--    <string name="lims_single_sample_result_input">Single_sample_result_input</string>-->
-    <string name="lims_inspect_project">Test items</string>
+    <string name="lims_inspect_project">Test</string>
     <string name="lims_inspect_method">Test method</string>
 
 
@@ -99,12 +99,12 @@
     <string name="lims_saving">Saving...</string>
     <string name="lims_submitting">Submitting...</string>
     <string name="lims_reject">Being rejected</string>
-    <string name="lims_calculation">Calculation</string>
-    <string name="lims_parallelNo">ParallelNo</string>
-    <string name="lims_originValue">OriginValue</string>
-    <string name="lims_roundValue">RoundValue</string>
-    <string name="lims_dispValue">DispValue</string>
-    <string name="lims_enclosure">Enclosure</string>
+    <string name="lims_calculation">Calculate</string>
+    <string name="lims_parallelNo">Parallel No.</string>
+    <string name="lims_originValue">Value</string>
+    <string name="lims_roundValue">Round Value</string>
+    <string name="lims_dispValue">Repoeted Value</string>
+    <string name="lims_enclosure">Attachment</string>
     <string name="lims_equipment_type">Equipment type</string>
     <string name="lims_equipment_code">Equipment Code</string>
     <string name="lims_equipment_name">Equipment Name</string>
@@ -121,9 +121,9 @@
     <string name="lims_not_file">There are no files to view</string>
     <string name="lims_not_scanned_code">No matching code was scanned</string>
     <string name="lims_select_one_operate">Please select a record to operate!</string>
-    <string name="lims_project">project</string>
-    <string name="lims_equipment">equipment</string>
-    <string name="lims_material">material</string>
+    <string name="lims_project">Items</string>
+    <string name="lims_equipment">Equipments</string>
+    <string name="lims_material">Materials</string>
     <string name="lims_select_sample">Please select the sample to receive</string>
     <string name="lims_sample_collection_process">Sample collection...</string>
     <string name="lims_submit_succeed">Submitted successfully</string>
