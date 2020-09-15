@@ -70,7 +70,7 @@ public class PleaseCheckSchemeReferenceActivity extends BaseRefreshRecyclerActiv
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("请检方案");
+        getController(ReferenceController.class).setSearchTypeList(context.getResources().getString(R.string.lims_application_scheme));
 
         selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
         id = getIntent().getStringExtra("id");

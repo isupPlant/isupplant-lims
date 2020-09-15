@@ -98,7 +98,7 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("质量标准","版本号");
+        getController(ReferenceController.class).setSearchTypeList(getResources().getString(R.string.lims_quality_standard),getResources().getString(R.string.lims_version_number));
 
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -212,9 +212,9 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
                                 }
                             }
                             if (k > 0){
-                                ToastUtils.show(context,"添加成功!已过滤重复数据");
+                                ToastUtils.show(context,context.getResources().getString(R.string.lims_add_succeed_filter_repeat_data));
                             }else {
-                                ToastUtils.show(context,"添加成功!");
+                                ToastUtils.show(context,context.getResources().getString(R.string.lims_add_succeed));
                             }
                             submitList.clear();
                             for (int i = 0; i < transmitValueList.size(); i++) {
@@ -225,7 +225,7 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
                             EventBus.getDefault().post(new SelectDataEvent<>(new QualityStandardEvent(submitList),selectTag));
                             finish();
                         }else {
-                            ToastUtils.show(context,"请至少选择一条数据!");
+                            ToastUtils.show(context,getResources().getString(R.string.lims_please_select_at_last_one_data));
                         }
 
 

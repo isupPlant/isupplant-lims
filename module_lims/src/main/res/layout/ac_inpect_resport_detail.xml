@@ -284,7 +284,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="检验项目"
+                        android:text="@string/lims_inspection_items"
                         android:textColor="#333333"
                         android:textSize="@dimen/fontSize_14sp" />
                 </LinearLayout>

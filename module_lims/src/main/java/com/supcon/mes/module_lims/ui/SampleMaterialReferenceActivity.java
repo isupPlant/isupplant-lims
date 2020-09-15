@@ -97,7 +97,9 @@ public class SampleMaterialReferenceActivity extends BaseRefreshRecyclerActivity
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("编号","物料名称","生产批号");
+        getController(ReferenceController.class).setSearchTypeList(context.getResources().getString(R.string.lims_matCode),
+                context.getResources().getString(R.string.lims_materiel_name),
+                context.getResources().getString(R.string.lims_produce_batch));
 
         radio = getIntent().getBooleanExtra("radio",false);
         matInfoCodeList = getIntent().getStringExtra("matInfoCodeList");
@@ -212,7 +214,7 @@ public class SampleMaterialReferenceActivity extends BaseRefreshRecyclerActivity
                             EventBus.getDefault().post(event);
                             finish();
                         }else {
-                            ToastUtils.show(context,"请至少选择一项");
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_please_select_at_last_one_data));
                         }
                     }
                 });

@@ -70,7 +70,7 @@
                         android:layout_height="@dimen/dp_35"
                         android:gravity="center"
                         android:background="@color/red"
-                        android:text="计算"
+                        android:text="@string/lims_calculation"
                         android:textColor="@color/white" />
                 </RelativeLayout>
 
@@ -89,7 +89,7 @@
                         android:layout_height="@dimen/dp_35"
                         android:gravity="center"
                         android:background="#1E82D2"
-                        android:text="保存"
+                        android:text="@string/lims_save"
                         android:textColor="@color/white" />
                 </RelativeLayout>
 
@@ -108,7 +108,7 @@
                         android:layout_height="@dimen/dp_35"
                         android:background="#2874D2"
                         android:gravity="center"
-                        android:text="提交"
+                        android:text="@string/lims_submit"
                         android:textColor="@color/white" />
 
                 </RelativeLayout>

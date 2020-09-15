@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="全选"/>
+                    android:text="@string/lims_select_all" />
 
                 <ImageView
                     android:id="@+id/iv_select"
@@ -64,7 +64,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dp_15"
                 android:gravity="center"
-                android:text="取样"
+                android:text="@string/lims_sampling"
                 android:textColor="@color/white"
                 android:background="@drawable/shape_sh_btn_bg"
                 android:textSize="@dimen/fontSize_16sp" />

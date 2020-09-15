@@ -69,7 +69,7 @@ public class DeviceReferenceActivity extends BaseRefreshRecyclerActivity<DeviceR
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("设备编码","设备名称");
+        getController(ReferenceController.class).setSearchTypeList(context.getResources().getString(R.string.lims_equipment_code),context.getResources().getString(R.string.lims_device_name));
 
         selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
         eamClassId = getIntent().getStringExtra("eamClassId");

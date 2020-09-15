@@ -70,7 +70,7 @@ public class SupplierReferenceActivity extends BaseRefreshRecyclerActivity<Vendo
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("客商编码","客商名称");
+        getController(ReferenceController.class).setSearchTypeList(context.getResources().getString(R.string.lims_supplier_code),context.getResources().getString(R.string.lims_customer_name));
 
         selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
 

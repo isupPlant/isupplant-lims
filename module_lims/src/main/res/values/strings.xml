@@ -4,8 +4,11 @@
     <string name="lims_all">全部</string>
     <string name="lims_goods">物料</string>
     <string name="lims_batch_number">批号</string>
+    <string name="lims_input_batch_number">请输入批号</string>
     <string name="lims_examiner">请检人</string>
+    <string name="lims_select_requester">请选择请检人</string>
     <string name="lims_inspection_department">请检部门</string>
+    <string name="lims_select_request_department">请选择请检部门</string>
     <string name="lims_time">请检时间</string>
     <string name="lims_name">名称</string>
     <string name="lims_code">编码</string>
@@ -28,10 +31,13 @@
     <string name="lims_materiel">物料</string>
     <string name="lims_registration_time">登记时间</string>
     <string name="lims_sampling_point">采样点</string>
+    <string name="lims_select_sampling_point">请选择采样点</string>
     <string name="lims_sample_name">样品名称</string>
     <string name="lims_sample_code">样品编码</string>
-    <string name="lims_sampling">样品取样</string>
+    <string name="lims_sample_sampling">样品取样</string>
+    <string name="lims_sampling">取样</string>
     <string name="lims_sample_collection">样品收样</string>
+    <string name="lims_receive">收样</string>
     <string name="lims_sample_inspection_report">样品检验报告</string>
     <string name="lims_material_name">物料名称</string>
     <string name="lims_material_reference">物料参照</string>
@@ -47,12 +53,14 @@
     <string name="lims_device_reference">设备参照</string>
     <string name="lims_inspection_items">检验项目</string>
     <string name="lims_busitype">业务类型</string>
+    <string name="lims_select_busitype">请选择业务类型</string>
     <string name="lims_inspect_quantity">请检数量</string>
     <string name="lims_material_unit">计量单位</string>
     <string name="lims_check_staff">检验人</string>
     <string name="lims_check_dept">检验部门</string>
     <string name="lims_check_time">检验时间</string>
     <string name="lims_vendor">供应商</string>
+    <string name="lims_select_vendor">请选择供应商</string>
     <string name="lims_report_name">检验项目</string>
     <string name="lims_dispvalue">报出值</string>
     <string name="lims_check_result">结论</string>
@@ -76,6 +84,10 @@
     <string name="lims_plan_date">计划观察日期</string>
     <string name="lims_real_date">实际观察日期</string>
     <string name="lims_state">状态</string>
+    <string name="lims_need_lims_check">需实验室检验</string>
+    <string name="lims_material_information">物料信息</string>
+    <string name="lims_num">数量</string>
+    <string name="lims_select_num">请输入数量</string>
 
 <!--    <string name="lims_single_sample_result_input">单样品录入结果</string>-->
     <string name="lims_inspect_project">检测项目</string>
@@ -126,13 +138,13 @@
     <string name="lims_project">项目</string>
     <string name="lims_equipment">设备</string>
     <string name="lims_material">材料</string>
-    <string name="lims_select_sample">请选择要收样的样品</string>
+    <string name="lims_select_sample">请选择要收样的样品!</string>
     <string name="lims_sample_collection_process">收样中...</string>
     <string name="lims_submit_succeed">提交成功</string>
     <string name="lims_enclosure_list">附件列表</string>
     <string name="lims_sample_report">样品报告单</string>
     <string name="lims_sampling_process">取样中...</string>
-    <string name="lims_select_sampling_sample">请选择要取样的样品</string>
+    <string name="lims_select_sampling_sample">请选择要取样的样品!</string>
     <string name="lims_input_original_value">请输入原始值</string>
     <string name="lims_not_content">没有更多展开的内容了!</string>
     <string name="lims_material_reagent_reference">材料试剂参照</string>
@@ -180,4 +192,11 @@
     <string name="lime_device_status">设备状态</string>
     <string name="lims_devies">设备列表</string>
     <string name="lims_materils">物料列表</string>
+    <string name="lims_add_succeed">添加成功</string>
+    <string name="lims_add_succeed_filter_repeat_data">添加成功!已过滤重复数据</string>
+    <string name="lims_please_select_at_last_one_data">请至少选择一条数据!</string>
+    <string name="lims_please_select_one_data_or_look">请选择一行记录进行查看!</string>
+    <string name="lims_status_not">状态非已观察，不允许查看!</string>
+    <string name="lims_select_all">全选</string>
+    <string name="lims_specification_model">规格型号</string>
 </resources>

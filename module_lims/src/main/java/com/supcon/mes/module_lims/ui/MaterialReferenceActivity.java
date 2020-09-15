@@ -96,7 +96,10 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Prod
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("物料名称","物料编码","规格","型号");
+        getController(ReferenceController.class).setSearchTypeList(context.getResources().getString(R.string.lims_material_name),
+                context.getResources().getString(R.string.lims_materiel_code),
+                context.getResources().getString(R.string.lims_specifications),
+                context.getResources().getString(R.string.lims_model));
 
         radio = getIntent().getBooleanExtra("radio",false);
 
@@ -209,7 +212,7 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Prod
                             EventBus.getDefault().post(event);
                             finish();
                         }else {
-                            ToastUtils.show(context,"请至少选择一项");
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_please_select_at_last_one_data));
                         }
                     }
                 });

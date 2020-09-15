@@ -108,7 +108,7 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_sampling));
+        titleText.setText(getString(R.string.lims_sample_sampling));
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {

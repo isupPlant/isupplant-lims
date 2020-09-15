@@ -41,7 +41,7 @@
                 style="@style/yh_custom_view_horizontal_style"
                 app:content_color="@color/font_333333"
                 app:gravity="center|center_vertical"
-                app:key="检验项目"
+                app:key="@string/lims_report_name"
                 />
         </LinearLayout>
 
@@ -61,7 +61,7 @@
                 style="@style/yh_custom_view_horizontal_style"
                 app:content_color="@color/font_333333"
                 app:gravity="center|center_vertical"
-                app:key="计量单位"
+                app:key="@string/lims_material_unit"
                 />
         </LinearLayout>
 

@@ -79,7 +79,6 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     private ProjectAdapter adapter;
     private Long sampleTesId;
-    private String filePath;
 
     BaseFragmentActivity activity;
     SpaceItemDecoration spaceItemDecoration;
@@ -194,7 +193,6 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                                 @Override
                                 public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
 
-                                    filePath = fileDataEntity.getLocalPath();
                                     File file=new File(fileDataEntity.getLocalPath());
                                     String name=file.getName();
                                     List<String> fileUploadMultiFileNames=itemEntity.getFileUploadMultiFileNames();
@@ -333,20 +331,16 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             if (null != myInspectionSubList.get(i).getDispMap()) {
                 HashMap<String, Object> dispMap = myInspectionSubList.get(i).getDispMap();
                 List<ConclusionEntity> conclusionList = myInspectionSubList.get(i).getConclusionList();
-                for (String key : dispMap.keySet()) {
-                    boolean isSuccess = false;
-                    for (int j = 0; j < conclusionList.size(); j++) {
+
+                for (int j = 0; j < conclusionList.size(); j++) {
+                    for (String key : dispMap.keySet()) {
                         if (key.equals(conclusionList.get(j).getColumnKey())) {
                             conclusionList.get(j).setFinalResult((String) dispMap.get(key));
-                            isSuccess = true;
+                            break;
                         }
-                    }
-                    if (isSuccess) {
-                        break;
                     }
 
                 }
-
             }
         }
         recordList = GsonUtil.jsonToList(GsonUtil.gsonString(myInspectionSubList),InspectionSubEntity.class);
@@ -361,8 +355,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     @Override
     public void getInspectionSubProjectColumnSuccess(BAP5CommonListEntity entity) {
-        //此处，多质量标准有问题，原因是  拿到数据后 进行组装 1结论--List<范围1>    2结论--List<范围1>
-        //应当改成 1结论 --List<范围1>  2结论--List<范围2>
+
         conclusionList.clear();
 
         columnList.clear();
@@ -380,13 +373,14 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         }
 
         int k = 0;
-        List<InspectionItemColumnEntity> recordList = new ArrayList<>();
+        int l = 0;
+
         //将合格范围 放入对应集合中
         for (int i = 0; i < conclusionList.size(); i++) {
-            for (int j = 0; j < columnList.size(); j++) {
+            for (int j = l; j < columnList.size(); j++) {
                 if (columnList.get(j).getColumnType().equals("range")) { //表示当前是结论
                     if (columnList.get(j).getColumnKey().equals(conclusionList.get(i).getColumnKey())) { //如果接口数据中的结论的key 跟截取出来的 结论集合的key是同一个key
-                        recordList.clear();
+                        List<InspectionItemColumnEntity> recordList = new ArrayList<>();
                         //将当前下标之前的范围放入属于这个结论的集合中
                         for (int a = j - 1; a >= k; a--) {
                             InspectionItemColumnEntity inspectionItemColumnEntity = columnList.get(a);
@@ -397,7 +391,13 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                         k = j + 1;
                     }
                 }
+
+                if (conclusionList.get(i).getColumnList().size() > 0){
+                    l = j+1;
+                    break;
+                }
             }
+
         }
 
         goRefresh();

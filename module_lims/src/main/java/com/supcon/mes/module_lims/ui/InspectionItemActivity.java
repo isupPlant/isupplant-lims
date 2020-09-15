@@ -220,7 +220,7 @@ public class InspectionItemActivity extends BaseRefreshRecyclerActivity<Inspecti
                             EventBus.getDefault().post(new SelectDataEvent<>(event,selectTag));
                             finish();
                         }else {
-                            ToastUtils.show(context,"请至少选择一条数据!");
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_please_select_at_last_one_data));
                         }
 
 

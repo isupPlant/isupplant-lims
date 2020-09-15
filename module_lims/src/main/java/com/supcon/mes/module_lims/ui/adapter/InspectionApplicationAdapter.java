@@ -132,7 +132,7 @@ public class InspectionApplicationAdapter extends BaseListDataRecyclerViewAdapte
             }else {
                 tvEdit.setText(StringUtil.isEmpty(data.getPending().taskDescription) ? "--" : data.getPending().taskDescription);
             }
-            if (tvEdit.getText().equals("编辑")){
+            if (null != data.getPending() && null != data.getPending().openUrl){ //表示编辑
                 tvEdit.setTextColor(Color.parseColor("#1E82D2"));
             }else {
                 tvEdit.setTextColor(Color.parseColor("#46B479"));

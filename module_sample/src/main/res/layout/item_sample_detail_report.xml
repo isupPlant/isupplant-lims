@@ -146,7 +146,7 @@
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_toRightOf="@+id/inspectRangeImg"
                 android:gravity="center"
-                android:text="范围"></TextView>
+                android:text="@string/lims_range"/>
 
             <ImageView
                 android:id="@+id/rangeImg"

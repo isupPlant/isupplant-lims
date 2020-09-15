@@ -353,16 +353,13 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
             if (null != myInspectionSubList.get(i).getDispMap()) {
                 HashMap<String, Object> dispMap = myInspectionSubList.get(i).getDispMap();
                 List<ConclusionEntity> conclusionList = myInspectionSubList.get(i).getConclusionList();
-                for (String key : dispMap.keySet()) {
-                    boolean isSuccess = false;
-                    for (int j = 0; j < conclusionList.size(); j++) {
+
+                for (int j = 0; j < conclusionList.size(); j++) {
+                    for (String key : dispMap.keySet()) {
                         if (key.equals(conclusionList.get(j).getColumnKey())) {
                             conclusionList.get(j).setFinalResult((String) dispMap.get(key));
-                            isSuccess = true;
+                            break;
                         }
-                    }
-                    if (isSuccess) {
-                        break;
                     }
 
                 }
@@ -400,13 +397,13 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         }
 
         int k = 0;
-        List<InspectionItemColumnEntity> recordList = new ArrayList<>();
+        int l = 0;
         //将合格范围 放入对应集合中
         for (int i = 0; i < conclusionList.size(); i++) {
-            for (int j = 0; j < columnList.size(); j++) {
+            for (int j = l; j < columnList.size(); j++) {
                 if (columnList.get(j).getColumnType().equals("range")) { //表示当前是结论
                     if (columnList.get(j).getColumnKey().equals(conclusionList.get(i).getColumnKey())) { //如果接口数据中的结论的key 跟截取出来的 结论集合的key是同一个key
-                        recordList.clear();
+                        List<InspectionItemColumnEntity> recordList = new ArrayList<>();
                         //将当前下标之前的范围放入属于这个结论的集合中
                         for (int a = j - 1; a >= k; a--) {
                             InspectionItemColumnEntity inspectionItemColumnEntity = columnList.get(a);
@@ -416,6 +413,10 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                         conclusionList.get(i).setColumnList(recordList);
                         k = j + 1;
                     }
+                }
+                if (conclusionList.get(i).getColumnList().size() > 0){
+                    l = j+1;
+                    break;
                 }
             }
         }

@@ -192,11 +192,11 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                 .throttleFirst(2000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (adapter.selectPosition < 0)
-                        ToastUtils.show(context, "请选择一行记录进行查看");
+                        ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_one_data_or_look));
                     else {
                         RecordEntity recordEntity = adapter.getItem(adapter.selectPosition);
                         if (!recordEntity.isStateObserved())
-                            ToastUtils.show(context, "状态非已观察，不允许查看！");
+                            ToastUtils.show(context, context.getResources().getString(R.string.lims_status_not));
                         else {
                             Bundle bundle = new Bundle();
                             bundle.putLong("id", recordEntity.id);

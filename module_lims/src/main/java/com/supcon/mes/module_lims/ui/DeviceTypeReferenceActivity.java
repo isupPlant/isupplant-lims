@@ -68,7 +68,7 @@ public class DeviceTypeReferenceActivity extends BaseRefreshRecyclerActivity<Dev
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList("编码","名称");
+        getController(ReferenceController.class).setSearchTypeList(context.getResources().getString(R.string.lims_code),context.getResources().getString(R.string.lims_name));
 
         selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
 

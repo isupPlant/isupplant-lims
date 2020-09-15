@@ -53,6 +53,8 @@ public class CalculationController extends BaseViewController {
 
     private NotifyRefreshAdapterListener mNotifyRefreshAdapterListener;
 
+    List<Double> list = new ArrayList<>();
+
     public CalculationController(View rootView) {
         super(rootView);
     }
@@ -474,9 +476,8 @@ public class CalculationController extends BaseViewController {
                 //输出类型为处理值
                     Object res = null;
                 if (dealFunc.equals("LIMSBasic_dealFunc/avg")) {
-
+                        list.clear();
                     try {
-                        List<Double> list = new ArrayList<>();
                         for (int i = 0; i < valueArr.size(); i++) {
                             list.add(Double.valueOf(valueArr.get(i)));
                         }
@@ -491,7 +492,7 @@ public class CalculationController extends BaseViewController {
                     //求和
                     try {
                         Invocable invoke = (Invocable) engine;
-                        res = invoke.invokeFunction("getSum", valueArr.toArray());
+                        res = invoke.invokeFunction("sum", valueArr.toArray());
                     }catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -502,9 +503,12 @@ public class CalculationController extends BaseViewController {
                     return valueArr.size() + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/max")) {
                     //最大值
+                    list.clear();
                     try {
-                        Invocable invoke = (Invocable) engine;
-                        res = invoke.invokeFunction("getMaxValue", valueArr.toArray());
+                        for (int i = 0; i < valueArr.size(); i++) {
+                            list.add(Double.valueOf(valueArr.get(i)));
+                        }
+                        res = Util.getMax(list);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -512,9 +516,12 @@ public class CalculationController extends BaseViewController {
                     return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/min")) {
                     //最小值
+                    list.clear();
                     try {
-                        Invocable invoke = (Invocable) engine;
-                        res = invoke.invokeFunction("getMinValue", valueArr.toArray());
+                        for (int i = 0; i < valueArr.size(); i++) {
+                            list.add(Double.valueOf(valueArr.get(i)));
+                        }
+                        res = Util.getMin(list);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }

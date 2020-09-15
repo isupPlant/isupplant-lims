@@ -109,6 +109,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         ImageView imageUpDown;
         @BindByTag("imageFileView")
         ImageView imageFileView;
+        @BindByTag("tvRepeatNumber")
+        CustomTextView tvRepeatNumber;
 
 
         public ViewHolder(Context context) {
@@ -150,6 +152,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ceOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
             ctRoundOffValue.setKeyColor(Color.parseColor("#666666"));
             cpOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
+            tvRepeatNumber.setKeyColor(Color.parseColor("#666666"));
 
         }
 
@@ -180,36 +183,6 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         }
                     });
 
-
-
-
-//            //原始值数值变化监听
-//            RxTextView.textChanges(ceOriginalValue.editText())
-//                    .skipInitialValue()
-//                    .subscribe(new Consumer<CharSequence>() {
-//                        @Override
-//                        public void accept(CharSequence charSequence) throws Exception {
-//                            if (StringUtil.isEmpty(charSequence.toString())){
-//                                getItem(getAdapterPosition()).setOriginValue("");
-//                                getItem(getAdapterPosition()).setRoundValue("");
-//                                getItem(getAdapterPosition()).setDispValue("");
-//
-//                            }
-//
-//                        }
-//                    });
-
-
-//            //原始值焦点监听
-//            ceOriginalValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    originalFocus = hasFocus;
-//                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
-//                        mOriginalValueChangeListener.originalValueChange(originalFocus,originalValue,getAdapterPosition());
-//                    }
-//                }
-//            });
 
             ceOriginalValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
@@ -254,30 +227,6 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 }
             });
 
-
-
-//            //报出值数值变化监听
-//            RxTextView.textChanges(ceReportedValue.editText())
-//                    .skipInitialValue()
-//                    .subscribe(new Consumer<CharSequence>() {
-//                        @Override
-//                        public void accept(CharSequence charSequence) throws Exception {
-//                            dispValue = charSequence.toString();
-//                            getList().get(getAdapterPosition()).setDispValue(dispValue);
-//
-//                        }
-//                    });
-//
-//            //报出值焦点监听
-//            ceReportedValue.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    dispValueFocus = hasFocus;
-//                    if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
-//                        mDispValueChangeListener.dispValueChange(dispValueFocus,dispValue,getAdapterPosition());
-//                    }
-//                }
-//            });
 
             ceReportedValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
@@ -358,6 +307,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             }
             ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "" : data.getRoundValue()); //修约值
             ceReportedValue.setContent(StringUtil.isEmpty(data.getDispValue()) ? "" : data.getDispValue()); //报出值
+            tvRepeatNumber.setContent(data.getParallelNo() == null ? "" : data.getParallelNo().toString()); //重复号
 
             //判断当前分项中有没有 不合格的结论  有的话 为false
             //HashMap<String, Object> dispMap = data.getDispMap();
