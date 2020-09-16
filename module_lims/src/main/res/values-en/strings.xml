@@ -178,7 +178,7 @@
     <string name="lims_service_not_exist">Sorry, the service does not exist or is not started</string>
     <string name="lims_open_camera">Please turn on camera permission</string>
     <string name="lims_upload_file">Uploading Files...</string>
-    <string name="lims_upload_succeed">Upload Successful</string>
+    <string name="lims_upload_succeed">Upload successfully</string>
     <string name="lims_unqualified">Unqualified</string>
     <string name="lims_customer_name">Customer Name</string>
     <string name="lims_supplier_code">Supplier Code</string>
