@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,7 +53,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.event.InspectionItemEvent;
 import com.supcon.mes.module_lims.event.MaterialDateEvent;
 
@@ -634,9 +633,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
         if (null != entity) {
             mHeadEntity = entity;
             if (null != entity.getPending() && null != entity.getPending().openUrl) {
-                if (entity.getPending().openUrl.contains(BusinessType.WorkType.PRODUCT_INSPECT_EDIT)) {
+                if (entity.getPending().openUrl.contains(LimsConstant.WorkType.PRODUCT_INSPECT_EDIT)) {
                     setCanEdit();
-                } else if (entity.getPending().openUrl.contains(BusinessType.WorkType.PRODUCT_INSPECT_VIEW)) { //表示不可编辑
+                } else if (entity.getPending().openUrl.contains(LimsConstant.WorkType.PRODUCT_INSPECT_VIEW)) { //表示不可编辑
                     setCannotEdit();
                 }else {
                     setCannotEdit();
@@ -1096,11 +1095,11 @@ public class InspectionApplicationDetailController extends BaseViewController im
     String getView(){
         String view="";
         if (type==1){
-            view=context.getResources().getString(R.string.lims_product_test_apply_bill);
+            view=context.getResources().getString(R.string.lims_product_test_request_bill);
         }else if (type==2){
-            view=context.getResources().getString(R.string.lims_incoming_text_apply_bill);
+            view=context.getResources().getString(R.string.lims_incoming_test_request_bill);
         }else if (type==3){
-            view=context.getResources().getString(R.string.lims_other_text_apply_bill);
+            view=context.getResources().getString(R.string.lims_other_test_request_bill);
         }
         return view;
     }

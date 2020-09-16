@@ -3,16 +3,16 @@ package com.supcon.mes.module_lims.controller;
 import android.content.Context;
 import android.view.View;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.controller.SystemConfigController;
+import com.supcon.mes.middleware.model.bean.ModuleConfigEntity;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.CalcParamInfoEntity;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
@@ -20,8 +20,6 @@ import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_lims.model.bean.SampleComResEntity;
 import com.supcon.mes.module_lims.model.bean.SpecLimitEntity;
 import com.supcon.mes.module_lims.utils.Util;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -100,17 +98,31 @@ public class CalculationController extends BaseViewController {
     public void initListener() {
         super.initListener();
 
-        systemConfigController.getSystemConfig("LIMSBasic_1.0.0_testItem", "LIMSBasic.specialResult", "", new SystemConfigController.SystemConfigResultListener() {
+//        systemConfigController.getSystemConfig("LIMSBasic_1.0.0_testItem", "LIMSBasic.specialResult", "", new SystemConfigController.SystemConfigResultListener() {
+//            @Override
+//            public void systemConfigResult(boolean isSuccess, JsonObject jsonObject, String msg) {
+//                if (isSuccess) {
+//                    try {
+//                        JsonElement jsonElement = jsonObject.get("LIMSBasic.specialResult");
+//                        String asString = jsonElement.getAsString();
+//                        specialResultStr = asString;
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
+        systemConfigController.getModuleConfig(LimsConstant.ModuleCode.LIMS_MODULE_CODE, LimsConstant.Keys.SPECIAL_RESULT, new OnSuccessListener() {
             @Override
-            public void systemConfigResult(boolean isSuccess, JsonObject jsonObject, String msg) {
-                if (isSuccess) {
+            public void onSuccess(Object result) {
+                if (null != result){
                     try {
-                        JsonElement jsonElement = jsonObject.get("LIMSBasic.specialResult");
-                        String asString = jsonElement.getAsString();
-                        specialResultStr = asString;
-                    } catch (Exception e) {
+                        ModuleConfigEntity bean = (ModuleConfigEntity)result;
+                        specialResultStr = bean.getSpecialResult();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
+
                 }
             }
         });
@@ -133,7 +145,7 @@ public class CalculationController extends BaseViewController {
         //样品分项pt
 
         //值类型不为计算且参数中包含该分项的参与计算；值类型为计算时，改变报出值会自动计算，重新赋值导致无法修改报出值
-        if (!adapterList.get(nRow).getValueKind().getId().equals(BusinessType.ValueType.CALCULATE) && checkAutoCalculate(nRow, adapterList)) {
+        if (!adapterList.get(nRow).getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE) && checkAutoCalculate(nRow, adapterList)) {
             //自动计算
             autoCalculate = true;
             readyCalculate(adapterList);
@@ -229,7 +241,7 @@ public class CalculationController extends BaseViewController {
         boolean clearFalg = false;
 
         if (!StringUtil.isEmpty(value)) {
-            if (sampleCom.getValueKind().getId().equals(BusinessType.ValueType.NUMBER) || sampleCom.getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)) {
+            if (sampleCom.getValueKind().getId().equals(LimsConstant.ValueType.NUMBER) || sampleCom.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
                 //数值、计算类型
                 //获取修约值
                 Object roundValue = null;
@@ -290,7 +302,7 @@ public class CalculationController extends BaseViewController {
         List<Integer> keyArr = new ArrayList<>();//存放key,用于遍历
         List<InspectionSubEntity> calArrays = null;//存放不同计算层级的对象
         for (int i = 0; i < myInspectionSubList.size(); i++) {
-            if (myInspectionSubList.get(i).getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)) {
+            if (myInspectionSubList.get(i).getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
                 int corder = calOrder(myInspectionSubList.get(i), myInspectionSubList);
                 if (map.get(corder) != null) {
                     calArrays = (List<InspectionSubEntity>) map.get(corder);
@@ -316,7 +328,7 @@ public class CalculationController extends BaseViewController {
 
     // 确定计算顺序
     public int calOrder(InspectionSubEntity sampleCom, List<InspectionSubEntity> myInspectionSubList) {
-        if (sampleCom == null || !sampleCom.getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)) {
+        if (sampleCom == null || !sampleCom.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
             return 0;
         }
         int maxDepth = 0;//输出的计算层级
@@ -594,7 +606,7 @@ public class CalculationController extends BaseViewController {
 
         //遍历分项，查找是否存在值类型为计算的分项，如果有则查找其参数是否包含本次修改的分项
         for (int i = 0; i < sampleComDgData.size(); i++) {
-            if (sampleComDgData.get(i).getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)) {
+            if (sampleComDgData.get(i).getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
                 String paramNameArr = sampleComDgData.get(i).getCalculateParamNames();
                 if (!StringUtil.isEmpty(paramNameArr) && paramNameArr.contains(sampleCom.getComName())) {
                     return true;
@@ -608,7 +620,7 @@ public class CalculationController extends BaseViewController {
     public boolean judgValueLegal(String value, int nRow, String dataKey, List<InspectionSubEntity> adapterList) {
         //样品分项pt
         String valueKind = adapterList.get(nRow).getValueKind().getId();
-        if (valueKind.equals(BusinessType.ValueType.CALCULATE) || valueKind.equals(BusinessType.ValueType.NUMBER)) {
+        if (valueKind.equals(LimsConstant.ValueType.CALCULATE) || valueKind.equals(LimsConstant.ValueType.NUMBER)) {
             if (!Util.isNumeric(value)) {
                 setValueByKey(adapterList, nRow, dataKey);
                 return false;

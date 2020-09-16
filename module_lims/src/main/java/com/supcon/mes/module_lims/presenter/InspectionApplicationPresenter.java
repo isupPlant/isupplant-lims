@@ -1,11 +1,10 @@
 package com.supcon.mes.module_lims.presenter;
 
-import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionApplicationApi;
@@ -30,7 +29,7 @@ public class InspectionApplicationPresenter extends InspectionApplicationApi.Pre
         String joinInfo = "BASESET_MATERIALS,ID,QCS_INSPECTS,PROD_ID";
         String modelAlias = "inspect";
         FastQueryCondEntity fastQuery;
-        if (type.equals(BusinessType.PleaseCheck.PRODUCT_PLEASE_CHECK)){
+        if (type.equals(LimsConstant.PleaseCheck.PRODUCT_PLEASE_CHECK)){
             if (isAll){
                 query = "manuInspectList-query";
             }else {
@@ -38,7 +37,7 @@ public class InspectionApplicationPresenter extends InspectionApplicationApi.Pre
             }
 
             viewCode = "QCS_5.0.0.0_inspect_manuInspectList";
-        }else if (type.equals(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK)){
+        }else if (type.equals(LimsConstant.PleaseCheck.INCOMING_PLEASE_CHECK)){
             if (isAll){
                 query = "purchInspectList-query";
             }else {
@@ -46,7 +45,7 @@ public class InspectionApplicationPresenter extends InspectionApplicationApi.Pre
             }
 
             viewCode = "QCS_5.0.0.0_inspect_purchInspectList";
-        }else if (type.equals(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK)){
+        }else if (type.equals(LimsConstant.PleaseCheck.OTHER_PLEASE_CHECK)){
             if (isAll){
                 query = "otherInspectList-query";
             }else {

@@ -1,7 +1,6 @@
 package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
-import com.supcon.mes.module_lims.constant.BusinessType;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyApi;

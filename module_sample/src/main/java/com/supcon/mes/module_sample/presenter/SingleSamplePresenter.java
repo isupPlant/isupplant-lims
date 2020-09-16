@@ -8,8 +8,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.SubcondEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
-import com.supcon.mes.module_lims.constant.BusinessType;
-import com.supcon.mes.module_lims.utils.BAPQueryHelper;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.contract.SampleListApi;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
@@ -92,7 +91,7 @@ public class SingleSamplePresenter extends SampleListApi.Presenter {
             case Constant.BAPQuery.IN_DATE_START:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = BusinessType.BAPQuery.REGISTER_TIME;
+                subcondEntity.columnName = LimsConstant.BAPQuery.REGISTER_TIME;
                 subcondEntity.dbColumnType = Constant.BAPQuery.DATETIME;
                 subcondEntity.operator = GE;
                 subcondEntity.paramStr = LIKE_OPT_Q;
@@ -101,7 +100,7 @@ public class SingleSamplePresenter extends SampleListApi.Presenter {
             case Constant.BAPQuery.IN_DATE_END:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = BusinessType.BAPQuery.REGISTER_TIME;
+                subcondEntity.columnName = LimsConstant.BAPQuery.REGISTER_TIME;
                 subcondEntity.dbColumnType = Constant.BAPQuery.DATETIME;
                 subcondEntity.operator = LE;
                 subcondEntity.paramStr = LIKE_OPT_Q;

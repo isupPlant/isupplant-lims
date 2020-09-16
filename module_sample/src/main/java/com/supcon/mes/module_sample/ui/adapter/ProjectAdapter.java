@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.listener.OnChildViewClickListener;
@@ -32,16 +31,14 @@ import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.StringUtil;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 
-import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -285,10 +282,10 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             //原始值
             if(null != data.getValueKind()){ // 值类型
                 if (!StringUtil.isEmpty(data.getValueKind().getId())){ // 值类型不为空
-                    if (data.getValueKind().getId().equals(BusinessType.ValueType.ENUM)){
+                    if (data.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)){
                         setVisible(false);
                         cpOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
-                    }else if (data.getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)){
+                    }else if (data.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)){
                         setVisible(true);
                         ceOriginalValue.setEditable(false);
                         ceOriginalValue.setHint("");
@@ -401,7 +398,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
     public void originValChange(InspectionSubEntity inspectionSubEntity,CustomEditText ceOriginalValue,CustomTextView ctRoundOffValue,CustomEditText ceReportedValue,CustomSpinner cpOriginalValue) {
         boolean clearFalg = false;
         if (!StringUtil.isEmpty(inspectionSubEntity.getOriginValue())) {
-            if (inspectionSubEntity.getValueKind().getId().equals(BusinessType.ValueType.NUMBER) || inspectionSubEntity.getValueKind().getId().equals(BusinessType.ValueType.CALCULATE)) {
+            if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.NUMBER) || inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
                 //数值、计算类型
                 //获取修约值
                 Object roundValue = null;
@@ -450,7 +447,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         ceOriginalValue.setContent(inspectionSubEntity.getOriginValue());
         ctRoundOffValue.setContent(inspectionSubEntity.getRoundValue());
         ceReportedValue.setContent(inspectionSubEntity.getOriginValue());
-        if (inspectionSubEntity.getValueKind().getId().equals(BusinessType.ValueType.ENUM)){
+        if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)){
             cpOriginalValue.setContent(inspectionSubEntity.getOriginValue());
             cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         }

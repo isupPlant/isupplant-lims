@@ -2,9 +2,7 @@ package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
-import com.supcon.mes.middleware.util.StringUtil;
-import com.supcon.mes.module_lims.constant.BusinessType;
-import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
@@ -50,7 +48,7 @@ public class InspectionApplicationDetailPresenter extends InspectionApplicationD
     public void getInspectionDetailPtData(String type, boolean isEdit, String id) {
         String dg = "";
         String datagridCode = "";
-        if (type.equals(BusinessType.PleaseCheck.PRODUCT_PLEASE_CHECK)){
+        if (type.equals(LimsConstant.PleaseCheck.PRODUCT_PLEASE_CHECK)){
             if (isEdit){
                 dg = "data-dg1591080786501";
                 datagridCode = "QCS_5.0.0.0_inspect_manuInspectEditdg1591080786501";
@@ -58,7 +56,7 @@ public class InspectionApplicationDetailPresenter extends InspectionApplicationD
                 dg = "data-dg1591080031851";
                 datagridCode = "QCS_5.0.0.0_inspect_manuInspectViewdg1591080031851";
             }
-        }else if (type.equals(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK)){
+        }else if (type.equals(LimsConstant.PleaseCheck.INCOMING_PLEASE_CHECK)){
             if (isEdit){
                 dg = "data-dg1587627206280";
                 datagridCode = "QCS_5.0.0.0_inspect_purchInspectEditdg1587627206280";
@@ -66,7 +64,7 @@ public class InspectionApplicationDetailPresenter extends InspectionApplicationD
                 dg = "data-dg1588124680273";
                 datagridCode = "QCS_5.0.0.0_inspect_purchInspectViewdg1588124680273";
             }
-        }else if (type.equals(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK)){
+        }else if (type.equals(LimsConstant.PleaseCheck.OTHER_PLEASE_CHECK)){
             if (isEdit){
                 dg = "data-dg1591595570526";
                 datagridCode = "QCS_5.0.0.0_inspect_otherInspectEditdg1591595570526";

@@ -28,7 +28,7 @@
     <string name="lims_sample">Sample</string>
     <string name="lims_materiel">Material</string>
     <string name="lims_registration_time">Reg Time</string>
-    <string name="lims_sampling_point">Sample Point</string>
+    <string name="lims_sampling_point">Sampling Point</string>
     <string name="lims_select_sampling_point">Please select the sample point</string>
     <string name="lims_sample_name">Sample Name</string>
     <string name="lims_sample_code">Sample Code</string>
@@ -83,7 +83,7 @@
     <string name="lims_state">Status</string>
     <string name="lims_need_lims_check">Lab Test</string>
     <string name="lims_material_information">Material Information</string>
-    <string name="lims_num">Number</string>
+    <string name="lims_num">Quantity</string>
     <string name="lims_select_num">Please input quantity</string>
 
 <!--    <string name="lims_single_sample_result_input">Single_sample_result_input</string>-->
@@ -156,9 +156,9 @@
     <string name="lims_to_void_bill">Are you sure you want to void the document？</string>
     <string name="lims_adopt">Adopt</string>
     <string name="reject">Reject</string>
-    <string name="lims_product_test_apply_bill">Product inspection application form</string>
-    <string name="lims_incoming_text_apply_bill">Application form for incoming inspection</string>
-    <string name="lims_other_text_apply_bill">Other inspection application form</string>
+    <string name="lims_product_test_request_bill">Product inspection application form</string>
+    <string name="lims_incoming_test_request_bill">Application form for incoming inspection</string>
+    <string name="lims_other_test_request_bill">Other inspection application form</string>
     <string name="lims_product_test_report">Product Test Report</string>
     <string name="lims_incoming_test_report">Incoming inspection report</string>
     <string name="lims_other_test_report">Other inspection reports</string>

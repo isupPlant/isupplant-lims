@@ -20,7 +20,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.SurveyReportController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
@@ -129,7 +129,7 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.SurveyReportApi.class).getSurveyReportList(BusinessType.Report.PRODUCT_REPORT, isWhole, pageIndex, params);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.SurveyReportApi.class).getSurveyReportList(LimsConstant.Report.PRODUCT_REPORT, isWhole, pageIndex, params);
             }
         });
     }

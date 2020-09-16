@@ -156,9 +156,9 @@
     <string name="lims_to_void_bill">确认要作废单据单据吗？</string>
     <string name="lims_adopt">通过</string>
     <string name="reject">驳回</string>
-    <string name="lims_product_test_apply_bill">产品检验申请单</string>
-    <string name="lims_incoming_text_apply_bill">来料检验申请单</string>
-    <string name="lims_other_text_apply_bill">其他检验申请单</string>
+    <string name="lims_product_test_request_bill">产品检验申请单</string>
+    <string name="lims_incoming_test_request_bill">来料检验申请单</string>
+    <string name="lims_other_test_request_bill">其他检验申请单</string>
     <string name="lims_product_test_report">产品检验报告单</string>
     <string name="lims_incoming_test_report">来料检验报告单</string>
     <string name="lims_other_test_report">其他检验报告单</string>

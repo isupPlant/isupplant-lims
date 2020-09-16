@@ -140,11 +140,9 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         if (activity instanceof SampleResultInputActivity) {
             int orientation = ((SampleResultInputActivity) activity).getOrientation();
             if (orientation == 2) { //横向
-                ToastUtils.show(context, "横向");
                 contentView.setLayoutManager(gridLayoutManager);
                 contentView.addItemDecoration(spaceItemDecoration);
             } else if (orientation == 1) { //竖向
-                ToastUtils.show(context, "竖向");
                 contentView.setLayoutManager(linearLayoutManager);
                 contentView.addItemDecoration(linearSpaceItemDecoration);
             }
@@ -290,7 +288,6 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                         }
 
                     } else if (orientation == 1) { //竖向
-                        ToastUtils.show(context, "竖向");
                         contentView.setLayoutManager(linearLayoutManager);
                         if (contentView.getItemDecorationCount() > 0) {
                             RecyclerView.ItemDecoration itemDecorationAt = contentView.getItemDecorationAt(0);

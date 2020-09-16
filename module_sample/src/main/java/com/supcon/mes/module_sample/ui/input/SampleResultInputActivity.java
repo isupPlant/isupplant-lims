@@ -15,7 +15,6 @@ import com.supcon.mes.module_sample.ui.input.fragment.SampleFragment;
  * on 2020/7/28
  * class name
  */
-@Router(value = Constant.AppCode.LIMS_SampleResultInput)
 public class SampleResultInputActivity extends BaseFragmentActivity {
 
     private Fragment sampleFragment,inspectionItemsFragment,inspectionSubItemFragment;

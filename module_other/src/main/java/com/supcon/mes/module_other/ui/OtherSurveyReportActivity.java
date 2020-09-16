@@ -11,7 +11,6 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
@@ -21,7 +20,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.SurveyReportController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
@@ -124,7 +123,7 @@ public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<Surve
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.SurveyReportApi.class).getSurveyReportList(BusinessType.Report.OTHER_REPORT, isWhole, pageIndex, params);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.SurveyReportApi.class).getSurveyReportList(LimsConstant.Report.OTHER_REPORT, isWhole, pageIndex, params);
             }
         });
     }

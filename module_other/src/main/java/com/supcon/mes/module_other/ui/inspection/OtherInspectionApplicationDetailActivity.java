@@ -12,9 +12,8 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
@@ -101,7 +100,7 @@ public class OtherInspectionApplicationDetailActivity extends BaseRefreshActivit
             @Override
             public void requestPtClick(boolean isEdit) {
                 //请求pt
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailPtData(BusinessType.PleaseCheck.OTHER_PLEASE_CHECK,isEdit,id);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailPtData(LimsConstant.PleaseCheck.OTHER_PLEASE_CHECK,isEdit,id);
             }
         });
     }

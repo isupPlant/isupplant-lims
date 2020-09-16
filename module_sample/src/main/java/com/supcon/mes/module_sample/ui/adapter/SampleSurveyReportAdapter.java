@@ -145,7 +145,7 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
             }else {
                 tvEdit.setText(StringUtil.isEmpty(data.getPending().taskDescription) ? "--" : data.getPending().taskDescription);
             }
-            if (tvEdit.getText().equals("编辑")){
+            if (null != data.getPending() && null != data.getPending().openUrl){
                 tvEdit.setTextColor(context.getResources().getColor(R.color.status_green));
             }else {
                 tvEdit.setTextColor(context.getResources().getColor(R.color.status_blue));

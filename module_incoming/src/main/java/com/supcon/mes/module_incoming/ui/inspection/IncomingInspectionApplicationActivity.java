@@ -24,7 +24,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_incoming.R;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.InspectionApplicationController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
@@ -128,7 +128,7 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationApi.class).getInspectionApplicationList(BusinessType.PleaseCheck.INCOMING_PLEASE_CHECK, isWhole, pageIndex, params);
+                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationApi.class).getInspectionApplicationList(LimsConstant.PleaseCheck.INCOMING_PLEASE_CHECK, isWhole, pageIndex, params);
             }
         });
 

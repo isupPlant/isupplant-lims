@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
-import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
-import com.supcon.mes.module_lims.constant.BusinessType;
-import com.supcon.mes.module_lims.model.bean.ConditionEntity;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
 import com.supcon.mes.module_lims.model.contract.SampleInquiryApi;
@@ -35,12 +33,12 @@ public class SampleInquiryPresenter extends SampleInquiryApi.Presenter {
         String modelAlias = "sampleInfo";
         String joinInfo = "LIMSBA_PICKSITE,ID,LIMSSA_SAMPLE_INFOS,PS_ID";
         FastQueryCondEntity fastQuery;
-        if (type.equals(BusinessType.Sample.SAMPLE_COLLECTION)){
+        if (type.equals(LimsConstant.Sample.SAMPLE_COLLECTION)){
             query = "receiveListPart-query";
             //customCondition = new Gson().toJson(new ConditionEntity("sampleReceive"));
             customCondition.put("menuCode","sampleReceive");
             viewCode = "LIMSSample_5.0.0.0_sample_receiveListLayout";
-        }else if (type.equals(BusinessType.Sample.SAMPLING)){
+        }else if (type.equals(LimsConstant.Sample.SAMPLING)){
             query = "collectListPart-query";
             //customCondition = new Gson().toJson(new ConditionEntity("sampleCollect"));
             customCondition.put("menuCode","sampleCollect");
@@ -103,9 +101,9 @@ public class SampleInquiryPresenter extends SampleInquiryApi.Presenter {
     @Override
     public void sampleSubmit(String type, String time, String ids, List<SampleInquiryEntity> submitList) {
         String dealType = "";
-        if (type.equals(BusinessType.Sample.SAMPLING)){ //取样 ？ pc的取样对应的就是collectSampleSubmit。。有点怪异
+        if (type.equals(LimsConstant.Sample.SAMPLING)){ //取样 ？ pc的取样对应的就是collectSampleSubmit。。有点怪异
             dealType = "collectSampleSubmit";
-        }else if (type.equals(BusinessType.Sample.SAMPLE_COLLECTION)){ //收样
+        }else if (type.equals(LimsConstant.Sample.SAMPLE_COLLECTION)){ //收样
             dealType = "receiveSample";
         }
         Map<String, Object> map = new HashMap<>();

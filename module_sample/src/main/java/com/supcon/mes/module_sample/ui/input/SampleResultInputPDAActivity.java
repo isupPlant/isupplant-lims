@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * on 2020/8/7
  * class name
  */
-@Router(Constant.AppCode.LIMS_SampleResultInputPda)
+@Router(Constant.AppCode.LIMS_SampleResultInput)
 public class SampleResultInputPDAActivity extends BaseFragmentActivity {
 
     private SampleFragment sampleFragment;

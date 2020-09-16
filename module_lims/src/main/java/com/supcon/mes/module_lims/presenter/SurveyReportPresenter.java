@@ -4,15 +4,12 @@ import android.text.TextUtils;
 
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
-import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
-import com.supcon.mes.module_lims.constant.BusinessType;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.contract.SurveyReportApi;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,21 +31,21 @@ public class SurveyReportPresenter extends SurveyReportApi.Presenter {
         String viewCode = "";
         String joinInfo = "QCS_INSPECTS,ID,QCS_INSPECT_REPORTS,INSPECT_ID";
         String modelAlias = "inspectReport";
-        if (type.equals(BusinessType.Report.PRODUCT_REPORT)){
+        if (type.equals(LimsConstant.Report.PRODUCT_REPORT)){
             if (isAll){
                 query = "manuInspReportList-query";
             }else {
                 query = "manuInspReportList-pending";
             }
             viewCode = "QCS_5.0.0.0_inspectReport_manuInspReportList";
-        }else if (type.equals(BusinessType.Report.INCOMING_REPORT)){
+        }else if (type.equals(LimsConstant.Report.INCOMING_REPORT)){
             if (isAll){
                 query = "purchInspReportList-query";
             }else {
                 query = "purchInspReportList-pending";
             }
             viewCode = "QCS_5.0.0.0_inspectReport_purchInspReportList";
-        }else if (type.equals(BusinessType.Report.OTHER_REPORT)){
+        }else if (type.equals(LimsConstant.Report.OTHER_REPORT)){
             if (isAll){
                 query = "otherInspReportList-query";
             }else {
