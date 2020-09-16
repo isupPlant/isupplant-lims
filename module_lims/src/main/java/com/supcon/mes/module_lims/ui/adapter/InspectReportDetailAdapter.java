@@ -106,7 +106,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
             reportNameTv.setValue(data.reportName);
             dispvalueTv.setValue(data.dispValue);
             checkResultTv.setValue(data.checkResult);
-            if ("不合格".equals(data.checkResult)){
+            if (context.getResources().getString(R.string.lims_unqualified).equals(data.checkResult)){
                 checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));

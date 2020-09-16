@@ -101,7 +101,7 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
 //                    ivIsQualified.setVisibility(View.GONE);
 //                }
 //            }
-            if ("不合格".equals(data.getTestResult())){
+            if (context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified).equals(data.getTestResult())){
                 checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));

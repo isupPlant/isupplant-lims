@@ -144,7 +144,7 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
 //                    ivIsQualified.setVisibility(View.GONE);
 //                }
 //            }
-            if ("不合格".equals(data.getCheckResult())){
+            if (context.getResources().getString(R.string.lims_unqualified).equals(data.getCheckResult())){
                 checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));

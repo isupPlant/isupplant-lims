@@ -73,7 +73,6 @@ public class Util {
 
     public static Intent openFile(Context context, String filePath) {
 
-        System.out.println("打开的文件路径 : " + filePath);
         File file = new File(filePath);
         if (!file.exists()) {
             return null;
@@ -121,7 +120,6 @@ public class Util {
     public static Intent openMusic(String filePath, Uri fileUri) {
 
         File file = new File(filePath);
-        System.out.println("打开的文件路径 : " + filePath);
         if (!file.exists()) {
             return null;
         }

@@ -117,7 +117,7 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
             } else {
                 rangeImg.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_inspect_up_arrow);
             }
-            if ("不合格".equals(data.testResult)){
+            if (context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified).equals(data.testResult)){
                 checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));

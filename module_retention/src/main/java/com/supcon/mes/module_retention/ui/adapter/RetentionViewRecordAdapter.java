@@ -47,7 +47,7 @@ public class RetentionViewRecordAdapter extends BaseListDataRecyclerViewAdapter<
         protected void update(RecordViewEntity data) {
             observeItemTv.setValue(data.observeItem);
             observeValueTv.setValue(data.observeValue);
-            if ("不合格".equals(data.observeResult)){
+            if (context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified).equals(data.observeResult)){
                 observeResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 observeResultTv.setValueColor(Color.parseColor("#0BC8C1"));
