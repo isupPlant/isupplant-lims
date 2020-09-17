@@ -38,22 +38,18 @@ public class SingleSamplePresenter extends SampleListApi.Presenter {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordBySingleSample";
         String modelAlias = "sampleInfo";
         Map<String, Object> map = new HashMap<>();
-        FastQueryCondEntity fastQueryCondEntity=null;
-        if (!params.isEmpty()){
-            fastQueryCondEntity=getFastQueryEntity(params);
+        Map<String,Object> paramMap=new HashMap<>();
+        if (!timeMap.isEmpty())
+            paramMap.putAll(timeMap);
+        if (!params.isEmpty())
+            paramMap.putAll(params);
+        if (!paramMap.isEmpty()) {
+            FastQueryCondEntity fastQueryCondEntity = getFastQueryEntity(paramMap);
             fastQueryCondEntity.viewCode = viewCode;
             fastQueryCondEntity.modelAlias = modelAlias;
             map.put("fastQueryCond",fastQueryCondEntity.toString());
         }
-        if (!timeMap.isEmpty()){
-            fastQueryCondEntity=getFastQueryEntity(timeMap);
-            if (fastQueryCondEntity!=null){
-            }else {
-                fastQueryCondEntity.viewCode = viewCode;
-                fastQueryCondEntity.modelAlias = modelAlias;
-            }
-            map.put("fastQueryCond",fastQueryCondEntity.toString());
-        }
+
         map.put("datagridCode","LIMSSample_5.0.0.0_sample_recordBySingleSampledg1592183350560");
         map.put("pageNo",1);
         map.put("pageSize",65535);
@@ -112,7 +108,7 @@ public class SingleSamplePresenter extends SampleListApi.Presenter {
                 subcondEntity.columnName = key;
                 subcondEntity.dbColumnType = Constant.BAPQuery.BAPCODE;
                 subcondEntity.operator = BE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
+                subcondEntity.paramStr = LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;
             case Constant.BAPQuery.NAME:
