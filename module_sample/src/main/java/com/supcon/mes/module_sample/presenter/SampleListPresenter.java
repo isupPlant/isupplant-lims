@@ -37,21 +37,17 @@ public class SampleListPresenter extends SampleListApi.Presenter {
     public void getSampleList(Map<String,Object> timeMap,Map<String, Object> params) {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordBySample";
         String modelAlias = "sampleInfo";
-        FastQueryCondEntity fastQueryCondEntity=null;
         Map<String, Object> map = new HashMap<>();
-        if (!params.isEmpty()){
-            fastQueryCondEntity=getFastQueryEntity(params);
+
+        Map<String,Object> paramMap=new HashMap<>();
+        if (!timeMap.isEmpty())
+            paramMap.putAll(timeMap);
+        if (!params.isEmpty())
+            paramMap.putAll(params);
+        if (!paramMap.isEmpty()) {
+            FastQueryCondEntity fastQueryCondEntity = getFastQueryEntity(paramMap);
             fastQueryCondEntity.viewCode = viewCode;
             fastQueryCondEntity.modelAlias = modelAlias;
-            map.put("fastQueryCond",fastQueryCondEntity.toString());
-        }
-        if (!timeMap.isEmpty()){
-            fastQueryCondEntity=getFastQueryEntity(timeMap);
-            if (fastQueryCondEntity!=null){
-            }else {
-                fastQueryCondEntity.viewCode = viewCode;
-                fastQueryCondEntity.modelAlias = modelAlias;
-            }
             map.put("fastQueryCond",fastQueryCondEntity.toString());
         }
         map.put("permissionCode","LIMSSample_5.0.0.0_sample_recordBySample");

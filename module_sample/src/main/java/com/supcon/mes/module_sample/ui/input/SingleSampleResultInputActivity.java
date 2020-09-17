@@ -187,12 +187,14 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
 
     boolean scan = false;
 
+    private String scanCode;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCodeReciver(CodeResultEvent codeResultEvent) {
         if (!TextUtils.isEmpty(codeResultEvent.scanResult)) {
             scan = true;
+            scanCode=codeResultEvent.scanResult;
             Map<String, Object> params = new HashMap<>();
-            params.put(Constant.BAPQuery.CODE, codeResultEvent.scanResult);
+            params.put(Constant.BAPQuery.CODE, scanCode);
             onLoading(getResources().getString(R.string.lims_loading_sample));
             presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap, params);
         }
@@ -210,17 +212,21 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
             scan = false;
             List<SampleEntity> sampleEntities = entity.result;
             if (!sampleEntities.isEmpty()) {
-                onLoadSuccessAndExit(getResources().getString(R.string.lims_loading_succeed), new OnLoaderFinishListener() {
-                    @Override
-                    public void onLoaderFinished() {
-                        SampleEntity sampleEntity = sampleEntities.get(0);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("sampleEntity", sampleEntity);
-                        IntentRouter.go(context, Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM, bundle);
-                    }
-                });
+                SampleEntity sampleEntity = sampleEntities.get(0);
+                if (scanCode.equals(sampleEntity.getCode())){
+                    onLoadSuccessAndExit(getResources().getString(R.string.lims_loading_succeed), new OnLoaderFinishListener() {
+                        @Override
+                        public void onLoaderFinished() {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("sampleEntity", sampleEntity);
+                            IntentRouter.go(context, Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM, bundle);
+                        }
+                    });
+                }else {
+                    onLoadFailed(getResources().getString(R.string.lims_load_fail));
+                }
             }else {
-                onLoading(getResources().getString(R.string.lims_load_fail));
+                onLoadFailed(getResources().getString(R.string.lims_load_fail));
             }
 
         } else {
