@@ -34,6 +34,7 @@
                 app:tabIndicatorColor="@color/themeColor"
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
                 app:tabSelectedTextColor="@color/themeColor"
                 app:tabTextColor="@color/font_333333" />
 

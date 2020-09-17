@@ -13,6 +13,7 @@ import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_retention.IntentRouter;
 import com.supcon.mes.module_retention.R;
 import com.supcon.mes.module_retention.model.bean.RetentionEntity;
@@ -93,15 +94,17 @@ public class RetentionAdapter extends BaseListDataRecyclerViewAdapter<RetentionE
             batchCodeTv.setValue(data.batchCode);
             keeperTv.setValue(data.keeperId != null && data.keeperId.getId() != null ? data.keeperId.getName() : "");
             retainDateTv.setValue(data.retainDate != null ? DateUtil.dateFormat(data.retainDate) : "");
-            if (!TextUtils.isEmpty(data.pending.openUrl)) {
-                if (data.pending.openUrl.contains("retentionEdit")) {
-                    tvEdit.setText(context.getResources().getString(R.string.lims_edit));
-                } else if (data.pending.openUrl.contains("retentionView")) {
-                    tvEdit.setText(context.getResources().getString(R.string.lims_approve));
-                }
-            }else {
-                tvEdit.setText(data.pending.taskDescription);
-            }
+
+//            if (!TextUtils.isEmpty(data.pending.openUrl)) {
+//                if (data.pending.openUrl.contains("retentionEdit")) {
+//                    tvEdit.setText(context.getResources().getString(R.string.lims_edit));
+//                } else if (data.pending.openUrl.contains("retentionView")) {
+//                    tvEdit.setText(context.getResources().getString(R.string.lims_approve));
+//                }
+//            }else {
+//                tvEdit.setText(data.pending.taskDescription);
+//            }
+            tvEdit.setText(data.pending.taskDescription);
         }
     }
 }

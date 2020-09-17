@@ -106,7 +106,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     @Override
     protected IListAdapter<InspectionSubEntity> createAdapter() {
-        adapter = new ProjectAdapter(context);
+        adapter = new ProjectAdapter(context,contentView);
         return adapter;
     }
 

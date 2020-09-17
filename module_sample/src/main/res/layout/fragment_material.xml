@@ -53,7 +53,7 @@
                     android:textColor="@color/font_333333"
                     android:textSize="@dimen/fontSize_12sp"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:text="@string/delete" />
+                    android:text="@string/lims_delete" />
             </LinearLayout>
 
             <LinearLayout

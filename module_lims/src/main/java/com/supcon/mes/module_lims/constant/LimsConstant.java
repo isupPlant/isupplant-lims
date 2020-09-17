@@ -68,4 +68,6 @@ public interface LimsConstant {
     interface Keys{
         String SPECIAL_RESULT = "LIMSBasic.specialResult";
     }
+
+
 }

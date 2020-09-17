@@ -24,7 +24,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_inspection_department" />
+            android:src="@drawable/ic_specifications" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ctNumber"
@@ -81,7 +81,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_materiel" />
+            android:src="@drawable/ic_wms_unit" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/ctMaterielUnit"

@@ -20,6 +20,7 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
@@ -67,6 +68,7 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     private int mPosition = -1;
 
     private List<String> deleteList = new ArrayList<>();
+    private List<TestDeviceEntity> deviceList = new ArrayList<>();
     @Override
     protected IListAdapter<TestDeviceEntity> createAdapter() {
         adapter = new TestDeviceAdapter(context);
@@ -227,6 +229,8 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
 
     @Override
     public void getTestDeviceSuccess(CommonListEntity entity) {
+        deviceList.clear();
+        deviceList = GsonUtil.jsonToList(GsonUtil.gsonString(entity.result),TestDeviceEntity.class);
         refreshListController.refreshComplete(entity.result);
     }
 
@@ -238,6 +242,10 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
 
     public List<TestDeviceEntity> getTestDeviceList(){
         return adapter.getList();
+    }
+
+    public List<TestDeviceEntity> getRecordList(){
+        return deviceList;
     }
 
     public String getDeleteList() {

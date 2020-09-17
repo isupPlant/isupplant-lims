@@ -62,12 +62,14 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
     private String originalValue;
     private String dispValue;
     private boolean dispValueFocus;
+    private RecyclerView recyclerView;
 
     private SinglePickController mSinglePickController;
 
 
-    public ProjectAdapter(Context context) {
+    public ProjectAdapter(Context context, RecyclerView recyclerView) {
         super(context);
+        this.recyclerView = recyclerView;
         mSinglePickController = new SinglePickController((Activity) context);
         mSinglePickController.setCanceledOnTouchOutside(true);
         mSinglePickController.setDividerVisible(true);
@@ -293,8 +295,35 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     }else {
                         setVisible(true);
                         ceOriginalValue.setEditable(true);
-                        ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
-                        ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
+                        if (StringUtil.isEmpty(data.getDefaultValue())){
+                            ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
+                            ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
+                        }else {
+                            if (StringUtil.isEmpty(data.getOriginValue())){  //原始值为空 并且默认值不为空  赋默认给原始 并去计算修约与报出
+                                ceOriginalValue.setContent(data.getDefaultValue());
+                                if (recyclerView.isComputingLayout()){
+                                    recyclerView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                                                originalValue = data.getDefaultValue();
+                                                mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                                            }
+                                        }
+                                    });
+                                }else {
+                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                                        originalValue = data.getDefaultValue();
+                                        mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                                    }
+                                }
+
+                            }else {
+                                ceOriginalValue.setContent(data.getOriginValue());
+                                ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
+                            }
+                        }
+
                     }
                 }else {
                     setVisible(true);

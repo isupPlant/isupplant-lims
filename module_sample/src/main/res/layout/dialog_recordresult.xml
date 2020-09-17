@@ -6,30 +6,35 @@
     android:layout_gravity="center"
     android:background="@drawable/shape_dialog"
     >
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
-        <ImageView
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_tips"
+            android:layout_centerInParent="true"
             android:layout_marginTop="@dimen/dp_5"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/lims_tips"
+            android:gravity="center"
+            android:textSize="@dimen/fontSize_18sp" />
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_tips"
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30"
             android:src="@drawable/ic_exception"/>
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:layout_marginTop="@dimen/dp_5"
-            android:layout_width="80dp"
-            android:layout_height="@dimen/dp_30"
-            android:layout_marginStart="@dimen/dp_10"
-            app:key="提   示"
-            app:key_size="18"/>
-    </LinearLayout>
+    </RelativeLayout>
     <TextView
         android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="编辑内容"
         android:textColor="@color/textColorGray"
-        android:text="提交的分项中存在报出值为空的项目，是否继续提交并设置报出值为未检？"
+        android:text="@string/lims_project_check_is_null_reported_value"
         android:layout_below="@+id/tv_title"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
@@ -57,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="否"
+            android:text="@string/lims_no"
             android:gravity="center"
             android:textColor="#797979"
             />
@@ -66,7 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="是"
+            android:text="@string/lims_yes"
             android:gravity="center"
             android:textColor="@color/themeColor"
             />

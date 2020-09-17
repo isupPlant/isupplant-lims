@@ -18,6 +18,7 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
@@ -62,6 +63,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     private TestMaterialAdapter adapter;
 
     private List<String> deleteList = new ArrayList<>();
+    private List<TestMaterialEntity> materialList = new ArrayList<>();
     @Override
     protected IListAdapter<TestMaterialEntity> createAdapter() {
         adapter = new TestMaterialAdapter(context);
@@ -203,6 +205,10 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
 
     @Override
     public void getTestMaterialSuccess(CommonListEntity entity) {
+        materialList.clear();
+        List<TestMaterialEntity> list = entity.result;
+        String string = GsonUtil.gsonString(list);
+        materialList = GsonUtil.jsonToList(string,TestMaterialEntity.class);
         refreshListController.refreshComplete(entity.result);
     }
 
@@ -214,6 +220,10 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
 
     public List<TestMaterialEntity> getTestMaterialList(){
         return adapter.getList();
+    }
+
+    public List<TestMaterialEntity> getRecordList(){
+        return materialList;
     }
 
     public String getDeleteList() {

@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="范围"
+            android:text="@string/lims_range"
             android:textColor="@color/font_333333"
             android:textSize="16sp" />
 
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:key_size="16"
-            app:key="结论"
+            app:key="@string/lims_observeResult"
             app:text_color="@color/font_333333"/>
 
 

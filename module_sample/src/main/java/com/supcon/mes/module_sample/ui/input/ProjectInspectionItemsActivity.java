@@ -192,13 +192,22 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                         List<InspectionSubEntity> recordList = projectFragment.getRecordList();
                         List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
 
-                        if (recordList.toString().equals(inspectionSubList.toString())){
+                        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+                        List<TestDeviceEntity> deviceRecordList = equipmentFragment.getRecordList();
+
+                        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+                        List<TestMaterialEntity> materialRecordList = materialFragment.getRecordList();
+
+
+                        if (recordList.toString().equals(inspectionSubList.toString())
+                                && deviceRecordList.toString().equals(testDeviceList.toString())
+                                && materialRecordList.toString().equals(testMaterialList.toString())){
                             ToastUtils.show(context,getResources().getString(R.string.lims_project_check_change));
                             return;
                         }
 
-                        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
-                        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+
+
                         String equipmentDelete = equipmentFragment.getDeleteList();
                         String materialDelete = materialFragment.getDeleteList();
 

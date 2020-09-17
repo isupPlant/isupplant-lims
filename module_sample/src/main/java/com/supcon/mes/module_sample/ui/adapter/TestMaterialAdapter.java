@@ -174,7 +174,13 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
                             }
                         }
                     }
-                    ctMaterielUnit.setValue(data.getUnitId()!=null?data.getUnitId().getName():"");
+
+                    if (null != data.getProductId().getMainUnit()){
+                        ctMaterielUnit.setValue(StringUtil.isEmpty(data.getProductId().getMainUnit().getName()) ? "" :  data.getProductId().getMainUnit().getName());
+                    }else {
+                        ctMaterielUnit.setValue("");
+                    }
+
 
 //                    //是否启用批次
 //                    if (data.getProductId().isEnableBatch()){
@@ -185,6 +191,7 @@ public class TestMaterialAdapter extends BaseListDataRecyclerViewAdapter<TestMat
 //                    }
                 }else {
                     ctMateriel.setContent("--");
+                    ctMaterielUnit.setValue("");
                 }
                 ctNumber.setContent(StringUtil.isEmpty(data.getMatCode()) ? "" : data.getMatCode());
                 ceBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "" : data.getBatchCode());

@@ -110,7 +110,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     @Override
     protected IListAdapter<InspectionSubEntity> createAdapter() {
-        adapter = new SingleProjectAdapter(context);
+        adapter = new SingleProjectAdapter(context,contentView);
         return adapter;
     }
 
