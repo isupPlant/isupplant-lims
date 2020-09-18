@@ -144,8 +144,8 @@
     <string name="lims_sample_report">Sample Report</string>
     <string name="lims_sampling_process">Sampling...</string>
     <string name="lims_select_sampling_sample">Please select the sample to be sampled!</string>
-    <string name="lims_input_original_value">Please enter the original value</string>
-    <string name="lims_input_reported_value">Please enter the reported value</string>
+    <string name="lims_input_original_value">Enter the original value</string>
+    <string name="lims_input_reported_value">Enter the reported value</string>
     <string name="lims_not_content">There is no more to expand on!</string>
     <string name="lims_material_reagent_reference">Material Reagent</string>
     <string name="lims_loading_succeed">Loading Succeeded</string>
