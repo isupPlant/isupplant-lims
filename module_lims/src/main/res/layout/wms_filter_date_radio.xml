@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/sh_white_stroke">
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_30"
+        android:orientation="horizontal"
+        android:id="@+id/dateFilterGroup"
+        android:tag="dateFilterGroup"
+        >
+        <RadioButton
+            android:id="@+id/dateFilterAll"
+            style="@style/FilterStyleDate"
+            android:checked="true"
+            android:tag="dateFilterAll"
+            android:text="@string/middleware_all" />
+        <!--<include layout="@layout/ly_vertical_line"/>-->
+        <RadioButton
+            android:id="@+id/dateFilterToday"
+            style="@style/FilterStyleDate"
+            android:tag="dateFilterToday"
+            android:text="@string/middleware_today"
+            />
+
+        <!--<include layout="@layout/ly_vertical_line"/>-->
+
+        <RadioButton
+            android:id="@+id/dateFilterThisWeek"
+            style="@style/FilterStyleDate"
+            android:tag="dateFilterThisWeek"
+            android:text="@string/middleware_week" />
+
+        <!--<include layout="@layout/ly_vertical_line"/>-->
+
+        <RadioButton
+            android:id="@+id/dateFilterThisMonth"
+            style="@style/FilterStyleDate"
+            android:tag="dateFilterThisMonth"
+            android:text="@string/middleware_mouth" />
+        <!--<include layout="@layout/ly_vertical_line"/>-->
+
+        <RadioButton
+            android:id="@+id/dateFilterCustom"
+            style="@style/FilterStyleDate"
+            android:tag="dateFilterCustom"
+            android:text="@string/middleware_customize" />
+
+    </RadioGroup>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateFilterCustomDate"
+        android:tag="dateFilterCustomDate"
+        android:textSize="12sp"
+        android:textColor="@color/tabtSelectColor"
+        android:gravity="center"
+        />
+</LinearLayout>

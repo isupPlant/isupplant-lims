@@ -30,5 +30,14 @@
         <item name="android:layout_height">46dp</item>
         <item name="key_width">@dimen/dp_120</item>
     </style>
-
+    <style name="FilterStyleDate">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginLeft">@dimen/dp_10</item>
+        <item name="android:layout_marginRight">@dimen/dp_10</item>
+        <item name="android:button">@null</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/sl_blue_text</item>
+    </style>
 </resources>
