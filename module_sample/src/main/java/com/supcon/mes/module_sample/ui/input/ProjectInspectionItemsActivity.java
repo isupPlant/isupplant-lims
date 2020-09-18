@@ -45,7 +45,6 @@ import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -197,7 +196,6 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
                         List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
                         List<TestMaterialEntity> materialRecordList = materialFragment.getRecordList();
-
 
                         if (recordList.toString().equals(inspectionSubList.toString())
                                 && deviceRecordList.toString().equals(testDeviceList.toString())

@@ -14,7 +14,7 @@ public class ProductIdEntity extends BaseEntity {
     private String name;
     private Long id;
     private BaseIdValueEntity isBatch;
-    private BaseSystemBackEntity mainUnit;
+    private BaseLongIdNameEntity mainUnit;
     private Unit unitId;
 
     public String getCode() {
@@ -49,11 +49,11 @@ public class ProductIdEntity extends BaseEntity {
         this.isBatch = isBatch;
     }
 
-    public BaseSystemBackEntity getMainUnit() {
+    public BaseLongIdNameEntity getMainUnit() {
         return mainUnit;
     }
 
-    public void setMainUnit(BaseSystemBackEntity mainUnit) {
+    public void setMainUnit(BaseLongIdNameEntity mainUnit) {
         this.mainUnit = mainUnit;
     }
 
