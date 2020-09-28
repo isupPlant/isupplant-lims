@@ -1,7 +1,7 @@
 package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.module_lims.model.bean.InspectionItemsListEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionItemsApi;
+import com.supcon.mes.module_lims.model.contract.InspectionItemsContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/21
  * class name
  */
-public class InspectionItemsPresenter extends InspectionItemsApi.Presenter {
+public class InspectionItemsPresenter extends InspectionItemsContract.Presenter {
     @Override
     public void getInspectionItemsList( String stdVersionId) {
         Map<String, Object> map = new HashMap<>();

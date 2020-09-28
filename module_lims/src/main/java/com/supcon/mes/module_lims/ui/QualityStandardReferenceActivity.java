@@ -30,10 +30,11 @@ import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.QualityStandardReferenceAPI;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
-import com.supcon.mes.module_lims.model.contract.QualityStandardReferenceApi;
+import com.supcon.mes.module_lims.model.contract.QualityStandardReferenceContract;
 import com.supcon.mes.module_lims.presenter.QualityStandardReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.QualityStandardReferenceAdapter;
 
@@ -55,7 +56,7 @@ import io.reactivex.functions.Consumer;
 @Router(value = Constant.AppCode.LIMS_QualityStdVerRef)
 @Presenter(value = {QualityStandardReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
-public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivity<QualityStandardReferenceEntity> implements QualityStandardReferenceApi.View {
+public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivity<QualityStandardReferenceEntity> implements QualityStandardReferenceContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -235,7 +236,7 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.QualityStandardReferenceApi.class).getQualityStandardReferenceList(pageIndex,hasStdVer,id,params);
+                presenterRouter.create(QualityStandardReferenceAPI.class).getQualityStandardReferenceList(pageIndex,hasStdVer,id,params);
             }
         });
     }

@@ -11,6 +11,6 @@ import java.util.Map;
  * class name
  */
 @ContractFactory(entites = {PleaseCheckSchemeListEntity.class})
-public interface PleaseCheckSchemeReferenceApi {
+public interface PleaseCheckSchemeReferenceAPI {
     void getPleaseCheckSchemeList(int pageNo, String id, Map<String, Object> map);
 }

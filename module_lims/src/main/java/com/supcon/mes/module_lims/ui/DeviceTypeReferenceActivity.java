@@ -25,8 +25,9 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.DeviceTypeReferenceAPI;
 import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
-import com.supcon.mes.module_lims.model.contract.DeviceTypeReferenceApi;
+import com.supcon.mes.module_lims.model.contract.DeviceTypeReferenceContract;
 import com.supcon.mes.module_lims.presenter.DeviceTypeReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.DeviceTypeReferenceAdapter;
 
@@ -43,7 +44,7 @@ import java.util.Map;
 @Router(value = Constant.AppCode.LIMS_EamTypeRefPart)
 @Presenter(value = {DeviceTypeReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
-public class DeviceTypeReferenceActivity extends BaseRefreshRecyclerActivity<DeviceTypeReferenceEntity> implements DeviceTypeReferenceApi.View {
+public class DeviceTypeReferenceActivity extends BaseRefreshRecyclerActivity<DeviceTypeReferenceEntity> implements DeviceTypeReferenceContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -130,7 +131,7 @@ public class DeviceTypeReferenceActivity extends BaseRefreshRecyclerActivity<Dev
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.DeviceTypeReferenceApi.class).getDeviceTypeReference(pageIndex,params);
+                presenterRouter.create(DeviceTypeReferenceAPI.class).getDeviceTypeReference(pageIndex,params);
             }
         });
     }

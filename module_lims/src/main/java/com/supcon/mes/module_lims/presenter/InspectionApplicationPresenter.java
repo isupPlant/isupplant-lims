@@ -7,7 +7,7 @@ import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionApplicationApi;
+import com.supcon.mes.module_lims.model.contract.InspectionApplicationContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/2
  * class name 检验申请列表Presenter
  */
-public class InspectionApplicationPresenter extends InspectionApplicationApi.Presenter {
+public class InspectionApplicationPresenter extends InspectionApplicationContract.Presenter {
     @Override
     public void getInspectionApplicationList(String type, boolean isAll, int pageNo, Map<String, Object> params) {
         String query = "";

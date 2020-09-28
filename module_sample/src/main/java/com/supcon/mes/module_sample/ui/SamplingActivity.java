@@ -33,9 +33,10 @@ import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.SampleInquiryController;
 import com.supcon.mes.module_lims.listener.OnScanToResultListener;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.SampleInquiryAPI;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
-import com.supcon.mes.module_lims.model.contract.SampleInquiryApi;
+import com.supcon.mes.module_lims.model.contract.SampleInquiryContract;
 import com.supcon.mes.module_lims.presenter.SampleInquiryPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SampleInquiryAdapter;
 import com.supcon.mes.module_sample.R;
@@ -57,7 +58,7 @@ import io.reactivex.functions.Consumer;
 @Router(Constant.AppCode.LIMS_Sampling)
 @Presenter(value = {SampleInquiryPresenter.class})
 @Controller(value = {SampleInquiryController.class})
-public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryEntity> implements SampleInquiryApi.View {
+public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryEntity> implements SampleInquiryContract.View {
 
     @BindByTag("ll_select_all")
     LinearLayout llSelectAll;
@@ -220,7 +221,7 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
 //                                .show();
                             onLoading(getResources().getString(R.string.lims_sampling_process));
                             String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
-                            presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).sampleSubmit(LimsConstant.Sample.SAMPLING,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
+                            presenterRouter.create(SampleInquiryAPI.class).sampleSubmit(LimsConstant.Sample.SAMPLING,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
                         }else {
                             ToastUtils.show(context,getResources().getString(R.string.lims_select_sampling_sample));
                         }
@@ -231,7 +232,7 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleInquiryApi.class).getSampleInquiryList(LimsConstant.Sample.SAMPLING, pageIndex, params);
+                presenterRouter.create(SampleInquiryAPI.class).getSampleInquiryList(LimsConstant.Sample.SAMPLING, pageIndex, params);
             }
         });
 

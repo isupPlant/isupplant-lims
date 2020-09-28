@@ -13,7 +13,7 @@ import java.util.Map;
  * class name
  */
 @ContractFactory(entites = {BAP5CommonEntity.class})
-public interface InspectApplicationSubmitApi {
+public interface InspectApplicationSubmitAPI {
 
     void submitInspectApplication(String path, Map<String,Object> params, InspectApplicationSubmitEntity entity);
 }

@@ -5,7 +5,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
-import com.supcon.mes.module_lims.model.contract.DeviceTypeReferenceApi;
+import com.supcon.mes.module_lims.model.contract.DeviceTypeReferenceContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 
@@ -20,7 +20,7 @@ import io.reactivex.functions.Function;
  * on 2020/8/13
  * class name
  */
-public class DeviceTypeReferencePresenter extends DeviceTypeReferenceApi.Presenter {
+public class DeviceTypeReferencePresenter extends DeviceTypeReferenceContract.Presenter {
     @Override
     public void getDeviceTypeReference(int pageNo, Map<String, Object> map) {
         String viewCode = "BaseSet_1.0.0_eamType_eamTypeRefLayout";

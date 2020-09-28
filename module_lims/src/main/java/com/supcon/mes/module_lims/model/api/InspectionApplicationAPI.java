@@ -11,6 +11,6 @@ import java.util.Map;
  * class name 检验申请接口
  */
 @ContractFactory(entites = {InspectionApplicationListEntity.class})
-public interface InspectionApplicationApi {
+public interface InspectionApplicationAPI {
     void getInspectionApplicationList(String type, boolean isAll, int pageNo, Map<String, Object> params);
 }

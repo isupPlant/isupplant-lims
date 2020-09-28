@@ -11,6 +11,6 @@ import java.util.Map;
  * class name
  */
 @ContractFactory(entites = {CommonListEntity.class})
-public interface SampleMaterialListApi {
+public interface SampleMaterialListAPI {
     void getSampleMaterialReference(int pageNo, Map<String, Object> params, String matInfoCodeList);
 }

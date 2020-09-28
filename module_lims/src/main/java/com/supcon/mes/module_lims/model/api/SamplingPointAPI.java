@@ -11,6 +11,6 @@ import java.util.Map;
  * class name
  */
 @ContractFactory(entites = {SamplingPointListEntity.class})
-public interface SamplingPointApi {
+public interface SamplingPointAPI {
     void getSamplingPointList(int pageNo, Map<String, Object> map);
 }

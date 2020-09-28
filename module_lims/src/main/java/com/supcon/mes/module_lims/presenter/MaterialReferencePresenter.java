@@ -2,7 +2,7 @@ package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
-import com.supcon.mes.module_lims.model.contract.MaterialReferenceApi;
+import com.supcon.mes.module_lims.model.contract.MaterialReferenceContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 
@@ -17,7 +17,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/9
  * class name
  */
-public class MaterialReferencePresenter extends MaterialReferenceApi.Presenter {
+public class MaterialReferencePresenter extends MaterialReferenceContract.Presenter {
     @Override
     public void getMaterialReferenceList(int pageNo, Map<String, Object> params) {
         String viewCode = "BaseSet_1.0.0_material_materialRefLayout";

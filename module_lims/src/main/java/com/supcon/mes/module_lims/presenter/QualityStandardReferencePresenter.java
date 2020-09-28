@@ -5,7 +5,7 @@ import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
-import com.supcon.mes.module_lims.model.contract.QualityStandardReferenceApi;
+import com.supcon.mes.module_lims.model.contract.QualityStandardReferenceContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 
@@ -20,7 +20,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/10
  * class name
  */
-public class QualityStandardReferencePresenter extends QualityStandardReferenceApi.Presenter {
+public class QualityStandardReferencePresenter extends QualityStandardReferenceContract.Presenter {
     @Override
     public void getQualityStandardReferenceList(int pageNo, boolean hasStdVer, String id, Map<String, Object> params) {
         String viewCode = "LIMSBasic_1.0.0_qualityStd_qualityStdVerRef";

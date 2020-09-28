@@ -24,10 +24,10 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
-import com.supcon.mes.module_lims.model.bean.SupplierReferenceEntity;
+import com.supcon.mes.module_lims.model.api.SupplierReferenceAPI;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.VendorIdEntity;
-import com.supcon.mes.module_lims.model.contract.SupplierReferenceApi;
+import com.supcon.mes.module_lims.model.contract.SupplierReferenceContract;
 import com.supcon.mes.module_lims.presenter.SupplierReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.SupplierReferenceAdapter;
 
@@ -44,7 +44,7 @@ import java.util.Map;
 @Router(value = Constant.AppCode.LIMS_CmcPartRef)
 @Controller(value = {ReferenceController.class})
 @Presenter(value = {SupplierReferencePresenter.class})
-public class SupplierReferenceActivity extends BaseRefreshRecyclerActivity<VendorIdEntity> implements SupplierReferenceApi.View {
+public class SupplierReferenceActivity extends BaseRefreshRecyclerActivity<VendorIdEntity> implements SupplierReferenceContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -132,7 +132,7 @@ public class SupplierReferenceActivity extends BaseRefreshRecyclerActivity<Vendo
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.SupplierReferenceApi.class).getSupplierReferenceList(pageIndex,params);
+                presenterRouter.create(SupplierReferenceAPI.class).getSupplierReferenceList(pageIndex,params);
             }
         });
     }

@@ -11,6 +11,6 @@ import java.util.Map;
  * class name
  */
 @ContractFactory(entites = {MaterialReferenceListEntity.class})
-public interface MaterialReferenceApi {
+public interface MaterialReferenceAPI {
     void getMaterialReferenceList(int pageNo, Map<String, Object> params);
 }

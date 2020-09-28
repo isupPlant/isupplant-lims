@@ -13,7 +13,7 @@ import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
  * class name
  */
 @ContractFactory(entites = {InspectionApplicationDetailHeaderEntity.class, InspectionDetailPtListEntity.class, InspectionApplicationEntity.class})
-public interface InspectionApplicationDetailApi {
+public interface InspectionApplicationDetailAPI {
     void getInspectionDetailHeaderData(String id, String paddingId);
 
     void getInspectionDetailPtData(String type, boolean isEdit, String id);

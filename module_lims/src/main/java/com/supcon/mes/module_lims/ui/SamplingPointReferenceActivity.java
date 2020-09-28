@@ -24,9 +24,10 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.SamplingPointAPI;
 import com.supcon.mes.module_lims.model.bean.PsIdEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
-import com.supcon.mes.module_lims.model.contract.SamplingPointApi;
+import com.supcon.mes.module_lims.model.contract.SamplingPointContract;
 import com.supcon.mes.module_lims.presenter.SamplingPointReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.SamplingPointReferenceAdapter;
 
@@ -44,7 +45,7 @@ import java.util.Map;
 @Router(value = Constant.AppCode.LIMS_PickSiteRefPart)
 @Presenter(value = {SamplingPointReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
-public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<PsIdEntity> implements SamplingPointApi.View {
+public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<PsIdEntity> implements SamplingPointContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -128,7 +129,7 @@ public class SamplingPointReferenceActivity extends BaseRefreshRecyclerActivity<
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.SamplingPointApi.class).getSamplingPointList(pageIndex,params);
+                presenterRouter.create(SamplingPointAPI.class).getSamplingPointList(pageIndex,params);
             }
         });
     }

@@ -28,9 +28,10 @@ import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.InspectionApplicationController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
+import com.supcon.mes.module_lims.model.api.InspectionApplicationAPI;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationListEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionApplicationApi;
+import com.supcon.mes.module_lims.model.contract.InspectionApplicationContract;
 import com.supcon.mes.module_lims.presenter.InspectionApplicationPresenter;
 import com.supcon.mes.module_lims.ui.adapter.InspectionApplicationAdapter;
 
@@ -50,7 +51,7 @@ import java.util.Map;
 @Router(Constant.AppCode.LIMS_IncomingApplicationInspection)
 @Presenter(value = {InspectionApplicationPresenter.class})
 @Controller(value = {InspectionApplicationController.class})
-public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationApi.View {
+public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationContract.View {
     private InspectionApplicationAdapter adapter;
     private boolean isWhole = false;
     private Map<String, Object> params = new HashMap<>();
@@ -128,7 +129,7 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationApi.class).getInspectionApplicationList(LimsConstant.PleaseCheck.INCOMING_PLEASE_CHECK, isWhole, pageIndex, params);
+                presenterRouter.create(InspectionApplicationAPI.class).getInspectionApplicationList(LimsConstant.PleaseCheck.INCOMING_PLEASE_CHECK, isWhole, pageIndex, params);
             }
         });
 

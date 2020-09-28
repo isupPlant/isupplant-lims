@@ -30,8 +30,9 @@ import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.event.SampleMaterialDataEvent;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.SampleMaterialListAPI;
 import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
-import com.supcon.mes.module_lims.model.contract.SampleMaterialListApi;
+import com.supcon.mes.module_lims.model.contract.SampleMaterialListContract;
 import com.supcon.mes.module_lims.presenter.SampleMaterialPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SampleMaterialReferenceAdapter;
 
@@ -54,7 +55,7 @@ import io.reactivex.functions.Consumer;
 @Router(value = Constant.AppCode.LIMS_MatInfoRef)
 @Controller(value = {ReferenceController.class})
 @Presenter(value = {SampleMaterialPresenter.class})
-public class SampleMaterialReferenceActivity extends BaseRefreshRecyclerActivity<SampleMaterialEntity> implements SampleMaterialListApi.View {
+public class SampleMaterialReferenceActivity extends BaseRefreshRecyclerActivity<SampleMaterialEntity> implements SampleMaterialListContract.View {
 
     private SampleMaterialReferenceAdapter adapter;
 
@@ -231,7 +232,7 @@ public class SampleMaterialReferenceActivity extends BaseRefreshRecyclerActivity
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.SampleMaterialListApi.class).getSampleMaterialReference(pageIndex,params,matInfoCodeList);
+                presenterRouter.create(SampleMaterialListAPI.class).getSampleMaterialReference(pageIndex,params,matInfoCodeList);
             }
         });
     }

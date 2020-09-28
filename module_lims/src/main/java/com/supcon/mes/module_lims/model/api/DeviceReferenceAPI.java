@@ -11,6 +11,6 @@ import java.util.Map;
  * class name
  */
 @ContractFactory(entites = {CommonListEntity.class})
-public interface DeviceReferenceApi {
+public interface DeviceReferenceAPI {
     void getDeviceReferenceList(int pageNo, String eamClassId, Map<String, Object> params);
 }

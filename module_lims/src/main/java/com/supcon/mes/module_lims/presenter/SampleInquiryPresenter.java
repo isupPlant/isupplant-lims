@@ -8,7 +8,7 @@ import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
-import com.supcon.mes.module_lims.model.contract.SampleInquiryApi;
+import com.supcon.mes.module_lims.model.contract.SampleInquiryContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 
@@ -24,7 +24,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/6
  * class name 收样取样列表公用Presenter
  */
-public class SampleInquiryPresenter extends SampleInquiryApi.Presenter {
+public class SampleInquiryPresenter extends SampleInquiryContract.Presenter {
     @Override
     public void getSampleInquiryList(String type, int pageNo, Map<String, Object> params) {
         String query = "";

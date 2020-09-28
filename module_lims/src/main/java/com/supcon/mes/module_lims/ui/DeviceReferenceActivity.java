@@ -25,10 +25,10 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.DeviceReferenceAPI;
 import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
-import com.supcon.mes.module_lims.model.contract.DeviceReferenceApi;
+import com.supcon.mes.module_lims.model.contract.DeviceReferenceContract;
 import com.supcon.mes.module_lims.presenter.DeviceReferencePresenter;
-import com.supcon.mes.module_lims.presenter.DeviceTypeReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.DeviceReferenceAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,7 +44,7 @@ import java.util.Map;
 @Router(value = Constant.AppCode.LIMS_EamInfoRefPart)
 @Presenter(value = {DeviceReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
-public class DeviceReferenceActivity extends BaseRefreshRecyclerActivity<DeviceReferenceEntity> implements DeviceReferenceApi.View {
+public class DeviceReferenceActivity extends BaseRefreshRecyclerActivity<DeviceReferenceEntity> implements DeviceReferenceContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -132,7 +132,7 @@ public class DeviceReferenceActivity extends BaseRefreshRecyclerActivity<DeviceR
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.DeviceReferenceApi.class).getDeviceReferenceList(pageIndex,eamClassId,params);
+                presenterRouter.create(DeviceReferenceAPI.class).getDeviceReferenceList(pageIndex,eamClassId,params);
             }
         });
     }

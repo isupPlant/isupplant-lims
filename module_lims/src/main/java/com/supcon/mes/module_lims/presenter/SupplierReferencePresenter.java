@@ -2,7 +2,7 @@ package com.supcon.mes.module_lims.presenter;
 
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
-import com.supcon.mes.module_lims.model.contract.SupplierReferenceApi;
+import com.supcon.mes.module_lims.model.contract.SupplierReferenceContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 
@@ -17,7 +17,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/20
  * class name
  */
-public class SupplierReferencePresenter extends SupplierReferenceApi.Presenter {
+public class SupplierReferencePresenter extends SupplierReferenceContract.Presenter {
     @Override
     public void getSupplierReferenceList(int pageNo, Map<String, Object> params) {
         String viewCode = "BaseSet_1.0.0_cooperate_cmcLayoutRef";

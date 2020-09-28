@@ -6,7 +6,7 @@ import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailApi;
+import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import io.reactivex.functions.Consumer;
@@ -17,7 +17,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/13
  * class name
  */
-public class InspectionApplicationDetailPresenter extends InspectionApplicationDetailApi.Presenter {
+public class InspectionApplicationDetailPresenter extends InspectionApplicationDetailContract.Presenter {
     @Override
     public void getInspectionDetailHeaderData(String id, String paddingId) {
         if (paddingId.equals("null")){

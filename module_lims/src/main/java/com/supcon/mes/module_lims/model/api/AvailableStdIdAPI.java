@@ -12,7 +12,7 @@ import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
  * class name
  */
 @ContractFactory(entites = {AvailableStdEntity.class, TemporaryQualityStandardEntity.class, StdVerComIdListEntity.class, InspectionDetailPtEntity.class})
-public interface AvailableStdIdApi {
+public interface AvailableStdIdAPI {
     void getAvailableStdId(String productId);
 
     void getDefaultStandardById(String productId);

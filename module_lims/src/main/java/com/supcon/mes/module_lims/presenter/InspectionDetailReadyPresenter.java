@@ -3,7 +3,7 @@ package com.supcon.mes.module_lims.presenter;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyApi;
+import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/14
  * class name  业务类型参照 Presenter
  */
-public class InspectionDetailReadyPresenter extends InspectionDetailReadyApi.Presenter {
+public class InspectionDetailReadyPresenter extends InspectionDetailReadyContract.Presenter {
 
     @Override
     public void getBusinessTypeList(int type) {

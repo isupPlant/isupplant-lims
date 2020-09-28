@@ -11,6 +11,6 @@ import java.util.Map;
  * class name
  */
 @ContractFactory(entites = {SupplierReferenceListEntity.class})
-public interface SupplierReferenceApi {
+public interface SupplierReferenceAPI {
     void getSupplierReferenceList(int pageNo, Map<String,Object> params);
 }

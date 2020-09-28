@@ -28,9 +28,10 @@ import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.event.MaterialDateEvent;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.MaterialReferenceAPI;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
-import com.supcon.mes.module_lims.model.contract.MaterialReferenceApi;
+import com.supcon.mes.module_lims.model.contract.MaterialReferenceContract;
 import com.supcon.mes.module_lims.presenter.MaterialReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.MaterialReferenceAdapter;
 
@@ -53,7 +54,7 @@ import io.reactivex.functions.Consumer;
 @Router(value = Constant.AppCode.LIMS_MaterialRef)
 @Presenter(value = {MaterialReferencePresenter.class})
 @Controller(value = {ReferenceController.class})
-public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<ProdIdEntity> implements MaterialReferenceApi.View {
+public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<ProdIdEntity> implements MaterialReferenceContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -229,7 +230,7 @@ public class MaterialReferenceActivity  extends BaseRefreshRecyclerActivity<Prod
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.MaterialReferenceApi.class).getMaterialReferenceList(pageIndex,params);
+                presenterRouter.create(MaterialReferenceAPI.class).getMaterialReferenceList(pageIndex,params);
             }
         });
     }

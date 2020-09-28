@@ -5,7 +5,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.model.bean.InspectApplicationSubmitEntity;
-import com.supcon.mes.module_lims.model.contract.InspectApplicationSubmitApi;
+import com.supcon.mes.module_lims.model.contract.InspectApplicationSubmitContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/23
  * class name
  */
-public class InspectApplicationSubmitPresenter extends InspectApplicationSubmitApi.Presenter {
+public class InspectApplicationSubmitPresenter extends InspectApplicationSubmitContract.Presenter {
     @Override
     public void submitInspectApplication(String path, Map<String, Object> params, InspectApplicationSubmitEntity entity) {
         mCompositeSubscription.add(BaseLimsHttpClient.submitInspectApplication(path,params,entity)

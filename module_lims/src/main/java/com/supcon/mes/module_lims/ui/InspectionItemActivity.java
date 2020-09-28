@@ -14,13 +14,11 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
@@ -33,11 +31,11 @@ import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.event.InspectionItemEvent;
-import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.InspectionItemsAPI;
 import com.supcon.mes.module_lims.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemsListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionItemsApi;
+import com.supcon.mes.module_lims.model.contract.InspectionItemsContract;
 import com.supcon.mes.module_lims.presenter.InspectionItemsPresenter;
 import com.supcon.mes.module_lims.ui.adapter.InspectionItemAdapter;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
@@ -58,7 +56,7 @@ import io.reactivex.functions.Consumer;
 @Router(value = Constant.AppCode.LIMS_InspectComDataByStdVerId)
 @Controller(value = {ReferenceController.class})
 @Presenter(value = {InspectionItemsPresenter.class})
-public class InspectionItemActivity extends BaseRefreshRecyclerActivity<InspectionItemsEntity> implements InspectionItemsApi.View {
+public class InspectionItemActivity extends BaseRefreshRecyclerActivity<InspectionItemsEntity> implements InspectionItemsContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -236,15 +234,15 @@ public class InspectionItemActivity extends BaseRefreshRecyclerActivity<Inspecti
                     //inspectProjIdIsValuable 为true 表示该质量标准是存在请检方案的  为false表示不存在请检方案
                     if (inspectProjIdIsValuable){
                         if (!StringUtil.isEmpty(inspectProjId)){
-                            presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectComDataByInspectProjId(inspectProjId);
+                            presenterRouter.create(InspectionItemsAPI.class).getInspectComDataByInspectProjId(inspectProjId);
                         }else {
-                            presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectionItemsList(stdVersionId);
+                            presenterRouter.create(InspectionItemsAPI.class).getInspectionItemsList(stdVersionId);
                         }
                     }else {
-                        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectionItemsList(stdVersionId);
+                        presenterRouter.create(InspectionItemsAPI.class).getInspectionItemsList(stdVersionId);
                     }
                 }else {
-                    presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionItemsApi.class).getInspectComDataByInspectStdId(inspectStdId);
+                    presenterRouter.create(InspectionItemsAPI.class).getInspectComDataByInspectStdId(inspectStdId);
                 }
 
             }

@@ -10,7 +10,7 @@ import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
-import com.supcon.mes.module_lims.model.contract.SampleMaterialListApi;
+import com.supcon.mes.module_lims.model.contract.SampleMaterialListContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 
@@ -27,7 +27,7 @@ import io.reactivex.functions.Function;
  * on 2020/8/27
  * class name
  */
-public class SampleMaterialPresenter extends SampleMaterialListApi.Presenter {
+public class SampleMaterialPresenter extends SampleMaterialListContract.Presenter {
     @Override
     public void getSampleMaterialReference(int pageNo, Map<String, Object> params,String matInfoCodeList) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");

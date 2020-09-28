@@ -8,7 +8,7 @@ import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
-import com.supcon.mes.module_lims.model.contract.SurveyReportApi;
+import com.supcon.mes.module_lims.model.contract.SurveyReportContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/2
  * class name 检验报告单presenter
  */
-public class SurveyReportPresenter extends SurveyReportApi.Presenter {
+public class SurveyReportPresenter extends SurveyReportContract.Presenter {
     @Override
     public void getSurveyReportList(String type, boolean isAll, int pageNo, Map<String, Object> params) {
         String query = "";

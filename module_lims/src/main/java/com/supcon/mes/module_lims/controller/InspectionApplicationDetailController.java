@@ -58,6 +58,9 @@ import com.supcon.mes.module_lims.event.InspectionItemEvent;
 import com.supcon.mes.module_lims.event.MaterialDateEvent;
 
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
+import com.supcon.mes.module_lims.model.api.AvailableStdIdAPI;
+import com.supcon.mes.module_lims.model.api.InspectApplicationSubmitAPI;
+import com.supcon.mes.module_lims.model.api.InspectionDetailReadyAPI;
 import com.supcon.mes.module_lims.model.bean.ApplyDeptIdEntity;
 import com.supcon.mes.module_lims.model.bean.ApplyStaffIdEntity;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
@@ -78,9 +81,10 @@ import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 import com.supcon.mes.module_lims.model.bean.VendorIdEntity;
-import com.supcon.mes.module_lims.model.contract.AvailableStdIdApi;
-import com.supcon.mes.module_lims.model.contract.InspectApplicationSubmitApi;
-import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyApi;
+
+import com.supcon.mes.module_lims.model.contract.AvailableStdIdContract;
+import com.supcon.mes.module_lims.model.contract.InspectApplicationSubmitContract;
+import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyContract;
 import com.supcon.mes.module_lims.presenter.AvailableStdPresenter;
 import com.supcon.mes.module_lims.presenter.InspectApplicationSubmitPresenter;
 import com.supcon.mes.module_lims.presenter.InspectionDetailReadyPresenter;
@@ -110,8 +114,8 @@ import io.reactivex.functions.Consumer;
  */
 
 @Presenter(value = {InspectionDetailReadyPresenter.class, AvailableStdPresenter.class, InspectApplicationSubmitPresenter.class})
-public class InspectionApplicationDetailController extends BaseViewController implements InspectionDetailReadyApi.View, AvailableStdIdApi.View,
-        InspectApplicationSubmitApi.View {
+public class InspectionApplicationDetailController extends BaseViewController implements InspectionDetailReadyContract.View, AvailableStdIdContract.View,
+        InspectApplicationSubmitContract.View {
 
     @BindByTag("searchTitle")
     SearchTitleBar searchTitle;
@@ -198,7 +202,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
     public void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionDetailReadyApi.class).getIfUpload();
+        presenterRouter.create(InspectionDetailReadyAPI.class).getIfUpload();
 
     }
 
@@ -485,7 +489,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                             return;
                         }
                         //先请求一个接口
-                        presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getAvailableStdId(mHeadEntity.getProdId().getId() + "");
+                        presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(mHeadEntity.getProdId().getId() + "");
                     }
                 });
 
@@ -629,7 +633,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
     public void setHeardData(int type, InspectionApplicationDetailHeaderEntity entity, OnRequestPtListener mOnRequestPtListener) {
         this.type = type;
         //获取业务类型参照的数据
-        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionDetailReadyApi.class).getBusinessTypeList(type);
+        presenterRouter.create(InspectionDetailReadyAPI.class).getBusinessTypeList(type);
         if (null != entity) {
             mHeadEntity = entity;
             if (null != entity.getPending() && null != entity.getPending().openUrl) {
@@ -886,7 +890,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
 //        String s = gson.toJson(entity);
 //        Log.i("eeeeeeeeeeeeeeeee", "->" + s);
 //        String s1 = gson.toJson(entity);
-        presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectApplicationSubmitApi.class).submitInspectApplication(path, params, entity);
+        presenterRouter.create(InspectApplicationSubmitAPI.class).submitInspectApplication(path, params, entity);
     }
 
     private void doSubmit(WorkFlowVar workFlowVar) {
@@ -1030,7 +1034,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         stdVerIdEntity.setStdId(stdIdEntity);
                         entity.setStdVerId(stdVerIdEntity);
                         //需要调用接口 获取选择过来的质量标准的请见方案
-                        presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultInspProjByStdVerId(entity,entity.getStdVerId().getId()+"");
+                        presenterRouter.create(AvailableStdIdAPI.class).getDefaultInspProjByStdVerId(entity,entity.getStdVerId().getId()+"");
 
                     }
                 }
@@ -1086,7 +1090,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                     ceMaterielBatchNumber.setEditable(false);
                     ceMaterielBatchNumber.setNecessary(false);
                 }
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultStandardById(mHeadEntity.getProdId().getId()+"");
+                presenterRouter.create(AvailableStdIdAPI.class).getDefaultStandardById(mHeadEntity.getProdId().getId()+"");
 
             }
         }
@@ -1253,7 +1257,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         if (null != entity){
             myDefaultQualityStandardEntity = entity;
             if (null != entity.getStdVersion()){
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.AvailableStdIdApi.class).getDefaultItems(entity.getStdVersion().getId()+"");
+                presenterRouter.create(AvailableStdIdAPI.class).getDefaultItems(entity.getStdVersion().getId()+"");
             }else {
                 //每次更换物料 就将之前带进来的质量标准作为删除项
                 for (int i = 0; i < adapter.getList().size(); i++) {

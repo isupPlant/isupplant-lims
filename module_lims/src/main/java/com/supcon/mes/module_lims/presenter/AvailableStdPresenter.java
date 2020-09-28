@@ -9,7 +9,7 @@ import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
-import com.supcon.mes.module_lims.model.contract.AvailableStdIdApi;
+import com.supcon.mes.module_lims.model.contract.AvailableStdIdContract;
 import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/21
  * class name 通过物料id 查询得到可用标准 id
  */
-public class AvailableStdPresenter extends AvailableStdIdApi.Presenter {
+public class AvailableStdPresenter extends AvailableStdIdContract.Presenter {
     @Override
     public void getAvailableStdId(String productId) {
         Map<String, Object> map = new HashMap<>();

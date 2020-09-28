@@ -14,7 +14,7 @@ import java.util.Map;
  * class name 样品查询接口
  */
 @ContractFactory(entites = {SampleInquiryListEntity.class, BAP5CommonEntity.class})
-public interface SampleInquiryApi {
+public interface SampleInquiryAPI {
     void getSampleInquiryList(String type,int pageNo, Map<String, Object> params);
 
     void sampleSubmit(String type, String time, String ids, List<SampleInquiryEntity> submitList);

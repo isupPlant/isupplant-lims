@@ -16,10 +16,11 @@ import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_incoming.R;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
+import com.supcon.mes.module_lims.model.api.InspectionApplicationDetailAPI;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
-import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailApi;
+import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailContract;
 import com.supcon.mes.module_lims.presenter.InspectionApplicationDetailPresenter;
 
 /**
@@ -30,7 +31,7 @@ import com.supcon.mes.module_lims.presenter.InspectionApplicationDetailPresenter
 @Router(value = "", viewCode = "purchInspectView,purchInspectEdit")
 @Presenter(value = {InspectionApplicationDetailPresenter.class})
 @Controller(value = {InspectionApplicationDetailController.class})
-public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailApi.View{
+public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailContract.View{
     private String id;
     private String pendingId;
     private PendingEntity pendingEntity;
@@ -73,10 +74,10 @@ public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActi
             @Override
             public void onRefresh() {
                 if (null != id && null != pendingId){
-                    presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(id,pendingId);
+                    presenterRouter.create(InspectionApplicationDetailAPI.class).getInspectionDetailHeaderData(id,pendingId);
                 }else {
                     //通过待办 获取检验申请单的id
-                    presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionApplicationByPending(pendingEntity.modelId,pendingEntity.id);
+                    presenterRouter.create(InspectionApplicationDetailAPI.class).getInspectionApplicationByPending(pendingEntity.modelId,pendingEntity.id);
                 }
 
             }
@@ -102,7 +103,7 @@ public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActi
             public void requestPtClick(boolean isEdit) {
                 //myEdit = isEdit;
                 //请求pt
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailPtData(LimsConstant.PleaseCheck.INCOMING_PLEASE_CHECK,isEdit,id);
+                presenterRouter.create(InspectionApplicationDetailAPI.class).getInspectionDetailPtData(LimsConstant.PleaseCheck.INCOMING_PLEASE_CHECK,isEdit,id);
             }
         });
     }
@@ -127,7 +128,7 @@ public class IncomingInspectionApplicationDetailActivity extends BaseRefreshActi
     public void getInspectionApplicationByPendingSuccess(InspectionApplicationEntity entity) {
         if (null != entity){
             id = entity.getId()+"";
-            presenterRouter.create(com.supcon.mes.module_lims.model.api.InspectionApplicationDetailApi.class).getInspectionDetailHeaderData(entity.getId()+"",pendingEntity.id+"");
+            presenterRouter.create(InspectionApplicationDetailAPI.class).getInspectionDetailHeaderData(entity.getId()+"",pendingEntity.id+"");
         }
     }
 

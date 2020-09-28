@@ -24,9 +24,10 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.api.PleaseCheckSchemeReferenceAPI;
 import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeEntity;
 import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeListEntity;
-import com.supcon.mes.module_lims.model.contract.PleaseCheckSchemeReferenceApi;
+import com.supcon.mes.module_lims.model.contract.PleaseCheckSchemeReferenceContract;
 import com.supcon.mes.module_lims.presenter.PleaseCheckSchemeReferencePresenter;
 import com.supcon.mes.module_lims.ui.adapter.PleaseCheckSchemeAdapter;
 
@@ -43,7 +44,7 @@ import java.util.Map;
 @Router(value = Constant.AppCode.LIMS_InspectProjRef)
 @Controller(value = {ReferenceController.class})
 @Presenter(value = {PleaseCheckSchemeReferencePresenter.class})
-public class PleaseCheckSchemeReferenceActivity extends BaseRefreshRecyclerActivity<PleaseCheckSchemeEntity> implements PleaseCheckSchemeReferenceApi.View {
+public class PleaseCheckSchemeReferenceActivity extends BaseRefreshRecyclerActivity<PleaseCheckSchemeEntity> implements PleaseCheckSchemeReferenceContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -128,7 +129,7 @@ public class PleaseCheckSchemeReferenceActivity extends BaseRefreshRecyclerActiv
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.PleaseCheckSchemeReferenceApi.class).getPleaseCheckSchemeList(pageIndex,id,params);
+                presenterRouter.create(PleaseCheckSchemeReferenceAPI.class).getPleaseCheckSchemeList(pageIndex,id,params);
             }
         });
     }

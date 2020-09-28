@@ -24,9 +24,10 @@ import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.SurveyReportController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
+import com.supcon.mes.module_lims.model.api.SurveyReportAPI;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
-import com.supcon.mes.module_lims.model.contract.SurveyReportApi;
+import com.supcon.mes.module_lims.model.contract.SurveyReportContract;
 import com.supcon.mes.module_lims.presenter.SurveyReportPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SurveyReportAdapter;
 import com.supcon.mes.module_other.R;
@@ -47,7 +48,7 @@ import java.util.Map;
 @Router(Constant.AppCode.LIMS_OtherSurveyReport)
 @Presenter(value = {SurveyReportPresenter.class})
 @Controller(value = {SurveyReportController.class})
-public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<SurveyReportEntity> implements SurveyReportApi.View {
+public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<SurveyReportEntity> implements SurveyReportContract.View {
     @BindByTag("titleText")
     TextView titleText;
 
@@ -123,7 +124,7 @@ public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<Surve
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_lims.model.api.SurveyReportApi.class).getSurveyReportList(LimsConstant.Report.OTHER_REPORT, isWhole, pageIndex, params);
+                presenterRouter.create(SurveyReportAPI.class).getSurveyReportList(LimsConstant.Report.OTHER_REPORT, isWhole, pageIndex, params);
             }
         });
     }

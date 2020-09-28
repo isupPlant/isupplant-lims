@@ -10,7 +10,7 @@ import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
  * class name
  */
 @ContractFactory(entites = {BusinessTypeListEntity.class, IfUploadEntity.class})
-public interface InspectionDetailReadyApi {
+public interface InspectionDetailReadyAPI {
     void getBusinessTypeList(int type);
 
     void getIfUpload();
