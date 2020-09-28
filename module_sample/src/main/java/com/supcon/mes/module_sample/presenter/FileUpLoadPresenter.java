@@ -4,13 +4,16 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
 import com.supcon.mes.middleware.util.FormDataHelper;
+import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.middleware.util.PicUtil;
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.model.contract.FileUpContract;
+import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
@@ -44,7 +47,7 @@ public class FileUpLoadPresenter extends FileUpContract.Presenter {
                             public BAP5CommonEntity apply(Throwable throwable) throws Exception {
                                 BAP5CommonEntity<FileDataEntity> bap5CommonEntity = new BAP5CommonEntity<FileDataEntity>();
                                 bap5CommonEntity.success = false;
-                                bap5CommonEntity.msg = throwable.getMessage();
+                                bap5CommonEntity.msg = HttpErrorReturnUtil.getErrorInfo(throwable);
                                 return bap5CommonEntity;
                             }
                         })
@@ -54,13 +57,13 @@ public class FileUpLoadPresenter extends FileUpContract.Presenter {
                                 if (result.success) {
                                     getView().upFileSuccess(result);
                                 } else {
-                                    getView().upFileFailed("上传图片失败！");
+                                    getView().upFileFailed(SupPlantApplication.getAppContext().getString(R.string.lims_upload_fail));
                                 }
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                getView().upFileFailed("上传图片失败！");
+                                getView().upFileFailed(SupPlantApplication.getAppContext().getString(R.string.lims_upload_fail));
                             }
                         })
         );

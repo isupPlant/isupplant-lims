@@ -204,4 +204,5 @@
     <string name="lims_no">否</string>
     <string name="lims_yes">是</string>
     <string name="lims_tips">提示</string>
+    <string name="lims_upload_fail"></string>
 </resources>

@@ -206,4 +206,5 @@
     <string name="lims_no">No</string>
     <string name="lims_yes">Yes</string>
     <string name="lims_tips">Tips</string>
+    <string name="lims_upload_fail">Failed to upload file</string>
 </resources>
