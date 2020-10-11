@@ -459,7 +459,7 @@ public class SurverReportDetailController extends BaseViewController implements 
         String view=getView();
         if (context.getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
             baseActivity.onLoading(view+context.getResources().getString(R.string.lims_reject));
-            jsonObject.addProperty("workFlowVarStatus", "cancel");
+            jsonObject.addProperty("outcomeType", "cancel");
         } else {
             baseActivity.onLoading(view+context.getResources().getString(R.string.lims_submitting));
         }

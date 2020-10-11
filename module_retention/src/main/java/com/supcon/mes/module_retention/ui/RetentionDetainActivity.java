@@ -314,7 +314,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         if ("驳回".equals(workFlowVar.dec)) {
             String tip = getString(R.string.lims_retention) + getString(R.string.lims_reject);
             onLoading(tip);
-            jsonObject.addProperty("workFlowVarStatus", "cancel");
+            jsonObject.addProperty("outcomeType", "cancel");
         } else {
             String tip = getString(R.string.lims_retention) + getString(R.string.lims_submitting);
             onLoading(tip);
