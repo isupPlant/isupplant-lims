@@ -85,6 +85,7 @@
     <string name="lims_material_information">Material Information</string>
     <string name="lims_num">Quantity</string>
     <string name="lims_select_num">Please input quantity</string>
+    <string name="lims_device_type_name">Type Name</string>
 
 <!--    <string name="lims_single_sample_result_input">Single_sample_result_input</string>-->
     <string name="lims_inspect_project">Test</string>
@@ -195,6 +196,7 @@
     <string name="lime_device_status">Equipment Status</string>
     <string name="lims_devies">Equipment</string>
     <string name="lims_materils">Material</string>
+    <string name="lims_material_list">Material List</string>
     <string name="lims_add_succeed">Added successfully</string>
     <string name="lims_add_succeed_filter_repeat_data">Added successfully!Duplicate data filtered!</string>
     <string name="lims_please_select_at_last_one_data">Please select at least one piece of data!</string>
@@ -202,7 +204,7 @@
     <string name="lims_status_not">Status not observed, not allowed to view!</string>
     <string name="lims_select_all">Select All</string>
     <string name="lims_specification_model">Specifications</string>
-    <string name="lims_project_check_is_null_reported_value">There are empty items in the submitted item. Do you want to continue to submit and set the reported value as not checked?</string>
+    <string name="lims_project_check_is_null_reported_value">There are items with null report value in the submitted item. Do you want to continue to submit and set the reported value as not checked?</string>
     <string name="lims_no">No</string>
     <string name="lims_yes">Yes</string>
     <string name="lims_tips">Tips</string>

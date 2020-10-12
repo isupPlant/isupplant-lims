@@ -44,7 +44,7 @@
                 android:paddingRight="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_3"
                 android:tag="tvEdit"
-                android:text="编辑"
+                android:text="@string/lims_edit"
                 android:textSize="@dimen/fontSize_14sp" />
 
 

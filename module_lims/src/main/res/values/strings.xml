@@ -50,6 +50,7 @@
     <string name="lims_sampling_point_reference">采样点参照</string>
     <string name="lims_supplier_reference">供应商参照</string>
     <string name="lims_device_type_reference">设备类型参照</string>
+    <string name="lims_device_type_name">类型名称</string>
     <string name="lims_device_reference">设备参照</string>
     <string name="lims_inspection_items">检验项目</string>
     <string name="lims_busitype">业务类型</string>
@@ -193,6 +194,7 @@
     <string name="lime_device_status">设备状态</string>
     <string name="lims_devies">设备列表</string>
     <string name="lims_materils">物料列表</string>
+    <string name="lims_material_list">材料列表</string>
     <string name="lims_add_succeed">添加成功</string>
     <string name="lims_add_succeed_filter_repeat_data">添加成功!已过滤重复数据!</string>
     <string name="lims_please_select_at_last_one_data">请至少选择一条数据!</string>
@@ -200,7 +202,7 @@
     <string name="lims_status_not">状态非已观察，不允许查看!</string>
     <string name="lims_select_all">全选</string>
     <string name="lims_specification_model">规格型号</string>
-    <string name="lims_project_check_is_null_reported_value">提交的分项中存在为空的项目，是否继续提交并设置报出值为未检?</string>
+    <string name="lims_project_check_is_null_reported_value">提交的分项中存在为报出值空的项目，是否继续提交并设置报出值为未检?</string>
     <string name="lims_no">否</string>
     <string name="lims_yes">是</string>
     <string name="lims_tips">提示</string>

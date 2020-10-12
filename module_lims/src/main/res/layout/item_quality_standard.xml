@@ -143,7 +143,7 @@
             android:background="@color/deleteBgColor"
             android:gravity="center"
             android:tag="itemViewDelBtn"
-            android:text="删除"
+            android:text="@string/lims_delete"
             android:textColor="@color/white"
             android:textSize="@dimen/fontSize_14sp" />
     </LinearLayout>
