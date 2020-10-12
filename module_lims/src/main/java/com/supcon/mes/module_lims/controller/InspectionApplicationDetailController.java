@@ -899,6 +899,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         jsonObject.addProperty("dec", workFlowVar.dec);
         jsonObject.addProperty("operateType", workFlowVar.operateType);
         jsonObject.addProperty("outcome", workFlowVar.outCome);
+        jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
         if (workFlowVar.outcomeMapJson != null) {
             jsonObject.addProperty("outcomeMapJson", workFlowVar.outcomeMapJson.toString());
         }
@@ -909,10 +910,10 @@ public class InspectionApplicationDetailController extends BaseViewController im
         String view=getView();
         if (context.getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
             ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_reject));
-            jsonObject.addProperty("workFlowVarStatus", "cancel");
+            jsonObject.addProperty("outcomeType", "cancel");
         }else if (context.getResources().getString(R.string.lims_to_void).equals(workFlowVar.dec)){
             ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_cancellation));
-            jsonObject.addProperty("workFlowVarStatus", "cancel");
+            jsonObject.addProperty("outcomeType", "cancel");
         }else {
             ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_submitting));
         }

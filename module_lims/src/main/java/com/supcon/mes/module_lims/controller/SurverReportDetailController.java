@@ -449,6 +449,8 @@ public class SurverReportDetailController extends BaseViewController implements 
         jsonObject.addProperty("dec", workFlowVar.dec);
         jsonObject.addProperty("operateType", workFlowVar.operateType);
         jsonObject.addProperty("outcome", workFlowVar.outCome);
+        jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
+
         if (workFlowVar.outcomeMapJson != null) {
             jsonObject.addProperty("outcomeMapJson", workFlowVar.outcomeMapJson.toString());
         }
@@ -459,7 +461,7 @@ public class SurverReportDetailController extends BaseViewController implements 
         String view=getView();
         if (context.getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
             baseActivity.onLoading(view+context.getResources().getString(R.string.lims_reject));
-            jsonObject.addProperty("workFlowVarStatus", "cancel");
+            jsonObject.addProperty("outcomeType", "cancel");
         } else {
             baseActivity.onLoading(view+context.getResources().getString(R.string.lims_submitting));
         }

@@ -289,6 +289,8 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         jsonObject.addProperty("dec", workFlowVar.dec);
         jsonObject.addProperty("operateType", workFlowVar.operateType);
         jsonObject.addProperty("outcome", workFlowVar.outCome);
+        jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
+
         if (workFlowVar.outcomeMapJson != null) {
             jsonObject.addProperty("outcomeMapJson", workFlowVar.outcomeMapJson.toString());
         }
@@ -299,7 +301,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
 
         if (getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
             onLoading(context.getResources().getString(R.string.lims_sample_inspection_report)+context.getResources().getString(R.string.lims_reject));
-            jsonObject.addProperty("workFlowVarStatus", "cancel");
+            jsonObject.addProperty("outcomeType", "cancel");
         } else {
             onLoading(context.getResources().getString(R.string.lims_sample_inspection_report)+context.getResources().getString(R.string.lims_submitting));
         }
