@@ -191,7 +191,7 @@ public class SampleReportController extends BaseViewController {
             }else if (getRootView().getResources().getString(R.string.lims_sample_name).equals(resultSearch)){
                 params.put(Constant.BAPQuery.NAME, resultEntity.result);
             }else if (getRootView().getResources().getString(R.string.lims_sample_code).equals(resultSearch)){
-                params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
+                params.put(Constant.BAPQuery.CODE, resultEntity.result);
             }else if (getRootView().getResources().getString(R.string.lims_batch_number).equals(resultSearch)){
                 params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
             }else if (getRootView().getResources().getString(R.string.lims_sampling_point).equals(resultSearch)){

@@ -107,7 +107,7 @@ public class SampleSurveyReportPresenter extends SampleSurveyReportApi.Presenter
         List<SurveyReportEntity> list=new ArrayList<>();
         if (!entities.isEmpty()) {
             for (SurveyReportEntity entity : entities) {
-                if (TextUtils.isEmpty(entity.pending.openUrl) || entity.pending.openUrl.contains("ReportView")) {
+                if (TextUtils.isEmpty(entity.pending.openUrl) || entity.pending.openUrl.contains("ReportView") || entity.pending.openUrl.contains("ReportEdit")) {
                     list.add(entity);
                 }
             }
