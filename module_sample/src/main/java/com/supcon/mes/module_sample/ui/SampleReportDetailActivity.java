@@ -289,6 +289,8 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         jsonObject.addProperty("dec", workFlowVar.dec);
         jsonObject.addProperty("operateType", workFlowVar.operateType);
         jsonObject.addProperty("outcome", workFlowVar.outCome);
+        jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
+
         if (workFlowVar.outcomeMapJson != null) {
             jsonObject.addProperty("outcomeMapJson", workFlowVar.outcomeMapJson.toString());
         }
