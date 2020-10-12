@@ -3,6 +3,8 @@ package com.supcon.mes.module_lims.ui.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -144,7 +146,7 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
 //                    ivIsQualified.setVisibility(View.GONE);
 //                }
 //            }
-            if (context.getResources().getString(R.string.lims_unqualified).equals(data.getCheckResult())){
+            if (!TextUtils.isEmpty(data.getCheckResult()) && data.getCheckResult().contains(context.getResources().getString(R.string.lims_unqualified))){
                 checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
