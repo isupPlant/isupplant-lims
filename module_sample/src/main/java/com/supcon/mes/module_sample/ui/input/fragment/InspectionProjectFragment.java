@@ -29,6 +29,7 @@ import com.supcon.mes.module_sample.ui.adapter.InspectionItemsListAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -198,9 +199,11 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 break;
             }
         }
-        if (position+1 == adapter.getList().size()){  //表示上次选中的已经是最后一条了
-            mInspectionSubRefreshListener.refreshOver(position, adapter.getList());
-        }
+//        if (position+1 == adapter.getList().size()){  //表示上次选中的已经是最后一条了
+//            mInspectionSubRefreshListener.refreshOver(position, adapter.getList());
+//        }else {
+//            presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
+//        }
         presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
 
     }
@@ -227,7 +230,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 itemClickListener(position);
             }else if (notifyType.equals("submit")){ //提交
                 if (null != mInspectionSubRefreshListener){
-                    mInspectionSubRefreshListener.refreshOver(position, list);
+                    mInspectionSubRefreshListener.refreshOver(list);
                 }
             }
         }else {
@@ -263,6 +266,13 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
     @Override
     public void getInspectionItemListFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
+        if (isOutNotify){
+             if (notifyType.equals("submit")){ //提交
+                if (null != mInspectionSubRefreshListener){
+                    mInspectionSubRefreshListener.refreshOver(new ArrayList<>());
+                }
+            }
+        }
     }
 
 

@@ -38,6 +38,7 @@ import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -256,11 +257,13 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 public void onChildViewClick(View childView, int action, Object obj) {
                     String[] split = getList().get(getAdapterPosition()).getOptionNames().split(",");
                     List<String> list = Arrays.asList(split);
-                    mSinglePickController.list(list)
+                    List<String> arrList = new ArrayList<>(list);
+                    arrList.add(0,"");
+                    mSinglePickController.list(arrList)
                             .listener(new SinglePicker.OnItemPickListener() {
                                 @Override
                                 public void onItemPicked(int index, Object item) {
-                                    getItem(getAdapterPosition()).setOriginValue(list.get(index));
+                                    getItem(getAdapterPosition()).setOriginValue(arrList.get(index));
                                     notifyItemChanged(getAdapterPosition());
                                     if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
                                         mOriginalValueChangeListener.originalValueChange(getItem(getAdapterPosition()).getOriginValue(),getAdapterPosition());

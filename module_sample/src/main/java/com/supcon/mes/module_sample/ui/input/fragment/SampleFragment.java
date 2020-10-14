@@ -29,6 +29,7 @@ import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
@@ -98,6 +99,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     private String searchKey;
     private String title;
     private boolean isFinish = false;
+    private boolean scan = false;
 
 
     @Override
@@ -290,50 +292,56 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 mParams.put(Constant.BAPQuery.BATCH_CODE,title);
             }
 
-            goRefresh();
+            presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap,mParams);
         }
     }
 
+    private String scanCode;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCodeReciver(CodeResultEvent codeResultEvent) {
         if (CodeUtlis.QR_TYPE.equals(codeResultEvent.type)) {
             if (!StringUtil.isEmpty(codeResultEvent.scanResult)){
-
-                for (int i = 0; i < adapter.getList().size(); i++) {
-                    adapter.getList().get(i).setSelect(false);
-                }
-                int position = -1;
-                for (int i = 0; i < adapter.getList().size(); i++) {
-                    if (adapter.getList().get(i).getCode().equals(codeResultEvent.scanResult)){
-                        adapter.getList().get(i).setSelect(true);
-                        position = i;
-                        break;
-                    }
-                }
-                adapter.notifyDataSetChanged();
-
-                if (position == -1){
-                    ToastUtils.show(context,context.getResources().getString(R.string.lims_not_scanned_code));
-                    return;
-                }
-
-                //通知 检验项目更新数据
-                if (activity instanceof SampleResultInputActivity){
-                    ((SampleResultInputActivity)activity).setSampleId(adapter.getList().get(position).getId());
-                }else if (activity instanceof  SampleResultInputPDAActivity){
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("sampleId",adapter.getList().get(position).getId());
-                    if (!StringUtil.isEmpty(adapter.getList().get(position).getName()) && !StringUtil.isEmpty(adapter.getList().get(position).getCode())){
-                        bundle.putString("title", adapter.getList().get(position).getName()+"(" + adapter.getList().get(position).getCode() + ")");
-                    }else {
-                        if (StringUtil.isEmpty(adapter.getList().get(position).getName())){
-                            bundle.putString("title", adapter.getList().get(position).getCode());
-                        }else {
-                            bundle.putString("title", adapter.getList().get(position).getName());
-                        }
-                    }
-                    IntentRouter.go(context,Constant.AppCode.LIMS_InspectionItemPda, bundle);
-                }
+                scan = true;
+                scanCode = codeResultEvent.scanResult;
+                removeParams();
+                mParams.put(Constant.BAPQuery.CODE, scanCode);
+                onLoading(getResources().getString(R.string.lims_loading_sample));
+                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap,mParams);
+//                for (int i = 0; i < adapter.getList().size(); i++) {
+//                    adapter.getList().get(i).setSelect(false);
+//                }
+//                int position = -1;
+//                for (int i = 0; i < adapter.getList().size(); i++) {
+//                    if (adapter.getList().get(i).getCode().equals(codeResultEvent.scanResult)){
+//                        adapter.getList().get(i).setSelect(true);
+//                        position = i;
+//                        break;
+//                    }
+//                }
+//                adapter.notifyDataSetChanged();
+//
+//                if (position == -1){
+//                    ToastUtils.show(context,context.getResources().getString(R.string.lims_not_scanned_code));
+//                    return;
+//                }
+//
+//                //通知 检验项目更新数据
+//                if (activity instanceof SampleResultInputActivity){
+//                    ((SampleResultInputActivity)activity).setSampleId(adapter.getList().get(position).getId());
+//                }else if (activity instanceof  SampleResultInputPDAActivity){
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong("sampleId",adapter.getList().get(position).getId());
+//                    if (!StringUtil.isEmpty(adapter.getList().get(position).getName()) && !StringUtil.isEmpty(adapter.getList().get(position).getCode())){
+//                        bundle.putString("title", adapter.getList().get(position).getName()+"(" + adapter.getList().get(position).getCode() + ")");
+//                    }else {
+//                        if (StringUtil.isEmpty(adapter.getList().get(position).getName())){
+//                            bundle.putString("title", adapter.getList().get(position).getCode());
+//                        }else {
+//                            bundle.putString("title", adapter.getList().get(position).getName());
+//                        }
+//                    }
+//                    IntentRouter.go(context,Constant.AppCode.LIMS_InspectionItemPda, bundle);
+//                }
             }
         }
     }
@@ -348,10 +356,41 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
 
     @Override
     public void getSampleListSuccess(CommonListEntity entity) {
-        refreshListController.refreshComplete(entity.result);
-        if (activity instanceof SampleResultInputActivity){
-            ((SampleResultInputActivity)activity).sampleRefresh();
+        if (scan){
+            scan = false;
+            List<SampleEntity> sampleEntities = entity.result;
+            if (!sampleEntities.isEmpty()){
+                SampleEntity sampleEntity = sampleEntities.get(0);
+                if (scanCode.equals(sampleEntity.getCode())){
+                    onLoadSuccessAndExit(getResources().getString(R.string.lims_loading_succeed), new OnLoaderFinishListener() {
+                        @Override
+                        public void onLoaderFinished() {
+                            Bundle bundle = new Bundle();
+                            bundle.putLong("sampleId", sampleEntity.getId());
+                            if (!StringUtil.isEmpty(sampleEntity.getName()) && !StringUtil.isEmpty(sampleEntity.getCode())) {
+                                bundle.putString("title", sampleEntity.getName() + "(" + sampleEntity.getCode() + ")");
+                            } else {
+                                if (StringUtil.isEmpty(sampleEntity.getName())) {
+                                    bundle.putString("title", sampleEntity.getCode());
+                                } else {
+                                    bundle.putString("title", sampleEntity.getName());
+                                }
+                            }
+                            IntentRouter.go(context, Constant.AppCode.LIMS_InspectionItemPda, bundle);
+                        }
+                    });
+                }
+            }else {
+                onLoadFailed(getResources().getString(R.string.lims_load_fail));
+            }
+
+        }else {
+            refreshListController.refreshComplete(entity.result);
+            if (activity instanceof SampleResultInputActivity){
+                ((SampleResultInputActivity)activity).sampleRefresh();
+            }
         }
+
     }
 
     @Override

@@ -10,5 +10,5 @@ import java.util.List;
  * class name
  */
 public interface InspectionSubRefreshListener {
-    void refreshOver(int position, List<InspectionItemsEntity> list);
+    void refreshOver( List<InspectionItemsEntity> list);
 }

@@ -239,9 +239,9 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 }else if (result == 2){//提交
                         inspectionProjectFragment.lookNext(new InspectionSubRefreshListener() {
                             @Override
-                            public void refreshOver(int position, List<InspectionItemsEntity> list) {
-                                if (position+1 <= list.size() -1){
-                                    inspectionProjectFragment.refreshItem(position+1);
+                            public void refreshOver(List<InspectionItemsEntity> list) {
+                                if (list.size() > 0){
+                                    inspectionProjectFragment.refreshItem(0);
                                 }else {
                                     EventBus.getDefault().post("refersh");
                                     onBackPressed();
