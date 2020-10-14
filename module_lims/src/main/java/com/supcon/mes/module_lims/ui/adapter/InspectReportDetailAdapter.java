@@ -2,6 +2,7 @@ package com.supcon.mes.module_lims.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.app.annotation.BindByTag;
@@ -106,7 +107,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
             reportNameTv.setValue(data.reportName);
             dispvalueTv.setValue(data.dispValue);
             checkResultTv.setValue(data.checkResult);
-            if (context.getResources().getString(R.string.lims_unqualified).equals(data.checkResult)){
+            if (!TextUtils.isEmpty(data.checkResult) && data.checkResult.contains(context.getResources().getString(R.string.lims_unqualified))){
                 checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));

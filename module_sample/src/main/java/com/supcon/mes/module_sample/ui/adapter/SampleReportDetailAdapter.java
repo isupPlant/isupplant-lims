@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.app.annotation.BindByTag;
@@ -117,7 +118,7 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
             } else {
                 rangeImg.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_inspect_up_arrow);
             }
-            if (context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified).equals(data.testResult)){
+            if (!TextUtils.isEmpty(data.testResult) && data.testResult.contains(context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified))){
                 checkResultTv.setValueColor(Color.parseColor("#F70606"));
             }else {
                 checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
