@@ -154,7 +154,7 @@
     <string name="lims_please_select_material">Please select material!</string>
     <string name="lims_cancellation">Cancellation...</string>
     <string name="lims_please_select_quality_standard">Please select quality standard!</string>
-    <string name="lims_to_void">Cancel</string>
+    <string name="lims_to_void">cancel</string>
     <string name="lims_to_void_bill">Are you sure you want to void the document？</string>
     <string name="lims_adopt">Adopt</string>
     <string name="reject">Reject</string>

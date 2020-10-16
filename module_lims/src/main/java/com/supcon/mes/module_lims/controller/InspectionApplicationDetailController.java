@@ -569,7 +569,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         break;
                     case 1:
                         workFlowType = 1;
-                        if (workFlowVar.dec.equals(context.getResources().getString(R.string.lims_to_void))){
+                        if ("cancel".equals(workFlowVar.outcomeMapJson.get(0).type)){
                             new CustomDialog(context)
                                     .twoButtonAlertDialog(context.getResources().getString(R.string.lims_to_void_bill))
                                     .bindView(R.id.grayBtn, context.getResources().getString(com.supcon.mes.middleware.R.string.common_cancel))
@@ -584,12 +584,12 @@ public class InspectionApplicationDetailController extends BaseViewController im
                         break;
                     case 2:
                         workFlowType = 1;
-                        if (workFlowVar.dec.equals(context.getResources().getString(R.string.lims_adopt))){
-                            doSubmit(workFlowVar);
-                        }else {
+                        if (getViewCode().contains("Edit")){ //编辑状态
                             if (checkSubmit()){
                                 doSubmit(workFlowVar);
                             }
+                        }else {
+                            doSubmit(workFlowVar);
                         }
 
                         break;
