@@ -242,19 +242,7 @@ public class SurverReportDetailController extends BaseViewController implements 
                 }
             }
         });
-        workFlowViewController.setWorkFlowView(new WorkFlowViewController.WorkFlowViewListener() {
-            @Override
-            public void OnWorkFlowViewListener(String viewCode) {
-                Flowable.timer(300,TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(o->{
-                            if (type==2) {
-                                TextView middleBtnTv = customWorkFlowView.findViewById(R.id.middleBtnTv);
-                                middleBtnTv.setText(context.getString(R.string.lims_effect));
-                            }
-                        });
-            }
-        });
+
 
 
     }
@@ -273,19 +261,6 @@ public class SurverReportDetailController extends BaseViewController implements 
                     workFlowViewController.initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
                     customWorkFlowView.setVisibility(View.VISIBLE);
                 }
-            }
-        });
-        workFlowViewController.setWorkFlowView(new WorkFlowViewController.WorkFlowViewListener() {
-            @Override
-            public void OnWorkFlowViewListener(String viewCode) {
-                Flowable.timer(300,TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(o-> {
-                            if (type == 2){
-                                TextView middleBtnTv = customWorkFlowView.findViewById(R.id.middleBtnTv);
-                                middleBtnTv.setText(context.getString(R.string.lims_effect));
-                            }
-                        });
             }
         });
     }
