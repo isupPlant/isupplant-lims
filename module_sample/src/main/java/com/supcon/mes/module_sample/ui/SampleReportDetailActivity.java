@@ -198,7 +198,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (pendingEntity.id!=null){
+                if (pendingEntity.id!=null &&!TextUtils.isEmpty(pendingEntity.openUrl) && pendingEntity.openUrl.contains("View")){
                     customWorkFlowView.setVisibility(View.VISIBLE);
                     getController(WorkFlowViewController.class).initPendingWorkFlowView(customWorkFlowView,pendingEntity.id);
                     getController(GetPowerCodeController.class).initPowerCode(pendingEntity.activityName);
@@ -245,7 +245,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         executeStdTv.setValue(sampleReport.getStdVerId()!=null && sampleReport.getStdVerId().getStdId()!=null?sampleReport.getStdVerId().getStdId().getStandard():"");
         versionNumberTv.setValue(sampleReport.getStdVerId()!=null?sampleReport.getStdVerId().getBusiVersion():"");
         inspectCheckResultTv.setValue(sampleReport.getTestResult());
-        if (getResources().getString(R.string.lims_unqualified).equals(sampleReport.getTestResult())){
+        if (sampleReport.getTestResult().contains(getResources().getString(R.string.lims_unqualified))){
             inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
         }else {
             inspectCheckResultTv.setValueColor(Color.parseColor("#0BC8C1"));

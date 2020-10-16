@@ -231,9 +231,11 @@ public class SurverReportDetailController extends BaseViewController implements 
             public void onRefresh() {
                 presenterRouter.create(InspectReportDetailAPI.class).getInspectHeadReport(entity.getId());
                 if (pendingEntity!=null && pendingEntity.id!=null){
-                    powerCodeController.initPowerCode(pendingEntity.activityName);
-                    workFlowViewController.initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
-                    customWorkFlowView.setVisibility(View.VISIBLE);
+                    if (!TextUtils.isEmpty(pendingEntity.openUrl) && pendingEntity.openUrl.contains("View")) {
+                        powerCodeController.initPowerCode(pendingEntity.activityName);
+                        workFlowViewController.initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
+                        customWorkFlowView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -282,7 +284,7 @@ public class SurverReportDetailController extends BaseViewController implements 
         inspectCheckTimeTv.setValue(entity.checkTime!=null? DateUtil.dateTimeFormat(entity.checkTime):"");
         inspectQualityStdTv.setValue(entity.stdVerId!=null && entity.stdVerId.getStdId()!=null? entity.stdVerId.getStdId().getName():"");
         inspectCheckResultTv.setValue(entity.checkResult);
-        if (context.getResources().getString(R.string.lims_unqualified).equals(entity.checkResult)){
+        if (entity.checkResult.contains(context.getResources().getString(R.string.lims_unqualified))){
             inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
         }else {
             inspectCheckResultTv.setValueColor(Color.parseColor("#0BC8C1"));
