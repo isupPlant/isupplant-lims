@@ -245,7 +245,7 @@ public class SurverReportDetailController extends BaseViewController implements 
         workFlowViewController.setWorkFlowView(new WorkFlowViewController.WorkFlowViewListener() {
             @Override
             public void OnWorkFlowViewListener(String viewCode) {
-                Flowable.timer(200,TimeUnit.MILLISECONDS)
+                Flowable.timer(300,TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(o->{
                             if (type==2) {
@@ -255,6 +255,7 @@ public class SurverReportDetailController extends BaseViewController implements 
                         });
             }
         });
+
 
     }
     public void setReportPending(int type, PendingEntity pendingEntity){
@@ -277,7 +278,7 @@ public class SurverReportDetailController extends BaseViewController implements 
         workFlowViewController.setWorkFlowView(new WorkFlowViewController.WorkFlowViewListener() {
             @Override
             public void OnWorkFlowViewListener(String viewCode) {
-                Flowable.timer(200,TimeUnit.MILLISECONDS)
+                Flowable.timer(300,TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(o-> {
                             if (type == 2){
