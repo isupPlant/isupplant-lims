@@ -61,6 +61,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 /**
  * Created by wanghaidong on 2020/7/16
  * Email:wanghaidong1@supcon.com
@@ -239,6 +242,18 @@ public class SurverReportDetailController extends BaseViewController implements 
                 }
             }
         });
+        workFlowViewController.setWorkFlowView(new WorkFlowViewController.WorkFlowViewListener() {
+            @Override
+            public void OnWorkFlowViewListener(String viewCode) {
+                Flowable.timer(200,TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(o->{
+                            TextView middleBtnTv=customWorkFlowView.findViewById(R.id.middleBtnTv);
+                            middleBtnTv.setText(context.getString(R.string.lims_effect));
+                        });
+            }
+        });
+
     }
     public void setReportPending(int type, PendingEntity pendingEntity){
         this.pendingEntity=pendingEntity;
@@ -255,6 +270,17 @@ public class SurverReportDetailController extends BaseViewController implements 
                     workFlowViewController.initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
                     customWorkFlowView.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+        workFlowViewController.setWorkFlowView(new WorkFlowViewController.WorkFlowViewListener() {
+            @Override
+            public void OnWorkFlowViewListener(String viewCode) {
+                Flowable.timer(200,TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(o->{
+                            TextView middleBtnTv=customWorkFlowView.findViewById(R.id.middleBtnTv);
+                            middleBtnTv.setText(context.getString(R.string.lims_effect));
+                        });
             }
         });
     }
