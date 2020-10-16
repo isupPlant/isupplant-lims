@@ -42,6 +42,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -229,9 +233,12 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
 
     @Override
     public void getTestDeviceSuccess(CommonListEntity entity) {
-        deviceList.clear();
-        deviceList = GsonUtil.jsonToList(GsonUtil.gsonString(entity.result),TestDeviceEntity.class);
-        refreshListController.refreshComplete(entity.result);
+            deviceList.clear();
+            deviceList = deepCopy(entity.result);
+
+            //deviceList = GsonUtil.jsonToList(GsonUtil.gsonString(entity.result),TestDeviceEntity.class);
+            refreshListController.refreshComplete(entity.result);
+
     }
 
     @Override
@@ -265,5 +272,21 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+    public static <E> List<E> deepCopy(List<E> src) {
+        try {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(byteOut);
+            out.writeObject(src);
+
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(byteIn);
+            @SuppressWarnings("unchecked")
+            List<E> dest = (List<E>) in.readObject();
+            return dest;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<E>();
+        }
     }
 }

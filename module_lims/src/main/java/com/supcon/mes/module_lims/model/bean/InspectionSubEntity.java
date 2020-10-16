@@ -29,7 +29,7 @@ public class InspectionSubEntity extends BaseEntity {
     private String defaultValue;//默认值
     private String dispValue;
     private Long id;
-    private Boolean isReport;
+    //private Boolean isReport;
     private String originValue;
     private Integer parallelNo;
     private String reportName;
@@ -169,13 +169,13 @@ public class InspectionSubEntity extends BaseEntity {
         this.id = id;
     }
 
-    public Boolean getReport() {
-        return isReport;
-    }
-
-    public void setReport(Boolean report) {
-        isReport = report;
-    }
+//    public Boolean getReport() {
+//        return isReport;
+//    }
+//
+//    public void setReport(Boolean report) {
+//        isReport = report;
+//    }
 
     public String getOriginValue() {
         return originValue;

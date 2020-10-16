@@ -84,6 +84,9 @@ public class QualityStandardAdapter extends BaseListDataRecyclerViewAdapter<Insp
             ctApplicationScheme.setOnChildViewClickListener(new OnChildViewClickListener() {
                 @Override
                 public void onChildViewClick(View childView, int action, Object obj) {
+                    if (action == -1){
+                        getItem(getAdapterPosition()).getInspectProjId().setName("");
+                    }
                     if (isEdit){
                         onItemChildViewClick(childView,1);
                     }

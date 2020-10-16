@@ -155,7 +155,7 @@
     <string name="lims_please_select_material">请选择物料!</string>
     <string name="lims_please_select_quality_standard">请选择质量标准!</string>
     <string name="lims_to_void">作废</string>
-    <string name="lims_to_void_bill">确认要作废单据单据吗？</string>
+    <string name="lims_to_void_bill">确认要作废单据吗？</string>
     <string name="lims_adopt">通过</string>
     <string name="reject">驳回</string>
     <string name="lims_product_test_request_bill">产品检验申请单</string>
