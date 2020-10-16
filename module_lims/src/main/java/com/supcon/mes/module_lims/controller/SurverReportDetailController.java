@@ -248,8 +248,10 @@ public class SurverReportDetailController extends BaseViewController implements 
                 Flowable.timer(200,TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(o->{
-                            TextView middleBtnTv=customWorkFlowView.findViewById(R.id.middleBtnTv);
-                            middleBtnTv.setText(context.getString(R.string.lims_effect));
+                            if (type==2) {
+                                TextView middleBtnTv = customWorkFlowView.findViewById(R.id.middleBtnTv);
+                                middleBtnTv.setText(context.getString(R.string.lims_effect));
+                            }
                         });
             }
         });
@@ -277,9 +279,11 @@ public class SurverReportDetailController extends BaseViewController implements 
             public void OnWorkFlowViewListener(String viewCode) {
                 Flowable.timer(200,TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(o->{
-                            TextView middleBtnTv=customWorkFlowView.findViewById(R.id.middleBtnTv);
-                            middleBtnTv.setText(context.getString(R.string.lims_effect));
+                        .subscribe(o-> {
+                            if (type == 2){
+                                TextView middleBtnTv = customWorkFlowView.findViewById(R.id.middleBtnTv);
+                                middleBtnTv.setText(context.getString(R.string.lims_effect));
+                            }
                         });
             }
         });

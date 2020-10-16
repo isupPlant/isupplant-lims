@@ -190,7 +190,7 @@
     <string name="lims_load_fail">Not loaded to the sample!</string>
     <string name="lims_edit">Edit</string>
     <string name="lims_approve">Approve</string>
-    <string name="lims_effect">Effect</string>
+    <string name="lims_effect">Pass</string>
     <string name="lims_refresnce">Refer</string>
     <string name="lims_add">Add</string>
     <string name="lime_device_status">Equipment Status</string>
