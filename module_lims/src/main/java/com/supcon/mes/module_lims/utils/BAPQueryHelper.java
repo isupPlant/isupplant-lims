@@ -72,7 +72,15 @@ public class BAPQueryHelper {
                 subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
                 break;
-
+            case Constant.BAPQuery.SAMPLE_STATE:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.columnName = key;
+                subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
+                subcondEntity.operator = BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = Util.getSampleState(String.valueOf(value));
+                break;
 
             case Constant.BAPQuery.BUSI_VERSION: //版本号
             case Constant.BAPQuery.NAME:

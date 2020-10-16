@@ -29,6 +29,8 @@ public class SampleAccountPresenter extends SampleAccountContract.Presenter {
         String viewCode = "LIMSSample_5.0.0.0_sample_sampleInfoLayout";
         String modelAlias = "sampleInfo";
         FastQueryCondEntity fastQuery = null;
+
+
         if (params.containsKey(Constant.BAPQuery.NAME) || params.containsKey(Constant.BAPQuery.CODE)
                 || params.containsKey(Constant.BAPQuery.BATCH_CODE) || params.containsKey(Constant.BAPQuery.SAMPLE_STATE)){
             fastQuery = BAPQueryHelper.createSingleFastQueryCond(params);

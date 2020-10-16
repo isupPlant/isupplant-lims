@@ -9,6 +9,6 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
  * class name
  */
 @ContractFactory(entites = {BAP5CommonListEntity.class})
-public interface InspectionSubProjectColumnApi {
+public interface InspectionSubProjectColumnAPI {
     void getInspectionSubProjectColumn(String sampleTestIds);
 }

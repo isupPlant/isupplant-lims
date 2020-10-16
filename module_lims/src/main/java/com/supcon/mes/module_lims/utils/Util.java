@@ -13,6 +13,8 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
+import com.supcon.mes.module_lims.constant.LimsConstant;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +31,7 @@ import static com.supcon.mes.middleware.ui.view.AddFileListView.getDataColumn;
  * Created by wanghaidong on 2020/7/16
  * Email:wanghaidong1@supcon.com
  */
-public class Util {
+public class Util implements LimsConstant.SampleState{
     /**
      * 浮点型保留两位小数
      *
@@ -542,4 +544,26 @@ public class Util {
         return result;
     }
 
+    public static String getSampleState(String value){
+        if (value.equals("待取样")){
+            return NOT_COLLECTED;
+        }else if (value.equals("待收样")){
+            return NOT_RECEIVED;
+        }else if (value.equals("待交接")){
+            return NOT_HANDOVER;
+        }else if (value.equals("待检验")){
+            return NOT_TESTED;
+        }else if (value.equals("部分已检")){
+            return HALF_TESTED;
+        }else if (value.equals("已检验")){
+            return TESTED;
+        }else if (value.equals("已审核")){
+            return CHECKED;
+        }else if (value.equals("已拒绝")){
+            return REFUSED;
+        }else if (value.equals("已取消")){
+            return CANCELED;
+        }
+        return "";
+    }
 }

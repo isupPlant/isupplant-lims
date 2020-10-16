@@ -10,7 +10,7 @@ import com.supcon.mes.middleware.model.bean.SubcondEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
-import com.supcon.mes.module_sample.model.contract.SampleListApi;
+import com.supcon.mes.module_sample.model.contract.SampleListContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
  * Created by wanghaidong on 2020/8/14
  * Email:wanghaidong1@supcon.com
  */
-public class SingleSamplePresenter extends SampleListApi.Presenter {
+public class SingleSamplePresenter extends SampleListContract.Presenter {
     @Override
     public void getSampleList(Map<String,Object> timeMap,Map<String, Object> params) {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordBySingleSample";

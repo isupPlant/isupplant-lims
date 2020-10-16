@@ -6,10 +6,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
-import com.afollestad.materialdialogs.util.DialogUtils;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
@@ -20,7 +18,6 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
-import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
@@ -28,12 +25,9 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
-import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.controller.CalculationController;
 
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
-import com.supcon.mes.module_lims.utils.FileUtils;
-import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
@@ -42,16 +36,16 @@ import com.supcon.mes.module_sample.custom.SpaceItemDecoration;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_sample.model.api.InspectionSubProjectAPI;
+import com.supcon.mes.module_sample.model.api.InspectionSubProjectColumnAPI;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
-import com.supcon.mes.module_sample.model.contract.InspectionSubProjectApi;
-import com.supcon.mes.module_sample.model.contract.InspectionSubProjectColumnApi;
+import com.supcon.mes.module_sample.model.contract.InspectionSubProjectColumnContract;
+import com.supcon.mes.module_sample.model.contract.InspectionSubProjectContract;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresenter;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
 import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
-import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
-import com.supcon.mes.module_scan.util.DialogUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,7 +66,7 @@ import java.util.List;
  */
 @Presenter(value = {InspectionSubProjectPresenter.class, InspectionSubProjectColumnPresenter.class})
 @Controller(value = {SystemConfigController.class, CalculationController.class, LimsFileUpLoadController.class})
-public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEntity> implements InspectionSubProjectApi.View, InspectionSubProjectColumnApi.View {
+public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEntity> implements InspectionSubProjectContract.View, InspectionSubProjectColumnContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -175,7 +169,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionSubProjectApi.class).getInspectionSubProjectList(sampleTesId + "");
+                presenterRouter.create(InspectionSubProjectAPI.class).getInspectionSubProjectList(sampleTesId + "");
             }
         });
 
@@ -308,7 +302,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     }
 
     public void getInspectionItemSubColumn() {
-        presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionSubProjectColumnApi.class).getInspectionSubProjectColumn(sampleTesId + "");
+        presenterRouter.create(InspectionSubProjectColumnAPI.class).getInspectionSubProjectColumn(sampleTesId + "");
     }
 
     @Override

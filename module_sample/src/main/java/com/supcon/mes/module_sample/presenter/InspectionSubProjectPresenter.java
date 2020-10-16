@@ -4,7 +4,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
-import com.supcon.mes.module_sample.model.contract.InspectionSubProjectApi;
+import com.supcon.mes.module_sample.model.contract.InspectionSubProjectContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
 import io.reactivex.functions.Consumer;
@@ -15,7 +15,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/31
  * class name
  */
-public class InspectionSubProjectPresenter extends InspectionSubProjectApi.Presenter {
+public class InspectionSubProjectPresenter extends InspectionSubProjectContract.Presenter {
     @Override
     public void getInspectionSubProjectList(String sampleTestIds) {
         mCompositeSubscription.add(SampleHttpClient.getInspectionSubProjectList(sampleTestIds).onErrorReturn(new Function<Throwable, BAP5CommonEntity<CommonListEntity<InspectionSubEntity>>>() {

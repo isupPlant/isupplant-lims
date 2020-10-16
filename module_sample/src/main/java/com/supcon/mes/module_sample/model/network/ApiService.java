@@ -14,6 +14,7 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_sample.model.bean.SampleAccountEntity;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleInspectItemEntity;
 import com.supcon.mes.module_sample.model.bean.SampleReportSubmitEntity;
@@ -161,4 +162,12 @@ public interface ApiService {
     @POST("/msService/baseService/workbench/uploadFile")
     @Multipart
     Flowable<BAP5CommonEntity<FileDataEntity>> bapUploadFile(@Part List<MultipartBody.Part> partList);
+
+    /**
+     * 获取样品台账列表数据
+     * @param map
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleInfo/sampleInfoListPart-query")
+    Flowable<CommonBAP5ListEntity<SampleAccountEntity>> getSampleAccountList(@Body Map<String, Object> map);
 }

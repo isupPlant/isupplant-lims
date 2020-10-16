@@ -3,11 +3,9 @@ package com.supcon.mes.module_sample.ui.input;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,12 +14,10 @@ import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
@@ -38,14 +34,14 @@ import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleInputController;
 
+import com.supcon.mes.module_sample.model.api.SampleListAPI;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
 
+import com.supcon.mes.module_sample.model.contract.SampleListContract;
 import com.supcon.mes.module_sample.presenter.SingleSamplePresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
 import com.supcon.mes.module_scan.controller.CommonScanController;
 import com.supcon.mes.module_scan.model.event.CodeResultEvent;
-import com.supcon.mes.module_search.ui.view.SearchTitleBar;
-import com.supcon.mes.module_sample.model.contract.SampleListApi;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,7 +61,7 @@ import io.reactivex.functions.Consumer;
 @Controller(value = {SampleInputController.class, CommonScanController.class, DateFilterController.class})
 @Presenter(value = SingleSamplePresenter.class)
 @Router(Constant.AppCode.LIMS_RecordBySingleSample)
-public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity<SampleEntity> implements SampleListApi.View {
+public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity<SampleEntity> implements SampleListContract.View {
 
 
     @BindByTag("titleText")
@@ -165,7 +161,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
             @Override
             public void onRefresh() {
 
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap, queryParam);
+                presenterRouter.create(SampleListAPI.class).getSampleList(timeMap, queryParam);
 
             }
         });
@@ -196,7 +192,7 @@ public class SingleSampleResultInputActivity extends BaseRefreshRecyclerActivity
             Map<String, Object> params = new HashMap<>();
             params.put(Constant.BAPQuery.CODE, scanCode);
             onLoading(getResources().getString(R.string.lims_loading_sample));
-            presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap, params);
+            presenterRouter.create(SampleListAPI.class).getSampleList(timeMap, params);
         }
     }
 

@@ -202,7 +202,7 @@
     <string name="lims_status_not">状态非已观察，不允许查看!</string>
     <string name="lims_select_all">全选</string>
     <string name="lims_specification_model">规格型号</string>
-    <string name="lims_project_check_is_null_reported_value">提交的分项中存在为报出值空的项目，是否继续提交并设置报出值为未检?</string>
+    <string name="lims_project_check_is_null_reported_value">提交的分项中存在报出值为空的项目，是否继续提交并设置报出值为未检?</string>
     <string name="lims_no">否</string>
     <string name="lims_yes">是</string>
     <string name="lims_tips">提示</string>

@@ -3,8 +3,9 @@ package com.supcon.mes.module_sample.presenter;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
+import com.supcon.mes.module_sample.model.api.InspectionItemsAPI;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
-import com.supcon.mes.module_sample.model.contract.InspectionItemsApi;
+import com.supcon.mes.module_sample.model.contract.InspectionItemsContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/30
  * class name
  */
-public class InspectionItemsPresenter extends InspectionItemsApi.Presenter {
+public class InspectionItemsPresenter extends InspectionItemsContract.Presenter {
     @Override
     public void getInspectionItemList(String sampleId, int pageNo) {
         Map<String, Object> map = new HashMap<>();

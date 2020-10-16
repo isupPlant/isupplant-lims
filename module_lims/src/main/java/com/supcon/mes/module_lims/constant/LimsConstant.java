@@ -70,4 +70,16 @@ public interface LimsConstant {
     }
 
 
+    interface SampleState{
+        String NOT_COLLECTED = "LIMSSample_sampleState/notCollected"; //待取样
+        String NOT_RECEIVED = "LIMSSample_sampleState/notReceived"; //待收样
+        String NOT_HANDOVER = "LIMSSample_sampleState/notHandover"; //待交接
+        String NOT_TESTED = "LIMSSample_sampleState/notTested"; //待检验
+        String HALF_TESTED = "LIMSSample_sampleState/halfTested"; //部分已检
+        String TESTED = "LIMSSample_sampleState/tested"; //已检验
+        String CHECKED = "LIMSSample_sampleState/checked"; //已审核
+        String REFUSED = "LIMSSample_sampleState/refused"; //已拒绝
+        String CANCELED = "LIMSSample_sampleState/canceled"; //已取消
+
+    }
 }

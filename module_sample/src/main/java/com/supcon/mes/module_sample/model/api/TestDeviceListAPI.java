@@ -10,6 +10,6 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
  */
 
 @ContractFactory(entites = {CommonListEntity.class})
-public interface TestDeviceListApi {
+public interface TestDeviceListAPI {
     void getTestDevice(String sampleTestIds);
 }

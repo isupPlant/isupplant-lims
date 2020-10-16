@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,8 +21,9 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.listener.InspectionSubRefreshListener;
+import com.supcon.mes.module_sample.model.api.InspectionItemsAPI;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
-import com.supcon.mes.module_sample.model.contract.InspectionItemsApi;
+import com.supcon.mes.module_sample.model.contract.InspectionItemsContract;
 import com.supcon.mes.module_sample.presenter.InspectionItemsPresenter;
 import com.supcon.mes.module_sample.ui.adapter.InspectionItemsListAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
@@ -39,7 +39,7 @@ import java.util.List;
  */
 @SuppressLint("ValidFragment")
 @Presenter(value = {InspectionItemsPresenter.class})
-public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<InspectionItemsEntity> implements InspectionItemsApi.View {
+public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<InspectionItemsEntity> implements InspectionItemsContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -120,7 +120,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
+                presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId+"",1);
             }
         });
 
@@ -204,7 +204,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
 //        }else {
 //            presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
 //        }
-        presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
+        presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId+"",1);
 
     }
 
@@ -217,7 +217,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 break;
             }
         }
-        presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
+        presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId+"",1);
     }
 
     @Override

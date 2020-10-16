@@ -24,13 +24,12 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.module_lims.event.MaterialDateEvent;
 import com.supcon.mes.module_lims.event.SampleMaterialDataEvent;
-import com.supcon.mes.module_lims.model.bean.ProdIdEntity;
 import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.model.api.TestMaterialListAPI;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
-import com.supcon.mes.module_sample.model.contract.TestMaterialListApi;
+import com.supcon.mes.module_sample.model.contract.TestMaterialListContract;
 import com.supcon.mes.module_sample.presenter.TestMaterialPresenter;
 import com.supcon.mes.module_sample.ui.adapter.TestMaterialAdapter;
 
@@ -38,7 +37,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +49,7 @@ import io.reactivex.functions.Consumer;
  * class name
  */
 @Presenter(value = {TestMaterialPresenter.class})
-public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEntity> implements TestMaterialListApi.View {
+public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEntity> implements TestMaterialListContract.View {
     @BindByTag("llDelete")
     LinearLayout llDelete;
     @BindByTag("llReference")
@@ -112,7 +110,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.TestMaterialListApi.class).getTestMaterial(sampleTesId+"");
+                presenterRouter.create(TestMaterialListAPI.class).getTestMaterial(sampleTesId+"");
             }
         });
 

@@ -12,29 +12,26 @@ import android.widget.LinearLayout;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.supcon.common.com_http.BaseEntity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.model.api.TestDeviceListAPI;
 import com.supcon.mes.module_sample.model.bean.EamIdEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
-import com.supcon.mes.module_sample.model.contract.TestDeviceListApi;
+import com.supcon.mes.module_sample.model.contract.TestDeviceListContract;
 import com.supcon.mes.module_sample.presenter.TestDevicePresenter;
 import com.supcon.mes.module_sample.ui.adapter.TestDeviceAdapter;
 
@@ -58,7 +55,7 @@ import io.reactivex.functions.Consumer;
  * class name
  */
 @Presenter(value = {TestDevicePresenter.class})
-public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEntity> implements TestDeviceListApi.View {
+public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEntity> implements TestDeviceListContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
     @BindByTag("llAdd")
@@ -117,7 +114,7 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.TestDeviceListApi.class).getTestDevice(sampleTesId+"");
+                presenterRouter.create(TestDeviceListAPI.class).getTestDevice(sampleTesId+"");
             }
         });
 

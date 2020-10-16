@@ -5,10 +5,11 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 
 /**
  * author huodongsheng
- * on 2020/8/12
+ * on 2020/7/31
  * class name
  */
 @ContractFactory(entites = {CommonListEntity.class})
-public interface TestMaterialListApi {
-    void getTestMaterial(String sampleTestIds);
+public interface InspectionSubProjectAPI {
+
+    void getInspectionSubProjectList(String sampleTestIds);
 }

@@ -1,16 +1,13 @@
 package com.supcon.mes.module_sample.ui.input.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,17 +15,11 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.supcon.common.com_http.BaseEntity;
-import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
-import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
-import com.supcon.common.view.util.StatusBarUtils;
-import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
@@ -41,15 +32,14 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.middleware.util.TimeUtil;
-import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.model.api.SampleListAPI;
 import com.supcon.mes.module_sample.model.bean.SampleEntity;
-import com.supcon.mes.module_sample.model.contract.SampleListApi;
+import com.supcon.mes.module_sample.model.contract.SampleListContract;
 import com.supcon.mes.module_sample.presenter.SampleListPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputPDAActivity;
-import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputActivity;
 import com.supcon.mes.module_scan.controller.CommonScanController;
 import com.supcon.mes.module_scan.model.event.CodeResultEvent;
 import com.supcon.mes.module_scan.util.scanCode.CodeUtlis;
@@ -60,7 +50,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +64,7 @@ import io.reactivex.functions.Consumer;
  */
 @Controller(value = {CommonScanController.class,  DateFilterController.class})
 @Presenter(value = {SampleListPresenter.class})
-public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> implements SampleListApi.View {
+public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> implements SampleListContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -165,7 +154,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap,mParams);
+                presenterRouter.create(SampleListAPI.class).getSampleList(timeMap,mParams);
             }
         });
 
@@ -292,7 +281,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 mParams.put(Constant.BAPQuery.BATCH_CODE,title);
             }
 
-            presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap,mParams);
+            presenterRouter.create(SampleListAPI.class).getSampleList(timeMap,mParams);
         }
     }
 
@@ -306,7 +295,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 removeParams();
                 mParams.put(Constant.BAPQuery.CODE, scanCode);
                 onLoading(getResources().getString(R.string.lims_loading_sample));
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleListApi.class).getSampleList(timeMap,mParams);
+                presenterRouter.create(SampleListAPI.class).getSampleList(timeMap,mParams);
 //                for (int i = 0; i < adapter.getList().size(); i++) {
 //                    adapter.getList().get(i).setSelect(false);
 //                }

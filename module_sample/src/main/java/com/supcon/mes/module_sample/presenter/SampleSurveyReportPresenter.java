@@ -8,7 +8,7 @@ import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
-import com.supcon.mes.module_sample.model.contract.SampleSurveyReportApi;
+import com.supcon.mes.module_sample.model.contract.SampleSurveyReportContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import io.reactivex.functions.Function;
  * on 2020/7/8
  * class name
  */
-public class SampleSurveyReportPresenter extends SampleSurveyReportApi.Presenter {
+public class SampleSurveyReportPresenter extends SampleSurveyReportContract.Presenter {
     @Override
     public void getSampleSurveyReportList(boolean isAll, int pageNo, Map<String, Object> params) {
         String query = "";

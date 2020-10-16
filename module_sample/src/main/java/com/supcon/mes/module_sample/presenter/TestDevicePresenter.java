@@ -4,7 +4,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
-import com.supcon.mes.module_sample.model.contract.TestDeviceListApi;
+import com.supcon.mes.module_sample.model.contract.TestDeviceListContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
 import io.reactivex.functions.Consumer;
@@ -15,7 +15,7 @@ import io.reactivex.functions.Function;
  * on 2020/8/12
  * class name
  */
-public class TestDevicePresenter extends TestDeviceListApi.Presenter {
+public class TestDevicePresenter extends TestDeviceListContract.Presenter {
     @Override
     public void getTestDevice(String sampleTestIds) {
         mCompositeSubscription.add(SampleHttpClient.getTestDevice(sampleTestIds).onErrorReturn(new Function<Throwable, BAP5CommonEntity<CommonListEntity<TestDeviceEntity>>>() {

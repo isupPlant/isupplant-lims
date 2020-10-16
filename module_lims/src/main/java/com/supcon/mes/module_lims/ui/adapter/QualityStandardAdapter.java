@@ -14,6 +14,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
+import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 
 import java.util.List;
@@ -85,11 +86,14 @@ public class QualityStandardAdapter extends BaseListDataRecyclerViewAdapter<Insp
                 @Override
                 public void onChildViewClick(View childView, int action, Object obj) {
                     if (action == -1){
-                        getItem(getAdapterPosition()).getInspectProjId().setName("");
+                        getItem(getAdapterPosition()).setInspectProjId(new BaseLongIdNameEntity());
+                        notifyItemChanged(getAdapterPosition());
+                    }else {
+                        if (isEdit){
+                            onItemChildViewClick(childView,1);
+                        }
                     }
-                    if (isEdit){
-                        onItemChildViewClick(childView,1);
-                    }
+
                 }
             });
 

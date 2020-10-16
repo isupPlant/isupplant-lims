@@ -11,7 +11,7 @@ import java.util.Map;
  * class name 样品检验报告接口
  */
 @ContractFactory(entites = {SurveyReportListEntity.class})
-public interface SampleSurveyReportApi {
+public interface SampleSurveyReportAPI {
 
     void getSampleSurveyReportList( boolean isAll, int pageNo, Map<String, Object> params);
 }

@@ -26,7 +26,8 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleReportController;
-import com.supcon.mes.module_sample.model.contract.SampleSurveyReportApi;
+import com.supcon.mes.module_sample.model.api.SampleSurveyReportAPI;
+import com.supcon.mes.module_sample.model.contract.SampleSurveyReportContract;
 import com.supcon.mes.module_sample.presenter.SampleSurveyReportPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleSurveyReportAdapter;
 
@@ -45,7 +46,7 @@ import java.util.Map;
 @Router(Constant.AppCode.LIMS_SampleSurveyReport)
 @Presenter(value = {SampleSurveyReportPresenter.class})
 @Controller(value = {SampleReportController.class})
-public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<SurveyReportEntity> implements SampleSurveyReportApi.View {
+public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<SurveyReportEntity> implements SampleSurveyReportContract.View {
 
     @BindByTag("titleText")
     TextView titleText;
@@ -123,7 +124,7 @@ public class SampleSurveyReportActivity extends BaseRefreshRecyclerActivity<Surv
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(com.supcon.mes.module_sample.model.api.SampleSurveyReportApi.class).getSampleSurveyReportList(isWhole, pageIndex, params);
+                presenterRouter.create(SampleSurveyReportAPI.class).getSampleSurveyReportList(isWhole, pageIndex, params);
             }
         });
     }

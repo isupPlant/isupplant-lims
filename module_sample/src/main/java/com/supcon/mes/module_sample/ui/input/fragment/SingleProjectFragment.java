@@ -48,8 +48,6 @@ import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
-import com.supcon.mes.module_sample.model.contract.InspectionSubProjectApi;
-import com.supcon.mes.module_sample.model.contract.InspectionSubProjectColumnApi;
 import com.supcon.mes.module_sample.model.contract.SingleSampleResultInputContract;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresenter;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
