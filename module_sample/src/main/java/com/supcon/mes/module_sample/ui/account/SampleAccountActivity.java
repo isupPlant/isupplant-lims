@@ -8,7 +8,14 @@ import com.supcon.mes.module_sample.model.bean.SampleAccountEntity;
 import com.supcon.mes.module_sample.model.contract.SampleAccountContract;
 import com.supcon.mes.module_sample.presenter.SampleAccountPresenter;
 
+import com.app.annotation.Presenter;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
+import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.model.bean.SampleAccountEntity;
+import com.supcon.mes.module_sample.model.contract.SampleAccountContract;
+import com.supcon.mes.module_sample.presenter.SampleAccountPresenter;
 
 
 /**
