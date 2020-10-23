@@ -13,6 +13,8 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
+import com.supcon.mes.middleware.SupPlantApplication;
+import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 
 import java.io.ByteArrayOutputStream;
@@ -545,23 +547,23 @@ public class Util implements LimsConstant.SampleState{
     }
 
     public static String getSampleState(String value){
-        if (value.equals("待取样")){
+        if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_wait_get_sample))){
             return NOT_COLLECTED;
-        }else if (value.equals("待收样")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_wait_received_sample))){
             return NOT_RECEIVED;
-        }else if (value.equals("待交接")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_wait_handover))){
             return NOT_HANDOVER;
-        }else if (value.equals("待检验")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_wait_test))){
             return NOT_TESTED;
-        }else if (value.equals("部分已检")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_some_have_been_inspected))){
             return HALF_TESTED;
-        }else if (value.equals("已检验")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_already_test))){
             return TESTED;
-        }else if (value.equals("已审核")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_already_reviewed))){
             return CHECKED;
-        }else if (value.equals("已拒绝")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_already_refuse))){
             return REFUSED;
-        }else if (value.equals("已取消")){
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_already_cancel))){
             return CANCELED;
         }
         return "";

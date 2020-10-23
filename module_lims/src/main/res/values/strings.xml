@@ -207,4 +207,22 @@
     <string name="lims_yes">是</string>
     <string name="lims_tips">提示</string>
     <string name="lims_upload_fail"></string>
+    <string name="lims_sample_retention_state">留样状态</string>
+    <string name="lims_sample_purpose">样品用途</string>
+    <string name="lims_branch_sample_type">分样类型</string>
+    <string name="lims_sample_account">样品台账</string>
+    <string name="lims_close">闭合</string>
+    <string name="lims_scan_code_register_sample">扫码登样</string>
+    <string name="lims_scan_data_not_integer">扫描到的数据非整数类型</string>
+    <string name="lims_wait_get_sample">待取样</string>
+    <string name="lims_wait_received_sample">待收样</string>
+    <string name="lims_wait_handover">待交接</string>
+    <string name="lims_wait_test">待检验</string>
+    <string name="lims_some_have_been_inspected">部分已检</string>
+    <string name="lims_already_test">已检验</string>
+    <string name="lims_already_reviewed">已审核</string>
+    <string name="lims_already_refuse">已拒绝</string>
+    <string name="lims_already_cancel">已取消</string>
+    <string name="lims_code_scanning_mode_one">1、摄像头扫码登样</string>
+    <string name="lims_code_scanning_mode_two">2、红外设备扫码登样</string>
 </resources>

@@ -197,4 +197,38 @@
         <cid>1000</cid>
         <remark>留样单查看功能</remark>
     </app>
+
+    <!--LIMS_SampleQuery-->
+    <app>
+        <code>LIMS_SampleQuery</code>
+        <name>样品台账</name>
+        <appType>base_AppType/02</appType>
+        <screenType>SCREEN_TYPE/03</screenType>
+        <moduleCode>LIMSSample_5.0.0.0</moduleCode>
+        <url></url>
+        <appIcon></appIcon>
+        <powerFlag>true</powerFlag>
+        <menuCode>LIMSSample_5.0.0.0_sample_sampleInfoLayout</menuCode>
+        <isHidden>false</isHidden>
+        <sort>66</sort>
+        <cid>1000</cid>
+        <remark>样品台账查看功能</remark>
+    </app>
+
+    <!--LIMS_ScanToReg-->
+    <app>
+        <code>LIMS_ScanToReg</code>
+        <name>扫码登样</name>
+        <appType>base_AppType/02</appType>
+        <screenType>SCREEN_TYPE/03</screenType>
+        <moduleCode>LIMSBasic_1.0.0</moduleCode>
+        <url></url>
+        <appIcon></appIcon>
+        <powerFlag>true</powerFlag>
+        <menuCode>PickSite</menuCode>
+        <isHidden>false</isHidden>
+        <sort>67</sort>
+        <cid>1000</cid>
+        <remark>扫描采样点ID进入样品台账界面</remark>
+    </app>
 </appList>

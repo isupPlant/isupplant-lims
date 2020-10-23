@@ -38,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_9"
                 android:tag="tvInspectionItems"
-
                 app:content_color="@color/font_333333"
                 app:gravity="center|center_vertical"
                 app:key_color="@color/font_666666"

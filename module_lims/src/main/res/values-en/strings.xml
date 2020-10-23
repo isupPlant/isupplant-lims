@@ -209,4 +209,22 @@
     <string name="lims_yes">Yes</string>
     <string name="lims_tips">Tips</string>
     <string name="lims_upload_fail">Failed to upload file</string>
+    <string name="lims_sample_retention_state">Sample Retention State</string>
+    <string name="lims_sample_purpose">Sample Purpose</string>
+    <string name="lims_branch_sample_type">Branch Sample Type</string>
+    <string name="lims_sample_account">Sample Query</string>
+    <string name="lims_close">Close</string>
+    <string name="lims_scan_code_register_sample">Scan to Reg</string>
+    <string name="lims_scan_data_not_integer">The scanned data is not of integer type</string>
+    <string name="lims_wait_get_sample">Waiting for sample</string>
+    <string name="lims_wait_received_sample">Waiting for sample collection</string>
+    <string name="lims_wait_handover">Waiting for handover</string>
+    <string name="lims_wait_test">Waiting for test</string>
+    <string name="lims_some_have_been_inspected">Some have been inspected</string>
+    <string name="lims_already_test">Already test</string>
+    <string name="lims_already_reviewed">Already to examine</string>
+    <string name="lims_already_refuse">Already refused</string>
+    <string name="lims_already_cancel">Already cancel</string>
+    <string name="lims_code_scanning_mode_one">1、Scanning code and sample of camera</string>
+    <string name="lims_code_scanning_mode_two">2、Code scanning and sample registration of infrared equipment</string>
 </resources>

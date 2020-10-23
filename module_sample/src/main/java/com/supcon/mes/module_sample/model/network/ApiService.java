@@ -170,4 +170,12 @@ public interface ApiService {
      */
     @POST("/msService/LIMSSample/sample/sampleInfo/sampleInfoListPart-query")
     Flowable<CommonBAP5ListEntity<SampleAccountEntity>> getSampleAccountList(@Body Map<String, Object> map);
+
+    /**
+     * 扫描采样点id
+     * @param pickSiteId
+     * @return
+     */
+    @GET("/msService/LIMSSample/sample/sampleInfo/createSampleByPsId")
+    Flowable<BAP5CommonEntity> scanSamplingPointId(@Query("pickSiteId") String pickSiteId);
 }

@@ -65,6 +65,16 @@
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
             />
+        <activity android:name=".ui.account.SampleAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
+            />
+        <activity android:name=".ui.scan.ScanCodeRegisterSampleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
+            />
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.supcon.mes.module_lims.utils;
 
+import android.app.Application;
+
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;

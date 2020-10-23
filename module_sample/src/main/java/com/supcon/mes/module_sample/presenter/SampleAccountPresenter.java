@@ -1,21 +1,27 @@
 package com.supcon.mes.module_sample.presenter;
 
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.middleware.model.bean.SubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
-import com.supcon.mes.module_lims.model.network.BaseLimsHttpClient;
 import com.supcon.mes.module_lims.utils.BAPQueryHelper;
+import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.model.bean.SampleAccountEntity;
 import com.supcon.mes.module_sample.model.contract.SampleAccountContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+
+
 
 /**
  * author huodongsheng
@@ -37,7 +43,10 @@ public class SampleAccountPresenter extends SampleAccountContract.Presenter {
             fastQuery.modelAlias = modelAlias;
         }
 
-        if (params.containsKey(Constant.BAPQuery.PICKSITE)){
+        if (params.containsKey("point-name")){
+            String value = (String) params.get("point-name");
+            params.clear();
+            params.put(Constant.BAPQuery.NAME,value);
             fastQuery = BAPQueryHelper.createSingleFastQueryCond(new HashMap<>());
             fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(params,joinInfo));
             fastQuery.viewCode = viewCode;

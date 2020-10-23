@@ -11,6 +11,7 @@ import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
  * class name
  */
 public class SampleAccountEntity extends BaseEntity {
+    private String batchCode;
     private Long cid;
     private String code;
     private Long id;
@@ -23,8 +24,17 @@ public class SampleAccountEntity extends BaseEntity {
     private BaseIdValueEntity speraType;
     private StdVerIdEntity stdVerId;
     private BaseIdValueEntity useMethod;
+    private BaseIdValueEntity retainState;
     private Boolean valid;
     private Integer version;
+
+    public String getBatchCode() {
+        return batchCode;
+    }
+
+    public void setBatchCode(String batchCode) {
+        this.batchCode = batchCode;
+    }
 
     public Long getCid() {
         return cid;
@@ -114,6 +124,14 @@ public class SampleAccountEntity extends BaseEntity {
         this.stdVerId = stdVerId;
     }
 
+    public BaseIdValueEntity getRetainState() {
+        return retainState;
+    }
+
+    public void setRetainState(BaseIdValueEntity retainState) {
+        this.retainState = retainState;
+    }
+
     public BaseIdValueEntity getUseMethod() {
         return useMethod;
     }
@@ -138,7 +156,7 @@ public class SampleAccountEntity extends BaseEntity {
         this.version = version;
     }
 
-    class PsIdEntity extends BaseEntity{
+    public class PsIdEntity extends BaseEntity{
         private Long id;
         private String name;
 

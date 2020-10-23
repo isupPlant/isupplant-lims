@@ -169,9 +169,15 @@ public class ReferenceController extends BaseViewController {
 
     // 将搜索页面回传的数据进行比对 并放入集合
     public Map<String, Object> screenSearchResult(SearchResultEntity entity){
-        if (context.getResources().getString(R.string.lims_quality_standard).equals(entity.key) || context.getResources().getString(R.string.lims_materiel_name).equals(entity.key) || context.getResources().getString(R.string.lims_sampling_point).equals(entity.key) || context.getResources().getString(R.string.lims_application_scheme).equals(entity.key) || context.getResources().getString(R.string.lims_customer_name).equals(entity.key) || context.getResources().getString(R.string.lims_name).equals(entity.key) || context.getResources().getString(R.string.lims_device_name).equals(entity.key)) {
+        if (context.getResources().getString(R.string.lims_quality_standard).equals(entity.key)
+                || context.getResources().getString(R.string.lims_materiel_name).equals(entity.key)
+                || context.getResources().getString(R.string.lims_application_scheme).equals(entity.key)
+                || context.getResources().getString(R.string.lims_customer_name).equals(entity.key)
+                || context.getResources().getString(R.string.lims_name).equals(entity.key)
+                || context.getResources().getString(R.string.lims_device_name).equals(entity.key)
+                || context.getResources().getString(R.string.lims_sample_name).equals(entity.key)) {
             params.put(Constant.BAPQuery.NAME, entity.result);
-        } else if (context.getResources().getString(R.string.lims_supplier_code).equals(entity.key) || context.getResources().getString(R.string.lims_materiel_code).equals(entity.key) || context.getResources().getString(R.string.lims_code).equals(entity.key) || context.getResources().getString(R.string.lims_equipment_code).equals(entity.key) || context.getResources().getString(R.string.lims_matCode).equals(entity.key)) {
+        } else if (context.getResources().getString(R.string.lims_supplier_code).equals(entity.key) || context.getResources().getString(R.string.lims_materiel_code).equals(entity.key) || context.getResources().getString(R.string.lims_code).equals(entity.key) || context.getResources().getString(R.string.lims_equipment_code).equals(entity.key) || context.getResources().getString(R.string.lims_matCode).equals(entity.key) || context.getResources().getString(R.string.lims_sample_code).equals(entity.key)) {
             params.put(Constant.BAPQuery.CODE, entity.result);
         } else if (context.getResources().getString(R.string.lims_specifications).equals(entity.key)) {
             params.put(Constant.BAPQuery.SPECIFICATIONS, entity.result);
@@ -181,8 +187,11 @@ public class ReferenceController extends BaseViewController {
             params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
         } else if (context.getResources().getString(R.string.lims_version_number).equals(entity.key)) {
             params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
-        } else if (context.getResources().getString(R.string.lims_produce_batch).equals(entity.key)) {
+        } else if (context.getResources().getString(R.string.lims_produce_batch).equals(entity.key)
+                || context.getResources().getString(R.string.lims_batch_number).equals(entity.key)) {
             params.put(Constant.BAPQuery.BATCH_CODE, entity.result);
+        } else if (context.getResources().getString(R.string.lims_sampling_point).equals(entity.key)){
+            params.put("point-name", entity.result);
         }
         return params;
     }
