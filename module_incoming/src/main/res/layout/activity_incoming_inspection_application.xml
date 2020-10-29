@@ -5,24 +5,50 @@
     android:background="@color/bgGray2"
     android:orientation="vertical">
 
-    <com.supcon.mes.module_search.ui.view.SearchTitleBar
-        android:id="@+id/searchTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:tag="searchTitle" />
-
-
-    <include
-        layout="@layout/ly_backlog_or_all_filter"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40" />
-
-
-    <include
-        layout="@layout/ly_recyclerview_with_scrollbar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/wts_bg_color" />
+        android:layout_weight="1"
+        android:background="@color/bgGray2"
+        android:orientation="vertical">
 
+
+        <com.supcon.mes.module_search.ui.view.SearchTitleBar
+            android:id="@+id/searchTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="searchTitle" />
+
+
+        <include
+            layout="@layout/ly_backlog_or_all_filter"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40" />
+
+
+        <include
+            layout="@layout/ly_recyclerview_with_scrollbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/wts_bg_color" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvAdd"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="right"
+        android:background="@color/themeColor"
+        android:gravity="center"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_3"
+        android:tag="tvAdd"
+        android:text="@string/lims_add"
+        android:textColor="@color/white"
+        android:visibility="gone" />
 
 </LinearLayout>

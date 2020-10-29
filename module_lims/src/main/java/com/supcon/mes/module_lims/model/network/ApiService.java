@@ -6,6 +6,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.wom.MaterialEntity;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
@@ -13,6 +14,7 @@ import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 
+import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.ConfigEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
@@ -42,6 +44,7 @@ import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
+import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 
 import java.util.Map;
@@ -304,6 +307,17 @@ public interface ApiService {
                                                                             @Query("pendingId") Long pendingId);
 
     /**
+     * 新增检验申请保存接口
+     * @param testType
+     * @param params
+     * @return
+     */
+    @POST("/msService/QCS/inspect/inspect/{testType}/submit")
+    Flowable<BAP5CommonEntity<PendingEntity>> addTestRequestSave(@Path("testType") String testType,
+                                                                 @QueryMap Map<String, Object> params,
+                                                                 @Body InspectApplicationSubmitEntity inspectApplicationSubmitEntity);
+
+    /**
      * 获取设备类型参照接口
      * @param map
      * @return
@@ -322,5 +336,13 @@ public interface ApiService {
 
     @POST("/msService/LIMSMaterial/mATInfo/matInfo/matInfoRef-query")
     Flowable<BAP5CommonEntity<CommonListEntity<SampleMaterialEntity>>> getSampleMaterialReference(@Body Map<String, Object> map);
+
+    /**
+     * 获取单据类型
+     * @param code
+     * @return
+     */
+    @GET("/msService/QCS/tableType/tableType/getTableTypeByCode")
+    Flowable<BAP5CommonEntity<TableTypeIdEntity>> getTableTypeByCode (@Query("code") String code);
 
 }

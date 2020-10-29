@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -58,6 +59,7 @@ import com.supcon.mes.module_lims.event.InspectionItemEvent;
 import com.supcon.mes.module_lims.event.MaterialDateEvent;
 
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
+import com.supcon.mes.module_lims.model.api.AddTestRequestAPI;
 import com.supcon.mes.module_lims.model.api.AvailableStdIdAPI;
 import com.supcon.mes.module_lims.model.api.InspectApplicationSubmitAPI;
 import com.supcon.mes.module_lims.model.api.InspectionDetailReadyAPI;
@@ -79,12 +81,15 @@ import com.supcon.mes.module_lims.model.bean.StdIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
+import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 import com.supcon.mes.module_lims.model.bean.VendorIdEntity;
 
+import com.supcon.mes.module_lims.model.contract.AddTestRequestContract;
 import com.supcon.mes.module_lims.model.contract.AvailableStdIdContract;
 import com.supcon.mes.module_lims.model.contract.InspectApplicationSubmitContract;
 import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyContract;
+import com.supcon.mes.module_lims.presenter.AddTestRequestPresenter;
 import com.supcon.mes.module_lims.presenter.AvailableStdPresenter;
 import com.supcon.mes.module_lims.presenter.InspectApplicationSubmitPresenter;
 import com.supcon.mes.module_lims.presenter.InspectionDetailReadyPresenter;
@@ -113,9 +118,10 @@ import io.reactivex.functions.Consumer;
  * class name 检验申请详情Controller
  */
 
-@Presenter(value = {InspectionDetailReadyPresenter.class, AvailableStdPresenter.class, InspectApplicationSubmitPresenter.class})
+@Presenter(value = {InspectionDetailReadyPresenter.class, AvailableStdPresenter.class,
+        InspectApplicationSubmitPresenter.class, AddTestRequestPresenter.class})
 public class InspectionApplicationDetailController extends BaseViewController implements InspectionDetailReadyContract.View, AvailableStdIdContract.View,
-        InspectApplicationSubmitContract.View {
+        InspectApplicationSubmitContract.View, AddTestRequestContract.View {
 
     @BindByTag("searchTitle")
     SearchTitleBar searchTitle;
@@ -171,7 +177,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
     @BindByTag("customWorkFlowView")
     CustomWorkFlowView customWorkFlowView;
 
+
     private OnRequestHeadListener mOnRequestHeadListener;
+    private OnRequestWorkFlowListener mOnRequestWorkFlowListener;
 
     private TemporaryQualityStandardEntity myDefaultQualityStandardEntity;
     private InspectionApplicationDetailHeaderEntity mHeadEntity;
@@ -190,9 +198,13 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     private int myQualityStandardPosition;
     private boolean isEdit = false;
+    private String from = "";
     private int inspectionItemPosition;
     private int type = -1;
     int workFlowType = -1;
+    private Long mDeploymentId;
+    private String activityName;
+    private TableTypeIdEntity tableType;
 
     public InspectionApplicationDetailController(View rootView) {
         super(rootView);
@@ -228,7 +240,6 @@ public class InspectionApplicationDetailController extends BaseViewController im
         initRecycler();
     }
 
-
     @SuppressLint("CheckResult")
     @Override
     public void initListener() {
@@ -237,6 +248,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
             @Override
             public void onClick(View v) {
                 ((Activity) context).onBackPressed();
+                EventBus.getDefault().post(new RefreshEvent());
             }
         });
 
@@ -368,6 +380,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
                     }
                 });
+
         ceMaterielNum.editText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -598,6 +611,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         });
     }
 
+
     private void initRecycler() {
         ptList.clear();
         adapter = new QualityStandardAdapter(context, ptList);
@@ -617,6 +631,19 @@ public class InspectionApplicationDetailController extends BaseViewController im
         });
         recyclerView.setAdapter(adapter);
 
+    }
+
+    public void startWorkFlow(Long id,String menuName){
+        ctMateriel.setEditable(true);
+        ceMaterielBatchNumber.setEditable(false);
+        mDeploymentId = id;
+        activityName = menuName;
+        mHeadEntity = new InspectionApplicationDetailHeaderEntity();
+        //获取业务类型参照的数据
+        presenterRouter.create(InspectionDetailReadyAPI.class).getBusinessTypeList(type);
+        powerCodeController.initPowerCode(type == 3 ? "start_t1vhtik" : type == 2 ? "start_7r8amon" : type == 1 ? "start_ju6mjql" : "");
+        workFlowViewController.initStartWorkFlowView(customWorkFlowView,id);
+        customWorkFlowView.setVisibility(View.VISIBLE);
     }
 
     //设置工作流
@@ -800,11 +827,14 @@ public class InspectionApplicationDetailController extends BaseViewController im
     }
 
     private void setNeedLaboratory() {
-        if (mHeadEntity.getNeedLab()) {
-            ivNeedLaboratory.setBackgroundResource(R.drawable.ic_check_yes);
-        } else {
-            ivNeedLaboratory.setBackgroundResource(R.drawable.ic_check_no);
+        if (null != mHeadEntity.getNeedLab()){
+            if (mHeadEntity.getNeedLab()) {
+                ivNeedLaboratory.setBackgroundResource(R.drawable.ic_check_yes);
+            } else {
+                ivNeedLaboratory.setBackgroundResource(R.drawable.ic_check_no);
+            }
         }
+
     }
 
     private void showSpinnerSelector(CustomSpinner spinner, List<String> list) {
@@ -850,11 +880,19 @@ public class InspectionApplicationDetailController extends BaseViewController im
     }
 
     private void generateSaveOrSubmit(InspectApplicationSubmitEntity entity) {
-        entity.deploymentId = mHeadEntity.getPending().deploymentId+"";
-        entity.taskDescription = mHeadEntity.getPending().taskDescription;
-        entity.activityName = mHeadEntity.getPending().activityName;
-        entity.pendingId = mHeadEntity.getPending().id.toString();
-        entity.inspect = mHeadEntity;
+        if (from.equals("add")){
+            entity.deploymentId = mDeploymentId+"";
+            entity.activityName = activityName;
+            entity.taskDescription = context.getResources().getString(R.string.lims_edit);
+            mHeadEntity.setTableTypeId(tableType);
+            entity.inspect = mHeadEntity;
+        }else {
+            entity.deploymentId = mHeadEntity.getPending().deploymentId+"";
+            entity.taskDescription = mHeadEntity.getPending().taskDescription;
+            entity.activityName = mHeadEntity.getPending().activityName;
+            entity.pendingId = mHeadEntity.getPending().id.toString();
+            entity.inspect = mHeadEntity;
+        }
 
         JsonObject dgJson = new JsonObject();
         dgJson.addProperty(getDg(),GsonUtil.gsonString(ptList));
@@ -881,16 +919,22 @@ public class InspectionApplicationDetailController extends BaseViewController im
         entity.viewCode = "QCS_5.0.0.0_inspect_"+viewCode;
         String path = viewCode;
         String _pc_ = powerCodeController.getPowerCodeResult();
-        Map<String, Object> params = new HashMap<>();
-        if (mHeadEntity.getId()!= null) {
-            params.put("id", mHeadEntity.getId());
+        if (from.equals("add")){
+            Map<String, Object> params = new HashMap<>();
+            if (mHeadEntity.getId()!= null) {
+                params.put("id", mHeadEntity.getId());
+            }
+            params.put("__pc__", _pc_);
+            presenterRouter.create(AddTestRequestAPI.class).addTestRequestSave(path,params,entity);
+        }else {
+            Map<String, Object> params = new HashMap<>();
+            if (mHeadEntity.getId()!= null) {
+                params.put("id", mHeadEntity.getId());
+            }
+            params.put("__pc__", _pc_);
+            presenterRouter.create(InspectApplicationSubmitAPI.class).submitInspectApplication(path, params, entity);
         }
-        params.put("__pc__", _pc_);
-//        Gson gson = new Gson();
-//        String s = gson.toJson(entity);
-//        Log.i("eeeeeeeeeeeeeeeee", "->" + s);
-//        String s1 = gson.toJson(entity);
-        presenterRouter.create(InspectApplicationSubmitAPI.class).submitInspectApplication(path, params, entity);
+
     }
 
     private void doSubmit(WorkFlowVar workFlowVar) {
@@ -1148,6 +1192,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         return viewCode;
     }
 
+
     private boolean checkSubmit(){
         if (StringUtil.isEmpty(ctBusinessType.getContent().trim()) || ctBusinessType.getContent().equals("--")){
             setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_12));
@@ -1310,6 +1355,19 @@ public class InspectionApplicationDetailController extends BaseViewController im
         }
     }
 
+    public void setIsFrom(String from){
+        this.from = from;
+        isEdit = from.equals("add");
+    }
+
+    public void setType(int type){
+        this.type = type;
+    }
+
+    public void setTableType(TableTypeIdEntity tableType){
+        this.tableType = tableType;
+    }
+
     @Override
     public void getDefaultItemsFailed(String errorMsg) {
         ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_2));
@@ -1356,6 +1414,34 @@ public class InspectionApplicationDetailController extends BaseViewController im
         this.mOnRequestHeadListener = mOnRequestHeadListener;
     }
 
+    public void setRequestWorkFlowListener(OnRequestWorkFlowListener mOnRequestWorkFlowListener){
+        this.mOnRequestWorkFlowListener = mOnRequestWorkFlowListener;
+    }
+
+    @Override
+    public void addTestRequestSaveSuccess(PendingEntity entity) {
+        ((BaseActivity)context).onLoadSuccessAndExit("操作成功", new OnLoaderFinishListener() {
+            @Override
+            public void onLoaderFinished() {
+                deletePtIds.clear();
+                if (workFlowType == 1){
+                    EventBus.getDefault().post(new RefreshEvent());
+                    ((BaseActivity)context).back();
+                }else {
+                    mOnRequestWorkFlowListener.requestWorkFlow(entity.id+"",entity.pendingId+"");
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void addTestRequestSaveFailed(String errorMsg) {
+        ((BaseActivity)context).onLoadFailed(errorMsg);
+    }
+
+
+
 
     public interface OnRequestPtListener {
         void requestPtClick(boolean isEdit);
@@ -1363,5 +1449,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     public interface OnRequestHeadListener{
         void requestHeadClick();
+    }
+
+    public interface OnRequestWorkFlowListener{
+        void requestWorkFlow(String id, String pendingId);
     }
 }

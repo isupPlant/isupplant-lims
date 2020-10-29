@@ -10,17 +10,27 @@ import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.api.DeploymentAPI;
+import com.supcon.mes.middleware.model.bean.DeploymentEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
+import com.supcon.mes.middleware.model.contract.DeploymentContract;
+import com.supcon.mes.middleware.presenter.DeploymentPresenter;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
 import com.supcon.mes.module_lims.model.api.InspectionApplicationDetailAPI;
+import com.supcon.mes.module_lims.model.api.TableTypeAPI;
+import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationDetailHeaderEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionApplicationEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtListEntity;
+import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
 import com.supcon.mes.module_lims.model.contract.InspectionApplicationDetailContract;
+import com.supcon.mes.module_lims.model.contract.TableTypeContract;
 import com.supcon.mes.module_lims.presenter.InspectionApplicationDetailPresenter;
+import com.supcon.mes.module_lims.presenter.TableTypePresenter;
 import com.supcon.mes.module_other.R;
 
 /**
@@ -29,11 +39,13 @@ import com.supcon.mes.module_other.R;
  * class name
  */
 @Router(value = "", viewCode = "otherInspectView,otherInspectEdit")
-@Presenter(value = {InspectionApplicationDetailPresenter.class})
+@Presenter(value = {InspectionApplicationDetailPresenter.class, DeploymentPresenter.class, TableTypePresenter.class})
 @Controller(value = {InspectionApplicationDetailController.class})
-public class OtherInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailContract.View{
+public class OtherInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailContract.View,
+        DeploymentContract.View, TableTypeContract.View {
     private String id;
     private String pendingId;
+    private String from;
     private PendingEntity pendingEntity;
 
     @BindByTag("titleText")
@@ -51,6 +63,7 @@ public class OtherInspectionApplicationDetailActivity extends BaseRefreshActivit
         super.onInit();
         id =  getIntent().getStringExtra("id");
         pendingId = getIntent().getStringExtra("pendingId");
+        from = getIntent().getStringExtra("from") == null ? "" : getIntent().getStringExtra("from");
         pendingEntity = (PendingEntity) getIntent().getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
     }
 
@@ -63,7 +76,18 @@ public class OtherInspectionApplicationDetailActivity extends BaseRefreshActivit
 
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
-        goRefresh();
+
+        //如果不是新增 就去请求接口
+        if (from.equals("add")){
+            presenterRouter.create(DeploymentAPI.class).getCurrentDeployment("otherInspectWorkFlow");
+            presenterRouter.create(TableTypeAPI.class).getTableTypeByCode("other");
+            getController(InspectionApplicationDetailController.class).setIsFrom(from);
+            getController(InspectionApplicationDetailController.class).setType(3);
+        }else {
+            goRefresh();
+        }
+
+
     }
 
     @Override
@@ -85,6 +109,14 @@ public class OtherInspectionApplicationDetailActivity extends BaseRefreshActivit
         getController(InspectionApplicationDetailController.class).setRefreshHeadData(new InspectionApplicationDetailController.OnRequestHeadListener() {
             @Override
             public void requestHeadClick() {
+                goRefresh();
+            }
+        });
+        getController(InspectionApplicationDetailController.class).setRequestWorkFlowListener(new InspectionApplicationDetailController.OnRequestWorkFlowListener() {
+            @Override
+            public void requestWorkFlow(String mId, String mPendingId) {
+                id = mId;
+                pendingId = mPendingId;
                 goRefresh();
             }
         });
@@ -133,5 +165,27 @@ public class OtherInspectionApplicationDetailActivity extends BaseRefreshActivit
     @Override
     public void getInspectionApplicationByPendingFailed(String errorMsg) {
         refreshController.refreshComplete();
+    }
+
+    @Override
+    public void getCurrentDeploymentSuccess(DeploymentEntity entity) {
+        if (null != entity){
+            getController(InspectionApplicationDetailController.class).startWorkFlow(entity.id,"TaskEvent_1qesde6");
+        }
+    }
+
+    @Override
+    public void getCurrentDeploymentFailed(String errorMsg) {
+        ToastUtils.show(context,errorMsg);
+    }
+
+    @Override
+    public void getTableTypeByCodeSuccess(TableTypeIdEntity entity) {
+        getController(InspectionApplicationDetailController.class).setTableType(entity);
+    }
+
+    @Override
+    public void getTableTypeByCodeFailed(String errorMsg) {
+        ToastUtils.show(context,errorMsg);
     }
 }

@@ -1,5 +1,6 @@
 package com.supcon.mes.module_other.ui.inspection;
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -41,6 +43,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -62,6 +67,9 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
 
     @BindByTag("contentView")
     RecyclerView contentView;
+
+    @BindByTag("tvAdd")
+    TextView tvAdd;
 
     @Override
     protected int getLayoutID() {
@@ -105,6 +113,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
         goRefresh();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -142,6 +151,17 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
                 }
             }
         });
+
+        RxView.clicks(tvAdd)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("from","add");
+                        IntentRouter.go(context,Constant.AppCode.LIMS_otherInspectEdit,bundle);
+                    }
+                });
     }
 
     private void goRefresh() {
