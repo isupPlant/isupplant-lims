@@ -79,6 +79,7 @@ public class SampleAccountAdapter extends BaseListDataRecyclerViewAdapter<Sample
             return R.layout.item_lims_sample_accountaa;
         }
 
+        @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
@@ -87,15 +88,7 @@ public class SampleAccountAdapter extends BaseListDataRecyclerViewAdapter<Sample
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-                            if (llExpand.getVisibility() == View.GONE){
-                                llExpand.setVisibility(View.VISIBLE);
-                                tvExpand.setText(context.getResources().getString(R.string.lims_close));
-                                ivExpand.setImageResource(R.drawable.ic_lims_close);
-                            }else {
-                                llExpand.setVisibility(View.GONE);
-                                tvExpand.setText(context.getResources().getString(R.string.middleware_more));
-                                ivExpand.setImageResource(R.drawable.ic_lims_open);
-                            }
+                            getItem(getAdapterPosition()).setOpen(!getItem(getAdapterPosition()).isOpen());
                             notifyItemChanged(getAdapterPosition());
                         }
                     });
@@ -150,6 +143,16 @@ public class SampleAccountAdapter extends BaseListDataRecyclerViewAdapter<Sample
                 ctQualityStandard.setContent(data.getStdVerId() == null ? "--" : StringUtil.isEmpty(data.getStdVerId().getName()) ? "--" : data.getStdVerId().getName());
                 //留样状态
                 ctSampleRetentionState.setContent(data.getRetainState() == null ? "--" : StringUtil.isEmpty(data.getRetainState().getValue()) ? "--" : data.getRetainState().getValue());
+
+                if (data.isOpen()){
+                    llExpand.setVisibility(View.VISIBLE);
+                    tvExpand.setText(context.getResources().getString(R.string.lims_close));
+                    ivExpand.setImageResource(R.drawable.ic_lims_close);
+                }else {
+                    llExpand.setVisibility(View.GONE);
+                    tvExpand.setText(context.getResources().getString(R.string.middleware_more));
+                    ivExpand.setImageResource(R.drawable.ic_lims_open);
+                }
             } else {
                 tvSample.setText("--");
                 tvSampleState.setText("--");

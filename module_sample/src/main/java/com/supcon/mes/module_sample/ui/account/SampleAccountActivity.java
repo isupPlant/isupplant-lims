@@ -72,7 +72,7 @@ public class SampleAccountActivity extends BaseRefreshRecyclerActivity<SampleAcc
     private Map<String, Object> params = new HashMap<>();
     private List<FilterBean> stateList = new ArrayList<>();
     private FilterBean filterBean;
-
+    private List<SampleAccountEntity> list;
     @Override
     protected IListAdapter<SampleAccountEntity> createAdapter() {
         adapter = new SampleAccountAdapter(context);
@@ -100,7 +100,7 @@ public class SampleAccountActivity extends BaseRefreshRecyclerActivity<SampleAcc
         searchTitle.showScan(false);
         searchTitle.setTitle(context.getResources().getString(R.string.lims_sample_account));
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-
+        list = new ArrayList<>();
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -218,7 +218,11 @@ public class SampleAccountActivity extends BaseRefreshRecyclerActivity<SampleAcc
 
     @Override
     public void getSampleAccountListSuccess(CommonListEntity entity) {
-        refreshListController.refreshComplete(entity.result);
+        list = entity.result;
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setOpen(false);
+        }
+        refreshListController.refreshComplete(list);
     }
 
     @Override

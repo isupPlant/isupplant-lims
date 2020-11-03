@@ -399,6 +399,17 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 
 
             rvConclusion.setAdapter(conclusionAdapter);
+            for (int i = 0; i < data.getConclusionList().size(); i++) {
+                int n = 0;
+                for (int j = 0; j < data.getConclusionList().get(i).getColumnList().size(); j++){
+                    if (data.getConclusionList().get(i).getColumnList().get(j).getLoad()){
+                        n ++;
+                    }
+                }
+                if (n == 1){
+                    data.getConclusionList().get(i).setOpen(true);
+                }
+            }
             conclusionAdapter.setData(data.getConclusionList(), data.getDispMap());
             conclusionAdapter.setList(data.getConclusionList());
             ceOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);

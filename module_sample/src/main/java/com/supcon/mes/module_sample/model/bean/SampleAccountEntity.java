@@ -27,6 +27,7 @@ public class SampleAccountEntity extends BaseEntity {
     private BaseIdValueEntity retainState;
     private Boolean valid;
     private Integer version;
+    private boolean isOpen;
 
     public String getBatchCode() {
         return batchCode;
@@ -154,6 +155,14 @@ public class SampleAccountEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
     }
 
     public class PsIdEntity extends BaseEntity{

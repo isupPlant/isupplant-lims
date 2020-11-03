@@ -45,10 +45,10 @@ public class SampleAccountPresenter extends SampleAccountContract.Presenter {
 
         if (params.containsKey("point-name")){
             String value = (String) params.get("point-name");
-            params.clear();
-            params.put(Constant.BAPQuery.NAME,value);
+            Map<String,Object> pointParams = new HashMap<>();
+            pointParams.put(Constant.BAPQuery.NAME,value);
             fastQuery = BAPQueryHelper.createSingleFastQueryCond(new HashMap<>());
-            fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(params,joinInfo));
+            fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(pointParams,joinInfo));
             fastQuery.viewCode = viewCode;
             fastQuery.modelAlias = modelAlias;
         }

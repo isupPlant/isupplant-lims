@@ -38,6 +38,7 @@ import com.supcon.mes.middleware.controller.WorkFlowViewController;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
 import com.supcon.mes.module_lims.model.api.StdJudgeSpecAPI;
@@ -289,7 +290,8 @@ public class SurverReportDetailController extends BaseViewController implements 
         inspectCheckDeptTv.setValue(entity.checkDeptId!=null ?entity.checkDeptId.getName():"");
         inspectCheckTimeTv.setValue(entity.checkTime!=null? DateUtil.dateTimeFormat(entity.checkTime):"");
         inspectQualityStdTv.setValue(entity.stdVerId!=null && entity.stdVerId.getStdId()!=null? entity.stdVerId.getStdId().getName():"");
-        inspectCheckResultTv.setValue(entity.checkResult);
+        inspectCheckResultTv.setValue(StringUtil.isEmpty(entity.checkResult) ? "" : entity.checkResult);
+        if (!StringUtil.isEmpty(entity.checkResult))
         if (entity.checkResult.contains(context.getResources().getString(R.string.lims_unqualified))){
             inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
         }else {
