@@ -47,12 +47,17 @@ public class RetentionViewRecordAdapter extends BaseListDataRecyclerViewAdapter<
         protected void update(RecordViewEntity data) {
             observeItemTv.setValue(data.observeItem);
             observeValueTv.setValue(data.observeValue);
-            if (context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified).equals(data.observeResult)){
-                observeResultTv.setValueColor(Color.parseColor("#F70606"));
+
+            if (data.observeResult!=null){
+                if ("LIMSRetain_observeResult/qualified".equals(data.observeResult.getId()))
+                    observeResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+                else
+                    observeResultTv.setValueColor(Color.parseColor("#F70606"));
+                observeResultTv.setValue(data.observeResult.getValue());
             }else {
-                observeResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+                observeResultTv.setValue("");
             }
-            observeResultTv.setValue(data.observeResult.getValue());
+
             memoFieldTv.setValue(data.memoField);
         }
     }
