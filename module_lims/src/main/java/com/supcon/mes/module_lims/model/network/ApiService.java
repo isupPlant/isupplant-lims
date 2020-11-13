@@ -4,6 +4,8 @@ import com.app.annotation.apt.ApiFactory;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
+import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
@@ -34,10 +36,12 @@ import com.supcon.mes.module_lims.model.bean.InspectionItemsListEntity;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
 import com.supcon.mes.module_lims.model.bean.PleaseCheckSchemeListEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
+import com.supcon.mes.module_lims.model.bean.QualityStdConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
 import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
 
+import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
 
@@ -46,6 +50,9 @@ import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
+import com.supcon.mes.module_lims.model.bean.TestReportEditHeadEntity;
+import com.supcon.mes.module_lims.model.bean.TestReportEditPtEntity;
+import com.supcon.mes.module_lims.model.bean.TestReportSubmitEntity;
 
 import java.util.Map;
 
@@ -287,6 +294,15 @@ public interface ApiService {
     Flowable<SubmitResultEntity> submitInspectReport(@Path("inspReportView") String path, @QueryMap Map<String,Object> params, @Body InspectReportSubmitEntity reportSubmitEntity);
 
     /**
+     * 报告单编辑工作流
+     * @param path
+     * @param params
+     * @param reportSubmitEntity
+     * @return
+     */
+    @POST("/msService/QCS/inspectReport/inspectReport/{inspReportView}/submit")
+    Flowable<SubmitResultEntity> setTestReportEditSubmit(@Path("inspReportView") String path, @QueryMap Map<String,Object> params, @Body TestReportSubmitEntity reportSubmitEntity);
+    /**
      * 检验申请详情提交接口
      * @param path
      * @param params
@@ -345,4 +361,27 @@ public interface ApiService {
     @GET("/msService/QCS/tableType/tableType/getTableTypeByCode")
     Flowable<BAP5CommonEntity<TableTypeIdEntity>> getTableTypeByCode (@Query("code") String code);
 
+    /**
+     * 获取检验报告（编辑状态下）
+     * @param pendingId
+     * @return
+     */
+    @GET("/msService/QCS/inspectReport/inspectReport/data/{id}")
+    Flowable<BAP5CommonEntity<TestReportEditHeadEntity>> getTestReportEdit(@Path("id") String id, @Query("pendingId") String pendingId);
+
+    /**
+     * 根据质量标准id 获取结论
+     * @param stdVersionId
+     * @return
+     */
+    @GET("/msService/LIMSBasic/qualityStd/stdVerGrade/getStdVerGradesByStdVerId")
+    Flowable<BAP5CommonListEntity<QualityStdConclusionEntity>> getStdVerGradesByStdVerId(@Query("stdVersionId") String stdVersionId);
+
+    /**
+     * 获取检验项目参照数据
+     * @param map
+     * @return
+     */
+    @POST("/msService/LIMSBasic/qualityStd/stdVerCom/stdVerComRef-query")
+    Flowable<BAP5CommonEntity<CommonBAPListEntity<StdVerComIdEntity>>> getStdVerComList(@Body Map<String, Object> map);
 }

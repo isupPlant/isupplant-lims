@@ -89,6 +89,8 @@
     <string name="lims_material_information">物料信息</string>
     <string name="lims_num">数量</string>
     <string name="lims_select_num">请输入数量</string>
+    <string name="lims_test_conclusion_cannot_be_empty">检验结论不允许为空!</string>
+    <string name="lims_Inspection_item_data_of_inspection_report_cannot_be_empty">检验报告检验项目数据不能为空！</string>
 
 <!--    <string name="lims_single_sample_result_input">单样品录入结果</string>-->
     <string name="lims_inspect_project">检测项目</string>

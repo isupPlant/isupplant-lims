@@ -19,24 +19,27 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
+import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
+import com.supcon.mes.module_lims.event.StdVerComEvent;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
-import com.supcon.mes.module_lims.model.api.QualityStandardReferenceAPI;
-import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
+import com.supcon.mes.module_lims.model.api.StdVerComRefAPI;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
-import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceListEntity;
-import com.supcon.mes.module_lims.model.contract.QualityStandardReferenceContract;
-import com.supcon.mes.module_lims.presenter.QualityStandardReferencePresenter;
-import com.supcon.mes.module_lims.ui.adapter.QualityStandardReferenceAdapter;
+import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
+import com.supcon.mes.module_lims.model.contract.StdVerComRefContract;
+import com.supcon.mes.module_lims.presenter.StdVerComRefPresenter;
+import com.supcon.mes.module_lims.ui.adapter.StdVerComReferenceAdapter;
+import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -50,56 +53,47 @@ import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
- * on 2020/7/10
- * class name 质量标准参照页面
+ * on 2020/11/12
+ * class name
  */
-@Router(value = Constant.AppCode.LIMS_QualityStdVerRef)
-@Presenter(value = {QualityStandardReferencePresenter.class})
+@Router(value = Constant.AppCode.LIMS_StdVerComRef)
+@Presenter(value = {StdVerComRefPresenter.class})
 @Controller(value = {ReferenceController.class})
-public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivity<QualityStandardReferenceEntity> implements QualityStandardReferenceContract.View {
-
+public class StdVerComReferenceActivity extends BaseRefreshRecyclerActivity<StdVerComIdEntity> implements StdVerComRefContract.View {
+    @BindByTag("searchTitle")
+    SearchTitleBar searchTitle;
     @BindByTag("contentView")
     RecyclerView contentView;
-
-    @BindByTag("ll_select_all")
-    LinearLayout llSelectAll;
-
     @BindByTag("iv_select")
     ImageView iv_select;
-
-    @BindByTag("titleText")
-    TextView titleText;
-
+    @BindByTag("ll_select_all")
+    LinearLayout ll_select_all;
     @BindByTag("btn_confirm")
     TextView btn_confirm;
 
-    private QualityStandardReferenceAdapter adapter;
-
-    private Map<String, Object> params = new HashMap<>();
-    private List<InspectionDetailPtEntity> list;
-    private List<QualityStandardReferenceEntity> transmitValueList = new ArrayList<>();
-    private List<QualityStandardReferenceEntity> submitList = new ArrayList<>();
-
-    private boolean isSelectAll = false;
-    private String id = "";
-    private String selectTag = "";
-    private boolean hasStdVer = false;
-    private boolean isReport = false;
+    private boolean isRadio;
+    private String stdVerId;
+    private String reportNames;
+    private String selectTag;
+    private boolean isSelectAll;
+    private Map<String, Object> map = new HashMap<>();
+    private StdVerComReferenceAdapter adapter;
+    private List<StdVerComIdEntity> list = new ArrayList<>();
     @Override
-    protected IListAdapter<QualityStandardReferenceEntity> createAdapter() {
-        adapter = new QualityStandardReferenceAdapter(context);
+    protected IListAdapter<StdVerComIdEntity> createAdapter() {
+        adapter = new StdVerComReferenceAdapter(context);
         return adapter;
     }
 
     @Override
     protected int getLayoutID() {
-        return R.layout.activity_quality_standard_reference;
+        return R.layout.activity_std_ver_com_ref;
     }
 
     @Override
     protected void onInit() {
         super.onInit();
-        getController(ReferenceController.class).setSearchTypeList(getResources().getString(R.string.lims_quality_standard),getResources().getString(R.string.lims_version_number));
+        getController(ReferenceController.class).setSearchTypeList(getResources().getString(R.string.lims_inspection_items));
 
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -110,13 +104,12 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_quality_standard_reference));
+        searchTitle.setTitle(getString(R.string.lims_quality_standard_reference));
 
-        hasStdVer = getIntent().getBooleanExtra("hasStdVer", false);
-        list = (List<InspectionDetailPtEntity>) getIntent().getSerializableExtra("existItem");
-        id = getIntent().getStringExtra("id");
-        selectTag = getIntent().getStringExtra(Constant.IntentKey.SELECT_TAG);
-        isReport = getIntent().getBooleanExtra("isReport", false);
+        stdVerId = getIntent().getStringExtra("stdVerId");
+        reportNames =  getIntent().getStringExtra("reportNames");
+        isRadio = getIntent().getBooleanExtra("isRadio", false);
+        selectTag = getIntent().getStringExtra("selectTag");
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -132,10 +125,10 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
             }
         });
 
-        if (isReport){
-            llSelectAll.setVisibility(View.GONE);
+        if (isRadio){
+            ll_select_all.setVisibility(View.GONE);
         }else {
-            llSelectAll.setVisibility(View.VISIBLE);
+            ll_select_all.setVisibility(View.VISIBLE);
         }
         goRefresh();
     }
@@ -145,12 +138,40 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
     protected void initListener() {
         super.initListener();
 
+        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
+            @Override
+            public void onRefresh(int pageIndex) {
+                presenterRouter.create(StdVerComRefAPI.class).getStdVerComRefList(stdVerId,reportNames,pageIndex+"",map);
+            }
+        });
+
+        getController(ReferenceController.class).setSearchOverListener(new OnSearchOverListener() {
+            @Override
+            public void onSearchOverClick(Map<String, Object> map) {
+                map.clear();
+                map.putAll(map);
+                goRefresh();
+            }
+        });
+
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (action == 0){
-                    adapter.getItem(position).setSelect(!adapter.getItem(position).isSelect());
+                if (action == 1){
+                    if (isRadio){
+                        adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            if (i != position){
+                                adapter.getList().get(i).setSelect(false);
+                            }
+                        }
+
+                    }else {
+                        adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
+                    }
                     adapter.notifyDataSetChanged();
+
+
                     int a = 0;
                     for (int i = 0; i < adapter.getList().size(); i++) {
                         if (adapter.getList().get(i).isSelect()) { //集合中存在勾选状态的 数据的话
@@ -166,8 +187,8 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
             }
         });
 
-        RxView.clicks(llSelectAll)
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
+        RxView.clicks(ll_select_all)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
@@ -186,51 +207,20 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
                     }
                 });
 
-        getController(ReferenceController.class).setSearchOverListener(new OnSearchOverListener() {
-            @Override
-            public void onSearchOverClick(Map<String, Object> map) {
-                params.clear();
-                params.putAll(map);
-                goRefresh();
-            }
-        });
-
         //点击确定
         RxView.clicks(btn_confirm)
-                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        transmitValueList.clear();
-                        List<QualityStandardReferenceEntity> myList = adapter.getList();
-                        for (int i = 0; i < myList.size(); i++) {
-                            if (myList.get(i).isSelect()){
-                                transmitValueList.add(myList.get(i));
+                        list.clear();
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            if (adapter.getList().get(i).isSelect()){
+                                list.add(adapter.getList().get(i));
                             }
                         }
-
-                        if (transmitValueList.size() > 0){
-                            int k = 0;
-                            for (int i = 0; i < transmitValueList.size(); i++) {
-                                for (int j = 0; j < list.size(); j++) {
-                                    if (transmitValueList.get(i).getId().equals(list.get(j).getStdVerId().getId())){
-                                        transmitValueList.get(i).setNeedRemove(true);
-                                        k++;
-                                    }
-                                }
-                            }
-                            if (k > 0){
-                                ToastUtils.show(context,context.getResources().getString(R.string.lims_add_succeed_filter_repeat_data));
-                            }else {
-                                ToastUtils.show(context,context.getResources().getString(R.string.lims_add_succeed));
-                            }
-                            submitList.clear();
-                            for (int i = 0; i < transmitValueList.size(); i++) {
-                                if (!transmitValueList.get(i).isNeedRemove()){
-                                    submitList.add(transmitValueList.get(i));
-                                }
-                            }
-                            EventBus.getDefault().post(new SelectDataEvent<>(new QualityStandardEvent(submitList),selectTag));
+                        if (list.size() > 0){
+                            EventBus.getDefault().post(new SelectDataEvent<>(new StdVerComEvent(list),selectTag));
                             finish();
                         }else {
                             ToastUtils.show(context,getResources().getString(R.string.lims_please_select_at_last_one_data));
@@ -239,42 +229,19 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
 
                     }
                 });
-
-        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
-            @Override
-            public void onRefresh(int pageIndex) {
-                presenterRouter.create(QualityStandardReferenceAPI.class).getQualityStandardReferenceList(pageIndex,hasStdVer,id,params);
-            }
-        });
     }
 
-    private void goRefresh() {
+    private void goRefresh(){
         refreshListController.refreshBegin();
     }
 
     @Override
-    public void getQualityStandardReferenceListSuccess(QualityStandardReferenceListEntity entity) {
-
-        if (!isReport){ //如果不是来自报告单的
-            if (entity.data.result.size() > 0){
-                setSelectAllStyle(false);
-            }
-            if (null != list && list.size() > 0){
-                for (int i = 0; i < list.size(); i++) {
-                    for (int j = 0; j < entity.data.result.size(); j++) {
-                        if (list.get(i).getStdVerId().getId().equals(entity.data.result.get(j).getId())){
-                            entity.data.result.get(j).setSelect(true);
-                        }
-                    }
-                }
-            }
-        }
-
-        refreshListController.refreshComplete(entity.data.result);
+    public void getStdVerComRefListSuccess(CommonBAPListEntity entity) {
+        refreshListController.refreshComplete(entity.result);
     }
 
     @Override
-    public void getQualityStandardReferenceListFailed(String errorMsg) {
+    public void getStdVerComRefListFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }

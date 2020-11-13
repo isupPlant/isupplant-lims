@@ -30,6 +30,7 @@ public class StdVerComIdEntity extends BaseEntity {
     private BaseLongIdNameEntity testId;
     private String unitName;
     private BaseLongIdNameEntity comId;
+    private boolean isSelect;
 
     public String getCarryRule() {
         return carryRule;
@@ -189,5 +190,13 @@ public class StdVerComIdEntity extends BaseEntity {
 
     public void setReportSort(String reportSort) {
         this.reportSort = reportSort;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

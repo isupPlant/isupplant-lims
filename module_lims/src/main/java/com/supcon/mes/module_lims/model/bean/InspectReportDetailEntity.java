@@ -1,6 +1,7 @@
 package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 
 /**
@@ -17,6 +18,7 @@ public class InspectReportDetailEntity extends BaseEntity {
     public int version;
     public String testResult;
     public String resultKey;
+    public BaseIdValueEntity valueKind;
 
     public int getTypeView(){
         return 1;

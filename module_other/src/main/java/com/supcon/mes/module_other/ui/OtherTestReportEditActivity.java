@@ -1,4 +1,4 @@
-package com.supcon.mes.module_product.ui;
+package com.supcon.mes.module_other.ui;
 
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -10,17 +10,13 @@ import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.supcon.common.view.base.activity.BaseActivity;
-import com.supcon.common.view.base.activity.BaseControllerActivity;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_lims.controller.TestReportEditController;
-import com.supcon.mes.module_lims.model.api.InspectionApplicationDetailAPI;
 import com.supcon.mes.module_lims.model.api.StdJudgeSpecAPI;
 import com.supcon.mes.module_lims.model.api.TestReportEditAPI;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
@@ -29,7 +25,7 @@ import com.supcon.mes.module_lims.model.contract.StdJudgeSpecContract;
 import com.supcon.mes.module_lims.model.contract.TestReportEditContract;
 import com.supcon.mes.module_lims.presenter.StdJudgeSpecPresenter;
 import com.supcon.mes.module_lims.presenter.TestReportEditPresenter;
-import com.supcon.mes.module_product.R;
+import com.supcon.mes.module_other.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,13 +35,13 @@ import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
- * on 2020/11/3
+ * on 2020/11/11
  * class name
  */
 @Controller(value = {TestReportEditController.class})
 @Presenter(value = {TestReportEditPresenter.class, StdJudgeSpecPresenter.class})
-@Router(Constant.AppCode.LIMS_ProductTestReportEdit)
-public class ProductTestReportEditActivity extends BaseRefreshActivity implements TestReportEditContract.View, StdJudgeSpecContract.View {
+@Router(value = Constant.AppCode.LIMS_OtherTestReportEdit)
+public class OtherTestReportEditActivity extends BaseRefreshActivity implements TestReportEditContract.View, StdJudgeSpecContract.View{
     private boolean isAdd;
     private String id;
     private String pendingId;
@@ -58,14 +54,10 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
 
     @BindByTag("ctSupplier")
     CustomTextView ctSupplier;
-
-
-
     @Override
     protected int getLayoutID() {
         return R.layout.activity_test_report_edit;
     }
-
 
     @Override
     protected void initView() {
@@ -77,7 +69,7 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
         id = getIntent().getStringExtra("id") == null ? "" : getIntent().getStringExtra("id");
         pendingId = getIntent().getStringExtra("pendingId") == null ? "" : getIntent().getStringExtra("pendingId");
         ctSupplier.setVisibility(View.GONE);
-        titleText.setText(context.getResources().getString(R.string.lims_product_test_report));
+        titleText.setText(context.getResources().getString(R.string.lims_incoming_test_report));
     }
 
     @SuppressLint("CheckResult")
@@ -92,6 +84,16 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
                         onBackPressed();
                     }
                 });
+
+        refreshController.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!isAdd){
+                    presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(id,pendingId);
+                }
+
+            }
+        });
 
         getController(TestReportEditController.class).setQualityChangeListener(new TestReportEditController.QualityChangeListener() {
             @Override
@@ -122,16 +124,6 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
                 }
             }
         });
-
-        refreshController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!isAdd){
-                    presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(id,pendingId);
-                }
-
-            }
-        });
     }
 
     @Override
@@ -144,9 +136,11 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
         refreshController.refreshBegin();
     }
 
+
+
     @Override
     public void getTestReportEditSuccess(TestReportEditHeadEntity entity) {
-        getController(TestReportEditController.class).setTableHead(1,entity, new TestReportEditController.TableHeadDataOverListener() {
+        getController(TestReportEditController.class).setTableHead(3,entity, new TestReportEditController.TableHeadDataOverListener() {
             @Override
             public void tableHeadOver() {
                 Map<String, Object> map = new HashMap<>();
@@ -167,7 +161,6 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
     public void getReportComListSuccess(StdJudgeSpecListEntity entity) {
         refreshController.refreshComplete();
         getController(TestReportEditController.class).setTablePt(entity);
-
     }
 
     @Override

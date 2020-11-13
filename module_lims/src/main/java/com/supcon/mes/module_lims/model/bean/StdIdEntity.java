@@ -15,7 +15,7 @@ public class StdIdEntity extends BaseEntity {
     private Boolean isDefault;
     private String name;
     private String standard;
-
+    private AsIdEntity asId;
     public Map getAttrMap() {
         return attrMap;
     }
@@ -54,5 +54,13 @@ public class StdIdEntity extends BaseEntity {
 
     public void setStandard(String standard) {
         this.standard = standard;
+    }
+
+    public AsIdEntity getAsId() {
+        return asId;
+    }
+
+    public void setAsId(AsIdEntity asId) {
+        this.asId = asId;
     }
 }

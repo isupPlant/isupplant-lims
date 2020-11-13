@@ -1,5 +1,6 @@
 package com.supcon.mes.module_lims.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,6 +39,13 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
         return new ViewHolder(context);
     }
 
+    private Bundle setBundle(SurveyReportEntity entity){
+        Bundle bundle = new Bundle();
+        bundle.putString("id",entity.getId()+"");
+        bundle.putString("pendingId",entity.getPending().id+"");
+        return bundle;
+    }
+
     class ViewHolder extends BaseRecyclerViewHolder<SurveyReportEntity>{
 
         @BindByTag("tvOddNumbers")
@@ -71,6 +79,7 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
             return R.layout.item_survey_report;
         }
 
+        @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
@@ -81,11 +90,23 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
                         SurveyReportEntity entity=getItem(getAdapterPosition());
                         bundle.putSerializable("resportEntity",entity);
                         if (entity.getTableNo().startsWith("manuReport_")){
-                            IntentRouter.go(context, Constant.Router.PRODUCT_INSPREPORT_VIEW,bundle);
+                            if (entity.getPending() != null && entity.getPending().id != null){
+                                IntentRouter.go(context, Constant.AppCode.LIMS_ProductTestReportEdit,setBundle(entity));
+                            }else {
+                                IntentRouter.go(context, Constant.Router.PRODUCT_INSPREPORT_VIEW,bundle);
+                            }
                         }else if(entity.getTableNo().startsWith("purchReport_")){
-                            IntentRouter.go(context, Constant.Router.PURCH_INSPREPORT_VIEW,bundle);
+                            if (entity.getPending() != null && entity.getPending().id != null){
+                                IntentRouter.go(context, Constant.AppCode.LIMS_IncomingTestReportEdit,setBundle(entity));
+                            }else {
+                                IntentRouter.go(context, Constant.Router.PURCH_INSPREPORT_VIEW,bundle);
+                            }
                         } else if (entity.getTableNo().startsWith("otherReport_")){
-                            IntentRouter.go(context, Constant.Router.OTHER_INSPREPORT_VIEW,bundle);
+                            if (entity.getPending() != null && entity.getPending().id != null){
+                                IntentRouter.go(context, Constant.AppCode.LIMS_OtherTestReportEdit,setBundle(entity));
+                            }else {
+                                IntentRouter.go(context, Constant.Router.OTHER_INSPREPORT_VIEW,bundle);
+                            }
                         }
                     });
         }

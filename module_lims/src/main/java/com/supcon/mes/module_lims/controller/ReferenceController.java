@@ -183,8 +183,6 @@ public class ReferenceController extends BaseViewController {
             params.put(Constant.BAPQuery.SPECIFICATIONS, entity.result);
         } else if (context.getResources().getString(R.string.lims_model).equals(entity.key)) {
             params.put(Constant.BAPQuery.MODEL, entity.result);
-
-            params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
         } else if (context.getResources().getString(R.string.lims_version_number).equals(entity.key)) {
             params.put(Constant.BAPQuery.BUSI_VERSION, entity.result);
         } else if (context.getResources().getString(R.string.lims_produce_batch).equals(entity.key)
@@ -192,6 +190,8 @@ public class ReferenceController extends BaseViewController {
             params.put(Constant.BAPQuery.BATCH_CODE, entity.result);
         } else if (context.getResources().getString(R.string.lims_sampling_point).equals(entity.key)){
             params.put("point-name", entity.result);
+        } else if (context.getResources().getString(R.string.lims_inspection_items).equals(entity.result)){
+            params.put(Constant.BAPQuery.REPORT_NAME,entity.result);
         }
         return params;
     }

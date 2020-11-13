@@ -1441,8 +1441,6 @@ public class InspectionApplicationDetailController extends BaseViewController im
     }
 
 
-
-
     public interface OnRequestPtListener {
         void requestPtClick(boolean isEdit);
     }

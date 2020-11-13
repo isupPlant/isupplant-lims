@@ -89,6 +89,7 @@ public class BAPQueryHelper {
             case STAFF_NAME:
             case Constant.BAPQuery.SPECIFY:
             case Constant.BAPQuery.DELIVER_CODE:
+            case Constant.BAPQuery.REPORT_NAME:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.columnName = key;
