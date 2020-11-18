@@ -192,6 +192,8 @@ public class ReferenceController extends BaseViewController {
             params.put("point-name", entity.result);
         } else if (context.getResources().getString(R.string.lims_inspection_items).equals(entity.result)){
             params.put(Constant.BAPQuery.REPORT_NAME,entity.result);
+        }else if (context.getResources().getString(R.string.lims_document_number).equals(entity.key)){
+            params.put(Constant.BAPQuery.TABLE_NO,entity.result);
         }
         return params;
     }

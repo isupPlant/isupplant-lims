@@ -299,7 +299,15 @@ public class BAPQueryHelper {
                 subcondEntity.paramStr = LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;
-
+            case Constant.BAPQuery.CHECK_STATE:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = key;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = SYSTEMCODE;
+                subcondEntity.operator = BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = Util.getReportState(String.valueOf(value));
+                break;
             /**
              * 维修工单筛选信息
              */

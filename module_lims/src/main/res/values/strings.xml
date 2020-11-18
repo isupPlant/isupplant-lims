@@ -18,6 +18,7 @@
     <string name="lims_materiel_code">物料编码</string>
     <string name="lims_document_number">单据编号</string>
     <string name="lims_request_no">检验申请单号</string>
+    <string name="lims_request_reference">检验申请参照</string>
     <string name="lims_product_inspection_application">产品检验申请</string>
     <string name="lims_incoming_inspection_application">来料检验申请</string>
     <string name="lims_other_inspection_application">其他检验申请</string>
@@ -227,4 +228,7 @@
     <string name="lims_already_cancel">已取消</string>
     <string name="lims_code_scanning_mode_one">1、摄像头扫码登样</string>
     <string name="lims_code_scanning_mode_two">2、红外设备扫码登样</string>
+    <string name="lims_testing">检验中</string>
+    <string name="lims_report_formation">报告编制中</string>
+    <string name="lims_report_review">报告审核中</string>
 </resources>

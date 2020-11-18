@@ -21,6 +21,7 @@ import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.ConfigEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceTypeReferenceEntity;
+import com.supcon.mes.module_lims.model.bean.FirstStdVerEntity;
 import com.supcon.mes.module_lims.model.bean.IfUploadEntity;
 import com.supcon.mes.module_lims.model.bean.InspectApplicationSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
@@ -43,6 +44,7 @@ import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
 
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
+import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
 import com.supcon.mes.module_lims.model.bean.SupplierReferenceListEntity;
 
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
@@ -50,11 +52,14 @@ import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
+import com.supcon.mes.module_lims.model.bean.TestNumEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportEditHeadEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportEditPtEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportSubmitEntity;
+import com.supcon.mes.module_lims.model.bean.TestRequestNoEntity;
 
 import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.Flowable;
 import retrofit2.http.Body;
@@ -384,4 +389,19 @@ public interface ApiService {
      */
     @POST("/msService/LIMSBasic/qualityStd/stdVerCom/stdVerComRef-query")
     Flowable<BAP5CommonEntity<CommonBAPListEntity<StdVerComIdEntity>>> getStdVerComList(@Body Map<String, Object> map);
+
+    @POST("/msService/QCS/inspect/inspect/{query}")
+    Flowable<BAP5CommonEntity<CommonBAPListEntity<TestRequestNoEntity>>> getTestRequestNo(@Path("query") String query,
+                                                                                          @Body Map<String, Object> map);
+
+    /**
+     *
+     * @param inspectId
+     * @return
+     */
+    @POST("/msService/QCS/inspect/inspectStd/getFirstStdVerByInspectId")
+    Flowable<BAP5CommonEntity<FirstStdVerEntity>> getFirstStdVerByInspectId(@Query("inspectId") String inspectId);
+
+    @GET("/msService/QCS/inspect/inspect/data/{id}")
+    Flowable<BAP5CommonEntity<TestNumEntity>> getTestNum(@Path("id") String id, @QueryMap Map<String, Object> map);
 }

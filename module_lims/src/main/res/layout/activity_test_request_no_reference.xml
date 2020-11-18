@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff8f8f8">
+
+    <com.supcon.mes.module_search.ui.view.SearchTitleBar
+        android:id="@+id/searchTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
+        android:paddingStart="@dimen/dp_5"
+        android:background="@color/white">
+
+        <com.supcon.mes.middleware.ui.view.CustomMiddleFilterView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/listStatusFilter"
+            android:tag="listStatusFilter"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            app:text="@string/lims_state"
+            app:text_size="14"
+            app:text_color="@color/font_333333"
+            app:icon_res="@drawable/ic_choose_close"
+            android:visibility="visible"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctMaterielCode"
+            android:tag="ctMaterielCode"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:key="@string/lims_materiel_code"
+            app:key_color="@color/font_333333"
+            app:key_size="14"
+            app:editable="true"
+            app:content_size="13"
+            app:content_color="@color/font_333333"/>
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/ctSupplier"
+            android:tag="ctSupplier"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:key="@string/lims_vendor"
+            app:key_color="@color/font_333333"
+            app:key_size="14"
+            app:editable="true"
+            app:content_size="13"
+            app:content_color="@color/font_333333"/>
+    </LinearLayout>
+
+    <include
+        layout="@layout/ly_recyclerview_with_scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/wts_bg_color" />
+
+</LinearLayout>

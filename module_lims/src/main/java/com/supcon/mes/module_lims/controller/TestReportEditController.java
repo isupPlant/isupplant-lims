@@ -39,25 +39,36 @@ import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.FilterInputType;
 import com.supcon.mes.middleware.controller.GetPowerCodeController;
 import com.supcon.mes.middleware.controller.WorkFlowViewController;
+import com.supcon.mes.middleware.model.api.DeploymentAPI;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
+import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentEntity;
+import com.supcon.mes.middleware.model.bean.DeploymentEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
+import com.supcon.mes.middleware.model.contract.DeploymentContract;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
+import com.supcon.mes.middleware.presenter.DeploymentPresenter;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
 import com.supcon.mes.module_lims.event.StdVerComEvent;
+import com.supcon.mes.module_lims.event.TestRequestNoEvent;
+import com.supcon.mes.module_lims.model.api.FirstStdVerAPI;
 import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
 import com.supcon.mes.module_lims.model.api.QualityStdIdByConclusionAPI;
+import com.supcon.mes.module_lims.model.api.TestNumAPI;
 import com.supcon.mes.module_lims.model.api.TestReportEditSubmitAPI;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
+import com.supcon.mes.module_lims.model.bean.FirstStdVerEntity;
+import com.supcon.mes.module_lims.model.bean.InspectIdEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStdConclusionEntity;
@@ -67,13 +78,18 @@ import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
+import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
+import com.supcon.mes.module_lims.model.bean.TestNumEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportEditHeadEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportSubmitEntity;
-import com.supcon.mes.module_lims.model.contract.InspectReportDetailContract;
+import com.supcon.mes.module_lims.model.bean.TestRequestNoEntity;
+import com.supcon.mes.module_lims.model.contract.FirstStdVerContract;
 import com.supcon.mes.module_lims.model.contract.QualityStdIdByConclusionContract;
+import com.supcon.mes.module_lims.model.contract.TestNumContract;
 import com.supcon.mes.module_lims.model.contract.TestReportEditSubmitContract;
-import com.supcon.mes.module_lims.presenter.InspectReportDetailPresenter;
+import com.supcon.mes.module_lims.presenter.FirstStdVerPresenter;
 import com.supcon.mes.module_lims.presenter.QualityStdIdByConclusionPresenter;
+import com.supcon.mes.module_lims.presenter.TestNumPresenter;
 import com.supcon.mes.module_lims.presenter.TestReportEditSubmitPresenter;
 import com.supcon.mes.module_lims.ui.adapter.TestReportEditPtAdapter;
 import com.supcon.mes.module_lims.utils.Util;
@@ -106,8 +122,10 @@ import io.reactivex.functions.Consumer;
  * class name
  */
 
-@Presenter(value = {QualityStdIdByConclusionPresenter.class, TestReportEditSubmitPresenter.class})
-public class TestReportEditController extends BaseViewController implements QualityStdIdByConclusionContract.View, TestReportEditSubmitContract.View {
+@Presenter(value = {QualityStdIdByConclusionPresenter.class, TestReportEditSubmitPresenter.class,
+        FirstStdVerPresenter.class,QualityStdIdByConclusionPresenter.class, TestNumPresenter.class, DeploymentPresenter.class})
+public class TestReportEditController extends BaseViewController implements QualityStdIdByConclusionContract.View,
+        TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, DeploymentContract.View {
 
     @BindByTag("ctTestRequestNo")
     CustomTextView ctTestRequestNo;
@@ -191,7 +209,15 @@ public class TestReportEditController extends BaseViewController implements Qual
     private int workFlowType = -1;
     private int type = -1;//产品、来料、其他用1，2，3来表示
 
+    private String inspectId = "";
+    private String stdVerId = "";
     private PendingEntity pendingEntity;
+    private InspectIdEntity inspectIdEntity;
+    private TestRequestNoEntity testRequestNoEntity;
+    private Long mDeploymentId;
+    private String activityName;
+    private String from = "";
+    private TableTypeIdEntity tableType;
 
     public TestReportEditController(View rootView) {
         super(rootView);
@@ -276,6 +302,16 @@ public class TestReportEditController extends BaseViewController implements Qual
                         expandTv.setText(R.string.lims_expand);
                     }
                 });
+
+        ctTestRequestNo.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("type",type);
+                bundle.putString("selectTag",ctTestRequestNo.getTag()+"");
+                IntentRouter.go(context,Constant.AppCode.LIMS_TestRequestNoRef,bundle);
+            }
+        });
 
         //检验人选择监听
         ctTestPeople.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -482,6 +518,14 @@ public class TestReportEditController extends BaseViewController implements Qual
         });
     }
 
+    public void setIsFrom(String from){
+        this.from = from;
+    }
+
+    public void setTableType(TableTypeIdEntity tableType){
+        this.tableType = tableType;
+    }
+
     //工作流--保存
     private void doSave(WorkFlowVar workFlowVar){
         String view=getView();
@@ -524,13 +568,18 @@ public class TestReportEditController extends BaseViewController implements Qual
     }
 
     private void generateSaveOrSubmit(TestReportSubmitEntity entity){
-        entity.deploymentId = pendingEntity.deploymentId+"";
-        entity.taskDescription = pendingEntity.taskDescription;
-        entity.activityName = pendingEntity.activityName;
-        entity.pendingId = pendingEntity.id.toString();
-
+        if (from.equals("add")){
+            entity.deploymentId = mDeploymentId+"";
+            entity.activityName = activityName;
+            entity.taskDescription = context.getResources().getString(R.string.lims_edit);
+            this.entity.setTableTypeId(tableType);
+        }else {
+            entity.deploymentId = pendingEntity.deploymentId+"";
+            entity.taskDescription = pendingEntity.taskDescription;
+            entity.activityName = pendingEntity.activityName;
+            entity.pendingId = pendingEntity.id.toString();
+        }
         entity.inspectReport=this.entity;
-
         myDeleteList.clear();
         for (int i = 0; i < deletePtIds.size(); i++) {
             if (!deletePtIds.get(i).equals("null") ){
@@ -738,13 +787,39 @@ public class TestReportEditController extends BaseViewController implements Qual
     }
 
     public void setTablePt(StdJudgeSpecListEntity entity){
+        llReference.setVisibility(View.VISIBLE);
         ptList.clear();
         ptList.addAll(entity.data.result);
         adapter.setList(ptList);
-        adapter.setNeedLab(this.entity.getInspectId().getNeedLab() == null ? false : this.entity.getInspectId().getNeedLab());
+        adapter.setNeedLab(this.entity.getInspectId() != null && (this.entity.getInspectId().getNeedLab() == null ? false :
+                this.entity.getInspectId().getNeedLab()));
         adapter.setConclusionOption(conclusionList);
         adapter.notifyDataSetChanged();
-        setConclusionColor(this.entity.getCheckResult(),true);
+        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),true);
+    }
+
+    public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){
+        this.type = type;
+        this.mTableHeadDataOverListener = mTableHeadDataOverListener;
+        this.entity = new TestReportEditHeadEntity();
+
+        ctTestPeople.setContent(SupPlantApplication.getAccountInfo().staffName);
+        ctTestDepartment.setContent(SupPlantApplication.getAccountInfo().getDepartmentName());
+        cdTestTime.setContent(DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"));
+        ctQualityStd.setEditable(false);
+        ctTestRequestNo.setEditable(true);
+        csTestConclusion.setEditable(false);
+        llReference.setVisibility(View.GONE);
+
+        String processKey = "";
+        if (type == 1){
+            processKey = "manuInspectReportWorkFlow";
+        }else if (type == 2){
+            processKey = "purchInspectReportWorkFlow";
+        }else if (type == 3){
+            processKey = "otherInspectReportWorkFlow";
+        }
+        presenterRouter.create(DeploymentAPI.class).getCurrentDeployment(processKey);
     }
 
     private void initRecycler(){
@@ -754,6 +829,13 @@ public class TestReportEditController extends BaseViewController implements Qual
         contentView.setNestedScrollingEnabled(false);
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(context));
         contentView.setAdapter(adapter);
+    }
+
+    private void setStartWorkFlow(Long id, String menuName){
+        mDeploymentId = id;
+        activityName = menuName;
+        powerCodeController.initPowerCode(type == 3 ? "start_xrl1zg5" : type == 2 ? "start_wcguvzx" : type == 1 ? "start_f4jgu4z" : "");
+        workFlowViewController.initStartWorkFlowView(customWorkFlowView,id);
     }
 
     //设置工作流
@@ -766,6 +848,7 @@ public class TestReportEditController extends BaseViewController implements Qual
             customWorkFlowView.setVisibility(View.GONE);
         }
     }
+
 
     public void setQualityChangeListener(QualityChangeListener mQualityChangeListener){
         this.mQualityChangeListener = mQualityChangeListener;
@@ -849,6 +932,47 @@ public class TestReportEditController extends BaseViewController implements Qual
                     }
                 }
             }
+        }else if (selectDataEvent.getEntity() instanceof TestRequestNoEvent){
+            TestRequestNoEvent event = (TestRequestNoEvent)selectDataEvent.getEntity();
+            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())){
+                if (selectDataEvent.getSelectTag().equals(ctTestRequestNo.getTag()+"")){
+                    List<TestRequestNoEntity> list = event.getList();
+                    if (list.size() == 1){
+                        testRequestNoEntity = list.get(0);
+                        ctTestRequestNo.setContent(testRequestNoEntity.getTableNo());
+                        ctBusinessType.setContent(testRequestNoEntity.getBusiTypeId() == null ? "" : testRequestNoEntity.getBusiTypeId().getName());
+                        ctGetPoint.setContent(testRequestNoEntity.getPsId() == null ? "" : testRequestNoEntity.getPsId().getName());
+                        ctMateriel.setContent(testRequestNoEntity.getProdId() == null ? "" : testRequestNoEntity.getProdId().getName()+"("+testRequestNoEntity.getProdId().getCode()+")");
+                        ctUnit.setContent(testRequestNoEntity.getProdId() == null ? "" : testRequestNoEntity.getProdId().getMainUnit() == null ? "" : testRequestNoEntity.getProdId().getMainUnit().getName());
+                        ctBatchNumber.setContent(StringUtil.isEmpty(testRequestNoEntity.getBatchCode()) ? "" : testRequestNoEntity.getBatchCode());
+                        ctTestPeople.setContent(testRequestNoEntity.getApplyStaffId() == null ? "" : testRequestNoEntity.getApplyStaffId().getName());
+                        ctTestDepartment.setContent(testRequestNoEntity.getApplyDeptId() == null ? "" : testRequestNoEntity.getApplyDeptId().getName());
+                        cdTestTime.setContent(testRequestNoEntity.getApplyTime() == null ? "" : DateUtil.dateFormat(testRequestNoEntity.getApplyTime(),"yyyy-MM-dd HH:mm:ss"));
+                        ctRequestTestDepartment.setContent(testRequestNoEntity.getApplyDeptId() == null ? "" : testRequestNoEntity.getApplyDeptId().getName());
+
+                        inspectIdEntity = new InspectIdEntity();
+                        inspectIdEntity.setTableNo(testRequestNoEntity.getTableNo());
+                        inspectIdEntity.setBusiTypeId(testRequestNoEntity.getBusiTypeId());
+                        inspectIdEntity.setPsId(testRequestNoEntity.getPsId());
+                        inspectIdEntity.setApplyDeptId(testRequestNoEntity.getApplyDeptId());
+                        inspectIdEntity.vendorId = testRequestNoEntity.getVendorId();
+                        inspectIdEntity.setProdId(testRequestNoEntity.getProdId());
+                        inspectIdEntity.setNeedLab(testRequestNoEntity.getNeedLab());
+                        inspectIdEntity.setId(testRequestNoEntity.getId());
+
+                        this.entity.setBatchCode(testRequestNoEntity.getBatchCode());
+                        this.entity.setCheckTime(testRequestNoEntity.getApplyTime());
+                        this.entity.setCheckStaffId(testRequestNoEntity.getApplyStaffId());
+                        this.entity.setCheckDeptId(testRequestNoEntity.getApplyDeptId());
+
+                        inspectId = testRequestNoEntity.getId()+"";
+
+                        presenterRouter.create(TestNumAPI.class).getTestNum(testRequestNoEntity.getId()+""); //获取数量
+
+
+                    }
+                }
+            }
         }
     }
 
@@ -856,7 +980,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     public void getStdVerGradesByStdVerIdSuccess(BAP5CommonListEntity entity) {
         conclusionList.clear();
         conclusionList.addAll(entity.data);
-        this.mTableHeadDataOverListener.tableHeadOver();
+        this.mTableHeadDataOverListener.tableHeadOver(inspectId,stdVerId);
     }
 
     @Override
@@ -874,9 +998,15 @@ public class TestReportEditController extends BaseViewController implements Qual
                     EventBus.getDefault().post(new RefreshEvent());
                     ((BaseActivity)context).back();
                 }else {
-                    if (null != mOnRequestHeadListener){
-                        mOnRequestHeadListener.requestHeadClick();
+                    if (from.equals("add")){
+                        EventBus.getDefault().post(new RefreshEvent());
+                        ((BaseActivity)context).back();
+                    }else {
+                        if (null != mOnRequestHeadListener){
+                            mOnRequestHeadListener.requestHeadClick();
+                        }
                     }
+
                 }
 
             }
@@ -892,13 +1022,69 @@ public class TestReportEditController extends BaseViewController implements Qual
         this.mOnRequestHeadListener = mOnRequestHeadListener;
     }
 
+    @Override
+    public void getFirstStdVerSuccess(FirstStdVerEntity entity) {
+        if (null != entity){
+            stdVerId = entity.getStdVerId().getId()+"";
+
+            ctQualityStd.setContent(entity.getStdVerId().getName());
+            ctQualityStd.setEditable(true);
+            csTestConclusion.setEditable(true);
+            this.entity.setStdVerId(entity.getStdVerId());
+            this.entity.setInspectId(inspectIdEntity);
+
+            presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId()+""); //获取范围标准
+        }else {
+            ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_3));
+        }
+
+    }
+
+    @Override
+    public void getFirstStdVerFailed(String errorMsg) {
+        ToastUtils.show(context,errorMsg);
+    }
+
+    @Override
+    public void getTestNumSuccess(TestNumEntity entity) {
+        if (null != entity){
+            ctTestNumber.setContent(entity.getQuantity() == null ? "" : entity.getQuantity().setScale(2)+"");
+            inspectIdEntity.quantity = entity.getQuantity().floatValue();
+            presenterRouter.create(FirstStdVerAPI.class).getFirstStdVer( testRequestNoEntity.getId()+""); //获取默认质量标准
+        }
+
+    }
+
+    @Override
+    public void getTestNumFailed(String errorMsg) {
+        ToastUtils.show(context,errorMsg);
+    }
+
+    @Override
+    public void getCurrentDeploymentSuccess(DeploymentEntity entity) {
+        String menuName = "";
+        if (type == 1){
+            menuName = "TaskEvent_1o6ys36";
+        }else if (type == 2){
+            menuName = "TaskEvent_02g4ihu";
+        }else if (type == 3){
+            menuName = "TaskEvent_1igkdn3";
+        }
+        setStartWorkFlow(entity.id,menuName);
+    }
+
+    @Override
+    public void getCurrentDeploymentFailed(String errorMsg) {
+
+    }
+
     public interface OnRequestHeadListener{
         void requestHeadClick();
     }
 
 
     public interface TableHeadDataOverListener{
-        void tableHeadOver();
+        void tableHeadOver(String inspectId, String stdVerId);
     }
 
     public interface QualityChangeListener{

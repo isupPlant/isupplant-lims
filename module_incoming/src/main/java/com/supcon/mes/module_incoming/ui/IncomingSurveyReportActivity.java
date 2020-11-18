@@ -1,6 +1,7 @@
 package com.supcon.mes.module_incoming.ui;
 
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +12,13 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -38,6 +41,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -55,6 +61,9 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
 
     @BindByTag("contentView")
     RecyclerView contentView;
+
+    @BindByTag("tvAdd")
+    TextView tvAdd;
 
     private boolean isWhole = false;
 
@@ -132,6 +141,17 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
                 presenterRouter.create(SurveyReportAPI.class).getSurveyReportList(LimsConstant.Report.INCOMING_REPORT, isWhole, pageIndex, params);
             }
         });
+
+        RxView.clicks(tvAdd)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isAdd",true);
+                        IntentRouter.go(context,Constant.AppCode.LIMS_IncomingTestReportEdit,bundle);
+                    }
+                });
     }
 
     private void goRefresh() {

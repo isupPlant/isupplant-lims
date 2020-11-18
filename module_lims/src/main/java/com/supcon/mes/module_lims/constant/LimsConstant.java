@@ -80,6 +80,12 @@ public interface LimsConstant {
         String CHECKED = "LIMSSample_sampleState/checked"; //已审核
         String REFUSED = "LIMSSample_sampleState/refused"; //已拒绝
         String CANCELED = "LIMSSample_sampleState/canceled"; //已取消
+    }
 
+    interface ReportState{
+        String TESTING = "QCS_checkState/testing"; //检验中
+        String TEST_COMPLETE = "QCS_checkState/tested"; //已检验
+        String REPORTING = "QCS_checkState/reporting"; //报告编制中
+        String REPORTED = "QCS_checkState/reported"; //报告已审核
     }
 }

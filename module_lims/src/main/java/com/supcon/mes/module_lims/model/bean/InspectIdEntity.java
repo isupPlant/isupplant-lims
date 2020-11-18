@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * class name
  */
 public class InspectIdEntity extends BaseEntity {
-    private BaseIntIdNameEntity applyDeptId;
+    private BaseLongIdNameEntity applyDeptId;
     private Long id;
     private String tableNo;
     public Float quantity;
@@ -25,11 +25,11 @@ public class InspectIdEntity extends BaseEntity {
     private Boolean needLab;
 
 
-    public BaseIntIdNameEntity getApplyDeptId() {
+    public BaseLongIdNameEntity getApplyDeptId() {
         return applyDeptId;
     }
 
-    public void setApplyDeptId(BaseIntIdNameEntity applyDeptId) {
+    public void setApplyDeptId(BaseLongIdNameEntity applyDeptId) {
         this.applyDeptId = applyDeptId;
     }
 

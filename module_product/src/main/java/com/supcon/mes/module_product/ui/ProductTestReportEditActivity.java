@@ -19,15 +19,20 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
 import com.supcon.mes.module_lims.controller.TestReportEditController;
 import com.supcon.mes.module_lims.model.api.InspectionApplicationDetailAPI;
 import com.supcon.mes.module_lims.model.api.StdJudgeSpecAPI;
+import com.supcon.mes.module_lims.model.api.TableTypeAPI;
 import com.supcon.mes.module_lims.model.api.TestReportEditAPI;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
+import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportEditHeadEntity;
 import com.supcon.mes.module_lims.model.contract.StdJudgeSpecContract;
+import com.supcon.mes.module_lims.model.contract.TableTypeContract;
 import com.supcon.mes.module_lims.model.contract.TestReportEditContract;
 import com.supcon.mes.module_lims.presenter.StdJudgeSpecPresenter;
+import com.supcon.mes.module_lims.presenter.TableTypePresenter;
 import com.supcon.mes.module_lims.presenter.TestReportEditPresenter;
 import com.supcon.mes.module_product.R;
 
@@ -43,9 +48,10 @@ import io.reactivex.functions.Consumer;
  * class name
  */
 @Controller(value = {TestReportEditController.class})
-@Presenter(value = {TestReportEditPresenter.class, StdJudgeSpecPresenter.class})
+@Presenter(value = {TestReportEditPresenter.class, StdJudgeSpecPresenter.class, TableTypePresenter.class})
 @Router(Constant.AppCode.LIMS_ProductTestReportEdit)
-public class ProductTestReportEditActivity extends BaseRefreshActivity implements TestReportEditContract.View, StdJudgeSpecContract.View {
+public class ProductTestReportEditActivity extends BaseRefreshActivity implements TestReportEditContract.View,
+        StdJudgeSpecContract.View, TableTypeContract.View {
     private boolean isAdd;
     private String id;
     private String pendingId;
@@ -93,6 +99,13 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
                     }
                 });
 
+        refreshController.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(id,pendingId);
+            }
+        });
+
         getController(TestReportEditController.class).setQualityChangeListener(new TestReportEditController.QualityChangeListener() {
             @Override
             public void qualityChangeClick(String inspectId, String stdVerId) {
@@ -117,27 +130,32 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
         getController(TestReportEditController.class).setOnRequestHeadListener(new TestReportEditController.OnRequestHeadListener() {
             @Override
             public void requestHeadClick() {
-                if (!isAdd){
-                    goRefresh();
-                }
+                goRefresh();
             }
         });
 
-        refreshController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!isAdd){
-                    presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(id,pendingId);
-                }
 
-            }
-        });
     }
 
     @Override
     protected void initData() {
         super.initData();
-        goRefresh();
+        if (isAdd){
+            getController(TestReportEditController.class).setIsFrom("add");
+            presenterRouter.create(TableTypeAPI.class).getTableTypeByCode("manu");
+            getController(TestReportEditController.class).setStartTabHead(1, new TestReportEditController.TableHeadDataOverListener() {
+                @Override
+                public void tableHeadOver(String inspectId, String stdVerId) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("inspectId",inspectId);
+                    map.put("stdVerId",stdVerId);
+                    presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(map);
+                }
+            });
+        }else {
+            goRefresh();
+        }
+
     }
 
     public void goRefresh(){
@@ -148,7 +166,7 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
     public void getTestReportEditSuccess(TestReportEditHeadEntity entity) {
         getController(TestReportEditController.class).setTableHead(1,entity, new TestReportEditController.TableHeadDataOverListener() {
             @Override
-            public void tableHeadOver() {
+            public void tableHeadOver(String inspectId, String stdVerId) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("inspectReportId",entity.getId());
                 map.put("pageNo",1);
@@ -173,6 +191,16 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
     @Override
     public void getReportComListFailed(String errorMsg) {
         refreshController.refreshComplete();
+        ToastUtils.show(context,errorMsg);
+    }
+
+    @Override
+    public void getTableTypeByCodeSuccess(TableTypeIdEntity entity) {
+        getController(TestReportEditController.class).setTableType(entity);
+    }
+
+    @Override
+    public void getTableTypeByCodeFailed(String errorMsg) {
         ToastUtils.show(context,errorMsg);
     }
 }

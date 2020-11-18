@@ -28,6 +28,10 @@ import java.util.Date;
 import java.util.List;
 
 import static com.supcon.mes.middleware.ui.view.AddFileListView.getDataColumn;
+import static com.supcon.mes.module_lims.constant.LimsConstant.ReportState.REPORTED;
+import static com.supcon.mes.module_lims.constant.LimsConstant.ReportState.REPORTING;
+import static com.supcon.mes.module_lims.constant.LimsConstant.ReportState.TESTING;
+import static com.supcon.mes.module_lims.constant.LimsConstant.ReportState.TEST_COMPLETE;
 
 /**
  * Created by wanghaidong on 2020/7/16
@@ -565,6 +569,19 @@ public class Util implements LimsConstant.SampleState{
             return REFUSED;
         }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_already_cancel))){
             return CANCELED;
+        }
+        return "";
+    }
+
+    public static String getReportState(String value){
+        if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_testing))){
+            return TESTING;
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_already_test))){
+            return TEST_COMPLETE;
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_report_formation))){
+            return REPORTING;
+        }else if (value.equals(SupPlantApplication.getAppContext().getResources().getString(R.string.lims_report_review))){
+            return REPORTED;
         }
         return "";
     }

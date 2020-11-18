@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/llItem"
+    android:tag="llItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_10"
+    android:background="@drawable/sl_press_no_stroke"
+    android:translationZ="2dp">
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/ic_quality_standard"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctBillNumber"
+                android:tag="ctBillNumber"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:key="@string/lims_document_number"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/ic_type"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctBusinessType"
+                android:tag="ctBusinessType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:key="@string/lims_busitype"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/ic_sampling_point"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctSamplingPoint"
+                android:tag="ctSamplingPoint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:key="@string/lims_sampling_point"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/ic_material"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctMateriel"
+                android:tag="ctMateriel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:key="@string/lims_materiel"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/ic_batch_number"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctBatchNumber"
+                android:tag="ctBatchNumber"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:key="@string/lims_batch_number"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/ic_eam_status"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctStatus"
+                android:tag="ctStatus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:key="@string/lims_state"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10">
+
+        <ImageView
+            android:id="@+id/iv_select"
+            android:tag="iv_select"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_no"/>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

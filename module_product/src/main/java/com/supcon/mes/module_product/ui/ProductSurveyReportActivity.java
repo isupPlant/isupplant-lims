@@ -1,6 +1,8 @@
 package com.supcon.mes.module_product.ui;
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
@@ -30,6 +33,7 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.contract.SurveyReportContract;
 import com.supcon.mes.module_lims.presenter.SurveyReportPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SurveyReportAdapter;
+import com.supcon.mes.module_product.IntentRouter;
 import com.supcon.mes.module_product.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +42,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -54,6 +61,9 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
 
     @BindByTag("contentView")
     RecyclerView contentView;
+
+    @BindByTag("tvAdd")
+    TextView tvAdd;
 
     private boolean isWhole = false;
 
@@ -108,6 +118,7 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
     }
 
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -133,6 +144,17 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
                 presenterRouter.create(SurveyReportAPI.class).getSurveyReportList(LimsConstant.Report.PRODUCT_REPORT, isWhole, pageIndex, params);
             }
         });
+
+        RxView.clicks(tvAdd)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isAdd",true);
+                        IntentRouter.go(context,Constant.AppCode.LIMS_ProductTestReportEdit,bundle);
+                    }
+                });
     }
 
     private void goRefresh() {
