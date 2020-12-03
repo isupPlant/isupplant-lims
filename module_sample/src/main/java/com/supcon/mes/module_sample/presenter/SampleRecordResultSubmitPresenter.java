@@ -59,7 +59,7 @@ public class SampleRecordResultSubmitPresenter extends SampleRecordResultSubmitC
                         .subscribe(new Consumer<BAP5CommonEntity<SampleSignatureEntity>>() {
                             @Override
                             public void accept(BAP5CommonEntity<SampleSignatureEntity> sampleSignatureEntity) throws Exception {
-                                if (sampleSignatureEntity.success6Local){
+                                if (sampleSignatureEntity.success){
                                     getView().getSignatureEnabledSuccess(sampleSignatureEntity.data);
                                 }else {
                                     getView().getSignatureEnabledFailed(sampleSignatureEntity.msg);
