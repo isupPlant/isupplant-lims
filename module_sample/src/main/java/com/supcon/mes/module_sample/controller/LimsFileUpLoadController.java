@@ -33,7 +33,9 @@ import com.supcon.common.view.base.fragment.BaseFragment;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.middleware.controller.AttachmentController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.ui.view.AddFileListView;
 import com.supcon.mes.module_lims.model.api.FileUpAPI;
@@ -74,6 +76,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
     private Activity context;
     private String filePath;
     private BaseFragment fragment;
+    private AttachmentController mAttachmentController;
 
     public void setContext(Activity context) {
         this.context = context;
@@ -212,7 +215,18 @@ public class LimsFileUpLoadController extends BasePresenterController implements
 
                 filePath = AddFileListView.getPath(context, imageUri);
                 File file = new File(filePath);
-                presenterRouter.create(FileUpAPI.class).upFile(file);
+                mAttachmentController = new AttachmentController();
+                mAttachmentController.bapUploadAttachment(new OnAPIResultListener<String>() {
+                    @Override
+                    public void onFail(String errorMsg) {
+                        setFailed(errorMsg);
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        setSucceed(result);
+                    }
+                }, file);
             } catch (Exception e) {
                 if (context instanceof BaseActivity){
                     ((BaseActivity) context).closeLoader();
@@ -236,7 +250,18 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                 if (context instanceof BaseFragmentActivity){
                     ((BaseFragmentActivity) context).onLoading(context.getResources().getString(R.string.lims_upload_file));
                 }
-                presenterRouter.create(FileUpAPI.class).upFile(file);
+                mAttachmentController = new AttachmentController();
+                mAttachmentController.bapUploadAttachment(new OnAPIResultListener<String>() {
+                    @Override
+                    public void onFail(String errorMsg) {
+                        setFailed(errorMsg);
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        setSucceed(result);
+                    }
+                }, file);
             } catch (Exception e) {
                 if (context instanceof BaseActivity){
                     ((BaseActivity) context).closeLoader();
@@ -248,36 +273,6 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void upFileSuccess(BAP5CommonEntity entity) {
-        if (context instanceof BaseActivity){
-            ((BaseActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
-                @Override
-                public void onLoaderFinished() {
-                    if (onSuccessListener != null) {
-                        FileDataEntity fileDataEntity = (FileDataEntity) entity.data;
-                        fileDataEntity.setLocalPath(filePath);
-                        onSuccessListener.onSuccess(fileDataEntity);
-                    }
-                }
-            });
-        }
-
-        if (context instanceof BaseFragmentActivity){
-            ((BaseFragmentActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
-                @Override
-                public void onLoaderFinished() {
-                    if (onSuccessListener != null) {
-                        FileDataEntity fileDataEntity = (FileDataEntity) entity.data;
-                        fileDataEntity.setLocalPath(filePath);
-                        onSuccessListener.onSuccess(fileDataEntity);
-                    }
-                }
-            });
-        }
-
     }
 
     public OnSuccessListener<List<AttachmentSampleInputEntity>> getFileOnSuccessListener() {
@@ -296,16 +291,6 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         this.onSuccessListener = onSuccessListener;
     }
 
-    @Override
-    public void upFileFailed(String errorMsg) {
-        if (context instanceof BaseActivity){
-            ((BaseActivity) context).onLoadFailed(errorMsg);
-        }
-
-        if (context instanceof BaseFragmentActivity){
-            ((BaseFragmentActivity) context).onLoadFailed(errorMsg);
-        }
-    }
 
     public LimsFileUpLoadController loadFile(List<String> id, List<String> fileName) {
         presenterRouter.create(FileUpAPI.class).loadFile(id, fileName);
@@ -324,4 +309,44 @@ public class LimsFileUpLoadController extends BasePresenterController implements
 
     }
 
+
+    private void setFailed(String errorMsg){
+        if (context instanceof BaseActivity){
+            ((BaseActivity) context).onLoadFailed(errorMsg);
+        }
+
+        if (context instanceof BaseFragmentActivity){
+            ((BaseFragmentActivity) context).onLoadFailed(errorMsg);
+        }
+    }
+
+
+    private void setSucceed(String result){
+        if (context instanceof BaseActivity){
+            ((BaseActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
+                @Override
+                public void onLoaderFinished() {
+                    if (onSuccessListener != null) {
+                        FileDataEntity fileDataEntity = new FileDataEntity();
+                        fileDataEntity.setLocalPath(filePath);
+                        fileDataEntity.setPath(result);
+                        onSuccessListener.onSuccess(fileDataEntity);
+                    }
+                }
+            });
+        }
+
+        if (context instanceof BaseFragmentActivity){
+            ((BaseFragmentActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
+                @Override
+                public void onLoaderFinished() {
+                    if (onSuccessListener != null) {
+                        FileDataEntity fileDataEntity = new FileDataEntity();
+                        fileDataEntity.setLocalPath(result);
+                        onSuccessListener.onSuccess(fileDataEntity);
+                    }
+                }
+            });
+        }
+    }
 }

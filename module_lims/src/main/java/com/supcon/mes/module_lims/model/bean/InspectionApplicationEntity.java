@@ -13,8 +13,8 @@ import java.util.Map;
  * class name 检验申请列表实体
  */
 public class InspectionApplicationEntity extends BaseEntity {
-    private BaseIntIdNameEntity applyDeptId;
-    private BaseIntIdNameEntity applyStaffId;
+    private BaseLongIdNameEntity applyDeptId;
+    private BaseLongIdNameEntity applyStaffId;
     private Long applyTime;
     private Map attrMap;
     private String batchCode;
@@ -33,19 +33,19 @@ public class InspectionApplicationEntity extends BaseEntity {
     private Boolean valid;
     private Integer version;
 
-    public BaseIntIdNameEntity getApplyDeptId() {
+    public BaseLongIdNameEntity getApplyDeptId() {
         return applyDeptId;
     }
 
-    public void setApplyDeptId(BaseIntIdNameEntity applyDeptId) {
+    public void setApplyDeptId(BaseLongIdNameEntity applyDeptId) {
         this.applyDeptId = applyDeptId;
     }
 
-    public BaseIntIdNameEntity getApplyStaffId() {
+    public BaseLongIdNameEntity getApplyStaffId() {
         return applyStaffId;
     }
 
-    public void setApplyStaffId(BaseIntIdNameEntity applyStaffId) {
+    public void setApplyStaffId(BaseLongIdNameEntity applyStaffId) {
         this.applyStaffId = applyStaffId;
     }
 

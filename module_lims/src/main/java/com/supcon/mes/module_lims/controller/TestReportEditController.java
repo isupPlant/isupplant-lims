@@ -1049,7 +1049,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     public void getTestNumSuccess(TestNumEntity entity) {
         if (null != entity){
             ctTestNumber.setContent(entity.getQuantity() == null ? "" : entity.getQuantity().setScale(2)+"");
-            inspectIdEntity.quantity = entity.getQuantity().floatValue();
+            inspectIdEntity.quantity = entity.getQuantity() != null ? entity.getQuantity().floatValue() : 0.0f;
             presenterRouter.create(FirstStdVerAPI.class).getFirstStdVer( testRequestNoEntity.getId()+""); //获取默认质量标准
         }
 

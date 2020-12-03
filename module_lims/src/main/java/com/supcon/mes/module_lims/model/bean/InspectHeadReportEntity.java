@@ -11,13 +11,13 @@ import com.supcon.mes.middleware.model.bean.PendingEntity;
 public class InspectHeadReportEntity extends BaseEntity {
     public Long id;
     public int version;
-    public BaseIntIdNameEntity busiTypeId;
+    public BaseLongIdNameEntity busiTypeId;
     public InspectIdEntity inspectId;
     public ProdIdEntity prodId;
     public String batchCode;
     public PendingEntity pending;
-    public BaseIntIdNameEntity checkStaffId;
-    public BaseIntIdNameEntity checkDeptId;
+    public BaseLongIdNameEntity checkStaffId;
+    public BaseLongIdNameEntity checkDeptId;
     public Long checkTime;
     public StdVerIdEntity stdVerId;//质量标准
     public String checkResult;

@@ -17,7 +17,7 @@ public class SampleIdEntity extends BaseEntity {
     private Long id;
     private String name;
     private ProdIdEntity productId;
-    private BaseIntIdNameEntity psId;
+    private BaseLongIdNameEntity psId;
     private Long registerTime;
     public Long testTime;
 
@@ -70,11 +70,11 @@ public class SampleIdEntity extends BaseEntity {
         this.productId = productId;
     }
 
-    public BaseIntIdNameEntity getPsId() {
+    public BaseLongIdNameEntity getPsId() {
         return psId;
     }
 
-    public void setPsId(BaseIntIdNameEntity psId) {
+    public void setPsId(BaseLongIdNameEntity psId) {
         this.psId = psId;
     }
 

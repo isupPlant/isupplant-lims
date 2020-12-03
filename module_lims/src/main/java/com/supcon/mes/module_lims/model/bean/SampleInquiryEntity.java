@@ -16,7 +16,7 @@ public class SampleInquiryEntity extends BaseEntity {
     private String batchCode;
     private Long cid;
     private String code;
-    private BaseIntIdNameEntity collectStaffId;
+    private BaseLongIdNameEntity collectStaffId;
     private Long createTime;
     private Long id;
     private String name;
@@ -63,11 +63,11 @@ public class SampleInquiryEntity extends BaseEntity {
         this.code = code;
     }
 
-    public BaseIntIdNameEntity getCollectStaffId() {
+    public BaseLongIdNameEntity getCollectStaffId() {
         return collectStaffId;
     }
 
-    public void setCollectStaffId(BaseIntIdNameEntity collectStaffId) {
+    public void setCollectStaffId(BaseLongIdNameEntity collectStaffId) {
         this.collectStaffId = collectStaffId;
     }
 

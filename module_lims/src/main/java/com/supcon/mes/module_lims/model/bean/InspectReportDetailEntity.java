@@ -12,7 +12,7 @@ public class InspectReportDetailEntity extends BaseEntity {
     public Long id;
     public String checkResult;
     public String dispValue;
-    public BaseIntIdNameEntity reportId;
+    public BaseLongIdNameEntity reportId;
     public String reportName;
     public String unitName;
     public int version;

@@ -159,9 +159,9 @@ public interface ApiService {
     @GET("/msService/baseService/signature/buttonSignature/getSignatureEnabled")
     Flowable<BAP5CommonEntity<SampleSignatureEntity>> getSignatureEnabled(@Query("buttonCode") String buttonCode);
 
-    @POST("/msService/baseService/workbench/uploadFile")
-    @Multipart
-    Flowable<BAP5CommonEntity<FileDataEntity>> bapUploadFile(@Part List<MultipartBody.Part> partList);
+//    @POST("/msService/baseService/workbench/uploadFile")
+//    @Multipart
+//    Flowable<BAP5CommonEntity<FileDataEntity>> bapUploadFile(@Part List<MultipartBody.Part> partList);
 
     /**
      * 获取样品台账列表数据

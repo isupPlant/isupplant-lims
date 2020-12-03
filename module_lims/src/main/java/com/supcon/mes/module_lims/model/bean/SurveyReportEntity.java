@@ -15,14 +15,14 @@ import java.util.Map;
 public class SurveyReportEntity extends BaseEntity {
     private Map attrMap;
     private String batchCode;
-    private BaseIntIdNameEntity busiTypeId;
-    private BaseIntIdNameEntity checkDeptId;
+    private BaseLongIdNameEntity busiTypeId;
+    private BaseLongIdNameEntity checkDeptId;
     private BaseIdValueEntity checkResOption;
-    public BaseIntIdNameEntity checkStaffId;
+    public BaseLongIdNameEntity checkStaffId;
     private String checkResult;
     private Long checkTime;
     private Long cid;
-    private BaseIntIdNameEntity createStaff;
+    private BaseLongIdNameEntity createStaff;
     private Long createTime;
     private Long id;
     public PendingEntity pending;
@@ -54,19 +54,19 @@ public class SurveyReportEntity extends BaseEntity {
         this.batchCode = batchCode;
     }
 
-    public BaseIntIdNameEntity getBusiTypeId() {
+    public BaseLongIdNameEntity getBusiTypeId() {
         return busiTypeId;
     }
 
-    public void setBusiTypeId(BaseIntIdNameEntity busiTypeId) {
+    public void setBusiTypeId(BaseLongIdNameEntity busiTypeId) {
         this.busiTypeId = busiTypeId;
     }
 
-    public BaseIntIdNameEntity getCheckDeptId() {
+    public BaseLongIdNameEntity getCheckDeptId() {
         return checkDeptId;
     }
 
-    public void setCheckDeptId(BaseIntIdNameEntity checkDeptId) {
+    public void setCheckDeptId(BaseLongIdNameEntity checkDeptId) {
         this.checkDeptId = checkDeptId;
     }
 
@@ -102,11 +102,11 @@ public class SurveyReportEntity extends BaseEntity {
         this.cid = cid;
     }
 
-    public BaseIntIdNameEntity getCreateStaff() {
+    public BaseLongIdNameEntity getCreateStaff() {
         return createStaff;
     }
 
-    public void setCreateStaff(BaseIntIdNameEntity createStaff) {
+    public void setCreateStaff(BaseLongIdNameEntity createStaff) {
         this.createStaff = createStaff;
     }
 

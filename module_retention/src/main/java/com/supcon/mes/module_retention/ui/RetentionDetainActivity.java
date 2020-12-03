@@ -2,6 +2,7 @@ package com.supcon.mes.module_retention.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -121,6 +122,8 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     TextView observePlanTv;
     @BindByTag("observePlanImg")
     ImageView observePlanImg;
+    @BindByTag("ns_scroll")
+    NestedScrollView ns_scroll;
 
     @Override
     protected int getLayoutID() {
@@ -148,6 +151,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         adapter = new RecordAdapter(context);
         contentView.setAdapter(adapter);
+        ns_scroll.setNestedScrollingEnabled(false);
     }
 
     private boolean expand = false;
