@@ -156,7 +156,7 @@ public interface ApiService {
     @POST("/msService/LIMSSample/sample/sampleTest/recordResultSubmit")
     Flowable<BAP5CommonEntity> recordResultSubmit(@FieldMap Map<String,Object> paramsMap);
 
-    @GET("/msService/baseService/signature/buttonSignature/getSignatureEnabled")
+    @GET("/inter-api/signature/buttonSignature/getSignatureEnabled")
     Flowable<BAP5CommonEntity<SampleSignatureEntity>> getSignatureEnabled(@Query("buttonCode") String buttonCode);
 
 //    @POST("/msService/baseService/workbench/uploadFile")
