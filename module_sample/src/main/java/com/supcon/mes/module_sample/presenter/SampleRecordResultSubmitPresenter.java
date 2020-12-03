@@ -1,11 +1,13 @@
 package com.supcon.mes.module_sample.presenter;
 
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.model.bean.FunctionEx;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_sample.model.bean.SampleSignatureEntity;
 import com.supcon.mes.module_sample.model.contract.SampleRecordResultSubmitContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
@@ -48,16 +50,16 @@ public class SampleRecordResultSubmitPresenter extends SampleRecordResultSubmitC
         mCompositeSubscription.add(
                 SampleHttpClient
                         .getSignatureEnabled(buttonCode)
-                        .onErrorReturn(error->{
-                            BAP5CommonEntity commonEntity=new BAP5CommonEntity();
-                            commonEntity.msg=error.getMessage();
-                            commonEntity.success=false;
-                            return commonEntity;
+                        .onErrorReturn(new FunctionEx<Throwable, SampleSignatureEntity>() {
+                            @Override
+                            public BAP5CommonEntity<SampleSignatureEntity> apply(Throwable throwable)  {
+                                return super.apply(throwable);
+                            }
                         })
                         .subscribe(new Consumer<BAP5CommonEntity<SampleSignatureEntity>>() {
                             @Override
                             public void accept(BAP5CommonEntity<SampleSignatureEntity> sampleSignatureEntity) throws Exception {
-                                if (sampleSignatureEntity.success){
+                                if (sampleSignatureEntity.success6Local){
                                     getView().getSignatureEnabledSuccess(sampleSignatureEntity.data);
                                 }else {
                                     getView().getSignatureEnabledFailed(sampleSignatureEntity.msg);
