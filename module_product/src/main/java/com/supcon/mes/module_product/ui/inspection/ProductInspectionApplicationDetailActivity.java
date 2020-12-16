@@ -100,6 +100,7 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
                 if (null != id && null != pendingId){
                     presenterRouter.create(InspectionApplicationDetailAPI.class).getInspectionDetailHeaderData(id,pendingId);
                 }else {
+                    if (null != pendingEntity)
                     //通过待办 获取检验申请单的id
                     presenterRouter.create(InspectionApplicationDetailAPI.class).getInspectionApplicationByPending(pendingEntity.modelId,pendingEntity.id);
                 }

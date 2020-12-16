@@ -43,6 +43,7 @@ import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.GetPowerCodeController;
 import com.supcon.mes.middleware.controller.WorkFlowViewController;
@@ -639,6 +640,21 @@ public class InspectionApplicationDetailController extends BaseViewController im
         mDeploymentId = id;
         activityName = menuName;
         mHeadEntity = new InspectionApplicationDetailHeaderEntity();
+
+        //设置默认请检人员
+        ApplyStaffIdEntity staffIdEntity = new ApplyStaffIdEntity();
+        staffIdEntity.setName(SupPlantApplication.getAccountInfo().staffName);
+        staffIdEntity.setId(SupPlantApplication.getAccountInfo().staffId);
+        mHeadEntity.setApplyStaffId(staffIdEntity);
+        ctCheckPeople.setContent(mHeadEntity.getApplyStaffId().getName());
+
+        //设置默认请检部门
+        ApplyDeptIdEntity deptIdEntity = new ApplyDeptIdEntity();
+        deptIdEntity.setName(SupPlantApplication.getAccountInfo().departmentName);
+        deptIdEntity.setId(SupPlantApplication.getAccountInfo().departmentId);
+        mHeadEntity.setApplyDeptId(deptIdEntity);
+        ctCheckDepartment.setContent(mHeadEntity.getApplyDeptId().getName());
+
         //获取业务类型参照的数据
         presenterRouter.create(InspectionDetailReadyAPI.class).getBusinessTypeList(type);
         powerCodeController.initPowerCode(type == 3 ? "start_t1vhtik" : type == 2 ? "start_7r8amon" : type == 1 ? "start_ju6mjql" : "");
