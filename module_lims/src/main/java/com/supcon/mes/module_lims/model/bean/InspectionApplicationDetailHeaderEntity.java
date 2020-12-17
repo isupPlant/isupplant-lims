@@ -52,7 +52,6 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
     private BigDecimal quantity;
     private Boolean needLab;
     private Boolean refable;
-    private Boolean closed;
     private ApplyDeptIdEntity applyDeptId;
     private ApplyStaffIdEntity applyStaffId;
     private String applyTime;
@@ -348,14 +347,6 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
 
     public void setRefable(Boolean refable) {
         this.refable = refable;
-    }
-
-    public Boolean getClosed() {
-        return closed;
-    }
-
-    public void setClosed(Boolean closed) {
-        this.closed = closed;
     }
 
     public ApplyDeptIdEntity getApplyDeptId() {

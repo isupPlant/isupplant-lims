@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sample.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +28,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.constant.Constant;
@@ -139,6 +141,7 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     }
     private int operate=-1;//0保存、1驳回、2提交
     private boolean expand=false;
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -147,11 +150,13 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
                 .subscribe(o -> {
                    back();
                 });
+
         if (reportEntity!=null){
             getSampleReportHead();
         }else {
             getSampleReportByPending();
         }
+
         RxView.clicks(imageUpDown)
                 .throttleFirst(1000,TimeUnit.MICROSECONDS)
                 .subscribe(o->{
@@ -188,8 +193,6 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
                 }
             }
         });
-
-
     }
 
     private void getSampleReportHead(){
@@ -314,7 +317,8 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
     public void getSampleReportSuccess(SurveyReportEntity entity) {
         reportEntity=entity;
         setSampleReport(entity);
-
+        customWorkFlowView.findViewById(R.id.commentInput).setVisibility(View.GONE);
+        ((CustomEditText)customWorkFlowView.findViewById(R.id.commentInput)).setContent("");
     }
 
     @Override
