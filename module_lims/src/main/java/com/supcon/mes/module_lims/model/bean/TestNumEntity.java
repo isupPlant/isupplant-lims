@@ -14,7 +14,7 @@ public class TestNumEntity extends BaseEntity {
     private String sourceType;
 
     public BigDecimal getQuantity() {
-        return quantity;
+        return quantity == null ? new BigDecimal(0) : quantity;
     }
 
     public void setQuantity(BigDecimal quantity) {
