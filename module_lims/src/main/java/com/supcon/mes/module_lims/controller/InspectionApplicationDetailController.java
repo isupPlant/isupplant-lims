@@ -644,6 +644,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
         powerCodeController.initPowerCode(type == 3 ? "start_t1vhtik" : type == 2 ? "start_7r8amon" : type == 1 ? "start_ju6mjql" : "");
         workFlowViewController.initStartWorkFlowView(customWorkFlowView,id);
         customWorkFlowView.setVisibility(View.VISIBLE);
+
+        //设置新增检验申请可滑动删除
+        recyclerView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(context));
     }
 
     //设置工作流

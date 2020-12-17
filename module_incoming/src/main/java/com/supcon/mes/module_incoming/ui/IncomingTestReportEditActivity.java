@@ -75,7 +75,7 @@ public class IncomingTestReportEditActivity extends BaseRefreshActivity implemen
         id = getIntent().getStringExtra("id") == null ? "" : getIntent().getStringExtra("id");
         pendingId = getIntent().getStringExtra("pendingId") == null ? "" : getIntent().getStringExtra("pendingId");
         ctSupplier.setVisibility(View.VISIBLE);
-        titleText.setText(context.getResources().getString(R.string.lims_incoming_test_report));
+        titleText.setText(context.getResources().getString(R.string.lims_incoming_inspection_report));
     }
 
     @SuppressLint("CheckResult")

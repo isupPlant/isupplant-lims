@@ -83,7 +83,7 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
         id = getIntent().getStringExtra("id") == null ? "" : getIntent().getStringExtra("id");
         pendingId = getIntent().getStringExtra("pendingId") == null ? "" : getIntent().getStringExtra("pendingId");
         ctSupplier.setVisibility(View.GONE);
-        titleText.setText(context.getResources().getString(R.string.lims_product_test_report));
+        titleText.setText(context.getResources().getString(R.string.lims_product_inspection_report));
     }
 
     @SuppressLint("CheckResult")

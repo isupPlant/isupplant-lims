@@ -335,7 +335,7 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
     }
 
     public Boolean getNeedLab() {
-        return needLab;
+        return needLab == null ? false : needLab;
     }
 
     public void setNeedLab(Boolean needLab) {
