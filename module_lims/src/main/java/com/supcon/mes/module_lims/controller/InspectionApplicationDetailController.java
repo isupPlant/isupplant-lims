@@ -49,6 +49,7 @@ import com.supcon.mes.middleware.controller.GetPowerCodeController;
 import com.supcon.mes.middleware.controller.WorkFlowViewController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
+import com.supcon.mes.middleware.model.bean.DataUtil;
 import com.supcon.mes.middleware.model.bean.DepartmentEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -62,6 +63,7 @@ import com.supcon.mes.module_lims.event.MaterialDateEvent;
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
 import com.supcon.mes.module_lims.model.api.AddTestRequestAPI;
 import com.supcon.mes.module_lims.model.api.AvailableStdIdAPI;
+import com.supcon.mes.module_lims.model.api.BusiTypeByCodeAPI;
 import com.supcon.mes.module_lims.model.api.InspectApplicationSubmitAPI;
 import com.supcon.mes.module_lims.model.api.InspectionDetailReadyAPI;
 import com.supcon.mes.module_lims.model.bean.ApplyDeptIdEntity;
@@ -88,10 +90,12 @@ import com.supcon.mes.module_lims.model.bean.VendorIdEntity;
 
 import com.supcon.mes.module_lims.model.contract.AddTestRequestContract;
 import com.supcon.mes.module_lims.model.contract.AvailableStdIdContract;
+import com.supcon.mes.module_lims.model.contract.BusiTypeByCodeContract;
 import com.supcon.mes.module_lims.model.contract.InspectApplicationSubmitContract;
 import com.supcon.mes.module_lims.model.contract.InspectionDetailReadyContract;
 import com.supcon.mes.module_lims.presenter.AddTestRequestPresenter;
 import com.supcon.mes.module_lims.presenter.AvailableStdPresenter;
+import com.supcon.mes.module_lims.presenter.BusiTypeByCodePresenter;
 import com.supcon.mes.module_lims.presenter.InspectApplicationSubmitPresenter;
 import com.supcon.mes.module_lims.presenter.InspectionDetailReadyPresenter;
 import com.supcon.mes.module_lims.ui.adapter.QualityStandardAdapter;
@@ -120,9 +124,9 @@ import io.reactivex.functions.Consumer;
  */
 
 @Presenter(value = {InspectionDetailReadyPresenter.class, AvailableStdPresenter.class,
-        InspectApplicationSubmitPresenter.class, AddTestRequestPresenter.class})
+        InspectApplicationSubmitPresenter.class, AddTestRequestPresenter.class, BusiTypeByCodePresenter.class})
 public class InspectionApplicationDetailController extends BaseViewController implements InspectionDetailReadyContract.View, AvailableStdIdContract.View,
-        InspectApplicationSubmitContract.View, AddTestRequestContract.View {
+        InspectApplicationSubmitContract.View, AddTestRequestContract.View, BusiTypeByCodeContract.View {
 
     @BindByTag("searchTitle")
     SearchTitleBar searchTitle;
@@ -640,6 +644,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
         mDeploymentId = id;
         activityName = menuName;
         mHeadEntity = new InspectionApplicationDetailHeaderEntity();
+        presenterRouter.create(BusiTypeByCodeAPI.class).getBusiTypeByCode(type == 1 ? "product" : type == 2 ? "material" : type == 3 ? "other" : ""  );
 
         //设置默认请检人员
         ApplyStaffIdEntity staffIdEntity = new ApplyStaffIdEntity();
@@ -654,6 +659,12 @@ public class InspectionApplicationDetailController extends BaseViewController im
         deptIdEntity.setId(SupPlantApplication.getAccountInfo().departmentId);
         mHeadEntity.setApplyDeptId(deptIdEntity);
         ctCheckDepartment.setContent(mHeadEntity.getApplyDeptId().getName());
+
+
+        //设置默认请检时间
+        long time = System.currentTimeMillis();
+        mHeadEntity.setApplyTime(time+"");
+        cdCheckTime.setContent(DateUtil.dateFormat(time,"yyyy-MM-dd HH:mm:ss"));
 
         //获取业务类型参照的数据
         presenterRouter.create(InspectionDetailReadyAPI.class).getBusinessTypeList(type);
@@ -1457,6 +1468,22 @@ public class InspectionApplicationDetailController extends BaseViewController im
     @Override
     public void addTestRequestSaveFailed(String errorMsg) {
         ((BaseActivity)context).onLoadFailed(errorMsg);
+    }
+
+    @Override
+    public void getBusiTypeByCodeSuccess(BusiTypeIdEntity entity) {
+        //设置默认业务类型
+        mHeadEntity.setBusiTypeId(entity);
+        if (null != mHeadEntity.getBusiTypeId()) {
+            ctBusinessType.setContent(StringUtil.isEmpty(mHeadEntity.getBusiTypeId().getName()) ? "--" : mHeadEntity.getBusiTypeId().getName());
+        } else {
+            ctBusinessType.setContent("--");
+        }
+    }
+
+    @Override
+    public void getBusiTypeByCodeFailed(String errorMsg) {
+        ToastUtils.show(context,errorMsg);
     }
 
 

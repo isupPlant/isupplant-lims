@@ -233,4 +233,5 @@
     <string name="lims_report_formation">The report is under preparation</string>
     <string name="lims_report_review">Report under review</string>
     <string name="lims_request_reference">Inspection application reference</string>
+    <string name="lims_insert">Add</string>
 </resources>

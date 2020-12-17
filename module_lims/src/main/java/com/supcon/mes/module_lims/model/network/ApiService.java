@@ -17,6 +17,7 @@ import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
+import com.supcon.mes.module_lims.model.bean.BusiTypeIdEntity;
 import com.supcon.mes.module_lims.model.bean.BusinessTypeListEntity;
 import com.supcon.mes.module_lims.model.bean.ConfigEntity;
 import com.supcon.mes.module_lims.model.bean.DeviceReferenceEntity;
@@ -404,4 +405,7 @@ public interface ApiService {
 
     @GET("/msService/QCS/inspect/inspect/data/{id}")
     Flowable<BAP5CommonEntity<TestNumEntity>> getTestNum(@Path("id") String id, @QueryMap Map<String, Object> map);
+
+    @GET("msService/QCS/tableType/busiType/getBusiTypeByCode")
+    Flowable<BAP5CommonEntity<BusiTypeIdEntity>> getBusiTypeByCode(@Query("code") String code);
 }

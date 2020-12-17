@@ -231,4 +231,5 @@
     <string name="lims_testing">检验中</string>
     <string name="lims_report_formation">报告编制中</string>
     <string name="lims_report_review">报告审核中</string>
+    <string name="lims_insert">添加</string>
 </resources>
