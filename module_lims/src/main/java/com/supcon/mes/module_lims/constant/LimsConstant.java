@@ -88,4 +88,10 @@ public interface LimsConstant {
         String REPORTING = "QCS_checkState/reporting"; //报告编制中
         String REPORTED = "QCS_checkState/reported"; //报告已审核
     }
+
+    interface ConclusionType{
+        String HIGH_GRADE = "LIMSBasic_standardGrade/highGrade" ; //优等品
+        String QUALIFIED = "LIMSBasic_standardGrade/Qualified"; //合格
+        String UN_QUALIFIED = "LIMSBasic_standardGrade/Unqualified";//不合格
+    }
 }

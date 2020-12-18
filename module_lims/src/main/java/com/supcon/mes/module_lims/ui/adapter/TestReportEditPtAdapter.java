@@ -238,23 +238,27 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             ceDispValue.setContent(data.dispValue == null ? "" : data.dispValue);
             csDispValue.setContent(data.dispValue == null ? "" : data.dispValue);
 
+
             ceDispValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
             ceDispValue.editText().setSingleLine();
             //结论
             csTestConclusion.setContent(data.checkResult == null ? "" : data.checkResult);
 
+
             if (!StringUtil.isEmpty(data.checkResult)) {
                 for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                     if (conclusionEntity.getName().equals(data.checkResult == null ? "" : data.checkResult)) {
                         if ((conclusionEntity.getStdGrade().getId() == null ? "" : conclusionEntity.getStdGrade().getId())
-                                .equals("LIMSBasic_standardGrade/Unqualified")) {
-                            csTestConclusion.setContentTextColor(Color.parseColor("#F70606"));
+                                .equals(LimsConstant.ConclusionType.UN_QUALIFIED)) {
+                            csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.warningRed));
                         } else {
-                            csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
+                            csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.lightGreen));
                         }
+
                     }
                 }
             }
+
 
             if (data.isExpand) {
                 rangeImg.setImageResource(R.drawable.ic_inspect_down_arrow);

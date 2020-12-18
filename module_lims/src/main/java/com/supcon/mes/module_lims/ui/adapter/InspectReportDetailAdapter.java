@@ -108,9 +108,9 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
             dispvalueTv.setValue(data.dispValue);
             checkResultTv.setValue(data.checkResult);
             if (!TextUtils.isEmpty(data.checkResult) && data.checkResult.contains(context.getResources().getString(R.string.lims_unqualified))){
-                checkResultTv.setValueColor(Color.parseColor("#F70606"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.warningRed));
             }else {
-                checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.lightGreen));
             }
             if (data.isExpand) {
                 rangeImg.setImageResource(R.drawable.ic_inspect_down_arrow);

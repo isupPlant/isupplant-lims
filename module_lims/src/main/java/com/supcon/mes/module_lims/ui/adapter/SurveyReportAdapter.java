@@ -168,9 +168,9 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
 //                }
 //            }
             if (!TextUtils.isEmpty(data.getCheckResult()) && data.getCheckResult().contains(context.getResources().getString(R.string.lims_unqualified))){
-                checkResultTv.setValueColor(Color.parseColor("#F70606"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.warningRed));
             }else {
-                checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.lightGreen));
             }
             checkResultTv.setValue(data.getCheckResult());
 

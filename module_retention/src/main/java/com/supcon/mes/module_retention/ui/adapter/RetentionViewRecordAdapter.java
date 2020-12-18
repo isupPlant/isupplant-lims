@@ -50,9 +50,9 @@ public class RetentionViewRecordAdapter extends BaseListDataRecyclerViewAdapter<
 
             if (data.observeResult!=null){
                 if ("LIMSRetain_observeResult/qualified".equals(data.observeResult.getId()))
-                    observeResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+                    observeResultTv.setValueColor(context.getResources().getColor(R.color.lightGreen));
                 else
-                    observeResultTv.setValueColor(Color.parseColor("#F70606"));
+                    observeResultTv.setValueColor(context.getResources().getColor(R.color.warningRed));
                 observeResultTv.setValue(data.observeResult.getValue());
             }else {
                 observeResultTv.setValue("");

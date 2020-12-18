@@ -249,9 +249,9 @@ public class SampleReportDetailActivity extends BaseRefreshActivity implements S
         versionNumberTv.setValue(sampleReport.getStdVerId()!=null?sampleReport.getStdVerId().getBusiVersion():"");
         inspectCheckResultTv.setValue(sampleReport.getTestResult());
         if (sampleReport.getTestResult().contains(getResources().getString(R.string.lims_unqualified))){
-            inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
+            inspectCheckResultTv.setValueColor(context.getResources().getColor(com.supcon.mes.module_lims.R.color.warningRed));
         }else {
-            inspectCheckResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+            inspectCheckResultTv.setValueColor(context.getResources().getColor(R.color.lightGreen));
         }
 
     }

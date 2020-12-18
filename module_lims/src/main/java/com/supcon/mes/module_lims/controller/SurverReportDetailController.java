@@ -293,9 +293,9 @@ public class SurverReportDetailController extends BaseViewController implements 
         inspectCheckResultTv.setValue(StringUtil.isEmpty(entity.checkResult) ? "" : entity.checkResult);
         if (!StringUtil.isEmpty(entity.checkResult))
         if (entity.checkResult.contains(context.getResources().getString(R.string.lims_unqualified))){
-            inspectCheckResultTv.setValueColor(Color.parseColor("#F70606"));
+            inspectCheckResultTv.setValueColor(context.getResources().getColor(R.color.warningRed));
         }else {
-            inspectCheckResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+            inspectCheckResultTv.setValueColor(context.getResources().getColor(R.color.lightGreen));
         }
     }
 

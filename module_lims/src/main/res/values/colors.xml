@@ -6,4 +6,6 @@
     <color name="btn_bg">#ff1e82d2</color>
     <color name="list_bg">#F8F8F8</color>
     <color name="colorGreen">#46B479</color>
+    <color name="lightGreen">#0BC8C1</color>
+    <color name="warningRed">#F70606</color>
 </resources>

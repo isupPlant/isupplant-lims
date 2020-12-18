@@ -119,9 +119,9 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
                 rangeImg.setImageResource(com.supcon.mes.module_lims.R.drawable.ic_inspect_up_arrow);
             }
             if (!TextUtils.isEmpty(data.testResult) && data.testResult.contains(context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified))){
-                checkResultTv.setValueColor(Color.parseColor("#F70606"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.warningRed));
             }else {
-                checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.lightGreen));
             }
         }
     }

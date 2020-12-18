@@ -103,9 +103,9 @@ public class SampleSurveyReportAdapter extends BaseListDataRecyclerViewAdapter<S
 //                }
 //            }
             if (!TextUtils.isEmpty(data.getTestResult()) && data.getTestResult().contains(context.getResources().getString(com.supcon.mes.module_lims.R.string.lims_unqualified))){
-                checkResultTv.setValueColor(Color.parseColor("#F70606"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.warningRed));
             }else {
-                checkResultTv.setValueColor(Color.parseColor("#0BC8C1"));
+                checkResultTv.setValueColor(context.getResources().getColor(R.color.lightGreen));
             }
             checkResultTv.setValue(data.getTestResult());
             //样品名称 && 批号 && 登记时间
