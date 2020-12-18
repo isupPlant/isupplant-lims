@@ -60,7 +60,7 @@ public class TestReportEditHeadEntity extends BaseEntity {
     }
 
     public InspectIdEntity getInspectId() {
-        return inspectId;
+        return inspectId == null ? new InspectIdEntity() : inspectId;
     }
 
     public void setInspectId(InspectIdEntity inspectId) {

@@ -580,6 +580,8 @@ public class TestReportEditController extends BaseViewController implements Qual
             entity.pendingId = pendingEntity.id.toString();
         }
         entity.inspectReport=this.entity;
+        entity.inspectReport.setBusiTypeId(entity.inspectReport.getInspectId().busiTypeId);
+        entity.inspectReport.setProdId(entity.inspectReport.getInspectId().prodId);
         myDeleteList.clear();
         for (int i = 0; i < deletePtIds.size(); i++) {
             if (!deletePtIds.get(i).equals("null") ){
@@ -1126,58 +1128,105 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     public void setConclusionColor(String checkResult,boolean isAuto){
         if (isAuto){
-            boolean isQualified  = true;
-            if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size()>0){
+            int unQualified = 0;
+            int qualified = 0;
+            int highGrade = 0;
+            if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size() > 0){
                 for (int i = 0; i < ptList.size(); i++) {
                     for (int j = 0; j < conclusionList.size(); j++) {
                         if (!StringUtil.isEmpty(ptList.get(i).checkResult)){
                             if (ptList.get(i).checkResult.equals(conclusionList.get(j).getName())){
                                 if (conclusionList.get(j).getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
-                                    isQualified = false;
-                                    break;
+                                    unQualified++;
+                                }else if (conclusionList.get(j).getStdGrade().getId().equals("LIMSBasic_standardGrade/Qualified")){
+                                    qualified++;
+                                }else if (conclusionList.get(j).getStdGrade().getId().equals("LIMSBasic_standardGrade/highGrade")){
+                                    highGrade++;
                                 }
                             }
                         }
                     }
-                    if (!isQualified){
-                        break;
-                    }
-                }
-                if (isQualified){
-                    csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
-                }else {
-                    csTestConclusion.setContentTextColor(Color.parseColor("#F70606"));
-                }
-            }else {
-                csTestConclusion.setContentTextColor(Color.parseColor("#8f8f8f"));
-            }
-            if (StringUtil.isEmpty(checkResult)){
-                csTestConclusion.setContent("");
-            }else {
-                if (isQualified){
-                    for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
-                        if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Qualified")){
-                            csTestConclusion.setContent(conclusionEntity.getName());
-                            this.entity.setCheckResult(conclusionEntity.getName());
-                        }
-                    }
-                }else {
-                    for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
-                        if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
-                            csTestConclusion.setContent(conclusionEntity.getName());
-                            this.entity.setCheckResult(conclusionEntity.getName());
-                        }
-                    }
-                }
-            }
 
+                }
+                if (unQualified > 0){  //不合格为最高优先级 只要有不合格的  表头检验结论必为不合格
+                    csTestConclusion.setContentTextColor(Color.parseColor("#F70606"));
+                    for (int i = 0; i < conclusionList.size(); i++) {
+                        if (conclusionList.get(i).getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
+                            csTestConclusion.setContent(conclusionList.get(i).getName());
+                        }
+                    }
+                }else {  //剩余合格与优等品
+                    csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
+                    if (qualified > 0){  //合格与优等品中 合格优先级高  只要有一个是合格 那检验结论就为合格
+                        for (int i = 0; i < conclusionList.size(); i++) {
+                            if (conclusionList.get(i).getStdGrade().getId().equals("LIMSBasic_standardGrade/Qualified")){
+                                csTestConclusion.setContent(conclusionList.get(i).getName());
+                            }
+                        }
+                    }else {
+                        if (highGrade == ptList.size()){
+                            for (int i = 0; i < conclusionList.size(); i++) {
+                                if (conclusionList.get(i).getStdGrade().getId().equals("LIMSBasic_standardGrade/highGrade")){
+                                    csTestConclusion.setContent(conclusionList.get(i).getName());
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+//            boolean isQualified  = true;
+//            if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size()>0){
+//                for (int i = 0; i < ptList.size(); i++) {
+//                    for (int j = 0; j < conclusionList.size(); j++) {
+//                        if (!StringUtil.isEmpty(ptList.get(i).checkResult)){
+//                            if (ptList.get(i).checkResult.equals(conclusionList.get(j).getName())){
+//                                if (conclusionList.get(j).getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
+//                                    isQualified = false;
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    }
+//                    if (!isQualified){
+//                        break;
+//                    }
+//                }
+//                if (!isQualified){
+//                    csTestConclusion.setContentTextColor(Color.parseColor("#F70606"));
+//                }else {
+//                    csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
+//                }
+//            }else {
+//                csTestConclusion.setContentTextColor(Color.parseColor("#8f8f8f"));
+//            }
+//            if (StringUtil.isEmpty(checkResult)){
+//                csTestConclusion.setContent("");
+//            }else {
+//                if (isQualified){
+//                    for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
+//                        if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Qualified")){
+//                            csTestConclusion.setContent(conclusionEntity.getName());
+//                            this.entity.setCheckResult(conclusionEntity.getName());
+//                        }
+//                    }
+//                }else {
+//                    for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
+//                        if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
+//                            csTestConclusion.setContent(conclusionEntity.getName());
+//                            this.entity.setCheckResult(conclusionEntity.getName());
+//                        }
+//                    }
+//                }
+//            }
         }else {
             for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                 if (checkResult.equals(conclusionEntity.getName())){
-                    if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Qualified")){
-                        csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
-                    }else {
+                    if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
                         csTestConclusion.setContentTextColor(Color.parseColor("#F70606"));
+                    }else {
+                        csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
                     }
                 }
             }

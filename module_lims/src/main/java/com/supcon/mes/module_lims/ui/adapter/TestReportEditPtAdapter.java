@@ -26,6 +26,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.InspectReportDetailEntity;
@@ -50,6 +51,7 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
     private Boolean needLab;
     private DispValueChangeListener mDispValueChangeListener;
     private ConclusionChangeListener mConclusionChangeListener;
+
     public TestReportEditPtAdapter(Context context) {
         super(context);
         mSinglePickController = new SinglePickController((Activity) context);
@@ -59,9 +61,9 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
 
     @Override
     protected BaseRecyclerViewHolder getViewHolder(int viewType) {
-        if (viewType == 1){
+        if (viewType == 1) {
             return new ViewHolder(context);
-        }else if (viewType == 2){
+        } else if (viewType == 2) {
             return new RangeViewHolder(context);
         }
         return null;
@@ -76,15 +78,15 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
         return super.getItemViewType(position, o);
     }
 
-    public void setNeedLab(Boolean needLab){
+    public void setNeedLab(Boolean needLab) {
         this.needLab = needLab;
     }
 
-    public void setConclusionOption(List<QualityStdConclusionEntity> conclusionList){
+    public void setConclusionOption(List<QualityStdConclusionEntity> conclusionList) {
         this.conclusionList = conclusionList;
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<StdJudgeSpecEntity>{
+    class ViewHolder extends BaseRecyclerViewHolder<StdJudgeSpecEntity> {
         private String dispValue;
         @BindByTag("ctTestProject")
         CustomTextView ctTestProject;
@@ -119,10 +121,10 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             ceDispValue.setKeyTextColor(Color.parseColor("#666666"));
             csDispValue.setKeyTextColor(Color.parseColor("#666666"));
             csTestConclusion.setKeyTextColor(Color.parseColor("#666666"));
-            if (needLab){
+            if (needLab) {
                 ceDispValue.setEditable(false);
                 csDispValue.setEditable(false);
-            }else {
+            } else {
                 ceDispValue.setEditable(true);
                 csDispValue.setEditable(true);
             }
@@ -162,17 +164,17 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                 public void onChildViewClick(View childView, int action, Object obj) {
                     stringList.clear();
                     for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
-                        stringList.add(conclusionEntity.getName()) ;
+                        stringList.add(conclusionEntity.getName());
                     }
-                    stringList.add(0,"");
+                    stringList.add(0, "");
                     mSinglePickController.list(stringList)
                             .listener(new SinglePicker.OnItemPickListener() {
                                 @Override
                                 public void onItemPicked(int index, Object item) {
-                                    StdJudgeSpecEntity entity = ((StdJudgeSpecEntity)getItem(getAdapterPosition()));
+                                    StdJudgeSpecEntity entity = ((StdJudgeSpecEntity) getItem(getAdapterPosition()));
                                     entity.checkResult = stringList.get(index);
                                     notifyItemChanged(getAdapterPosition());
-                                    if (null != mConclusionChangeListener){
+                                    if (null != mConclusionChangeListener) {
                                         mConclusionChangeListener.conclusionChangeClick();
                                     }
                                 }
@@ -184,24 +186,24 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                 @Override
                 public void onClick(View v) {
                     ceDispValue.setContent("");
-                    ((StdJudgeSpecEntity)getItem(getAdapterPosition())).dispValue = "";
+                    ((StdJudgeSpecEntity) getItem(getAdapterPosition())).dispValue = "";
                 }
             });
 
             ceDispValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE){
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
                         dispValue = ceDispValue.editText().getText().toString();
-                        ((StdJudgeSpecEntity)getList().get(getAdapterPosition())).dispValue = dispValue;
+                        ((StdJudgeSpecEntity) getList().get(getAdapterPosition())).dispValue = dispValue;
 
                         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if (imm.isActive()){
-                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
+                        if (imm.isActive()) {
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);      //隐藏软键盘
                         }
 
-                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
-                            mDispValueChangeListener.dispValueChange(dispValue,getAdapterPosition());
+                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
+                            mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
                         }
                         return true;
                     }
@@ -221,15 +223,15 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             //检验项目
             ctTestProject.setContent(data.reportName == null ? "" : data.reportName);
             //报出值
-            if (data.valueKind != null){
-                if (data.valueKind.getId().equals(LimsConstant.ValueType.ENUM)){
+            if (data.valueKind != null) {
+                if (data.valueKind.getId().equals(LimsConstant.ValueType.ENUM)) {
                     llCeDispValue.setVisibility(View.GONE);
                     llEnumDispValue.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     llCeDispValue.setVisibility(View.VISIBLE);
                     llEnumDispValue.setVisibility(View.GONE);
                 }
-            }else {
+            } else {
                 llCeDispValue.setVisibility(View.VISIBLE);
                 llEnumDispValue.setVisibility(View.GONE);
             }
@@ -241,13 +243,14 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             //结论
             csTestConclusion.setContent(data.checkResult == null ? "" : data.checkResult);
 
-            if (!TextUtils.isEmpty(data.checkResult)){
+            if (!StringUtil.isEmpty(data.checkResult)) {
                 for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
-                    if (conclusionEntity.getName().equals(data.checkResult)){
-                        if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Qualified")){
-                            csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
-                        }else {
+                    if (conclusionEntity.getName().equals(data.checkResult == null ? "" : data.checkResult)) {
+                        if ((conclusionEntity.getStdGrade().getId() == null ? "" : conclusionEntity.getStdGrade().getId())
+                                .equals("LIMSBasic_standardGrade/Unqualified")) {
                             csTestConclusion.setContentTextColor(Color.parseColor("#F70606"));
+                        } else {
+                            csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
                         }
                     }
                 }
@@ -261,10 +264,11 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
         }
     }
 
-    class RangeViewHolder extends BaseRecyclerViewHolder<StdJudgeEntity>{
+    class RangeViewHolder extends BaseRecyclerViewHolder<StdJudgeEntity> {
 
         @BindByTag("judgeRangeTv")
         CustomTextView judgeRangeTv;
+
         public RangeViewHolder(Context context) {
             super(context);
         }
@@ -281,19 +285,19 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
         }
     }
 
-    public void setDispValueChangeListener(DispValueChangeListener mDispValueChangeListener){
+    public void setDispValueChangeListener(DispValueChangeListener mDispValueChangeListener) {
         this.mDispValueChangeListener = mDispValueChangeListener;
     }
 
-    public interface DispValueChangeListener{
+    public interface DispValueChangeListener {
         void dispValueChange(String value, int position);
     }
 
-    public void setConclusionChangeListener( ConclusionChangeListener mConclusionChangeListener){
+    public void setConclusionChangeListener(ConclusionChangeListener mConclusionChangeListener) {
         this.mConclusionChangeListener = mConclusionChangeListener;
     }
 
-    public interface ConclusionChangeListener{
+    public interface ConclusionChangeListener {
         void conclusionChangeClick();
     }
 }
