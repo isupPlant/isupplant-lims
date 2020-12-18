@@ -149,7 +149,7 @@ public interface ApiService {
      * @param id
      * @return
      */
-    @GET("/msService/LIMSSample/baseService/workbench/download?entityCode=LIMSSample_5.0.0.0_sample")
+    @GET("/inter-api/file-server/v1/file/download?entityCode=LIMSSample_5.0.0.0_sample&methodType=GET&url=/LIMSSample/baseService/workbench/download/validate&serverName=LIMS")
     Flowable<ResponseBody> getSampleInspectItemFile(@Query("id") String id);
 
     @FormUrlEncoded
