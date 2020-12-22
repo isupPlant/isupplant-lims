@@ -146,9 +146,11 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 //                    }
 //                }
 //                adapter.notifyDataSetChanged();
-                isScan = true;
-                scanParams.clear();
-                scanParams.put(Constant.BAPQuery.CODE,result);
+//                isScan = true;
+//                scanParams.clear();
+//                scanParams.put(Constant.BAPQuery.CODE,result);
+                params.clear();
+                params.put(Constant.BAPQuery.CODE,result);
                 goRefresh();
             }
         });
