@@ -660,11 +660,14 @@ public class InspectionApplicationDetailController extends BaseViewController im
         mHeadEntity.setApplyDeptId(deptIdEntity);
         ctCheckDepartment.setContent(mHeadEntity.getApplyDeptId().getName());
 
-
         //设置默认请检时间
         long time = System.currentTimeMillis();
         mHeadEntity.setApplyTime(time+"");
         cdCheckTime.setContent(DateUtil.dateFormat(time,"yyyy-MM-dd HH:mm:ss"));
+
+        //默认需要实验室检验
+        ivNeedLaboratory.setBackgroundResource(R.drawable.ic_check_yes);
+        mHeadEntity.setNeedLab(true);
 
         //获取业务类型参照的数据
         presenterRouter.create(InspectionDetailReadyAPI.class).getBusinessTypeList(type);

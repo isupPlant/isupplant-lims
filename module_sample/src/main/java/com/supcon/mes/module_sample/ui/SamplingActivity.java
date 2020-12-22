@@ -140,13 +140,16 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
         getController(SampleInquiryController.class).setScanToResultListener(new OnScanToResultListener() {
             @Override
             public void scanToResultClick(String result) {
-                for (int i = 0; i < adapter.getList().size(); i++) {
-                    if (adapter.getList().get(i).getCode().equals(result)){
-                        adapter.getList().get(i).setSelect(true);
-                        break;
-                    }
-                }
-                adapter.notifyDataSetChanged();
+//                for (int i = 0; i < adapter.getList().size(); i++) {
+//                    if (adapter.getList().get(i).getCode().equals(result)){
+//                        adapter.getList().get(i).setSelect(true);
+//                        break;
+//                    }
+//                }
+//                adapter.notifyDataSetChanged();
+                params.clear();
+                params.put(Constant.BAPQuery.CODE,result);
+                goRefresh();
             }
         });
 

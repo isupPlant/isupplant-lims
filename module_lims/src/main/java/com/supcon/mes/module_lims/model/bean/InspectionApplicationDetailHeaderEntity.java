@@ -44,7 +44,7 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
     private Integer effectiveState;
     private String batchCode;
     private BusiTypeIdEntity busiTypeId;
-    private CheckStateEntity checkState;
+    //private CheckStateEntity checkState;
     private TableTypeIdEntity tableTypeId;
     private VendorIdEntity vendorId;
     private ProdIdEntity prodId;
@@ -293,13 +293,13 @@ public class InspectionApplicationDetailHeaderEntity extends BaseSystemBackEntit
         this.busiTypeId = busiTypeId;
     }
 
-    public CheckStateEntity getCheckState() {
-        return checkState;
-    }
-
-    public void setCheckState(CheckStateEntity checkState) {
-        this.checkState = checkState;
-    }
+//    public CheckStateEntity getCheckState() {
+//        return checkState;
+//    }
+//
+//    public void setCheckState(CheckStateEntity checkState) {
+//        this.checkState = checkState;
+//    }
 
     public TableTypeIdEntity getTableTypeId() {
         return tableTypeId;
