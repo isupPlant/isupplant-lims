@@ -150,9 +150,9 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
 //                    }
 //                }
 //                adapter.notifyDataSetChanged();
-//                isScan = true;
-//                scanParams.clear();
-//                scanParams.put(Constant.BAPQuery.CODE,result);
+                isScan = true;
+                scanParams.clear();
+                scanParams.put(Constant.BAPQuery.CODE,result);
 //                goRefresh();
                 //presenterRouter.create(SampleInquiryAPI.class).getSampleInquiryList(LimsConstant.Sample.SAMPLING, 1, params);
                 params.clear();

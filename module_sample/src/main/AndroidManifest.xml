@@ -26,7 +26,7 @@
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
-        <activity android:name=".ui.input.SampleResultInputActivity"
+        <activity android:name=".ui.input.SampleResultInputPADActivity"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
@@ -42,7 +42,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
 <!--        按样品结果录入PDA-->
-        <activity android:name=".ui.input.SampleResultInputPDAActivity"
+        <activity android:name=".ui.input.SampleResultInputActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />

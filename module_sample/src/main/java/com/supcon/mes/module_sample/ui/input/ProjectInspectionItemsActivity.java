@@ -55,7 +55,7 @@ import io.reactivex.functions.Consumer;
  * on 2020/8/7
  * class name
  */
-@Router(Constant.AppCode.LIMS_InspectionItemPda)
+@Router(Constant.AppCode.LIMS_InspectionItem)
 public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
     @BindByTag("tabLayout")

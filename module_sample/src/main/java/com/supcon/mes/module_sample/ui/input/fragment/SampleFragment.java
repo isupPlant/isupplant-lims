@@ -33,6 +33,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.middleware.util.TimeUtil;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.api.SampleListAPI;
@@ -41,7 +42,6 @@ import com.supcon.mes.module_sample.presenter.SampleListPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputPADActivity;
-import com.supcon.mes.module_sample.ui.input.SampleResultInputPDAActivity;
 import com.supcon.mes.module_scan.controller.CommonScanController;
 import com.supcon.mes.module_scan.model.event.CodeResultEvent;
 import com.supcon.mes.module_scan.util.scanCode.CodeUtlis;
@@ -101,6 +101,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         }else if (context instanceof SampleResultInputActivity){
             activity = (SampleResultInputActivity) context;
         }
+
     }
 
     @Override
@@ -246,9 +247,6 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 adapter.notifyDataSetChanged();
 
                 //通知 检验项目更新数据
-//                if (activity instanceof SampleResultInputActivity){
-//                    ((SampleResultInputActivity)activity).setSampleId(list.get(position).getId());
-//                }else if (activity instanceof  SampleResultInputPDAActivity){
                 if (activity instanceof SampleResultInputPADActivity){
                     ((SampleResultInputPADActivity)activity).setSampleId(list.get(position).getId(),list.get(position).getCode());
                 }else if (activity instanceof SampleResultInputActivity){
@@ -265,7 +263,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                     }
                     //LIMS_Sampling
                     //LIMS_InspectionItemPda
-                    IntentRouter.go(context,Constant.AppCode.LIMS_InspectionItemPda, bundle);
+                    IntentRouter.go(context, LimsConstant.AppCode.LIMS_InspectionItem, bundle);
                 }
 
             }
@@ -392,7 +390,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                                     bundle.putString("title", sampleEntity.getName());
                                 }
                             }
-                            IntentRouter.go(context, Constant.AppCode.LIMS_InspectionItemPda, bundle);
+                            IntentRouter.go(context, LimsConstant.AppCode.LIMS_InspectionItem, bundle);
                         }
                     });
                 }
@@ -405,8 +403,6 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             refreshListController.refreshComplete(entity.result);
             SelectDataEvent<String> dataEvent=new SelectDataEvent<>("refreshData","refreshData");
             EventBus.getDefault().post(dataEvent);
-//            if (activity instanceof SampleResultInputActivity){
-//                ((SampleResultInputActivity)activity).sampleRefresh();
 //            if (activity instanceof SampleResultInputPADActivity){
 //                ((SampleResultInputPADActivity)activity).sampleRefresh();
 //            }
@@ -420,8 +416,6 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         refreshListController.refreshComplete(null);
         SelectDataEvent<String> dataEvent=new SelectDataEvent<>("refreshData","refreshData");
         EventBus.getDefault().post(dataEvent);
-//        SnackbarHelper.showError(rootView, errorMsg);
-//        refreshListController.refreshComplete(null);
     }
 
     public void openCameraScan(){

@@ -51,7 +51,7 @@ import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresente
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
 import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
-import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+import com.supcon.mes.module_sample.ui.input.SampleResultInputPADActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -103,8 +103,8 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SampleResultInputActivity) {
-            activity = (SampleResultInputActivity) context;
+        if (context instanceof SampleResultInputPADActivity) {
+            activity = (SampleResultInputPADActivity) context;
         } else if (context instanceof ProjectInspectionItemsActivity) {
             activity = (ProjectInspectionItemsActivity) context;
         }
@@ -139,8 +139,8 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         linearLayoutManager = new LinearLayoutManager(context);
         linearSpaceItemDecoration = new LinearSpaceItemDecoration(context);
 
-        if (activity instanceof SampleResultInputActivity) {
-            int orientation = ((SampleResultInputActivity) activity).getOrientation();
+        if (activity instanceof SampleResultInputPADActivity) {
+            int orientation = ((SampleResultInputPADActivity) activity).getOrientation();
             if (orientation == 2) { //横向
                 contentView.setLayoutManager(gridLayoutManager);
                 contentView.addItemDecoration(spaceItemDecoration);
@@ -299,8 +299,8 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             }
         });
 
-        if (activity instanceof SampleResultInputActivity) {
-            ((SampleResultInputActivity) activity).setOnOrientationChangeListener(new SampleResultInputActivity.OnOrientationChangeListener() {
+        if (activity instanceof SampleResultInputPADActivity) {
+            ((SampleResultInputPADActivity) activity).setOnOrientationChangeListener(new SampleResultInputPADActivity.OnOrientationChangeListener() {
                 @Override
                 public void orientationChange(int orientation) {
                     if (orientation == 2) { //横向

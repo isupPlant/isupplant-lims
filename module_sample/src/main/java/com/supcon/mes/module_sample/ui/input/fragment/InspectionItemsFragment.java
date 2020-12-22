@@ -17,19 +17,15 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.fragment.BaseFragment;
-
 import com.supcon.common.view.base.fragment.BasePresenterFragment;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.middleware.IntentRouter;
-import com.supcon.mes.module_lims.constant.LimsConstant;
-import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
-import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
@@ -76,7 +72,7 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
     @BindByTag("tvAutoCollection")
     TextView tvAutoCollection;
 
-    private String[] title = new String[]{context.getResources().getString(R.string.lims_project), context.getResources().getString(R.string.lims_equipment), context.getResources().getString(R.string.lims_material)};
+    private String[] title = new String[]{SupPlantApplication.getAppContext().getResources().getString(R.string.lims_project), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_equipment), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_material)};
     private List<Fragment> fragmentList = new ArrayList<>();
     SampleResultInputPADActivity activity;
 
@@ -116,6 +112,7 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
         fragmentList.add(materialFragment);
 
         //使用适配器将ViewPager与Fragment绑定在一起
+        viewPage.setOffscreenPageLimit(3);
         viewPage.setAdapter(new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager()));
         //将TabLayout与ViewPager绑定
         tabLayout.setupWithViewPager(viewPage);

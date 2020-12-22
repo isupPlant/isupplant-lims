@@ -17,6 +17,7 @@ import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -28,7 +29,7 @@ import com.supcon.mes.module_sample.model.contract.InspectionItemsContract;
 import com.supcon.mes.module_sample.presenter.InspectionItemsPresenter;
 import com.supcon.mes.module_sample.ui.adapter.InspectionItemsListAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
-import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+import com.supcon.mes.module_sample.ui.input.SampleResultInputPADActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,12 +61,13 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
     private String notifyType = "";
     private int position = 0;
     private InspectionSubRefreshListener mInspectionSubRefreshListener;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SampleResultInputActivity){
-            activity = (SampleResultInputActivity) context;
-        }else {
+        if (context instanceof SampleResultInputPADActivity) {
+            activity = (SampleResultInputPADActivity) context;
+        } else {
             activity = (ProjectInspectionItemsActivity) context;
         }
 
@@ -115,7 +117,6 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 }
             }
         });
-
         if (activity instanceof ProjectInspectionItemsActivity){
             title.setVisibility(View.VISIBLE);
             goRefresh();
@@ -123,7 +124,6 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
             title.setVisibility(View.GONE);
         }
 
-        goRefresh();
     }
 
     @Override
@@ -133,14 +133,14 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId+"",1);
+                presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId + "", 1);
             }
         });
 
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (action == 0){
+                if (action == 0) {
 
                     itemClickListener(position);
 
@@ -148,20 +148,11 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
             }
         });
 
-        if (activity instanceof SampleResultInputActivity){
-            ((SampleResultInputActivity)activity).setOnRefreshInspectionItemListener(new SampleResultInputActivity.OnRefreshInspectionItemListener() {
+        if (activity instanceof SampleResultInputPADActivity) {
+            ((SampleResultInputPADActivity) activity).setOnRefreshInspectionItemListener(new SampleResultInputPADActivity.OnRefreshInspectionItemListener() {
                 @Override
                 public void onRefreshInspectionItem(Long sampleId) {
                     mSampleId = sampleId;
-                    goRefresh();
-                }
-            });
-
-
-            ((SampleResultInputActivity)activity).setOnSampleRefreshListener(new SampleResultInputActivity.OnSampleRefreshListener() {
-                @Override
-                public void onSampleRefresh() {
-                    mSampleId = -1l;
                     goRefresh();
                 }
             });
@@ -174,18 +165,16 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
 //                }
 //            });
 
-
         }
 
 
-
     }
 
-    public void goRefresh(){
+    public void goRefresh() {
         refreshListController.refreshBegin();
     }
 
-    public void itemClickListener(int position){
+    public void itemClickListener(int position) {
         List<InspectionItemsEntity> list = adapter.getList();
         for (int i = 0; i < list.size(); i++) {
             list.get(i).setSelect(false);
@@ -193,94 +182,104 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
         list.get(position).setSelect(true);
         adapter.notifyDataSetChanged();
 
-        if (activity instanceof SampleResultInputActivity){
-            ((SampleResultInputActivity)activity).setSampleTesId(list.get(position).getId());
-        }else if (activity instanceof ProjectInspectionItemsActivity){
+        if (activity instanceof SampleResultInputPADActivity) {
+            ((SampleResultInputPADActivity) activity).setSampleTesId(list.get(position).getId());
+        } else if (activity instanceof ProjectInspectionItemsActivity) {
             String name;
-            if (null ==  list.get(position).getTestId()){
+            if (null == list.get(position).getTestId()) {
                 name = "--";
-            }else {
+            } else {
                 name = list.get(position).getTestId().getName();
             }
-            ((ProjectInspectionItemsActivity)activity).notifyInspectionItemsRefresh(list.get(position).getId(),name);
+            ((ProjectInspectionItemsActivity) activity).notifyInspectionItemsRefresh(list.get(position).getId(), name);
         }
     }
 
 
-    public void refreshItem(int position){
+    public void refreshItem(int position) {
         itemClickListener(position);
     }
 
 
-    public void lookNext(InspectionSubRefreshListener mInspectionSubRefreshListener){
+    public void lookNext(InspectionSubRefreshListener mInspectionSubRefreshListener) {
         this.mInspectionSubRefreshListener = mInspectionSubRefreshListener;
         isOutNotify = true;
         notifyType = "submit";
         for (int i = 0; i < adapter.getList().size(); i++) {
-            if (adapter.getList().get(i).isSelect()){
+            if (adapter.getList().get(i).isSelect()) {
                 position = i;
                 break;
             }
         }
-//        if (position+1 == adapter.getList().size()){  //表示上次选中的已经是最后一条了
-//            mInspectionSubRefreshListener.refreshOver(position, adapter.getList());
-//        }else {
-//            presenterRouter.create(com.supcon.mes.module_sample.model.api.InspectionItemsApi.class).getInspectionItemList(mSampleId+"",1);
-//        }
-        presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId+"",1);
+
+        presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId + "", 1);
 
     }
 
-    public void againRefresh(){
+    public void againRefresh() {
         isOutNotify = true;
         notifyType = "save";
         for (int i = 0; i < adapter.getList().size(); i++) {
-            if (adapter.getList().get(i).isSelect()){
+            if (adapter.getList().get(i).isSelect()) {
                 position = i;
                 break;
             }
         }
-        presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId+"",1);
+        presenterRouter.create(InspectionItemsAPI.class).getInspectionItemList(mSampleId + "", 1);
     }
 
     @Override
     public void getInspectionItemListSuccess(CommonListEntity entity) {
         //请求数据回来默认 第一个item 为选中状态
-        if (isOutNotify){
+        if (isOutNotify) {
             List<InspectionItemsEntity> list = entity.result;
             refreshListController.refreshComplete(list);
-            if (notifyType.equals("save")){  //保存
+            if (notifyType.equals("save")) {  //保存
                 itemClickListener(position);
-            }else if (notifyType.equals("submit")){ //提交
-                if (null != mInspectionSubRefreshListener){
+            } else if (notifyType.equals("submit")) { //提交
+                if (null != mInspectionSubRefreshListener) {
                     mInspectionSubRefreshListener.refreshOver(list);
                 }
             }
-        }else {
+        } else {
             List<InspectionItemsEntity> list = entity.result;
             for (int i = 0; i < list.size(); i++) {
-                if (i == 0){
+                if (i == 0) {
                     list.get(i).setSelect(true);
                 }
             }
             refreshListController.refreshComplete(list);
 
             //通知Activity 去刷新检验分项的数据
-            if (activity instanceof ProjectInspectionItemsActivity){
+            if (activity instanceof ProjectInspectionItemsActivity) {
                 for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).isSelect()){
+                    if (list.get(i).isSelect()) {
                         String name;
-                        if (null ==  list.get(i).getTestId()){
+                        if (null == list.get(i).getTestId()) {
                             name = "--";
-                        }else {
+                        } else {
                             name = list.get(i).getTestId().getName();
                         }
-                        ((ProjectInspectionItemsActivity) activity).notifyInspectionItemsRefresh(list.get(i).getId(),name);
+                        ((ProjectInspectionItemsActivity) activity).notifyInspectionItemsRefresh(list.get(i).getId(), name);
                         break;
                     }
 
                 }
 
+            }
+
+            if (activity instanceof SampleResultInputPADActivity) {
+                int x = 0;
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).isSelect()) {
+                        x++;
+                        ((SampleResultInputPADActivity) activity).setSampleTesId(list.get(i).getId());
+                        break;
+                    }
+                }
+                if (x == 0){
+                    ((SampleResultInputPADActivity) activity).setSampleTesId(-1l);
+                }
             }
         }
 
@@ -288,16 +287,20 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
 
     @Override
     public void getInspectionItemListFailed(String errorMsg) {
+        ToastUtils.show(context, errorMsg);
         refreshListController.refreshComplete(null);
-        if (isOutNotify){
-             if (notifyType.equals("submit")){ //提交
-                if (null != mInspectionSubRefreshListener){
+        if (isOutNotify) {
+            if (notifyType.equals("submit")) { //提交
+                if (null != mInspectionSubRefreshListener) {
                     mInspectionSubRefreshListener.refreshOver(new ArrayList<>());
                 }
             }
+        } else {
+            if (activity instanceof SampleResultInputPADActivity) {
+                ((SampleResultInputPADActivity) activity).setSampleTesId(-1l);
+            }
         }
     }
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
