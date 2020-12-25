@@ -23,6 +23,7 @@ import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
@@ -62,15 +63,18 @@ import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.event.QualityStandardEvent;
 import com.supcon.mes.module_lims.event.StdVerComEvent;
 import com.supcon.mes.module_lims.event.TestRequestNoEvent;
+import com.supcon.mes.module_lims.model.api.AvailableStdIdAPI;
 import com.supcon.mes.module_lims.model.api.FirstStdVerAPI;
 import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
 import com.supcon.mes.module_lims.model.api.QualityStdIdByConclusionAPI;
 import com.supcon.mes.module_lims.model.api.TestNumAPI;
 import com.supcon.mes.module_lims.model.api.TestReportEditSubmitAPI;
+import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.FirstStdVerEntity;
 import com.supcon.mes.module_lims.model.bean.InspectIdEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStdConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.SpecLimitEntity;
@@ -78,16 +82,20 @@ import com.supcon.mes.module_lims.model.bean.StdIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
+import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
 import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
+import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 import com.supcon.mes.module_lims.model.bean.TestNumEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportEditHeadEntity;
 import com.supcon.mes.module_lims.model.bean.TestReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.TestRequestNoEntity;
+import com.supcon.mes.module_lims.model.contract.AvailableStdIdContract;
 import com.supcon.mes.module_lims.model.contract.FirstStdVerContract;
 import com.supcon.mes.module_lims.model.contract.QualityStdIdByConclusionContract;
 import com.supcon.mes.module_lims.model.contract.TestNumContract;
 import com.supcon.mes.module_lims.model.contract.TestReportEditSubmitContract;
+import com.supcon.mes.module_lims.presenter.AvailableStdPresenter;
 import com.supcon.mes.module_lims.presenter.FirstStdVerPresenter;
 import com.supcon.mes.module_lims.presenter.QualityStdIdByConclusionPresenter;
 import com.supcon.mes.module_lims.presenter.TestNumPresenter;
@@ -124,9 +132,10 @@ import io.reactivex.functions.Consumer;
  */
 
 @Presenter(value = {QualityStdIdByConclusionPresenter.class, TestReportEditSubmitPresenter.class,
-        FirstStdVerPresenter.class,QualityStdIdByConclusionPresenter.class, TestNumPresenter.class, DeploymentPresenter.class})
+        FirstStdVerPresenter.class,QualityStdIdByConclusionPresenter.class, TestNumPresenter.class,
+        DeploymentPresenter.class, AvailableStdPresenter.class})
 public class TestReportEditController extends BaseViewController implements QualityStdIdByConclusionContract.View,
-        TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, DeploymentContract.View {
+        TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, DeploymentContract.View, AvailableStdIdContract.View {
 
     @BindByTag("ctTestRequestNo")
     CustomTextView ctTestRequestNo;
@@ -219,6 +228,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private String activityName;
     private String from = "";
     private TableTypeIdEntity tableType;
+    private Long asId;
 
     public TestReportEditController(View rootView) {
         super(rootView);
@@ -307,6 +317,10 @@ public class TestReportEditController extends BaseViewController implements Qual
         ctTestRequestNo.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (action == -1){
+                    setCleanTestRequestNo();
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putInt("type",type);
                 bundle.putString("selectTag",ctTestRequestNo.getTag()+"");
@@ -377,11 +391,14 @@ public class TestReportEditController extends BaseViewController implements Qual
                 if (action == -1){
                     entity.getStdVerId().setStdId(null);
                     csTestConclusion.setContent("");
+                    ptList.clear();
+                    adapter.notifyDataSetChanged();
+                    llReference.setVisibility(View.GONE);
                 }else {
                     //跳转请求质量标准的页面
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("isReport",true);
-                    bundle.putString("id", entity.getStdVerId().getStdId().getAsId().getId()+"");
+                    bundle.putString("id", asId == null ? 0+"" : asId+"");
                     bundle.putSerializable("existItem", new ArrayList<>());
                     bundle.putString(Constant.IntentKey.SELECT_TAG, ctQualityStd.getTag() + "");
                     IntentRouter.go(context, Constant.AppCode.LIMS_QualityStdVerRef, bundle);
@@ -491,6 +508,10 @@ public class TestReportEditController extends BaseViewController implements Qual
                 switch (action){
                     case 0:
                         workFlowType = 0;
+                        if (StringUtil.isEmpty(ctTestRequestNo.getContent().trim())){
+                            setToast(context.getResources().getString(R.string.lims_inspection_request_no_cannot_be_blank));
+                            return;
+                        }
                         doSave(workFlowVar);
                         break;
                     case 1:
@@ -970,6 +991,8 @@ public class TestReportEditController extends BaseViewController implements Qual
 
                         inspectId = testRequestNoEntity.getId()+"";
 
+                        presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(inspectIdEntity.prodId.getId()+"");
+
                         presenterRouter.create(TestNumAPI.class).getTestNum(testRequestNoEntity.getId()+""); //获取数量
 
 
@@ -977,6 +1000,37 @@ public class TestReportEditController extends BaseViewController implements Qual
                 }
             }
         }
+    }
+
+    private void setCleanTestRequestNo(){
+        inspectIdEntity = null;
+        this.entity.setBatchCode("");
+        this.entity.setCheckTime(null);
+        this.entity.setCheckStaffId(null);
+        this.entity.setCheckDeptId(null);
+        this.entity.setStdVerId(null);
+        this.entity.setInspectId(null);
+        this.entity.setCheckResult(null);
+        conclusionList.clear();
+        ptList.clear();
+
+        ctTestRequestNo.setContent("");
+        ctBusinessType.setContent("");
+        ctGetPoint.setContent("");
+        ctMateriel.setContent("");
+        ctUnit.setContent("");
+        ctBatchNumber.setContent("");
+        ctRequestTestDepartment.setContent("");
+        ctTestPeople.setContent(SupPlantApplication.getAccountInfo().staffName);
+        ctTestDepartment.setContent(SupPlantApplication.getAccountInfo().getDepartmentName());
+        cdTestTime.setContent(DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"));
+        ctTestNumber.setContent("");
+        ctQualityStd.setContent("");
+        ctQualityStd.setEditable(false);
+        csTestConclusion.setContent("");
+        csTestConclusion.setEditable(false);
+        llReference.setVisibility(View.GONE);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -1030,8 +1084,8 @@ public class TestReportEditController extends BaseViewController implements Qual
         if (null != entity){
             stdVerId = entity.getStdVerId().getId()+"";
 
-            ctQualityStd.setContent(entity.getStdVerId().getName());
             ctQualityStd.setEditable(true);
+            ctQualityStd.setContent(entity.getStdVerId().getStdId().getName());
             csTestConclusion.setEditable(true);
             this.entity.setStdVerId(entity.getStdVerId());
             this.entity.setInspectId(inspectIdEntity);
@@ -1078,6 +1132,46 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     @Override
     public void getCurrentDeploymentFailed(String errorMsg) {
+
+    }
+
+    @Override
+    public void getAvailableStdIdSuccess(AvailableStdEntity entity) {
+        asId = entity.getAsId();
+    }
+
+    @Override
+    public void getAvailableStdIdFailed(String errorMsg) {
+        LogUtil.d(errorMsg);
+    }
+
+    @Override
+    public void getDefaultStandardByIdSuccess(TemporaryQualityStandardEntity entity) {
+
+    }
+
+    @Override
+    public void getDefaultStandardByIdFailed(String errorMsg) {
+
+    }
+
+    @Override
+    public void getDefaultItemsSuccess(StdVerComIdListEntity entity) {
+
+    }
+
+    @Override
+    public void getDefaultItemsFailed(String errorMsg) {
+
+    }
+
+    @Override
+    public void getDefaultInspProjByStdVerIdSuccess(InspectionDetailPtEntity entity) {
+
+    }
+
+    @Override
+    public void getDefaultInspProjByStdVerIdFailed(String errorMsg) {
 
     }
 

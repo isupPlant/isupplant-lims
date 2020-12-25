@@ -14,7 +14,7 @@ public class AsIdEntity extends BaseEntity {
     private String name;
 
     public Long getId() {
-        return id;
+        return id ;
     }
 
     public void setId(Long id) {

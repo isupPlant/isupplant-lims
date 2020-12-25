@@ -18,7 +18,7 @@
     <string name="lims_product_inspection_application">Product Test Request</string>
     <string name="lims_incoming_inspection_application">Material Test Request</string>
     <string name="lims_other_inspection_application">Other Test Request</string>
-    <string name="lims_inspection_request_no">Inspection request no</string>
+    <string name="lims_inspection_request_no_cannot_be_blank">Inspection request no</string>
     <string name="lims_creator">Creator</string>
     <string name="lims_test_conclusion">Conclusion</string>
     <string name="lims_product_inspection_report">Product Test Report</string>
@@ -178,6 +178,7 @@
     <string name="lims_inspection_application_detail_tips_10">Inspection department cannot be empty!</string>
     <string name="lims_inspection_application_detail_tips_11">The inspector is not allowed to be empty!</string>
     <string name="lims_inspection_application_detail_tips_12">Business type cannot be empty!</string>
+    <string name="lims_inspection_request_no">Inspection request No. cannot be blank!</string>
     <string name="lims_inspection_application_detail_tips_13">Article 【%1$s】 the inspection items in the quality standard cannot be blank!</string>
     <string name="lims_service_not_exist">Sorry, the service does not exist or is not started!</string>
     <string name="lims_open_camera">Please turn on camera permission!</string>

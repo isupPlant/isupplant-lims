@@ -41,7 +41,7 @@ public class StdIdEntity extends BaseEntity {
     }
 
     public String getName() {
-        return name;
+        return name == null ? "" : name;
     }
 
     public void setName(String name) {
@@ -57,7 +57,7 @@ public class StdIdEntity extends BaseEntity {
     }
 
     public AsIdEntity getAsId() {
-        return asId;
+        return asId == null ? new AsIdEntity() : asId;
     }
 
     public void setAsId(AsIdEntity asId) {

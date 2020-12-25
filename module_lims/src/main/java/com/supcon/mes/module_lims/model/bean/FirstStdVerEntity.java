@@ -29,7 +29,7 @@ public class FirstStdVerEntity extends BaseEntity {
     }
 
     public StdVerIdEntity getStdVerId() {
-        return stdVerId;
+        return stdVerId == null ? new StdVerIdEntity() : stdVerId;
     }
 
     public void setStdVerId(StdVerIdEntity stdVerId) {

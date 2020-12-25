@@ -50,7 +50,7 @@ public class StdVerIdEntity extends BaseEntity {
     }
 
     public StdIdEntity getStdId() {
-        return stdId;
+        return stdId == null ? new StdIdEntity() : stdId;
     }
 
     public void setStdId(StdIdEntity stdId) {
