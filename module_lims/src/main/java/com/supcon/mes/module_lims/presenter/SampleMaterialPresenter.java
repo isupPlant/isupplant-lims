@@ -30,7 +30,7 @@ import io.reactivex.functions.Function;
 public class SampleMaterialPresenter extends SampleMaterialListContract.Presenter {
     @Override
     public void getSampleMaterialReference(int pageNo, Map<String, Object> params,String matInfoCodeList) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
         String currentDate = simpleDateFormat.format(date);
 
@@ -76,7 +76,7 @@ public class SampleMaterialPresenter extends SampleMaterialListContract.Presente
         Map<String, Object> customConditionMap = new HashMap<>();
         customConditionMap.put("matInfoCodeList",matInfoCodeList);
         customConditionMap.put("currentDate",currentDate);
-        customConditionMap.put("dataBaseType","SQLSERVER");
+        customConditionMap.put("dataBaseType","ORACLE");
         map.put("customCondition",customConditionMap);
 
         map.put("permissionCode","LIMSMaterial_5.1.0.1_mATInfo_matInfoRef");
