@@ -79,6 +79,7 @@ import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStdConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.SpecLimitEntity;
 import com.supcon.mes.module_lims.model.bean.StdIdEntity;
+import com.supcon.mes.module_lims.model.bean.StdJudgeEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
@@ -202,7 +203,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private TestProjectChangeListener mTestProjectChangeListener;
     private OnRequestHeadListener mOnRequestHeadListener;
     private TestReportEditHeadEntity entity;
-    private List<StdJudgeSpecEntity> ptList;
+    private List ptList;
     private List<QualityStdConclusionEntity> conclusionList;
     private List<String> stringConclusionList;
     private List<String> deletePtIds;
@@ -437,9 +438,10 @@ public class TestReportEditController extends BaseViewController implements Qual
             @Override
             public void dispValueChange(String value, int position) {
                 List<SpecLimitEntity> specLimitList = null;
-                ptList.get(position).dispValue = value;
+                StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(position);
+                stdJudgeSpec.dispValue = value;
                 String resultGrade = "";
-                String specLimitListStr = ptList.get(position).specLimitListStr;
+                String specLimitListStr = stdJudgeSpec.specLimitListStr;
                 if (!StringUtil.isEmpty(specLimitListStr) && !specLimitListStr.equals("[]")){
                     specLimitList = GsonUtil.jsonToList(specLimitListStr, SpecLimitEntity.class);
                 }
@@ -449,7 +451,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                         Invocable invoke = (Invocable) engine;
                         Object gradeDetermine = invoke.invokeFunction("gradeDetermine", value, specListsArr, specLimitListStr, null);
                         resultGrade = (String) gradeDetermine;
-                        ptList.get(position).checkResult = resultGrade;
+                        stdJudgeSpec.checkResult = resultGrade;
                         adapter.notifyDataSetChanged();
                         setConclusionColor("auto",true);
                     } catch (Exception e) {
@@ -487,10 +489,11 @@ public class TestReportEditController extends BaseViewController implements Qual
                     public void accept(Object o) throws Exception {
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < ptList.size(); i++) {
+                            StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(i);
                             if (i != ptList.size()-1){
-                                sb.append(ptList.get(i).reportName+",");
+                                sb.append(stdJudgeSpec.reportName+",");
                             }else {
-                                sb.append(ptList.get(i).reportName);
+                                sb.append(stdJudgeSpec.reportName);
                             }
 
                         }
@@ -615,7 +618,8 @@ public class TestReportEditController extends BaseViewController implements Qual
 
         for (int i = myDeleteList.size(); i >= 1; i--) {
             for (int j = 0; j < ptList.size(); j++) {
-                if (myDeleteList.get(i).equals(ptList.get(j).id+"")){
+                StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(j);
+                if (myDeleteList.get(i).equals(stdJudgeSpec+"")){
                     myDeleteList.remove(i);
                     break;
                 }
@@ -942,7 +946,8 @@ public class TestReportEditController extends BaseViewController implements Qual
                     if (list.size() > 0){
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < ptList.size(); i++) {
-                            sb.append(ptList.get(i).reportName).append(",");
+                            StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(i);
+                            sb.append(stdJudgeSpec.reportName).append(",");
                         }
                         for (int i = 0; i < list.size(); i++) {
                             if (i != list.size() -1){
@@ -1231,9 +1236,12 @@ public class TestReportEditController extends BaseViewController implements Qual
             int ptCheckResult = 0;
             if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size() > 0){
                 for (int i = 0; i < ptList.size(); i++) {
+                    if (ptList.get(i) instanceof StdJudgeEntity)
+                        continue;
+                    StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(i);
                     for (int j = 0; j < conclusionList.size(); j++) {
-                        if (!StringUtil.isEmpty(ptList.get(i).checkResult)){
-                            if (ptList.get(i).checkResult.equals(conclusionList.get(j).getName())){
+                        if (!StringUtil.isEmpty(stdJudgeSpec.checkResult)){
+                            if (stdJudgeSpec.checkResult.equals(conclusionList.get(j).getName())){
                                 if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
                                     unQualified++;
                                     break;

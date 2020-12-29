@@ -197,22 +197,27 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
             initPending();
         });
 
-//        RxView.clicks(ll_record_view)
-//                .throttleFirst(2000, TimeUnit.MILLISECONDS)
-//                .subscribe(o -> {
-//                    if (adapter.selectPosition < 0)
-//                        ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_one_data_or_look));
-//                    else {
-//                        RecordEntity recordEntity = adapter.getItem(adapter.selectPosition);
-//                        if (!recordEntity.isStateObserved())
-//                            ToastUtils.show(context, context.getResources().getString(R.string.lims_status_not));
-//                        else {
-//                            Bundle bundle = new Bundle();
-//                            bundle.putLong("id", recordEntity.id);
-//                            IntentRouter.go(context, Constant.Router.RETENTION_VIEW_RECORD, bundle);
-//                        }
-//                    }
-//                });
+
+        RxView.clicks(ll_record_view)
+                .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (pendingEntity!=null && !TextUtils.isEmpty(pendingEntity.openUrl) && pendingEntity.openUrl.contains("retentionEdit")) {
+                        return;
+                    }
+                    if (adapter.selectPosition < 0)
+                        ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_one_data_or_look));
+                    else {
+                        RecordEntity recordEntity = adapter.getItem(adapter.selectPosition);
+                        if (!recordEntity.isStateObserved())
+                            ToastUtils.show(context, context.getResources().getString(R.string.lims_status_not));
+                        else {
+                            Bundle bundle = new Bundle();
+                            bundle.putLong("id", recordEntity.id);
+                            IntentRouter.go(context, Constant.Router.RETENTION_VIEW_RECORD, bundle);
+                        }
+                    }
+                });
+
         customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {

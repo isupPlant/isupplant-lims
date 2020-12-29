@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -153,7 +154,7 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                             .listener(new SinglePicker.OnItemPickListener() {
                                 @Override
                                 public void onItemPicked(int index, Object item) {
-                                    StdJudgeSpecEntity entity = ((StdJudgeSpecEntity) getItem(getAdapterPosition()));
+                                    StdJudgeSpecEntity entity = (StdJudgeSpecEntity) getItem(getAdapterPosition());
                                     entity.checkResult = stringList.get(index);
                                     notifyItemChanged(getAdapterPosition());
                                     if (null != mConclusionChangeListener) {
