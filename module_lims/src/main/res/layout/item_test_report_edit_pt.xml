@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemSwipeLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
     android:tag="itemSwipeLayout"
     tools:ignore="MissingDefaultResource">
@@ -165,13 +165,27 @@
             </RelativeLayout>
         </LinearLayout>
 
+
+
         <View
             android:id="@+id/endView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_5"
             android:background="#fff8f8f8"
             android:tag="endView" />
-
+        <LinearLayout
+            android:id="@+id/ll_judgeRange"
+            android:tag="ll_judgeRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF0F4FC"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingEnd="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_5"
+            android:orientation="vertical"
+            android:visibility="gone"
+            />
     </LinearLayout>
 
     <LinearLayout

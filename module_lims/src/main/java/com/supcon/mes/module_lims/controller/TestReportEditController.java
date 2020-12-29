@@ -79,7 +79,6 @@ import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStdConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.SpecLimitEntity;
 import com.supcon.mes.module_lims.model.bean.StdIdEntity;
-import com.supcon.mes.module_lims.model.bean.StdJudgeEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
@@ -203,7 +202,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private TestProjectChangeListener mTestProjectChangeListener;
     private OnRequestHeadListener mOnRequestHeadListener;
     private TestReportEditHeadEntity entity;
-    private List ptList;
+    private List<StdJudgeSpecEntity> ptList;
     private List<QualityStdConclusionEntity> conclusionList;
     private List<String> stringConclusionList;
     private List<String> deletePtIds;
@@ -419,16 +418,14 @@ public class TestReportEditController extends BaseViewController implements Qual
                     for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                         stringConclusionList.add(conclusionEntity.getName());
                     }
-                    if (null != stringConclusionList && stringConclusionList.size() > 0){
-                        mSinglePickController.list(stringConclusionList)
-                                .listener(new SinglePicker.OnItemPickListener() {
-                                    @Override
-                                    public void onItemPicked(int index, Object item) {
-                                        entity.setCheckResult(stringConclusionList.get(index));
-                                        setConclusionColor(entity.getCheckResult(),false);
-                                    }
-                                }).show();
-                    }
+                    mSinglePickController.list(stringConclusionList)
+                            .listener(new SinglePicker.OnItemPickListener() {
+                                @Override
+                                public void onItemPicked(int index, Object item) {
+                                    entity.setCheckResult(stringConclusionList.get(index));
+                                    setConclusionColor(entity.getCheckResult(),false);
+                                }
+                            }).show();
                  }
                 }
 
@@ -438,10 +435,9 @@ public class TestReportEditController extends BaseViewController implements Qual
             @Override
             public void dispValueChange(String value, int position) {
                 List<SpecLimitEntity> specLimitList = null;
-                StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(position);
-                stdJudgeSpec.dispValue = value;
+                ptList.get(position).dispValue = value;
                 String resultGrade = "";
-                String specLimitListStr = stdJudgeSpec.specLimitListStr;
+                String specLimitListStr = ptList.get(position).specLimitListStr;
                 if (!StringUtil.isEmpty(specLimitListStr) && !specLimitListStr.equals("[]")){
                     specLimitList = GsonUtil.jsonToList(specLimitListStr, SpecLimitEntity.class);
                 }
@@ -451,7 +447,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                         Invocable invoke = (Invocable) engine;
                         Object gradeDetermine = invoke.invokeFunction("gradeDetermine", value, specListsArr, specLimitListStr, null);
                         resultGrade = (String) gradeDetermine;
-                        stdJudgeSpec.checkResult = resultGrade;
+                        ptList.get(position).checkResult = resultGrade;
                         adapter.notifyDataSetChanged();
                         setConclusionColor("auto",true);
                     } catch (Exception e) {
@@ -489,11 +485,10 @@ public class TestReportEditController extends BaseViewController implements Qual
                     public void accept(Object o) throws Exception {
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < ptList.size(); i++) {
-                            StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(i);
                             if (i != ptList.size()-1){
-                                sb.append(stdJudgeSpec.reportName+",");
+                                sb.append(ptList.get(i).reportName+",");
                             }else {
-                                sb.append(stdJudgeSpec.reportName);
+                                sb.append(ptList.get(i).reportName);
                             }
 
                         }
@@ -618,8 +613,7 @@ public class TestReportEditController extends BaseViewController implements Qual
 
         for (int i = myDeleteList.size(); i >= 1; i--) {
             for (int j = 0; j < ptList.size(); j++) {
-                StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(j);
-                if (myDeleteList.get(i).equals(stdJudgeSpec+"")){
+                if (myDeleteList.get(i).equals(ptList.get(j).id+"")){
                     myDeleteList.remove(i);
                     break;
                 }
@@ -825,7 +819,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 this.entity.getInspectId().getNeedLab()));
         adapter.setConclusionOption(conclusionList);
         adapter.notifyDataSetChanged();
-        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),false);
+        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),true);
     }
 
     public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){
@@ -946,8 +940,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                     if (list.size() > 0){
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < ptList.size(); i++) {
-                            StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(i);
-                            sb.append(stdJudgeSpec.reportName).append(",");
+                            sb.append(ptList.get(i).reportName).append(",");
                         }
                         for (int i = 0; i < list.size(); i++) {
                             if (i != list.size() -1){
@@ -1236,12 +1229,9 @@ public class TestReportEditController extends BaseViewController implements Qual
             int ptCheckResult = 0;
             if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size() > 0){
                 for (int i = 0; i < ptList.size(); i++) {
-                    if (ptList.get(i) instanceof StdJudgeEntity)
-                        continue;
-                    StdJudgeSpecEntity stdJudgeSpec= (StdJudgeSpecEntity) ptList.get(i);
                     for (int j = 0; j < conclusionList.size(); j++) {
-                        if (!StringUtil.isEmpty(stdJudgeSpec.checkResult)){
-                            if (stdJudgeSpec.checkResult.equals(conclusionList.get(j).getName())){
+                        if (!StringUtil.isEmpty(ptList.get(i).checkResult)){
+                            if (ptList.get(i).checkResult.equals(conclusionList.get(j).getName())){
                                 if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
                                     unQualified++;
                                     break;

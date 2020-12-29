@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/judgeRangeTv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:tag="judgeRangeTv"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemJudgeKey"
+        android:textColor="@color/black_text"
+        android:text="111"
+        android:textSize="@dimen/dp_14"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@+id/itemJudgeKey"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemJudgeValue"
+        android:textColor="@color/black_text"
+        android:layout_alignParentRight="true"
+        android:text="111"
+        android:gravity="center_vertical|right"
+        android:textSize="@dimen/dp_14"
+        />
+</RelativeLayout>

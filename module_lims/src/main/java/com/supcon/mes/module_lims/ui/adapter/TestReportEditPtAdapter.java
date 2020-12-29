@@ -7,8 +7,8 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -107,6 +107,9 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
         @BindByTag("itemViewDelBtn")
         TextView itemViewDelBtn;
 
+        @BindByTag("ll_judgeRange")
+        LinearLayout ll_judgeRange;
+
         public ViewHolder(Context context) {
             super(context);
         }
@@ -138,7 +141,35 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             RxView.clicks(rangeImg)
                     .throttleFirst(1000, TimeUnit.MICROSECONDS)
                     .subscribe(o -> {
-                        setRangeClick();
+                        int position = getAdapterPosition();
+                        StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity) getItem(position);
+                        if (detailEntity.getTypeView() == 1) {
+                            List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getStdJudgeSpecEntities();
+                            int size = stdJudgeSpecEntities.size();
+                            if (size == 0) {
+                                ToastUtils.show(context, context.getResources().getString(R.string.lims_not_content));
+                                return;
+                            }
+                            detailEntity.isExpand = !detailEntity.isExpand;
+                            notifyChanged(detailEntity);
+
+
+//                            List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getSpec();
+//                            if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()) {
+//                                int size = stdJudgeSpecEntities.size();
+//                                if (!detailEntity.isExpand) {
+//                                    for (int i = 0; i < size; i++) {
+//                                        getList().add(position + i + 1, stdJudgeSpecEntities.get(i));
+//                                    }
+//                                } else {
+//                                    getList().removeAll(stdJudgeSpecEntities);
+//                                }
+//                                detailEntity.isExpand = !detailEntity.isExpand;
+//                                notifyDataSetChanged();
+//                            } else {
+//                                ToastUtils.show(context, context.getResources().getString(R.string.lims_not_content));
+//                            }
+                        }
                     });
 
             //结论
@@ -154,7 +185,7 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                             .listener(new SinglePicker.OnItemPickListener() {
                                 @Override
                                 public void onItemPicked(int index, Object item) {
-                                    StdJudgeSpecEntity entity = (StdJudgeSpecEntity) getItem(getAdapterPosition());
+                                    StdJudgeSpecEntity entity = ((StdJudgeSpecEntity) getItem(getAdapterPosition()));
                                     entity.checkResult = stringList.get(index);
                                     notifyItemChanged(getAdapterPosition());
                                     if (null != mConclusionChangeListener) {
@@ -200,27 +231,6 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                         onItemChildViewClick(itemViewDelBtn, 2);
                     });
         }
-        private void setRangeClick(){
-            int position = getAdapterPosition();
-            StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity) getItem(position);
-            if (detailEntity.getTypeView() == 1) {
-                List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getSpec();
-                if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()) {
-                    int size = stdJudgeSpecEntities.size();
-                    if (!detailEntity.isExpand) {
-                        for (int i = 0; i < size; i++) {
-                            getList().add(position + i + 1, stdJudgeSpecEntities.get(i));
-                        }
-                    } else {
-                        getList().removeAll(stdJudgeSpecEntities);
-                    }
-                    detailEntity.isExpand = !detailEntity.isExpand;
-                    notifyDataSetChanged();
-                } else {
-                    ToastUtils.show(context, context.getResources().getString(R.string.lims_not_content));
-                }
-            }
-        }
 
         @Override
         protected void update(StdJudgeSpecEntity data) {
@@ -258,16 +268,31 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                         } else {
                             csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.lightGreen));
                         }
-
                     }
                 }
             }
 
-
             if (data.isExpand) {
+                if (ll_judgeRange.getChildCount() == 0) {
+                    List<StdJudgeEntity> stdJudgeSpecEntities = data.getStdJudgeSpecEntities();
+                    int size = stdJudgeSpecEntities.size();
+                    for (int i = 0; i < size; i++) {
+                        StdJudgeEntity stdJudgeEntity = stdJudgeSpecEntities.get(i);
+                        View view = LayoutInflater.from(context).inflate(R.layout.item_inspect_report_range, null);
+                        TextView itemJudgeKey = view.findViewById(R.id.itemJudgeKey);
+                        TextView itemJudgeValue = view.findViewById(R.id.itemJudgeValue);
+                        itemJudgeKey.setText(stdJudgeEntity.resultValue + context.getResources().getString(R.string.lims_range));
+                        itemJudgeValue.setText(stdJudgeEntity.dispValue);
+                        ll_judgeRange.addView(view);
+                    }
+                }
                 rangeImg.setImageResource(R.drawable.ic_inspect_down_arrow);
+                ll_judgeRange.setVisibility(View.VISIBLE);
+
             } else {
                 rangeImg.setImageResource(R.drawable.ic_inspect_up_arrow);
+                ll_judgeRange.setVisibility(View.GONE);
+
             }
         }
     }
