@@ -304,23 +304,6 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         }else {
                             if (StringUtil.isEmpty(data.getOriginValue())){  //原始值为空 并且默认值不为空  赋默认给原始 并去计算修约与报出
                                 ceOriginalValue.setContent(data.getDefaultValue());
-                                if (recyclerView.isComputingLayout()){
-                                    recyclerView.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
-                                                originalValue = data.getDefaultValue();
-                                                mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
-                                            }
-                                        }
-                                    });
-                                }else {
-                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
-                                        originalValue = data.getDefaultValue();
-                                        mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
-                                    }
-                                }
-
                             }else {
                                 ceOriginalValue.setContent(data.getOriginValue());
                                 ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
@@ -418,7 +401,25 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             conclusionAdapter.notifyDataSetChanged();
             if (TextUtils.isEmpty(data.getOriginValue()) && !TextUtils.isEmpty(data.getDefaultValue())){
                 data.setOriginValue(data.getDefaultValue());
-                originValChange(data,ceOriginalValue,ctRoundOffValue,ceReportedValue,cpOriginalValue);
+
+                //originValChange(data,ceOriginalValue,ctRoundOffValue,ceReportedValue,cpOriginalValue);//设置其他修约报出值
+
+                if (recyclerView.isComputingLayout()){
+                    recyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                                originalValue = data.getDefaultValue();
+                                mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                            }
+                        }
+                    });
+                }else {
+                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                        originalValue = data.getDefaultValue();
+                        mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                    }
+                }
             }
         }
 

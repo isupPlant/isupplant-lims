@@ -231,6 +231,6 @@
     <string name="lims_code_scanning_mode_two">2、红外设备扫码登样</string>
     <string name="lims_testing">检验中</string>
     <string name="lims_report_formation">报告编制中</string>
-    <string name="lims_report_review">报告审核中</string>
+    <string name="lims_report_review">报告已审核</string>
     <string name="lims_insert">添加</string>
 </resources>

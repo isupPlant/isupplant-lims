@@ -13,9 +13,11 @@ import java.util.Map;
  * on 2020/7/6
  * class name 样品查询接口
  */
-@ContractFactory(entites = {SampleInquiryListEntity.class, BAP5CommonEntity.class})
+@ContractFactory(entites = {SampleInquiryListEntity.class, BAP5CommonEntity.class,SampleInquiryListEntity.class})
 public interface SampleInquiryAPI {
     void getSampleInquiryList(String type,int pageNo, Map<String, Object> params);
 
     void sampleSubmit(String type, String time, String ids, List<SampleInquiryEntity> submitList);
+
+    void getSampleScanList(String type,int pageNo, Map<String, Object> params);
 }

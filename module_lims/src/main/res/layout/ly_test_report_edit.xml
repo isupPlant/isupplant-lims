@@ -13,6 +13,7 @@
         android:tag="ctTestRequestNo"
         app:gravity="right|center_vertical"
         app:text="@string/lims_request_no"
+        app:necessary="true"
         app:text_color="@color/font_333333" />
 
     <View
@@ -66,6 +67,7 @@
         app:editable="true"
         app:gravity="right|center_vertical"
         app:key="@string/lims_test_conclusion"
+        app:necessary="true"
         app:text_color="@color/font_333333" />
 
     <View
@@ -80,6 +82,7 @@
         app:editable="true"
         app:gravity="right|center_vertical"
         app:text="@string/lims_quality_standard"
+        app:necessary="true"
         app:text_color="@color/font_333333" />
 
     <View
@@ -95,6 +98,7 @@
         app:editable="true"
         app:gravity="right|center_vertical"
         app:text="@string/lims_check_staff"
+        app:necessary="true"
         app:text_color="@color/font_333333" />
 
     <View
@@ -109,6 +113,7 @@
         app:editable="true"
         app:gravity="right|center_vertical"
         app:text="@string/lims_check_dept"
+        app:necessary="true"
         app:text_color="@color/font_333333" />
 
     <View
@@ -122,6 +127,7 @@
         android:tag="cdTestTime"
         app:gravity="right|center_vertical"
         app:text="@string/lims_check_time"
+        app:necessary="true"
         app:text_color="@color/editableTextColor" />
 
 

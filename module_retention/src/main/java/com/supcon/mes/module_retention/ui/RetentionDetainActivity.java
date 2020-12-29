@@ -1,5 +1,6 @@
 package com.supcon.mes.module_retention.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.app.annotation.Bind;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
@@ -124,6 +126,8 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     ImageView observePlanImg;
     @BindByTag("ns_scroll")
     NestedScrollView ns_scroll;
+    @BindByTag("rlExpand")
+    RelativeLayout rlExpand;
 
     @Override
     protected int getLayoutID() {
@@ -157,6 +161,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
     private boolean expand = false;
     private int operate = -1;
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -168,7 +173,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                 .subscribe(o -> {
                     back();
                 });
-        RxView.clicks(imageUpDown)
+        RxView.clicks(rlExpand)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     expand = !expand;
@@ -192,22 +197,22 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
             initPending();
         });
 
-        RxView.clicks(ll_record_view)
-                .throttleFirst(2000, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    if (adapter.selectPosition < 0)
-                        ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_one_data_or_look));
-                    else {
-                        RecordEntity recordEntity = adapter.getItem(adapter.selectPosition);
-                        if (!recordEntity.isStateObserved())
-                            ToastUtils.show(context, context.getResources().getString(R.string.lims_status_not));
-                        else {
-                            Bundle bundle = new Bundle();
-                            bundle.putLong("id", recordEntity.id);
-                            IntentRouter.go(context, Constant.Router.RETENTION_VIEW_RECORD, bundle);
-                        }
-                    }
-                });
+//        RxView.clicks(ll_record_view)
+//                .throttleFirst(2000, TimeUnit.MILLISECONDS)
+//                .subscribe(o -> {
+//                    if (adapter.selectPosition < 0)
+//                        ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_one_data_or_look));
+//                    else {
+//                        RecordEntity recordEntity = adapter.getItem(adapter.selectPosition);
+//                        if (!recordEntity.isStateObserved())
+//                            ToastUtils.show(context, context.getResources().getString(R.string.lims_status_not));
+//                        else {
+//                            Bundle bundle = new Bundle();
+//                            bundle.putLong("id", recordEntity.id);
+//                            IntentRouter.go(context, Constant.Router.RETENTION_VIEW_RECORD, bundle);
+//                        }
+//                    }
+//                });
         customWorkFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {

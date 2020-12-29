@@ -137,25 +137,7 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             RxView.clicks(rangeImg)
                     .throttleFirst(1000, TimeUnit.MICROSECONDS)
                     .subscribe(o -> {
-                        int position = getAdapterPosition();
-                        StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity) getItem(position);
-                        if (detailEntity.getTypeView() == 1) {
-                            List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getSpec();
-                            if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()) {
-                                int size = stdJudgeSpecEntities.size();
-                                if (!detailEntity.isExpand) {
-                                    for (int i = 0; i < size; i++) {
-                                        getList().add(position + i + 1, stdJudgeSpecEntities.get(i));
-                                    }
-                                } else {
-                                    getList().removeAll(stdJudgeSpecEntities);
-                                }
-                                detailEntity.isExpand = !detailEntity.isExpand;
-                                notifyDataSetChanged();
-                            } else {
-                                ToastUtils.show(context, context.getResources().getString(R.string.lims_not_content));
-                            }
-                        }
+                        setRangeClick();
                     });
 
             //结论
@@ -216,6 +198,27 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                     .subscribe(o -> {
                         onItemChildViewClick(itemViewDelBtn, 2);
                     });
+        }
+        private void setRangeClick(){
+            int position = getAdapterPosition();
+            StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity) getItem(position);
+            if (detailEntity.getTypeView() == 1) {
+                List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getSpec();
+                if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()) {
+                    int size = stdJudgeSpecEntities.size();
+                    if (!detailEntity.isExpand) {
+                        for (int i = 0; i < size; i++) {
+                            getList().add(position + i + 1, stdJudgeSpecEntities.get(i));
+                        }
+                    } else {
+                        getList().removeAll(stdJudgeSpecEntities);
+                    }
+                    detailEntity.isExpand = !detailEntity.isExpand;
+                    notifyDataSetChanged();
+                } else {
+                    ToastUtils.show(context, context.getResources().getString(R.string.lims_not_content));
+                }
+            }
         }
 
         @Override

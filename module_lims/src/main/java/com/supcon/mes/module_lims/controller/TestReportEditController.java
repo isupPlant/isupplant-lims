@@ -418,14 +418,16 @@ public class TestReportEditController extends BaseViewController implements Qual
                     for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                         stringConclusionList.add(conclusionEntity.getName());
                     }
-                    mSinglePickController.list(stringConclusionList)
-                            .listener(new SinglePicker.OnItemPickListener() {
-                                @Override
-                                public void onItemPicked(int index, Object item) {
-                                    entity.setCheckResult(stringConclusionList.get(index));
-                                    setConclusionColor(entity.getCheckResult(),false);
-                                }
-                            }).show();
+                    if (null != stringConclusionList && stringConclusionList.size() > 0){
+                        mSinglePickController.list(stringConclusionList)
+                                .listener(new SinglePicker.OnItemPickListener() {
+                                    @Override
+                                    public void onItemPicked(int index, Object item) {
+                                        entity.setCheckResult(stringConclusionList.get(index));
+                                        setConclusionColor(entity.getCheckResult(),false);
+                                    }
+                                }).show();
+                    }
                  }
                 }
 
@@ -819,7 +821,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 this.entity.getInspectId().getNeedLab()));
         adapter.setConclusionOption(conclusionList);
         adapter.notifyDataSetChanged();
-        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),true);
+        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),false);
     }
 
     public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){

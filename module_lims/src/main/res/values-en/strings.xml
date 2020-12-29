@@ -232,7 +232,7 @@
     <string name="lims_code_scanning_mode_two">2、Code scanning and sample registration of infrared equipment</string>
     <string name="lims_testing">Inspect</string>
     <string name="lims_report_formation">The report is under preparation</string>
-    <string name="lims_report_review">Report under review</string>
+    <string name="lims_report_review">Report reviewed</string>
     <string name="lims_request_reference">Inspection application reference</string>
     <string name="lims_insert">Add</string>
 </resources>
