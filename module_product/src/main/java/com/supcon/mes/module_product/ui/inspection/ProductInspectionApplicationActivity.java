@@ -90,6 +90,8 @@ public class ProductInspectionApplicationActivity extends BaseRefreshRecyclerAct
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+
+        getController(InspectionApplicationController.class).setType(1);
     }
 
     @Override

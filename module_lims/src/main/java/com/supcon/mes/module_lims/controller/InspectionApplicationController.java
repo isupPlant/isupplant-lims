@@ -15,9 +15,12 @@ import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.WorkFlowButtonInfoController;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
+import com.supcon.mes.middleware.model.bean.WorkFlowButtonInfo;
 import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.module_lims.R;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
@@ -68,6 +71,9 @@ public class InspectionApplicationController extends BaseViewController {
     private String searchKey;
     private String title;
     private boolean isFinish = false;
+    private int type = -1;
+
+    private WorkFlowButtonInfoController workFlowController;
 
     public InspectionApplicationController(View rootView) {
         super(rootView);
@@ -87,7 +93,10 @@ public class InspectionApplicationController extends BaseViewController {
     @Override
     public void initView() {
         super.initView();
-        searchTitle.showScan(false);
+        searchTitle.getRightScanActionBar().setImageResource(R.drawable.sl_top_add);
+
+        workFlowController = new WorkFlowButtonInfoController(getRootView());
+
     }
 
     @SuppressLint("CheckResult")
@@ -102,6 +111,24 @@ public class InspectionApplicationController extends BaseViewController {
             }
         });
 
+        workFlowController.getWorkFlowButtonInfo(getMenuCode(), LimsConstant.ModuleCode.LIMS_APPLY_ENTITY_CODE, new WorkFlowButtonInfoController.WorkFlowButtonListener() {
+            @Override
+            public void getWorkFlowEntity(WorkFlowButtonInfo info) {
+                Bundle bundle = new Bundle();
+                bundle.putString("from","add");
+                bundle.putSerializable("info",info);
+                IntentRouter.go(context,getIntentObject(),bundle);
+            }
+
+            @Override
+            public void checkAddFlowButtonResult(boolean isHas) {
+                if (isHas){
+                    searchTitle.showScan(true);
+                }else {
+                    searchTitle.showScan(false);
+                }
+            }
+        });
         //当前页面搜索图标的的点击事件
         RxView.clicks(searchTitle.getSearchBtn())
                 .throttleFirst(200, TimeUnit.MILLISECONDS)
@@ -229,6 +256,43 @@ public class InspectionApplicationController extends BaseViewController {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    public void setType(int type){
+        this.type = type;
+    }
+
+    private String getMenuCode(){
+        String menuCode = null;
+        switch (type){
+            case 1:
+                menuCode =  LimsConstant.ModuleCode.LIMS_PRODUCT_APPLY_MENU_CODE;
+                break;
+            case 2:
+                menuCode =  LimsConstant.ModuleCode.LIMS_INCOMING_APPLY_MENU_CODE;
+                break;
+            case 3:
+                menuCode =  LimsConstant.ModuleCode.LIMS_OTHER_APPLY_MENU_CODE;
+                break;
+        }
+        return menuCode == null ? "" : menuCode;
+    }
+
+    private String getIntentObject() {
+        String intentObject = null;
+        switch (type) {
+            case 1:
+                intentObject = Constant.AppCode.LIMS_ManuInspectEdit;
+                break;
+            case 2:
+                intentObject = Constant.AppCode.LIMS_PurchInspectEdit;
+                break;
+            case 3:
+                intentObject = Constant.AppCode.LIMS_otherInspectEdit;
+                break;
+
+        }
+        return intentObject == null ? "" : intentObject;
     }
 
 

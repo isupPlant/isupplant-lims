@@ -89,6 +89,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+        getController(InspectionApplicationController.class).setType(3);
     }
 
     @Override

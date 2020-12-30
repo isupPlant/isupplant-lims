@@ -62,6 +62,17 @@ public interface LimsConstant {
     //模块编码
     interface ModuleCode{
         String LIMS_MODULE_CODE = "QCS_5.0.0.0";
+
+        String LIMS_APPLY_ENTITY_CODE = "QCS_5.0.0.0_inspect";
+        String LIMS_REPORT_ENTITY_CODE = "QCS_5.0.0.0_inspectReport";
+
+        String LIMS_PRODUCT_APPLY_MENU_CODE = "QCS_5.0.0.0_inspect_manuInspectList";
+        String LIMS_INCOMING_APPLY_MENU_CODE = "QCS_5.0.0.0_inspect_purchInspectList";
+        String LIMS_OTHER_APPLY_MENU_CODE = "QCS_5.0.0.0_inspect_otherInspectList";
+
+        String LIMS_PRODUCT_REPORT_MENU_CODE = "QCS_5.0.0.0_inspectReport_manuInspReportList";
+        String LIMS_INCOMING_REPORT_MENU_CODE = "QCS_5.0.0.0_inspectReport_purchInspReportList";
+        String LIMS_OTHER_REPORT_MENU_CODE = "QCS_5.0.0.0_inspectReport_otherInspReportList";
     }
 
     //配置项KEY

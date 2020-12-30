@@ -819,7 +819,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 this.entity.getInspectId().getNeedLab()));
         adapter.setConclusionOption(conclusionList);
         adapter.notifyDataSetChanged();
-        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),true);
+        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),false);
     }
 
     public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){
