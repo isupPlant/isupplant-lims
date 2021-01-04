@@ -178,6 +178,9 @@
     <string name="lims_inspection_application_detail_tips_10">Inspection department cannot be empty!</string>
     <string name="lims_inspection_application_detail_tips_11">The inspector is not allowed to be empty!</string>
     <string name="lims_inspection_application_detail_tips_12">Business type cannot be empty!</string>
+    <string name="lims_inspection_report_inspector_cannot_be_empty">Inspector cannot be empty!</string>
+    <string name="lims_inspection_report_inspection_department_cannot_be_empty">Inspection department cannot be empty!</string>
+    <string name="lims_inspection_report_inspection_time_cannot_be_empty">Inspection time cannot be empty!</string>
     <string name="lims_inspection_request_no">Inspection request No. cannot be blank!</string>
     <string name="lims_inspection_application_detail_tips_13">Article 【%1$s】 the inspection items in the quality standard cannot be blank!</string>
     <string name="lims_service_not_exist">Sorry, the service does not exist or is not started!</string>

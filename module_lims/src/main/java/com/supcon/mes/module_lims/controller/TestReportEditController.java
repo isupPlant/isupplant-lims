@@ -687,17 +687,17 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     private boolean checkSubmit(){
         if (StringUtil.isEmpty(ctTestPeople.getContent().trim())){
-            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_11));
+            setToast(context.getResources().getString(R.string.lims_inspection_report_inspector_cannot_be_empty));
             return false;
         }
 
         if (StringUtil.isEmpty(ctTestDepartment.getContent().trim())){
-            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_10));
+            setToast(context.getResources().getString(R.string.lims_inspection_report_inspection_department_cannot_be_empty));
             return false;
         }
 
         if (StringUtil.isEmpty(cdTestTime.getContent().trim())){
-            setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_9));
+            setToast(context.getResources().getString(R.string.lims_inspection_report_inspection_time_cannot_be_empty));
             return false;
         }
 

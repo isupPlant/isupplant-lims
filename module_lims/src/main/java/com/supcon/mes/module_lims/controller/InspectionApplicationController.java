@@ -111,15 +111,8 @@ public class InspectionApplicationController extends BaseViewController {
             }
         });
 
-        workFlowController.getWorkFlowButtonInfo(getMenuCode(), LimsConstant.ModuleCode.LIMS_APPLY_ENTITY_CODE, new WorkFlowButtonInfoController.WorkFlowButtonListener() {
-            @Override
-            public void getWorkFlowEntity(WorkFlowButtonInfo info) {
-                Bundle bundle = new Bundle();
-                bundle.putString("from","add");
-                bundle.putSerializable("info",info);
-                IntentRouter.go(context,getIntentObject(),bundle);
-            }
 
+        workFlowController.checkWorkFlowButtonStatus(getMenuCode(), LimsConstant.ModuleCode.LIMS_APPLY_ENTITY_CODE, new WorkFlowButtonInfoController.WorkFlowButtonShowListener() {
             @Override
             public void checkAddFlowButtonResult(boolean isHas) {
                 if (isHas){
@@ -129,6 +122,25 @@ public class InspectionApplicationController extends BaseViewController {
                 }
             }
         });
+
+        RxView.clicks(searchTitle.getRightScanActionBar()).throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        workFlowController.getWorkFlowEntity(new WorkFlowButtonInfoController.WorkFlowButtonEntityListener() {
+                            @Override
+                            public void onChooseWorkFlowEntity(WorkFlowButtonInfo info) {
+                                if (null == info){
+                                    return;
+                                }
+                                Bundle bundle = new Bundle();
+                                bundle.putString("from","add");
+                                bundle.putSerializable("info",info);
+                                IntentRouter.go(context,getIntentObject(),bundle);
+                            }
+                        });
+                    }
+                });
         //当前页面搜索图标的的点击事件
         RxView.clicks(searchTitle.getSearchBtn())
                 .throttleFirst(200, TimeUnit.MILLISECONDS)

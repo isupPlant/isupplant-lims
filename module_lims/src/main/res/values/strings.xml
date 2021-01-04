@@ -181,6 +181,9 @@
     <string name="lims_inspection_application_detail_tips_11">请检人不允许为空!</string>
     <string name="lims_inspection_application_detail_tips_12">业务类型不允许为空!</string>
     <string name="lims_inspection_request_no_cannot_be_blank">请检单号不允许为空</string>
+    <string name="lims_inspection_report_inspector_cannot_be_empty">检验人不允许为空!</string>
+    <string name="lims_inspection_report_inspection_department_cannot_be_empty">检验部门不允许为空!</string>
+    <string name="lims_inspection_report_inspection_time_cannot_be_empty">检验时间不允许为空!</string>
     <string name="lims_inspection_application_detail_tips_13">第【%1$s】条质量标准中的检验项目不允许为空!</string>
     <string name="lims_service_not_exist">抱歉，服务不存在或者未启动!</string>
     <string name="lims_open_camera">请打开相机权限!</string>

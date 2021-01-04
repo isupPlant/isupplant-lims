@@ -149,19 +149,28 @@ public class QualityStandardReferenceActivity extends BaseRefreshRecyclerActivit
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
-                    adapter.getItem(position).setSelect(!adapter.getItem(position).isSelect());
-                    adapter.notifyDataSetChanged();
-                    int a = 0;
-                    for (int i = 0; i < adapter.getList().size(); i++) {
-                        if (adapter.getList().get(i).isSelect()) { //集合中存在勾选状态的 数据的话
-                            a++;
+                    if(isReport){
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            adapter.getList().get(i).setSelect(false);
+                        }
+                        adapter.getList().get(position).setSelect(true);
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        adapter.getItem(position).setSelect(!adapter.getItem(position).isSelect());
+                        adapter.notifyDataSetChanged();
+                        int a = 0;
+                        for (int i = 0; i < adapter.getList().size(); i++) {
+                            if (adapter.getList().get(i).isSelect()) { //集合中存在勾选状态的 数据的话
+                                a++;
+                            }
+                        }
+                        if (a == adapter.getList().size()) {
+                            setSelectAllStyle(true);
+                        } else {
+                            setSelectAllStyle(false);
                         }
                     }
-                    if (a == adapter.getList().size()) {
-                        setSelectAllStyle(true);
-                    } else {
-                        setSelectAllStyle(false);
-                    }
+
                 }
             }
         });
