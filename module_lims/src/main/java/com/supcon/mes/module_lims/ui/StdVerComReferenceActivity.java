@@ -79,6 +79,7 @@ public class StdVerComReferenceActivity extends BaseRefreshRecyclerActivity<StdV
     private Map<String, Object> map = new HashMap<>();
     private StdVerComReferenceAdapter adapter;
     private List<StdVerComIdEntity> list = new ArrayList<>();
+    private String title;
     @Override
     protected IListAdapter<StdVerComIdEntity> createAdapter() {
         adapter = new StdVerComReferenceAdapter(context);
@@ -104,13 +105,14 @@ public class StdVerComReferenceActivity extends BaseRefreshRecyclerActivity<StdV
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        searchTitle.setTitle(getString(R.string.lims_quality_standard_reference));
+
 
         stdVerId = getIntent().getStringExtra("stdVerId");
         reportNames =  getIntent().getStringExtra("reportNames");
         isRadio = getIntent().getBooleanExtra("isRadio", false);
         selectTag = getIntent().getStringExtra("selectTag");
-
+        title = getIntent().getStringExtra("title");
+        searchTitle.setTitle(title == null ? getString(R.string.lims_quality_standard_reference) : title);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override

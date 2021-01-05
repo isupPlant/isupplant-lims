@@ -257,23 +257,24 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             }
 
             if (data.isExpand) {
-                if (ll_judgeRange.getChildCount() == 0) {
-                    List<StdJudgeEntity> stdJudgeSpecEntities = data.getStdJudgeSpecEntities();
-                    int size = stdJudgeSpecEntities.size();
-                    for (int i = 0; i < size; i++) {
-                        StdJudgeEntity stdJudgeEntity = stdJudgeSpecEntities.get(i);
-                        View view = LayoutInflater.from(context).inflate(R.layout.item_inspect_report_range, null);
-                        TextView itemJudgeKey = view.findViewById(R.id.itemJudgeKey);
-                        TextView itemJudgeValue = view.findViewById(R.id.itemJudgeValue);
-                        itemJudgeKey.setText(stdJudgeEntity.resultValue + context.getResources().getString(R.string.lims_range));
-                        itemJudgeValue.setText(stdJudgeEntity.dispValue);
-                        ll_judgeRange.addView(view);
-                    }
+                ll_judgeRange.removeAllViews();
+                List<StdJudgeEntity> stdJudgeSpecEntities = data.getStdJudgeSpecEntities();
+                int size = stdJudgeSpecEntities.size();
+                for (int i = 0; i < size; i++) {
+                    StdJudgeEntity stdJudgeEntity = stdJudgeSpecEntities.get(i);
+                    View view = LayoutInflater.from(context).inflate(R.layout.item_inspect_report_range, null);
+                    TextView itemJudgeKey = view.findViewById(R.id.itemJudgeKey);
+                    TextView itemJudgeValue = view.findViewById(R.id.itemJudgeValue);
+                    itemJudgeKey.setText(stdJudgeEntity.resultValue + context.getResources().getString(R.string.lims_range));
+                    itemJudgeValue.setText(stdJudgeEntity.dispValue);
+                    ll_judgeRange.addView(view);
                 }
+
                 rangeImg.setImageResource(R.drawable.ic_inspect_down_arrow);
                 ll_judgeRange.setVisibility(View.VISIBLE);
 
             } else {
+                ll_judgeRange.removeAllViews();
                 rangeImg.setImageResource(R.drawable.ic_inspect_up_arrow);
                 ll_judgeRange.setVisibility(View.GONE);
 

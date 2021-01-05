@@ -52,7 +52,7 @@ public class TestReportEditHeadEntity extends BaseEntity {
     }
 
     public ProdIdEntity getProdId() {
-        return prodId;
+        return prodId == null ? new ProdIdEntity() : prodId;
     }
 
     public void setProdId(ProdIdEntity prodId) {

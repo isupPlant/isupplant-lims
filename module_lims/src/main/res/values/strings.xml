@@ -54,6 +54,7 @@
     <string name="lims_device_type_name">类型名称</string>
     <string name="lims_device_reference">设备参照</string>
     <string name="lims_inspection_items">检验项目</string>
+    <string name="lims_inspection_items_reference">检验项目参照</string>
     <string name="lims_busitype">业务类型</string>
     <string name="lims_select_busitype">请选择业务类型</string>
     <string name="lims_inspect_quantity">请检数量</string>
@@ -180,7 +181,7 @@
     <string name="lims_inspection_application_detail_tips_10">请检部门不允许为空!</string>
     <string name="lims_inspection_application_detail_tips_11">请检人不允许为空!</string>
     <string name="lims_inspection_application_detail_tips_12">业务类型不允许为空!</string>
-    <string name="lims_inspection_request_no_cannot_be_blank">请检单号不允许为空</string>
+    <string name="lims_inspection_request_no_cannot_be_blank">检验申请单号不允许为空</string>
     <string name="lims_inspection_report_inspector_cannot_be_empty">检验人不允许为空!</string>
     <string name="lims_inspection_report_inspection_department_cannot_be_empty">检验部门不允许为空!</string>
     <string name="lims_inspection_report_inspection_time_cannot_be_empty">检验时间不允许为空!</string>

@@ -39,11 +39,11 @@ import com.supcon.mes.module_product.R;
  * class name 产品检验申请详情
  */
 @Router(value = "", viewCode = "manuInspectView,manuInspectEdit")
-@Presenter(value = {InspectionApplicationDetailPresenter.class, DeploymentPresenter.class, TableTypePresenter.class})
+@Presenter(value = {InspectionApplicationDetailPresenter.class, TableTypePresenter.class})
 @Controller(value = {InspectionApplicationDetailController.class})
 public class ProductInspectionApplicationDetailActivity extends BaseRefreshActivity implements InspectionApplicationDetailContract.View,
         TableTypeContract.View {
-    //DeploymentContract.View,
+    //DeploymentContract.View,DeploymentPresenter.class,
     private String id;
     private String pendingId;
     private PendingEntity pendingEntity;

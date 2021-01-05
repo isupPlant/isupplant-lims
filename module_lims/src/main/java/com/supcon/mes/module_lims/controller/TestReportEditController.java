@@ -497,6 +497,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                         bundle.putString("stdVerId",entity.getStdVerId().getId()+"");
                         bundle.putString("reportNames",sb.toString());
                         bundle.putString("selectTag",llReference.getTag()+"");
+                        bundle.putString("title",context.getResources().getString(R.string.lims_inspection_items_reference));
                         IntentRouter.go(context,Constant.AppCode.LIMS_StdVerComRef,bundle);
                     }
                 });
@@ -686,6 +687,11 @@ public class TestReportEditController extends BaseViewController implements Qual
     }
 
     private boolean checkSubmit(){
+
+        if (StringUtil.isEmpty(ctTestRequestNo.getContent().trim())){
+            setToast(context.getResources().getString(R.string.lims_inspection_request_no_cannot_be_blank));
+            return false;
+        }
         if (StringUtil.isEmpty(ctTestPeople.getContent().trim())){
             setToast(context.getResources().getString(R.string.lims_inspection_report_inspector_cannot_be_empty));
             return false;
@@ -807,6 +813,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         }
 
         presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(this.entity.getStdVerId().getId()+"");
+        presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(this.entity.getProdId().getId()+"");
 
     }
 
@@ -819,7 +826,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 this.entity.getInspectId().getNeedLab()));
         adapter.setConclusionOption(conclusionList);
         adapter.notifyDataSetChanged();
-        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(),false);
+        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(), this.entity.getCheckResult() == null);
     }
 
     public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){

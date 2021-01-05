@@ -190,6 +190,7 @@
     <string name="lims_unqualified">Unqualified</string>
     <string name="lims_customer_name">Customer Name</string>
     <string name="lims_supplier_code">Supplier Code</string>
+    <string name="lims_inspection_items_reference">Inspection item reference</string>
     <string name="lims_code">Code</string>
     <string name="lims_specifications">Specifications</string>
     <string name="lims_model">Model</string>
