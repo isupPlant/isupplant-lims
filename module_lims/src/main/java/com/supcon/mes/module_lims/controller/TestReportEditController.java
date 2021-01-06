@@ -1247,8 +1247,9 @@ public class TestReportEditController extends BaseViewController implements Qual
         if (isAuto){
             int unQualified = 0;
             int qualified = 0;
+            int firstGrade = 0;
             int highGrade = 0;
-            int ptCheckResult = 0;
+            //int ptCheckResult = 0;
             if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size() > 0){
                 for (int i = 0; i < ptList.size(); i++) {
                     for (int j = 0; j < conclusionList.size(); j++) {
@@ -1260,13 +1261,16 @@ public class TestReportEditController extends BaseViewController implements Qual
                                 }else if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)){
                                     qualified++;
                                     break;
+                                }else if(conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)){
+                                    firstGrade++;
+                                    break;
                                 }else if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
                                     highGrade++;
                                     break;
                                 }
                             }
                         }else {
-                            ptCheckResult++;
+                            //ptCheckResult++;
                             break;
                         }
                     }
@@ -1281,9 +1285,9 @@ public class TestReportEditController extends BaseViewController implements Qual
                             break;
                         }
                     }
-                }else {  //剩余合格与优等品
+                }else {
                     csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.lightGreen));
-                    if (qualified > 0){  //合格与优等品中 合格优先级高  只要有一个是合格 那检验结论就为合格
+                    if (qualified > 0){  //合格优先级排第二，如果在没有不合格的前提下  只要存在一个合格  表头检验结论必为合格
                         for (int i = 0; i < conclusionList.size(); i++) {
                             if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)){
                                 csTestConclusion.setContent(conclusionList.get(i).getName());
@@ -1291,19 +1295,17 @@ public class TestReportEditController extends BaseViewController implements Qual
                                 break;
                             }
                         }
-                    }else {
-                        if (highGrade == ptList.size()){
+                    }else { //剩余 一等品和优等品 一等品优先级高于优等品
+                        if (firstGrade > 0){
                             for (int i = 0; i < conclusionList.size(); i++) {
-                                if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
+                                if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)){
                                     csTestConclusion.setContent(conclusionList.get(i).getName());
                                     this.entity.setCheckResult(conclusionList.get(i).getName());
                                     break;
                                 }
                             }
-                        }else if (ptCheckResult == ptList.size()){ //表示所有的pt数据，结论均为空
-                            csTestConclusion.setContent("");
-                            this.entity.setCheckResult("");
                         }else {
+                            //只有优等品或者什么都没选择会进入此逻辑
                             if (highGrade > 0){
                                 for (int i = 0; i < conclusionList.size(); i++) {
                                     if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
@@ -1312,8 +1314,26 @@ public class TestReportEditController extends BaseViewController implements Qual
                                         break;
                                     }
                                 }
+                            }else {
+                                csTestConclusion.setContent("");
+                                this.entity.setCheckResult("");
                             }
+//                            if (highGrade == ptList.size()){
+//                                for (int i = 0; i < conclusionList.size(); i++) {
+//                                    if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
+//                                        csTestConclusion.setContent(conclusionList.get(i).getName());
+//                                        this.entity.setCheckResult(conclusionList.get(i).getName());
+//                                        break;
+//                                    }
+//                                }
+//                            }else if (ptCheckResult == ptList.size()){ //表示所有的pt数据，结论均为空
+//
+//                            }else {
+//
+//                            }
+
                         }
+
                     }
 
                 }

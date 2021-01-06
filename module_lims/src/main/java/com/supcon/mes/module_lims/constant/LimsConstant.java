@@ -104,5 +104,6 @@ public interface LimsConstant {
         String HIGH_GRADE = "LIMSBasic_standardGrade/highGrade" ; //优等品
         String QUALIFIED = "LIMSBasic_standardGrade/Qualified"; //合格
         String UN_QUALIFIED = "LIMSBasic_standardGrade/Unqualified";//不合格
+        String FIRST_GRADE = "LIMSBasic_standardGrade/firstGrade";//一等品
     }
 }
