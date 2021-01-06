@@ -389,11 +389,7 @@ public class TestReportEditController extends BaseViewController implements Qual
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 if (action == -1){
-                    entity.getStdVerId().setStdId(null);
-                    csTestConclusion.setContent("");
-                    ptList.clear();
-                    adapter.notifyDataSetChanged();
-                    llReference.setVisibility(View.GONE);
+                    qualityStdClean();
                 }else {
                     //跳转请求质量标准的页面
                     Bundle bundle = new Bundle();
@@ -418,14 +414,17 @@ public class TestReportEditController extends BaseViewController implements Qual
                     for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                         stringConclusionList.add(conclusionEntity.getName());
                     }
-                    mSinglePickController.list(stringConclusionList)
-                            .listener(new SinglePicker.OnItemPickListener() {
-                                @Override
-                                public void onItemPicked(int index, Object item) {
-                                    entity.setCheckResult(stringConclusionList.get(index));
-                                    setConclusionColor(entity.getCheckResult(),false);
-                                }
-                            }).show();
+                    if (stringConclusionList.size() > 0){
+                        mSinglePickController.list(stringConclusionList)
+                                .listener(new SinglePicker.OnItemPickListener() {
+                                    @Override
+                                    public void onItemPicked(int index, Object item) {
+                                        entity.setCheckResult(stringConclusionList.get(index));
+                                        setConclusionColor(entity.getCheckResult(),false);
+                                    }
+                                }).show();
+                    }
+
                  }
                 }
 
@@ -493,7 +492,7 @@ public class TestReportEditController extends BaseViewController implements Qual
 
                         }
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean("isRadio",true);
+                        bundle.putBoolean("isRadio",false);
                         bundle.putString("stdVerId",entity.getStdVerId().getId()+"");
                         bundle.putString("reportNames",sb.toString());
                         bundle.putString("selectTag",llReference.getTag()+"");
@@ -932,6 +931,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                                 "" : entity.getStdVerId().getStdId() == null ?
                                 "" : entity.getStdVerId().getStdId().getName() == null ?
                                 "" : entity.getStdVerId().getStdId().getName());
+                        presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId()+""); //获取范围标准
                         if (null != mQualityChangeListener){
                             mQualityChangeListener.qualityChangeClick(entity.getInspectId().getId()+"", entity.getStdVerId().getId()+"");
                         }
@@ -1228,6 +1228,21 @@ public class TestReportEditController extends BaseViewController implements Qual
         return cacheFile.getAbsolutePath();
     }
 
+    private void qualityStdClean(){
+        /*1.清除质量标准控件的文字 2.清除质量标准对应实体字段 3.清除检验结论控件文字 4.清除检验结论对应实体字段 5.清除表体数据并刷新 6.隐藏参照检验项目按钮*/
+        entity.getStdVerId().setStdId(null);
+
+        csTestConclusion.setContent("");
+        entity.setCheckResult("");
+        conclusionList.clear();
+
+        ptList.clear();
+        adapter.notifyDataSetChanged();
+
+        llReference.setVisibility(View.GONE);
+
+    }
+
     public void setConclusionColor(String checkResult,boolean isAuto){
         if (isAuto){
             int unQualified = 0;
@@ -1285,59 +1300,25 @@ public class TestReportEditController extends BaseViewController implements Qual
                                     break;
                                 }
                             }
-                        }else if (ptCheckResult == ptList.size()){
+                        }else if (ptCheckResult == ptList.size()){ //表示所有的pt数据，结论均为空
                             csTestConclusion.setContent("");
                             this.entity.setCheckResult("");
+                        }else {
+                            if (highGrade > 0){
+                                for (int i = 0; i < conclusionList.size(); i++) {
+                                    if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
+                                        csTestConclusion.setContent(conclusionList.get(i).getName());
+                                        this.entity.setCheckResult(conclusionList.get(i).getName());
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
 
                 }
 
             }
-//            boolean isQualified  = true;
-//            if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size()>0){
-//                for (int i = 0; i < ptList.size(); i++) {
-//                    for (int j = 0; j < conclusionList.size(); j++) {
-//                        if (!StringUtil.isEmpty(ptList.get(i).checkResult)){
-//                            if (ptList.get(i).checkResult.equals(conclusionList.get(j).getName())){
-//                                if (conclusionList.get(j).getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
-//                                    isQualified = false;
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                    }
-//                    if (!isQualified){
-//                        break;
-//                    }
-//                }
-//                if (!isQualified){
-//                    csTestConclusion.setContentTextColor(Color.parseColor("#F70606"));
-//                }else {
-//                    csTestConclusion.setContentTextColor(Color.parseColor("#0BC8C1"));
-//                }
-//            }else {
-//                csTestConclusion.setContentTextColor(Color.parseColor("#8f8f8f"));
-//            }
-//            if (StringUtil.isEmpty(checkResult)){
-//                csTestConclusion.setContent("");
-//            }else {
-//                if (isQualified){
-//                    for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
-//                        if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Qualified")){
-//                            csTestConclusion.setContent(conclusionEntity.getName());
-//                            this.entity.setCheckResult(conclusionEntity.getName());
-//                        }
-//                    }
-//                }else {
-//                    for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
-//                        if (conclusionEntity.getStdGrade().getId().equals("LIMSBasic_standardGrade/Unqualified")){
-//                            csTestConclusion.setContent(conclusionEntity.getName());
-//                            this.entity.setCheckResult(conclusionEntity.getName());
-//                        }
-//                    }
-//                }
-//            }
         }else {
             for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                 if (checkResult.equals(conclusionEntity.getName())){

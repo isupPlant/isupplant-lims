@@ -5,10 +5,12 @@ import android.text.TextUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.annotations.Expose;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.middleware.util.StringUtil;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ public class StdJudgeSpecEntity extends InspectReportDetailEntity {
     public String specLimitListStr;
     public boolean isExpand=false;
     public SampleComeEntity sampleComId;
+    private String showValuesBak;
     public List<StdJudgeEntity> getSpec(){
 
         List<StdJudgeEntity> list=new ArrayList<>();
@@ -35,5 +38,25 @@ public class StdJudgeSpecEntity extends InspectReportDetailEntity {
             stdJudgeSpecEntities=GsonUtil.jsonToList(specLimitListStr,StdJudgeEntity.class);
         }
         return stdJudgeSpecEntities;
+    }
+
+    public List<String> getShowValuesBak() {
+
+        if (StringUtil.isEmpty(showValuesBak)){
+            return new ArrayList<>();
+        }
+        String[] split = showValuesBak.split("@##@");
+        if (split.length > 0){
+            List<String> list = Arrays.asList(split);
+            List<String> arrList = new ArrayList<>(list);
+            arrList.add(0,"");
+            return arrList;
+        }else{
+            return new ArrayList<>();
+        }
+    }
+
+    public void setShowValuesBak(String showValuesBak) {
+        this.showValuesBak = showValuesBak;
     }
 }

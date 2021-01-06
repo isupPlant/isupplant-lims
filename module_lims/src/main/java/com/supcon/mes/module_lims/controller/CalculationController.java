@@ -249,7 +249,7 @@ public class CalculationController extends BaseViewController {
                 try {
                     Invocable invoke = (Invocable) engine;
                     roundValue = invoke.invokeFunction("roundingValue", value, sampleCom.getDigitType(), sampleCom.getCarrySpace(), sampleCom.getCarryType(), sampleCom.getCarryFormula());
-                    roundValue = checkValue(roundValue+"");
+                    //roundValue = checkValue(roundValue+"");
                     sampleCom.setOriginValue(value);
                     sampleCom.setRoundValue(roundValue + "");
                     sampleCom.setDispValue(roundValue + "");

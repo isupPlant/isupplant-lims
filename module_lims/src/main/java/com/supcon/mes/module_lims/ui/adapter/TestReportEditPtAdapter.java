@@ -160,6 +160,14 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
             csTestConclusion.setOnChildViewClickListener(new OnChildViewClickListener() {
                 @Override
                 public void onChildViewClick(View childView, int action, Object obj) {
+                    if (action == -1){
+                        StdJudgeSpecEntity entity = ((StdJudgeSpecEntity) getItem(getAdapterPosition()));
+                        entity.checkResult = "";
+                        if (null != mConclusionChangeListener) {
+                            mConclusionChangeListener.conclusionChangeClick();
+                        }
+                        return;
+                    }
                     stringList.clear();
                     for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                         stringList.add(conclusionEntity.getName());
@@ -184,7 +192,11 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                 @Override
                 public void onClick(View v) {
                     ceDispValue.setContent("");
+                    dispValue = "";
                     ((StdJudgeSpecEntity) getItem(getAdapterPosition())).dispValue = "";
+                    if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
+                        mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
+                    }
                 }
             });
 
@@ -195,22 +207,37 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                         dispValue = ceDispValue.editText().getText().toString();
                         ((StdJudgeSpecEntity) getList().get(getAdapterPosition())).dispValue = dispValue;
 
-                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if (imm.isActive()) {
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);      //隐藏软键盘
-                        }
-
                         if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
                             mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
                         }
-                        return true;
+                        return false;
                     }
                     return false;
                 }
             });
 
+            csDispValue.setOnChildViewClickListener(new OnChildViewClickListener() {
+                @Override
+                public void onChildViewClick(View childView, int action, Object obj) {
+                    StdJudgeSpecEntity entity = ((StdJudgeSpecEntity) getItem(getAdapterPosition()));
+                    List<String> showValuesBak = entity.getShowValuesBak();
+                    mSinglePickController.list(showValuesBak)
+                            .listener(new SinglePicker.OnItemPickListener() {
+                                @Override
+                                public void onItemPicked(int index, Object item) {
+                                    dispValue = showValuesBak.get(index);
+                                    ((StdJudgeSpecEntity) getItem(getAdapterPosition())).dispValue = showValuesBak.get(index);
+                                    notifyItemChanged(getAdapterPosition());
+                                    if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
+                                        mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
+                                    }
+                                }
+                            }).show();
+                }
+            });
+
             RxView.clicks(itemViewDelBtn)
-                    .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                    .throttleFirst(300, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
                         onItemChildViewClick(itemViewDelBtn, 2);
                     });
