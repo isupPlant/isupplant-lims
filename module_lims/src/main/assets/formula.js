@@ -1024,8 +1024,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  with(Math){
 		r1=Number(dividend.toString().replace(".",""))
 		r2=Number(divisor.toString().replace(".",""))
-		//return exports.MULTIPLY((r1/r2),pow(10,t2-t1));
-		return exports.MULTIPLY((r1/r2), "1e"+(t2-t1));
+		return exports.MULTIPLY((r1/r2),Math.pow(10,t2-t1));
+		//return exports.MULTIPLY((r1/r2), "1e"+(t2-t1));
 	  }
 	};
 
@@ -1126,7 +1126,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      result += elt;
 	    } else if (typeof elt === 'string') {
 	      var parsed = parseFloat(elt);
-	      !isNaN(parsed) && (result += parsed);
+          if(isNaN(parsed)){
+             return false;
+          }
+	      result += parsed;
 	    } else if (Array.isArray(elt)) {
 	      result += exports.SUM.apply(null, elt);
 	    }
