@@ -69,8 +69,6 @@ public class ProductInspectionApplicationActivity extends BaseRefreshRecyclerAct
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    @BindByTag("tvAdd")
-    TextView tvAdd;
 
     @Override
     protected int getLayoutID() {
@@ -158,16 +156,6 @@ public class ProductInspectionApplicationActivity extends BaseRefreshRecyclerAct
             }
         });
 
-        RxView.clicks(tvAdd)
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("from","add");
-                        com.supcon.mes.middleware.IntentRouter.go(context,Constant.AppCode.LIMS_ManuInspectEdit,bundle);
-                    }
-                });
     }
 
     private void goRefresh() {

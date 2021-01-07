@@ -32,21 +32,6 @@
             android:background="@color/wts_bg_color" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvAdd"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="right"
-        android:background="@color/themeColor"
-        android:gravity="center"
-        android:paddingStart="@dimen/dp_5"
-        android:paddingTop="@dimen/dp_3"
-        android:paddingEnd="@dimen/dp_5"
-        android:paddingBottom="@dimen/dp_3"
-        android:tag="tvAdd"
-        android:text="@string/lims_insert"
-        android:textColor="@color/white" />
 
 
 </LinearLayout>

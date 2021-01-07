@@ -133,9 +133,10 @@ import io.reactivex.functions.Consumer;
 
 @Presenter(value = {QualityStdIdByConclusionPresenter.class, TestReportEditSubmitPresenter.class,
         FirstStdVerPresenter.class,QualityStdIdByConclusionPresenter.class, TestNumPresenter.class,
-        DeploymentPresenter.class, AvailableStdPresenter.class})
+         AvailableStdPresenter.class})
 public class TestReportEditController extends BaseViewController implements QualityStdIdByConclusionContract.View,
-        TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, DeploymentContract.View, AvailableStdIdContract.View {
+        TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, AvailableStdIdContract.View {
+    // DeploymentContract.View,DeploymentPresenter.class,
 
     @BindByTag("ctTestRequestNo")
     CustomTextView ctTestRequestNo;
@@ -841,15 +842,22 @@ public class TestReportEditController extends BaseViewController implements Qual
         csTestConclusion.setEditable(false);
         llReference.setVisibility(View.GONE);
 
-        String processKey = "";
-        if (type == 1){
-            processKey = "manuInspectReportWorkFlow";
-        }else if (type == 2){
-            processKey = "purchInspectReportWorkFlow";
-        }else if (type == 3){
-            processKey = "otherInspectReportWorkFlow";
-        }
-        presenterRouter.create(DeploymentAPI.class).getCurrentDeployment(processKey);
+//        String processKey = "";
+//        if (type == 1){
+//            processKey = "manuInspectReportWorkFlow";
+//        }else if (type == 2){
+//            processKey = "purchInspectReportWorkFlow";
+//        }else if (type == 3){
+//            processKey = "otherInspectReportWorkFlow";
+//        }
+//        presenterRouter.create(DeploymentAPI.class).getCurrentDeployment(processKey);
+
+        setStartWorkFlow(mDeploymentId,activityName);
+    }
+
+    public void setDeploymentId(Long deploymentId, String menuName){
+        this.mDeploymentId = deploymentId;
+        this.activityName = menuName;
     }
 
     private void initRecycler(){
@@ -862,8 +870,6 @@ public class TestReportEditController extends BaseViewController implements Qual
     }
 
     private void setStartWorkFlow(Long id, String menuName){
-        mDeploymentId = id;
-        activityName = menuName;
         powerCodeController.initPowerCode(type == 3 ? "start_xrl1zg5" : type == 2 ? "start_wcguvzx" : type == 1 ? "start_f4jgu4z" : "");
         workFlowViewController.initStartWorkFlowView(customWorkFlowView,id);
     }
@@ -1124,23 +1130,23 @@ public class TestReportEditController extends BaseViewController implements Qual
         ToastUtils.show(context,errorMsg);
     }
 
-    @Override
-    public void getCurrentDeploymentSuccess(DeploymentEntity entity) {
-        String menuName = "";
-        if (type == 1){
-            menuName = "TaskEvent_1o6ys36";
-        }else if (type == 2){
-            menuName = "TaskEvent_02g4ihu";
-        }else if (type == 3){
-            menuName = "TaskEvent_1igkdn3";
-        }
-        setStartWorkFlow(entity.id,menuName);
-    }
-
-    @Override
-    public void getCurrentDeploymentFailed(String errorMsg) {
-
-    }
+//    @Override
+//    public void getCurrentDeploymentSuccess(DeploymentEntity entity) {
+//        String menuName = "";
+//        if (type == 1){
+//            menuName = "TaskEvent_1o6ys36";
+//        }else if (type == 2){
+//            menuName = "TaskEvent_02g4ihu";
+//        }else if (type == 3){
+//            menuName = "TaskEvent_1igkdn3";
+//        }
+//        setStartWorkFlow(entity.id,menuName);
+//    }
+//
+//    @Override
+//    public void getCurrentDeploymentFailed(String errorMsg) {
+//
+//    }
 
     @Override
     public void getAvailableStdIdSuccess(AvailableStdEntity entity) {

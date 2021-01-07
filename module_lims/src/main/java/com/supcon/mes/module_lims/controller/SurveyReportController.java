@@ -14,9 +14,12 @@ import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.WorkFlowButtonInfoController;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
+import com.supcon.mes.middleware.model.bean.WorkFlowButtonInfo;
 import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.module_lims.R;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
@@ -66,9 +69,11 @@ public class SurveyReportController extends BaseViewController {
     private String searchKey;
     private String title;
     private boolean isFinish = false;
+    private int type = -1;
 
     private List<String> searchTypeList = new ArrayList<>();
     private Map<String, Object> params = new HashMap<>();
+    private WorkFlowButtonInfoController workFlowController;
 
     public SurveyReportController(View rootView) {
         super(rootView);
@@ -89,7 +94,8 @@ public class SurveyReportController extends BaseViewController {
     @Override
     public void initView() {
         super.initView();
-        searchTitle.showScan(false);
+        searchTitle.getRightScanActionBar().setImageResource(R.drawable.sl_top_add);
+        workFlowController = new WorkFlowButtonInfoController(getRootView());
     }
 
     @SuppressLint("CheckResult")
@@ -102,6 +108,36 @@ public class SurveyReportController extends BaseViewController {
                 ((Activity)context).onBackPressed();
             }
         });
+
+        workFlowController.checkWorkFlowButtonStatus(getMenuCode(), LimsConstant.ModuleCode.LIMS_REPORT_ENTITY_CODE, new WorkFlowButtonInfoController.WorkFlowButtonShowListener() {
+            @Override
+            public void checkAddFlowButtonResult(boolean isHas) {
+                if (isHas){
+                    searchTitle.showScan(true);
+                }else {
+                    searchTitle.showScan(false);
+                }
+            }
+        });
+
+        RxView.clicks(searchTitle.getRightScanActionBar()).throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        workFlowController.getWorkFlowEntity(new WorkFlowButtonInfoController.WorkFlowButtonEntityListener() {
+                            @Override
+                            public void onChooseWorkFlowEntity(WorkFlowButtonInfo info) {
+                                if (null == info){
+                                    return;
+                                }
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean("isAdd",true);
+                                bundle.putSerializable("info",info);
+                                IntentRouter.go(context,getIntentObject(),bundle);
+                            }
+                        });
+                    }
+                });
 
         //当前页面搜索图标的的点击事件
         RxView.clicks(searchTitle.getSearchBtn())
@@ -207,6 +243,43 @@ public class SurveyReportController extends BaseViewController {
                 mOnSearchOverListener.onSearchOverClick(params);
             }
         }
+    }
+
+    public void setType(int type){
+        this.type = type;
+    }
+
+    private String getMenuCode(){
+        String menuCode = null;
+        switch (type){
+            case 1:
+                menuCode =  LimsConstant.ModuleCode.LIMS_PRODUCT_REPORT_MENU_CODE;
+                break;
+            case 2:
+                menuCode =  LimsConstant.ModuleCode.LIMS_INCOMING_REPORT_MENU_CODE;
+                break;
+            case 3:
+                menuCode =  LimsConstant.ModuleCode.LIMS_OTHER_REPORT_MENU_CODE;
+                break;
+        }
+        return menuCode == null ? "" : menuCode;
+    }
+
+    private String getIntentObject() {
+        String intentObject = null;
+        switch (type) {
+            case 1:
+                intentObject = Constant.AppCode.LIMS_ProductTestReportEdit;
+                break;
+            case 2:
+                intentObject = Constant.AppCode.LIMS_IncomingTestReportEdit;
+                break;
+            case 3:
+                intentObject = Constant.AppCode.LIMS_OtherTestReportEdit;
+                break;
+
+        }
+        return intentObject == null ? "" : intentObject;
     }
 
     private void cleanParams() {

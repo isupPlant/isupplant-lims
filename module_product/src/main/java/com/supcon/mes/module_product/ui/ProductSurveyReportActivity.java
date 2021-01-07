@@ -62,8 +62,6 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    @BindByTag("tvAdd")
-    TextView tvAdd;
 
     private boolean isWhole = false;
 
@@ -109,6 +107,7 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
                 }
             }
         });
+        getController(SurveyReportController.class).setType(1);
         goRefresh();
     }
 
@@ -145,16 +144,6 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
             }
         });
 
-        RxView.clicks(tvAdd)
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("isAdd",true);
-                        IntentRouter.go(context,Constant.AppCode.LIMS_ProductTestReportEdit,bundle);
-                    }
-                });
     }
 
     private void goRefresh() {

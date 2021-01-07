@@ -16,6 +16,7 @@ import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.WorkFlowButtonInfo;
 import com.supcon.mes.module_lims.controller.TestReportEditController;
 import com.supcon.mes.module_lims.model.api.StdJudgeSpecAPI;
 import com.supcon.mes.module_lims.model.api.TableTypeAPI;
@@ -47,9 +48,6 @@ import io.reactivex.functions.Consumer;
 @Router(value = Constant.AppCode.LIMS_OtherTestReportEdit)
 public class OtherTestReportEditActivity extends BaseRefreshActivity implements TestReportEditContract.View,
         StdJudgeSpecContract.View, TableTypeContract.View{
-    private boolean isAdd;
-    private String id;
-    private String pendingId;
 
     @BindByTag("titleText")
     TextView titleText;
@@ -59,6 +57,11 @@ public class OtherTestReportEditActivity extends BaseRefreshActivity implements 
 
     @BindByTag("ctSupplier")
     CustomTextView ctSupplier;
+
+    private boolean isAdd;
+    private String id;
+    private String pendingId;
+    private WorkFlowButtonInfo info;
     @Override
     protected int getLayoutID() {
         return R.layout.activity_test_report_edit;
@@ -68,13 +71,19 @@ public class OtherTestReportEditActivity extends BaseRefreshActivity implements 
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+        titleText.setText(context.getResources().getString(R.string.lims_other_inspection_report));
+
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
+
+        ctSupplier.setVisibility(View.GONE);
+
         isAdd = getIntent().getBooleanExtra("isAdd",false);
         id = getIntent().getStringExtra("id") == null ? "" : getIntent().getStringExtra("id");
         pendingId = getIntent().getStringExtra("pendingId") == null ? "" : getIntent().getStringExtra("pendingId");
-        ctSupplier.setVisibility(View.GONE);
-        titleText.setText(context.getResources().getString(R.string.lims_other_inspection_report));
+        info = (WorkFlowButtonInfo) getIntent().getSerializableExtra("info");
+
+
     }
 
     @SuppressLint("CheckResult")
@@ -130,17 +139,20 @@ public class OtherTestReportEditActivity extends BaseRefreshActivity implements 
     protected void initData() {
         super.initData();
         if (isAdd){
-            getController(TestReportEditController.class).setIsFrom("add");
-            presenterRouter.create(TableTypeAPI.class).getTableTypeByCode("other");
-            getController(TestReportEditController.class).setStartTabHead(3, new TestReportEditController.TableHeadDataOverListener() {
-                @Override
-                public void tableHeadOver(String inspectId, String stdVerId) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("inspectId",inspectId);
-                    map.put("stdVerId",stdVerId);
-                    presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(map);
-                }
-            });
+            if (null != info){
+                presenterRouter.create(TableTypeAPI.class).getTableTypeByCode("other");
+                getController(TestReportEditController.class).setIsFrom("add");
+                getController(TestReportEditController.class).setDeploymentId(info.getDeploymentId(),"TaskEvent_1igkdn3");
+                getController(TestReportEditController.class).setStartTabHead(3, new TestReportEditController.TableHeadDataOverListener() {
+                    @Override
+                    public void tableHeadOver(String inspectId, String stdVerId) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("inspectId",inspectId);
+                        map.put("stdVerId",stdVerId);
+                        presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(map);
+                    }
+                });
+            }
         }else {
             goRefresh();
         }

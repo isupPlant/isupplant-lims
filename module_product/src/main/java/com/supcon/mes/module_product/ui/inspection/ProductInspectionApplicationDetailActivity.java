@@ -186,6 +186,7 @@ public class ProductInspectionApplicationDetailActivity extends BaseRefreshActiv
 
     @Override
     public void getTableTypeByCodeSuccess(TableTypeIdEntity entity) {
+        if (null != info)
         getController(InspectionApplicationDetailController.class).startWorkFlow(info.getDeploymentId(),"TaskEvent_0k2n0a2");
         getController(InspectionApplicationDetailController.class).setTableType(entity);
     }
