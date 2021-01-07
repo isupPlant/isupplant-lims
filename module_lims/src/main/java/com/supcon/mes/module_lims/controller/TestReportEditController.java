@@ -230,7 +230,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private String from = "";
     private TableTypeIdEntity tableType;
     private Long asId;
-
+    private boolean isNeedSetHead = false; //是否需求回调完成表头数据装载
     public TestReportEditController(View rootView) {
         super(rootView);
     }
@@ -811,7 +811,7 @@ public class TestReportEditController extends BaseViewController implements Qual
 
             setWorkFlow(entity.getPending());
         }
-
+        isNeedSetHead = true;
         presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(this.entity.getStdVerId().getId()+"");
         presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(this.entity.getProdId().getId()+"");
 
@@ -826,7 +826,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 this.entity.getInspectId().getNeedLab()));
         adapter.setConclusionOption(conclusionList);
         adapter.notifyDataSetChanged();
-        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(), this.entity.getCheckResult() == null);
+        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(), StringUtil.isEmpty(this.entity.getCheckResult()));
     }
 
     public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){
@@ -937,6 +937,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                                 "" : entity.getStdVerId().getStdId() == null ?
                                 "" : entity.getStdVerId().getStdId().getName() == null ?
                                 "" : entity.getStdVerId().getStdId().getName());
+                        isNeedSetHead = false;
                         presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId()+""); //获取范围标准
                         if (null != mQualityChangeListener){
                             mQualityChangeListener.qualityChangeClick(entity.getInspectId().getId()+"", entity.getStdVerId().getId()+"");
@@ -1050,7 +1051,10 @@ public class TestReportEditController extends BaseViewController implements Qual
     public void getStdVerGradesByStdVerIdSuccess(BAP5CommonListEntity entity) {
         conclusionList.clear();
         conclusionList.addAll(entity.data);
-        this.mTableHeadDataOverListener.tableHeadOver(inspectId,stdVerId);
+        if (isNeedSetHead){
+            this.mTableHeadDataOverListener.tableHeadOver(inspectId,stdVerId);
+        }
+
     }
 
     @Override
@@ -1103,6 +1107,7 @@ public class TestReportEditController extends BaseViewController implements Qual
             this.entity.setStdVerId(entity.getStdVerId());
             this.entity.setInspectId(inspectIdEntity);
 
+            isNeedSetHead = true;
             presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId()+""); //获取范围标准
         }else {
             ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_3));
