@@ -191,15 +191,15 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         originalValue = ceOriginalValue.editText().getText().toString();
                         getList().get(getAdapterPosition()).setOriginValue(originalValue); //将输入的值设置为原始值
 
-                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if (imm.isActive()){
-                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
-                        }
+//                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        if (imm.isActive()){
+//                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
+//                        }
 
                         if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
                             mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
                         }
-                        return true;
+                        return false;
                     }
                     return false;
                 }
