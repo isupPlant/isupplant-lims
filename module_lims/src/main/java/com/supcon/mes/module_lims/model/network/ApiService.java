@@ -43,6 +43,7 @@ import com.supcon.mes.module_lims.model.bean.SampleInquiryListEntity;
 import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
 import com.supcon.mes.module_lims.model.bean.SamplingPointListEntity;
 
+import com.supcon.mes.module_lims.model.bean.SerialDeviceEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
@@ -408,4 +409,12 @@ public interface ApiService {
 
     @GET("msService/QCS/tableType/busiType/getBusiTypeByCode")
     Flowable<BAP5CommonEntity<BusiTypeIdEntity>> getBusiTypeByCode(@Query("code") String code);
+    /**
+     * 获取串口采集设备参照
+     * @param map
+     * @return
+     */
+    @POST("/msService/BaseSet/eamInfo/eamInfo/serialRef-query")
+    Flowable<BAP5CommonEntity<CommonBAPListEntity<SerialDeviceEntity>>> getSerialDeviceRef(@Body Map<String, Object> map);
+
 }

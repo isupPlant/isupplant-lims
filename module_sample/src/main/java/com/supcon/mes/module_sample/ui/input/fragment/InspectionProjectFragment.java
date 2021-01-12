@@ -110,6 +110,13 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
             }
         });
 
+        if (activity instanceof ProjectInspectionItemsActivity){
+            title.setVisibility(View.VISIBLE);
+            goRefresh();
+        }else {
+            title.setVisibility(View.GONE);
+        }
+
         goRefresh();
     }
 
@@ -144,6 +151,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                 }
             });
 
+
             ((SampleResultInputActivity)activity).setOnSampleRefreshListener(new SampleResultInputActivity.OnSampleRefreshListener() {
                 @Override
                 public void onSampleRefresh() {
@@ -151,6 +159,15 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
                     goRefresh();
                 }
             });
+
+//            ((SampleResultInputPADActivity) activity).setOnSampleRefreshListener(new SampleResultInputPADActivity.OnSampleRefreshListener() {
+//                @Override
+//                public void onSampleRefresh() {
+//                    mSampleId = null;
+//                    goRefresh();
+//                }
+//            });
+
 
         }
 

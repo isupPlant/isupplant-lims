@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_item"
+    android:tag="ll_item"
+    android:padding="@dimen/dp_10"
+    android:background="@drawable/sl_press_no_stroke"
+    android:translationZ="2dp">
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_device_name"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvDeviceName"
+                android:tag="tvDeviceName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_15"
+                app:key="@string/lims_device_name"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_device_code"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvDeviceCode"
+                android:tag="tvDeviceCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_15"
+                app:key="@string/lims_equipment_code"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_device_type"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvDeviceType"
+                android:tag="tvDeviceType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_15"
+                app:key="@string/lims_equipment_type"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_batch_number"
+                />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvAcquisitionMode"
+                android:tag="tvAcquisitionMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_15"
+                app:key="@string/lims_acquisition_mode_"
+                app:key_color="@color/c_scan_666"
+                app:key_size="13"
+                app:content_size="15"
+                app:content_color="@color/dark_text"
+                app:gravity="center|center_vertical"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10">
+
+        <ImageView
+            android:id="@+id/iv_select"
+            android:tag="iv_select"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_no"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

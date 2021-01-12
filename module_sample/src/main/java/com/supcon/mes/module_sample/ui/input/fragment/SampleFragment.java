@@ -28,6 +28,7 @@ import com.supcon.mes.middleware.controller.DateFilterController;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
 import com.supcon.mes.middleware.model.event.EventInfo;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.StringUtil;
@@ -39,6 +40,7 @@ import com.supcon.mes.module_sample.model.contract.SampleListContract;
 import com.supcon.mes.module_sample.presenter.SampleListPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleListAdapter;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+import com.supcon.mes.module_sample.ui.input.SampleResultInputPADActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputPDAActivity;
 import com.supcon.mes.module_scan.controller.CommonScanController;
 import com.supcon.mes.module_scan.model.event.CodeResultEvent;
@@ -94,12 +96,11 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SampleResultInputActivity){
+        if (context instanceof SampleResultInputPADActivity){
+            activity = (SampleResultInputPADActivity) context;
+        }else if (context instanceof SampleResultInputActivity){
             activity = (SampleResultInputActivity) context;
-        }else if (context instanceof SampleResultInputPDAActivity){
-            activity = (SampleResultInputPDAActivity) context;
         }
-
     }
 
     @Override
@@ -118,7 +119,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         super.onInit();
         EventBus.getDefault().register(this);
         titleText.setText(getString(R.string.lims_result_input));
-
+        selectPosition=-1;
         searchTypeList.add(getString(R.string.lims_sample_code));
         searchTypeList.add(getString(R.string.lims_sample_name));
         searchTypeList.add(getString(R.string.lims_batch_number));
@@ -144,8 +145,16 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 }
             }
         });
+
+        if (activity instanceof SampleResultInputPADActivity){
+            searchTitle.setVisibility(View.GONE);
+        }else {
+            searchTitle.setVisibility(View.VISIBLE);
+        }
+
         goRefresh();
     }
+    public static int selectPosition=-1;
     Map<String,Object> timeMap=new HashMap<>();
     @SuppressLint("CheckResult")
     @Override
@@ -157,6 +166,17 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 presenterRouter.create(SampleListAPI.class).getSampleList(timeMap,mParams);
             }
         });
+
+
+        if (activity instanceof  SampleResultInputPADActivity){
+            ((SampleResultInputPADActivity) activity).setOnSampleRefreshListener(new SampleResultInputPADActivity.OnSampleRefreshListener() {
+                @Override
+                public void onSampleRefresh() {
+                    goRefresh();
+                }
+            });
+        }
+
 
         leftBtn.setOnClickListener(v -> activity.onBackPressed());
 
@@ -252,7 +272,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        getController(CommonScanController.class).openCameraScan();
+                        openCameraScan();
                     }
                 });
 
@@ -279,6 +299,10 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 mParams.put(Constant.BAPQuery.NAME,title);
             }else if (searchKey.equals(getString(R.string.lims_batch_number))){
                 mParams.put(Constant.BAPQuery.BATCH_CODE,title);
+            }
+
+            if (activity instanceof SampleResultInputPADActivity){
+                ((SampleResultInputPADActivity)activity).setShowTitle(title,searchKey);
             }
 
             presenterRouter.create(SampleListAPI.class).getSampleList(timeMap,mParams);
@@ -335,12 +359,11 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         }
     }
 
-    private void removeParams(){
+    public void removeParams(){
         if (null != mParams){
             mParams.clear();
         }
     }
-
 
 
     @Override
@@ -374,10 +397,13 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             }
 
         }else {
+            selectPosition=-1;
             refreshListController.refreshComplete(entity.result);
-            if (activity instanceof SampleResultInputActivity){
-                ((SampleResultInputActivity)activity).sampleRefresh();
-            }
+            SelectDataEvent<String> dataEvent=new SelectDataEvent<>("refreshData","refreshData");
+            EventBus.getDefault().post(dataEvent);
+//            if (activity instanceof SampleResultInputActivity){
+//                ((SampleResultInputActivity)activity).sampleRefresh();
+//            }
         }
 
     }
@@ -386,6 +412,14 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
     public void getSampleListFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+        SelectDataEvent<String> dataEvent=new SelectDataEvent<>("refreshData","refreshData");
+        EventBus.getDefault().post(dataEvent);
+//        SnackbarHelper.showError(rootView, errorMsg);
+//        refreshListController.refreshComplete(null);
+    }
+
+    public void openCameraScan(){
+        getController(CommonScanController.class).openCameraScan();
     }
 
     @Override

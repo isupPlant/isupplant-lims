@@ -28,11 +28,11 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_lims.controller.CalculationController;
 
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
+import com.supcon.mes.module_lims.utils.SpaceItemDecoration;
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
-import com.supcon.mes.module_sample.custom.SpaceItemDecoration;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;

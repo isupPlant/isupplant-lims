@@ -128,6 +128,7 @@
     <string name="lims_equipment_type">设备类型</string>
     <string name="lims_equipment_code">设备编码</string>
     <string name="lims_equipment_name">设备名称</string>
+    <string name="lims_acquisition_mode_">采集方式</string>
     <string name="lims_matCode">编号</string>
     <string name="lims_useQty">用量</string>
     <string name="lims_produce_batch">生产批号</string>
@@ -235,6 +236,9 @@
     <string name="lims_code_scanning_mode_two">2、红外设备扫码登样</string>
     <string name="lims_testing">检验中</string>
     <string name="lims_report_formation">报告编制中</string>
-    <string name="lims_report_review">报告已审核</string>
     <string name="lims_insert">添加</string>
+    <string name="lims_report_review">报告审核中</string>
+    <string name="lims_acquisition_mode_error">移动端暂不支持该设备的采集方式</string>
+    <string name="lims_select_sample_data">请选择一个样品!</string>
+
 </resources>

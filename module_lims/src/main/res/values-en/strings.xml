@@ -124,6 +124,7 @@
     <string name="lims_equipment_type">Equipment Type</string>
     <string name="lims_equipment_code">Equipment Code</string>
     <string name="lims_equipment_name">Equipment Name</string>
+    <string name="lims_acquisition_mode_">Acquisition Mode</string>
     <string name="lims_matCode">Code</string>
     <string name="lims_useQty">Quantity</string>
     <string name="lims_produce_batch">Batch Number</string>
@@ -239,4 +240,6 @@
     <string name="lims_report_review">Report reviewed</string>
     <string name="lims_request_reference">Inspection application reference</string>
     <string name="lims_insert">Add</string>
+    <string name="lims_acquisition_mode_error">The mobile terminal does not support the acquisition mode of the device</string>
+    <string name="lims_select_sample_data">Please select a sample!</string>
 </resources>

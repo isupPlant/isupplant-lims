@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sample.ui.input.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,6 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+
+
+import android.widget.LinearLayout;
+
 import android.widget.RelativeLayout;
 
 import com.app.annotation.BindByTag;
@@ -34,14 +39,17 @@ import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+
 import com.supcon.mes.module_lims.utils.FileUtils;
 import com.supcon.mes.module_lims.utils.Util;
+
+import com.supcon.mes.module_lims.utils.SpaceItemDecoration;
+
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
 import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
-import com.supcon.mes.module_sample.custom.SpaceItemDecoration;
 import com.supcon.mes.module_sample.model.api.SingleSampleResultInputAPI;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
@@ -57,6 +65,7 @@ import com.supcon.mes.module_sample.ui.adapter.SingleProjectAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
+import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputPADActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -83,6 +92,20 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     @BindByTag("contentView")
     RecyclerView contentView;
+
+    @BindByTag("ll_bottom")
+    LinearLayout ll_bottom;
+
+    @BindByTag("rl_calculation")
+    RelativeLayout rl_calculation;
+
+    @BindByTag("rl_save")
+    RelativeLayout rl_save;
+
+    @BindByTag("rl_submit")
+    RelativeLayout rl_submit;
+
+
     private SingleProjectAdapter adapter;
     private Long sampleTesId;
     private String filePath;
@@ -97,12 +120,15 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
     private List<ConclusionEntity> conclusionList = new ArrayList<>();
     private List<InspectionSubEntity> myInspectionSubList = new ArrayList<>();
 
+    SampleRecordResultSubmitController submitController;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof SingleSampleResultInputItemActivity) {
             activity = (SingleSampleResultInputItemActivity) context;
+        }else if (context instanceof SingleSampleResultInputPADActivity){
+            activity = (SingleSampleResultInputPADActivity) context;
         }
     }
 
@@ -121,7 +147,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        refreshListController.setAutoPullDownRefresh(true);
+        refreshListController.setAutoPullDownRefresh(activity instanceof SingleSampleResultInputItemActivity);
         refreshListController.setPullDownRefreshEnabled(false);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
 
@@ -134,6 +160,9 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         gridLayoutManager = new GridLayoutManager(context, 2);
         linearLayoutManager = new LinearLayoutManager(context);
         linearSpaceItemDecoration = new LinearSpaceItemDecoration(context);
+        contentView.setLayoutManager(linearLayoutManager);
+        contentView.addItemDecoration(linearSpaceItemDecoration);
+
 
         if (activity instanceof SampleResultInputActivity) {
             int orientation = ((SampleResultInputActivity) activity).getOrientation();
@@ -147,7 +176,26 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         } else {
             contentView.setLayoutManager(linearLayoutManager);
             contentView.addItemDecoration(linearSpaceItemDecoration);
+
+            if (activity instanceof SingleSampleResultInputPADActivity) {
+                ll_bottom.setVisibility(View.VISIBLE);
+            } else {
+                ll_bottom.setVisibility(View.GONE);
+            }
+//        if (activity instanceof SampleResultInputPADActivity) {
+//            int orientation = ((SampleResultInputPADActivity) activity).getOrientation();
+//            if (orientation == 2) { //横向
+//                contentView.setLayoutManager(gridLayoutManager);
+//                contentView.addItemDecoration(spaceItemDecoration);
+//            } else if (orientation == 1) { //竖向
+//                contentView.setLayoutManager(linearLayoutManager);
+//                contentView.addItemDecoration(linearSpaceItemDecoration);
+//            }
+//        } else {
+//
+//        }
         }
+        submitController=new SampleRecordResultSubmitController();
     }
 
     InspectionSubEntity itemEntity;
@@ -168,13 +216,26 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
             }
         }
     }
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
         Bundle bundle = getArguments();
-        sampleTesId = bundle.getLong("sampleId");
+        if (null != bundle){
+            sampleTesId = bundle.getLong("sampleId",1l);
+        }
+        if (activity instanceof SingleSampleResultInputPADActivity){
+            ((SingleSampleResultInputPADActivity)activity).setOnNotifySubRefreshListener(new SingleSampleResultInputPADActivity.OnNotifySubRefreshListener() {
+                @Override
+                public void NotifySubRefresh(Long sampleId) {
+                    sampleTesId = sampleId == null ? 0L : sampleId;
+                    refreshListController.refreshBegin();
+                }
+            });
+        }
 
         adapter.setEngine(getController(CalculationController.class).getEngine());
+
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -305,6 +366,48 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
             });
         }
 
+        RxView.clicks(rl_save)
+                .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        if (!change()){
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_project_check_change));
+                            return;
+                        }
+                        List<InspectionSubEntity> inspectionSubList = getInspectionSubList();
+                        SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("save",sampleTesId,inspectionSubList);
+                        submitController.recordResultSubmit(activity,1,submitEntity);
+                    }
+                });
+        RxView.clicks(rl_submit)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(o ->  {
+                    List<InspectionSubEntity> inspectionSubList = getInspectionSubList();
+                    SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("submit",sampleTesId,inspectionSubList);
+                    submitController.recordResultSubmit(activity,1,submitEntity);
+                });
+        RxView.clicks(rl_calculation)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        manualCalculate();
+                    }
+                });
+
+        submitController.setSubmitOnSuccessListener(new OnSuccessListener<Integer>() {
+            @Override
+            public void onSuccess(Integer type) {
+                if (type==1){//保存
+                    goRefresh();
+                }else if (type==2){//提交
+                    adapter.getList().clear();
+                    adapter.notifyDataSetChanged();
+                    ((SingleSampleResultInputPADActivity) activity).notifySampleRefresh();
+                }
+            }
+        });
 
     }
 

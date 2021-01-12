@@ -6,6 +6,8 @@
         android:allowBackup="true"
         android:supportsRtl="true">
 
+        <service android:name=".service.SerialWebSocketService" />
+
         <activity android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
@@ -65,6 +67,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
+        <activity android:name=".ui.SerialDeviceReferenceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
 
     </application>
 

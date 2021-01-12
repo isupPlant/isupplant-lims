@@ -1,4 +1,4 @@
-package com.supcon.mes.module_sample.custom;
+package com.supcon.mes.module_lims.utils;
 
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
@@ -13,7 +13,7 @@ import android.view.View;
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
     private int count;
-    public SpaceItemDecoration(int space,int count) {
+    public SpaceItemDecoration(int space, int count) {
         this.space = space;
         this.count = count;
     }

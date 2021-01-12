@@ -106,4 +106,15 @@ public interface LimsConstant {
         String UN_QUALIFIED = "LIMSBasic_standardGrade/Unqualified";//不合格
         String FIRST_GRADE = "LIMSBasic_standardGrade/firstGrade";//一等品
     }
+
+    interface AppCode{
+        String LIMS_SerialRef = "LIMS_SerialRef"; //串口采集设备参照
+        String LIMS_InspectionItemPda = "LIMS_InspectionItemPda";
+        String LIMS_InspectionItem = "LIMS_InspectionItem"; //检验分项
+        String LIMS_SAMPLE_FILE_ANALYSE="LIMS_SAMPLE_FILE_ANALYSE";
+        String SAMPLE_REF="SAMPLE_REF";
+        String SAMPLE_UNIT_REF="SAMPLE_UNIT_REF";
+        String WARE_STORE_REF="WARE_STORE_REF";
+        String retentionEdit="retentionEdit";
+    }
 }
