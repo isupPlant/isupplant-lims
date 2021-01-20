@@ -24,6 +24,7 @@ import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DateFilterController;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.TimeUtil;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
@@ -102,6 +103,7 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
     @Override
     protected void onInit() {
         super.onInit();
+        selectPosition=-1;
         EventBus.getDefault().register(this);
         titleText.setText(getString(R.string.lims_result_input));
     }
@@ -127,6 +129,8 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
         timeMap.put(Constant.BAPQuery.IN_DATE_END, endTime);
     }
 
+    public static int selectPosition=-1;
+    boolean refresh=false;
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
@@ -136,6 +140,7 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+                refresh=true;
                 presenterRouter.create(SampleListAPI.class).getSampleList(timeMap, queryParam);
             }
         });
@@ -172,12 +177,13 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                selectPosition=position;
                 for (int i = 0; i < adapter.getList().size(); i++) {
                     adapter.getList().get(i).setSelect(false);
                 }
                 adapter.getItem(position).setSelect(true);
                 adapter.notifyDataSetChanged();
-                ((SingleSampleResultInputPADActivity)activity).notifySubRefresh(adapter.getItem(position).getId());
+                ((SingleSampleResultInputPADActivity)activity).notifySubRefresh(adapter.getItem(position).getId(),adapter.getItem(position).getCode());
             }
         });
 
@@ -218,18 +224,26 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
 
     @Override
     public void getSampleListSuccess(CommonListEntity entity) {
+        refresh=false;
+        selectPosition=-1;
         if (scan) {
             scan = false;
             List<SampleEntity> sampleEntities = entity.result;
             if (!sampleEntities.isEmpty()) {
                 SampleEntity sampleEntity = sampleEntities.get(0);
+                sampleEntity.setSelect(true);
                 if (scanCode.equals(sampleEntity.getCode())){
                     onLoadSuccessAndExit(getResources().getString(R.string.lims_loading_succeed), new OnLoaderFinishListener() {
                         @Override
                         public void onLoaderFinished() {
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("sampleEntity", sampleEntity);
-                            IntentRouter.go(context, Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM, bundle);
+                            adapter.clear();
+                            adapter.addData(sampleEntity);
+                            selectPosition=0;
+                            adapter.notifyDataSetChanged();
+                            ((SingleSampleResultInputPADActivity)activity).notifySubRefresh(adapter.getItem(selectPosition).getId(),adapter.getItem(selectPosition).getCode());
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable("sampleEntity", sampleEntity);
+//                            IntentRouter.go(context, Constant.Router.SINGLE_SAMPLE_RESULT_INPUT_ITEM, bundle);
                         }
                     });
                 }else {
@@ -241,6 +255,8 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
 
         } else {
             refreshListController.refreshComplete(entity.result);
+            SelectDataEvent<String> dataEvent=new SelectDataEvent<>("refreshData","refreshData");
+            EventBus.getDefault().post(dataEvent);
         }
     }
 

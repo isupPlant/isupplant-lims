@@ -1,9 +1,13 @@
 package com.supcon.mes.module_lims.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.NetWorkUtil;
+import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.SupPlantApplication;
 
 import java.util.HashMap;
@@ -30,7 +34,7 @@ public class WebSocketUtils {
     public final static int WRITE_TIMEOUT = 60;
 
     private static Request request = null;
-    private static WebSocketUtils instance;
+    public static WebSocketUtils instance;
     private boolean wantToRunning = true;
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private int reconnectConsecutiveFailed = 0;
@@ -38,78 +42,58 @@ public class WebSocketUtils {
     private OkHttpClient.Builder builder;
     private OkHttpClient client;
     private WebSocket webSocket;
-    private MyWebSocketListener listener;
+    private MyWebSocketListener listener = new MyWebSocketListener();
     private WebSocketCallBack mWebSocketCallBack;
 
     private WebSocketUtils() {
+        builder = new OkHttpClient.Builder();
+        client = builder
+                .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)//设置连接超时时间
+                .build();
     }
 
 
     public static WebSocketUtils getInstance() {
-       if (null == instance){
-           return new WebSocketUtils();
-       }
+        if (null == instance) {
+            synchronized (StatusBarUtils.class) {
+                if (null == instance) {
+                    instance = new WebSocketUtils();
+                }
+            }
+        }
         return instance;
     }
 
-    public void setConnect(String url,WebSocketCallBack webSocketCallBack){
+    public String url;
+
+    public void setConnect(String url, WebSocketCallBack webSocketCallBack) {
+        this.url = url;
         this.mWebSocketCallBack = webSocketCallBack;
-        init(url);
-    }
-
-
-    private void init(String url) {
-        builder = new OkHttpClient.Builder();
-        if (client == null) {
-            synchronized (WebSocketUtils.class) {
-                if (client == null)
-                    client = builder
-                            .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
-                            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)//设置写的超时时间
-                            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)//设置连接超时时间
-                            .build();
-            }
-        }
-
-        if (request == null) {
-            request = new Request.Builder().get().url("ws://"+url).build();
-        }
-        listener = new MyWebSocketListener();
-    }
-
-    /**
-     * 开始
-     */
-    public void start() {
-        wantToRunning = true;
-
-        //把原来的都取消掉
-        if (client != null) {
-            client.dispatcher().cancelAll();
-        }
-
-        if (client == null) {
-            client = builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS).build();
-        }
-
-        try {
-            webSocket = client.newWebSocket(request, listener);
-        } catch (Exception e) {
-
-        }
+        request = new Request.Builder().url("ws://" + url).build();
+        webSocket = client.newWebSocket(request, listener);
+        status = ConnectStatus.Connecting;
     }
 
 
     /**
-     * 停止
+     * 丢弃所有已经在队列中的消息然后残忍地关闭socket。
      */
-    public void stop() {
-        wantToRunning = false;
-        if (client != null) {
-            client.dispatcher().cancelAll();
+    public void cancel() {
+        if (webSocket != null) {
+            status = ConnectStatus.DisConnect;
+            webSocket.cancel();
         }
+    }
 
-        webSocket = null;
+    /**
+     * 请求服务器优雅地关闭连接然后等待确认。在关闭之前，所有已经在队列中的消息将被传送完毕。
+     */
+    public void close() {
+        if (webSocket != null) {
+            webSocket.close(1000, null);
+        }
     }
 
     /**
@@ -117,32 +101,31 @@ public class WebSocketUtils {
      * 2。如果没有网络就return
      */
     public void reconnect() {
-        if (webSocket == null) {
-            start();
-            return;
-        }
-
         if (!NetWorkUtil.isNetConnected(SupPlantApplication.getAppContext())) {
             return;
         }
-
-        if (reconnectConsecutiveFailed == 3) {
-            reconnectConsecutiveFailed = 0;
-            return;
-        }
-
-        reconnectConsecutiveFailed++;
-
-        client.dispatcher().cancelAll();
-        webSocket = client.newWebSocket(request, listener);
+        if (webSocket != null)
+            webSocket = client.newWebSocket(request, listener);
     }
 
-    private final class MyWebSocketListener extends WebSocketListener{
+    private ConnectStatus status;
+
+    public ConnectStatus getStatus() {
+        return status;
+    }
+
+    int reConnectCount = 0;
+
+    private final class MyWebSocketListener extends WebSocketListener {
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
             super.onOpen(webSocket, response);
-            if (null != mWebSocketCallBack)
-                mWebSocketCallBack.onOpen(webSocket,response);
+            status = ConnectStatus.Open;
+            reConnectCount = 0;
+            Log.i("WebSocketListener", "onOpen");
+            if (null != mWebSocketCallBack) {
+                mWebSocketCallBack.onOpen(webSocket, response);
+            }
         }
 
         @Override
@@ -156,24 +139,27 @@ public class WebSocketUtils {
         public void onClosing(WebSocket webSocket, int code, String reason) {
             super.onClosing(webSocket, code, reason);
             LogUtil.e("Closing : " + code + " / " + reason);
-            webSocket.close(NORMAL_CLOSURE_STATUS, null);
-            if (wantToRunning){
-                reconnect();
-            }
+            status = ConnectStatus.Closed;
         }
 
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
             super.onFailure(webSocket, t, response);
             LogUtil.e("Error : " + t.getMessage());
-            if (wantToRunning){
+            if (status == ConnectStatus.DisConnect)
+                return;
+            status = ConnectStatus.Canceled;
+            String disConnectUrl = webSocket.request().url().host() + ":" + webSocket.request().url().port();
+            if (status == ConnectStatus.Canceled && !TextUtils.isEmpty(url) && url.equals(disConnectUrl) && reConnectCount < 3) {
                 reconnect();
+                reConnectCount++;
             }
         }
     }
 
-    public interface WebSocketCallBack{
-        void onOpen(WebSocket webSocket,Response response);
-        void onMessage( String text);
+    public interface WebSocketCallBack {
+        void onOpen(WebSocket webSocket, Response response);
+
+        void onMessage(String text);
     }
 }

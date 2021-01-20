@@ -11,6 +11,8 @@ import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
+import com.supcon.mes.module_sample.model.bean.FileAnalyseListEntity;
+import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.bean.SampleAccountEntity;
@@ -20,6 +22,7 @@ import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
@@ -32,6 +35,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * author huodongsheng
@@ -171,4 +175,21 @@ public interface ApiService {
      */
     @GET("/msService/LIMSSample/sample/sampleInfo/createSampleByPsId")
     Flowable<BAP5CommonEntity> scanSamplingPointId(@Query("pickSiteId") String pickSiteId);
+
+    /**
+     * 获取参照视图的解析文件
+     * @param queryMap
+     * @return
+     */
+    @POST("/msService/LIMSDC/analysisFile/analysisFile/analysisFileRef-query")
+    Flowable<FileAnalyseListEntity> getAnalyseList(@Body Map<String,Object> queryMap);
+
+    /**
+     * :9410/lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode?collectCode=30
+     * @param url
+     * @return
+     */
+    @GET
+    Flowable<List<Map<String,Object>>> getFormatDataByCollectCode(@Url String url);
+
 }

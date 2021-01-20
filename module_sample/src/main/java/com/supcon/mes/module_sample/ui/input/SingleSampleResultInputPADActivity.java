@@ -58,18 +58,19 @@ public class SingleSampleResultInputPADActivity extends BaseFragmentActivity {
         this.mOnNotifySubRefreshListener = mOnNotifySubRefreshListener;
     }
 
-    public void notifySubRefresh(Long sampleId){
+    public void notifySubRefresh(Long sampleId,String sampleCode){
         if (null != mOnNotifySubRefreshListener){
-            mOnNotifySubRefreshListener.NotifySubRefresh(sampleId);
+            mOnNotifySubRefreshListener.NotifySubRefresh(sampleId,sampleCode);
         }
     }
 
     public interface OnNotifySubRefreshListener{
-        void NotifySubRefresh(Long sampleId);
+        void NotifySubRefresh(Long sampleId,String sampleCode);
     }
     public void setOnNotifySampleRefreshListener(OnNotifySampleRefreshListener mOnNotifySampleRefreshListener){
         this.mOnNotifySampleRefreshListener = mOnNotifySampleRefreshListener;
     }
+
 
     public void notifySampleRefresh(){
         if (null != mOnNotifySampleRefreshListener){

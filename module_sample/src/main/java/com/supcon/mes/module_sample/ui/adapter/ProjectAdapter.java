@@ -56,7 +56,7 @@ import io.reactivex.functions.Consumer;
  */
 public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSubEntity> {
 
-//    private ConclusionAdapter conclusionAdapter;
+    //    private ConclusionAdapter conclusionAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     private OriginalValueChangeListener mOriginalValueChangeListener;
@@ -68,7 +68,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 
     private SinglePickController mSinglePickController;
 
-
+    public int selectPosition=-1;
     public ProjectAdapter(Context context, RecyclerView recyclerView) {
         super(context);
         this.recyclerView = recyclerView;
@@ -82,7 +82,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         return new ViewHolder(context);
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<InspectionSubEntity>{
+    class ViewHolder extends BaseRecyclerViewHolder<InspectionSubEntity> {
         private ConclusionAdapter conclusionAdapter;
         @BindByTag("ctInspectionItems")
         CustomTextView ctInspectionItems;
@@ -112,8 +112,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         ImageView imageFileView;
         @BindByTag("tvRepeatNumber")
         CustomTextView tvRepeatNumber;
-
-
+        @BindByTag("llInspectionItems")
+        LinearLayout llInspectionItems;
         public ViewHolder(Context context) {
             super(context);
         }
@@ -128,25 +128,25 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             super.initView();
             linearLayoutManager = new LinearLayoutManager(context);
             rvConclusion.setLayoutManager(linearLayoutManager);
-            ((DefaultItemAnimator)rvConclusion.getItemAnimator()).setSupportsChangeAnimations(false);
+            ((DefaultItemAnimator) rvConclusion.getItemAnimator()).setSupportsChangeAnimations(false);
             rvConclusion.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                     super.getItemOffsets(outRect, view, parent, state);
                     int childLayoutPosition = parent.getChildAdapterPosition(view);
 
-                        if (childLayoutPosition == 0 && childLayoutPosition == conclusionAdapter.getItemCount()-1) {
-                            outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
+                    if (childLayoutPosition == 0 && childLayoutPosition == conclusionAdapter.getItemCount() - 1) {
+                        outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
+                    } else {
+                        if (childLayoutPosition == 0) {
+                            outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
+                        } else if (childLayoutPosition == conclusionAdapter.getItemCount() - 1) {
+                            outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
                         } else {
-                            if (childLayoutPosition == 0){
-                                outRect.set(DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
-                            }else if(childLayoutPosition == conclusionAdapter.getItemCount()-1){
-                                outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(0, context));
-                            } else {
-                                outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
-                            }
+                            outRect.set(DisplayUtil.dip2px(0, context), 0, DisplayUtil.dip2px(0, context), DisplayUtil.dip2px(10, context));
                         }
                     }
+                }
 
             });
 
@@ -163,15 +163,24 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             super.initListener();
 
 
+            RxView.clicks(llInspectionItems)
+                    .throttleFirst(1,TimeUnit.SECONDS)
+                    .subscribe(o -> {
+                        if (selectPosition==getAdapterPosition())
+                            return;
+                        selectPosition=getAdapterPosition();
+                        onItemChildViewClick(itemView,3);
+                        notifyDataSetChanged();
+                    });
             RxView.clicks(imageUpDown)
-                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
-                    .subscribe(o->{
-                        onItemChildViewClick(imageUpDown,1);
+                    .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                    .subscribe(o -> {
+                        onItemChildViewClick(imageUpDown, 1);
                     });
             RxView.clicks(imageFileView)
-                    .throttleFirst(2000,TimeUnit.MILLISECONDS)
-                    .subscribe(o->{
-                        onItemChildViewClick(imageFileView,2);
+                    .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                    .subscribe(o -> {
+                        onItemChildViewClick(imageFileView, 2);
                     });
 
             RxView.clicks(llQualityStandard)
@@ -179,8 +188,8 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-                           getList().get(getAdapterPosition()).setOpen(!getList().get(getAdapterPosition()).isOpen());
-                           notifyItemChanged(getAdapterPosition());
+                            getList().get(getAdapterPosition()).setOpen(!getList().get(getAdapterPosition()).isOpen());
+                            notifyItemChanged(getAdapterPosition());
                         }
                     });
 
@@ -188,17 +197,17 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ceOriginalValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE){
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
                         originalValue = ceOriginalValue.editText().getText().toString();
                         getList().get(getAdapterPosition()).setOriginValue(originalValue); //将输入的值设置为原始值
 
-//                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        if (imm.isActive()){
-//                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
-//                        }
+                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm.isActive()){
+                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
+                        }
 
-                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
-                            mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
+                            mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
                         }
                         return false;
                     }
@@ -212,7 +221,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     ceOriginalValue.setContent(null);
                     ctRoundOffValue.setValue(null);
                     ceReportedValue.setContent(null);
-                    InspectionSubEntity subEntity=getItem(getAdapterPosition());
+                    InspectionSubEntity subEntity = getItem(getAdapterPosition());
                     subEntity.setOriginValue(null);
                     subEntity.setRoundValue(null);
                     subEntity.setDispValue(null);
@@ -232,18 +241,18 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ceReportedValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE){
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
 
                         dispValue = ceReportedValue.editText().getText().toString();
                         getList().get(getAdapterPosition()).setDispValue(dispValue);
 
                         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if (imm.isActive()){
-                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
+                        if (imm.isActive()) {
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);      //隐藏软键盘
                         }
 
-                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0){
-                            mDispValueChangeListener.dispValueChange(dispValue,getAdapterPosition());
+                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
+                            mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
                         }
                         return true;
                     }
@@ -259,15 +268,15 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     String[] split = getList().get(getAdapterPosition()).getOptionNames().split(",");
                     List<String> list = Arrays.asList(split);
                     List<String> arrList = new ArrayList<>(list);
-                    arrList.add(0,"");
+                    arrList.add(0, "");
                     mSinglePickController.list(arrList)
                             .listener(new SinglePicker.OnItemPickListener() {
                                 @Override
                                 public void onItemPicked(int index, Object item) {
                                     getItem(getAdapterPosition()).setOriginValue(arrList.get(index));
                                     notifyItemChanged(getAdapterPosition());
-                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){
-                                        mOriginalValueChangeListener.originalValueChange(getItem(getAdapterPosition()).getOriginValue(),getAdapterPosition());
+                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) {
+                                        mOriginalValueChangeListener.originalValueChange(getItem(getAdapterPosition()).getOriginValue(), getAdapterPosition());
                                     }
                                 }
                             }).show();
@@ -278,10 +287,16 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 
         @Override
         protected void update(InspectionSubEntity data) {
-            if (data.getValueSource()==null || TextUtils.isEmpty(data.getValueSource().getId())){
-                BaseIdValueEntity valueSource=new BaseIdValueEntity();
+            if (data.getValueSource()==null || TextUtils.isEmpty(data.getValueSource().getId())) {
+                BaseIdValueEntity valueSource = new BaseIdValueEntity();
                 valueSource.setId("LIMSSample_valueSource/enter");
                 data.setValueSource(valueSource);
+            }
+
+            if (selectPosition==getAdapterPosition()){
+                llInspectionItems.setBackground(context.getResources().getDrawable(R.drawable.shape_line_blue));
+            }else {
+                llInspectionItems.setBackgroundColor(context.getResources().getColor(R.color.white));
             }
             //检验项目
             ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "" : data.getComName());
@@ -291,36 +306,52 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             ceReportedValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
             ceReportedValue.editText().setSingleLine();
             //原始值
-            if(null != data.getValueKind()){ // 值类型
-                if (!StringUtil.isEmpty(data.getValueKind().getId())){ // 值类型不为空
-                    if (data.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)){
+            if (null != data.getValueKind()) { // 值类型
+                if (!StringUtil.isEmpty(data.getValueKind().getId())) { // 值类型不为空
+                    if (data.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)) {
                         setVisible(false);
                         cpOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
-                    }else if (data.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)){
+                    } else if (data.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
                         setVisible(true);
                         ceOriginalValue.setEditable(false);
                         ceOriginalValue.setHint("");
                         ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
-                    }else {
+                    } else {
                         setVisible(true);
                         ceOriginalValue.setEditable(true);
-                        if (StringUtil.isEmpty(data.getDefaultValue())){
+                        if (StringUtil.isEmpty(data.getDefaultValue())) {
                             ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                             ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
-                        }else {
-                            if (StringUtil.isEmpty(data.getOriginValue())){  //原始值为空 并且默认值不为空  赋默认给原始 并去计算修约与报出
+                        } else {
+                            if (StringUtil.isEmpty(data.getOriginValue())) {  //原始值为空 并且默认值不为空  赋默认给原始 并去计算修约与报出
                                 ceOriginalValue.setContent(data.getDefaultValue());
-                            }else {
+                                if (recyclerView.isComputingLayout()) {
+                                    recyclerView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
+                                                originalValue = data.getDefaultValue();
+                                                mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
+                                        originalValue = data.getDefaultValue();
+                                        mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
+                                    }
+                                }
+                            } else {
                                 ceOriginalValue.setContent(data.getOriginValue());
                                 ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
                             }
                         }
 
                     }
-                }else {
+                } else {
                     setVisible(true);
                 }
-            }else {
+            } else {
                 setVisible(true);
             }
             ctRoundOffValue.setContent(StringUtil.isEmpty(data.getRoundValue()) ? "" : data.getRoundValue()); //修约值
@@ -331,14 +362,14 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             //HashMap<String, Object> dispMap = data.getDispMap();
             List<ConclusionEntity> conclusionList = data.getConclusionList();
             for (int i = 0; i < conclusionList.size(); i++) {
-                if (null != conclusionList.get(i).getFinalResult()){
-                    if (conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(conclusionList.get(i).getColumnList().size()-1).getResult())){
+                if (null != conclusionList.get(i).getFinalResult()) {
+                    if (conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(conclusionList.get(i).getColumnList().size() - 1).getResult())) {
                         data.setConclusionState(false);
-                    }else {
+                    } else {
                         data.setConclusionState(true);
                     }
                     break;
-                }else {
+                } else {
                     data.setConclusionState(true);
                 }
 
@@ -349,18 +380,18 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 //                }
             }
 
-            if (data.isConclusionState()){
+            if (data.isConclusionState()) {
                 ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
                 ceReportedValue.setContentTextColor(Color.parseColor("#333333"));
-            }else {
+            } else {
                 ceReportedValue.setKeyTextColor(Color.parseColor("#B20404"));
                 ceReportedValue.setContentTextColor(Color.parseColor("#B20404"));
             }
 
-            if (data.isOpen()){
+            if (data.isOpen()) {
                 rvConclusion.setVisibility(View.VISIBLE);
                 ivExpand.setImageResource(R.drawable.ic_drop_up);
-            }else {
+            } else {
                 rvConclusion.setVisibility(View.GONE);
                 ivExpand.setImageResource(R.drawable.ic_drop_down);
             }
@@ -372,7 +403,6 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     notifyItemChanged(getAdapterPosition());
                 }
             });
-
 
 
             if (data.getFileUploadMultiFileIds() != null && !data.getFileUploadMultiFileIds().isEmpty()) {
@@ -390,12 +420,12 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             rvConclusion.setAdapter(conclusionAdapter);
             for (int i = 0; i < data.getConclusionList().size(); i++) {
                 int n = 0;
-                for (int j = 0; j < data.getConclusionList().get(i).getColumnList().size(); j++){
-                    if (data.getConclusionList().get(i).getColumnList().get(j).getLoad()){
-                        n ++;
+                for (int j = 0; j < data.getConclusionList().get(i).getColumnList().size(); j++) {
+                    if (data.getConclusionList().get(i).getColumnList().get(j).getLoad()) {
+                        n++;
                     }
                 }
-                if (n == 1){
+                if (n == 1) {
                     data.getConclusionList().get(i).setOpen(true);
                 }
             }
@@ -405,7 +435,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
             cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
             ceReportedValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
             conclusionAdapter.notifyDataSetChanged();
-            if (TextUtils.isEmpty(data.getOriginValue()) && !TextUtils.isEmpty(data.getDefaultValue())){
+            if (TextUtils.isEmpty(data.getOriginValue()) && !TextUtils.isEmpty(data.getDefaultValue())) {
                 data.setOriginValue(data.getDefaultValue());
 
                 //originValChange(data,ceOriginalValue,ctRoundOffValue,ceReportedValue,cpOriginalValue);//设置其他修约报出值
@@ -426,26 +456,28 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
                     }
                 }
+                originValChange(data, ceOriginalValue, ctRoundOffValue, ceReportedValue, cpOriginalValue);
             }
         }
 
-        private void setVisible(boolean visible){
-            if (visible){
+        private void setVisible(boolean visible) {
+            if (visible) {
                 llCeOriginalValue.setVisibility(View.VISIBLE);
                 llCpOriginalValue.setVisibility(View.GONE);
-            }else {
+            } else {
                 llCeOriginalValue.setVisibility(View.GONE);
                 llCpOriginalValue.setVisibility(View.VISIBLE);
             }
         }
     }
+
     ScriptEngine engine;
 
     public void setEngine(ScriptEngine engine) {
         this.engine = engine;
     }
 
-    public void originValChange(InspectionSubEntity inspectionSubEntity,CustomEditText ceOriginalValue,CustomTextView ctRoundOffValue,CustomEditText ceReportedValue,CustomSpinner cpOriginalValue) {
+    public void originValChange(InspectionSubEntity inspectionSubEntity, CustomEditText ceOriginalValue, CustomTextView ctRoundOffValue, CustomEditText ceReportedValue, CustomSpinner cpOriginalValue) {
         boolean clearFalg = false;
         if (!StringUtil.isEmpty(inspectionSubEntity.getOriginValue())) {
             if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.NUMBER) || inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
@@ -455,7 +487,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                 try {
                     Invocable invoke = (Invocable) engine;
                     roundValue = invoke.invokeFunction("roundingValue", inspectionSubEntity.getOriginValue(), inspectionSubEntity.getDigitType(), inspectionSubEntity.getCarrySpace(), inspectionSubEntity.getCarryType(), inspectionSubEntity.getCarryFormula());
-                    roundValue = checkValue(roundValue+"");
+                    roundValue = checkValue(roundValue + "");
                     inspectionSubEntity.setRoundValue(roundValue + "");
                     inspectionSubEntity.setDispValue(roundValue + "");
                 } catch (Exception e) {
@@ -467,7 +499,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         Invocable invoke = (Invocable) engine;
                         Object dispValue = invoke.invokeFunction("sectionJudgment", inspectionSubEntity.getOriginValue(), inspectionSubEntity.getLimitType().getId(), inspectionSubEntity.getMaxValue(), inspectionSubEntity.getMinValue());
                         if (dispValue != "reject") {
-                            if ((dispValue + "").equals(inspectionSubEntity.getOriginValue()) ) {
+                            if ((dispValue + "").equals(inspectionSubEntity.getOriginValue())) {
                                 inspectionSubEntity.setDispValue(dispValue + "");
                             } else {
                                 inspectionSubEntity.setDispValue(roundValue + "");
@@ -497,41 +529,50 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         ceOriginalValue.setContent(inspectionSubEntity.getOriginValue());
         ctRoundOffValue.setContent(inspectionSubEntity.getRoundValue());
         ceReportedValue.setContent(inspectionSubEntity.getOriginValue());
-        if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)){
+        if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)) {
             cpOriginalValue.setContent(inspectionSubEntity.getOriginValue());
             cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         }
         ceOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         ceReportedValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
     }
-    public String checkValue(String str){
-        if (StringUtil.isEmpty(str)){
+
+    public void setOriginalValueChangeListener(int position, String originValue) {
+        getList().get(position).setOriginValue(originValue); //将输入的值设置为原始值
+        if (null != mOriginalValueChangeListener && position >= 0) { //调用监听事件 去执行计算
+            mOriginalValueChangeListener.originalValueChange(originValue, position);
+        }
+    }
+
+    public String checkValue(String str) {
+        if (StringUtil.isEmpty(str)) {
             return "";
         }
-        if (com.supcon.mes.middleware.util.Util.isNumeric(str)){
-            if (com.supcon.mes.middleware.util.Util.isContainPoint(str)){
+        if (com.supcon.mes.middleware.util.Util.isNumeric(str)) {
+            if (com.supcon.mes.middleware.util.Util.isContainPoint(str)) {
                 return com.supcon.mes.middleware.util.Util.removePoint(str);
-            }else {
+            } else {
                 return str;
             }
-        }else {
+        } else {
             return str;
         }
 
     }
-    public void setOriginalValueChangeListener(OriginalValueChangeListener mOriginalValueChangeListener){
+
+    public void setOriginalValueChangeListener(OriginalValueChangeListener mOriginalValueChangeListener) {
         this.mOriginalValueChangeListener = mOriginalValueChangeListener;
     }
 
-    public interface OriginalValueChangeListener{
+    public interface OriginalValueChangeListener {
         void originalValueChange(String value, int position);
     }
 
-    public void setDispValueChangeListener(DispValueChangeListener mDispValueChangeListener){
+    public void setDispValueChangeListener(DispValueChangeListener mDispValueChangeListener) {
         this.mDispValueChangeListener = mDispValueChangeListener;
     }
 
-    public interface DispValueChangeListener{
+    public interface DispValueChangeListener {
         void dispValueChange(String value, int position);
     }
 }

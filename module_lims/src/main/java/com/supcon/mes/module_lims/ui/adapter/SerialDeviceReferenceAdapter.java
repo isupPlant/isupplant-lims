@@ -72,11 +72,11 @@ public class SerialDeviceReferenceAdapter extends BaseListDataRecyclerViewAdapte
                 tvDeviceType.setContent(data.getEamType().getName());
                 tvAcquisitionMode.setContent(data.getSerialType().getValue());
 
-                if (data.getSerialType().getId() == null ||  data.getSerialType().getId().equals("BaseSet_serialType/direct")){
-                    iv_select.setVisibility(View.GONE);
-                }else {
-                    iv_select.setVisibility(View.VISIBLE);
-                }
+//                if (data.getSerialType().getId() == null ||  data.getSerialType().getId().equals("BaseSet_serialType/direct")){
+//                    iv_select.setVisibility(View.GONE);
+//                }else {
+//                    iv_select.setVisibility(View.VISIBLE);
+//                }
 
                 if (data.isSelect()) {
                     iv_select.setImageResource(R.drawable.ic_check_yes);

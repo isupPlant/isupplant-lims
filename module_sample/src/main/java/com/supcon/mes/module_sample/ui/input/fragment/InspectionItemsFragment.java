@@ -14,9 +14,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.fragment.BaseFragment;
 
+import com.supcon.common.view.base.fragment.BasePresenterFragment;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_sample.R;
@@ -24,15 +28,19 @@ import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
 import com.supcon.mes.module_sample.listener.InspectionSubRefreshListener;
+import com.supcon.mes.module_sample.model.api.SampleAnalyseCollectDataAPI;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
+import com.supcon.mes.module_sample.model.contract.SampleAnalyseCollectDataContract;
+import com.supcon.mes.module_sample.presenter.SampleAnalyseCollectDataPresenter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputPADActivity;
 
@@ -49,7 +57,8 @@ import io.reactivex.functions.Consumer;
  * on 2020/7/29
  * class name
  */
-public class InspectionItemsFragment extends BaseFragment {
+@Presenter(value = {SampleAnalyseCollectDataPresenter.class})
+public class InspectionItemsFragment extends BasePresenterFragment implements SampleAnalyseCollectDataContract.View {
 
     @BindByTag("tabLayout")
     TabLayout tabLayout;
@@ -62,6 +71,10 @@ public class InspectionItemsFragment extends BaseFragment {
     RelativeLayout rl_calculation;
     @BindByTag("tvSerial")
     TextView tvSerial;
+    @BindByTag("tvFileAnalyse")
+    TextView tvFileAnalyse;
+    @BindByTag("tvAutoCollection")
+    TextView tvAutoCollection;
 
     private String[] title = new String[]{context.getResources().getString(R.string.lims_project), context.getResources().getString(R.string.lims_equipment), context.getResources().getString(R.string.lims_material)};
     private List<Fragment> fragmentList = new ArrayList<>();
@@ -72,6 +85,7 @@ public class InspectionItemsFragment extends BaseFragment {
     private MaterialFragment materialFragment;
     private SampleRecordResultSubmitController controller;
     private Long sampleId,sampleTestId;
+    private String sampleCode;
 
     @Override
     public void onAttach(Context context) {
@@ -211,6 +225,18 @@ public class InspectionItemsFragment extends BaseFragment {
             }
         });
 
+        RxView.clicks(tvAutoCollection)
+                .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (SampleFragment.selectPosition==-1){
+                        ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                        return;
+                    }
+                    sampleCode=activity.sampleCode;
+                    String url = "http://" + SupPlantApplication.getIp() + ":9410//lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode?collectCode="+sampleCode;
+                    onLoading(context.getResources().getString(R.string.lims_parsing));
+                    presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode(url);
+                });
         tvSerial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,11 +250,36 @@ public class InspectionItemsFragment extends BaseFragment {
             }
         });
 
+        RxView.clicks(tvFileAnalyse)
+                .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (SampleFragment.selectPosition==-1){
+                        ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                        return;
+                    }
+                    IntentRouter.go(context, LimsConstant.AppCode.LIMS_SAMPLE_FILE_ANALYSE);
+                });
     }
 
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    @Override
+    public void getFormatDataByCollectCodeSuccess(List entity) {
+        if (entity != null && entity.size() > 0) {
+            SelectDataEvent<List> selectDataEvent=new SelectDataEvent<>(entity,"SampleAnalyseFile");
+            EventBus.getDefault().post(selectDataEvent);
+            onLoadSuccess(context.getResources().getString(R.string.lims_parse_success));
+        } else {
+            onLoadFailed(context.getResources().getString(R.string.lims_no_parse_data));
+        }
+    }
+
+    @Override
+    public void getFormatDataByCollectCodeFailed(String errorMsg) {
+        onLoadFailed(errorMsg);
     }
 
 

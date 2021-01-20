@@ -235,6 +235,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         });
 
         adapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
+            selectPosition=position;
             if (action == 0){
                 //刷新页面
                 List<SampleEntity> list = adapter.getList();
@@ -245,9 +246,12 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 adapter.notifyDataSetChanged();
 
                 //通知 检验项目更新数据
-                if (activity instanceof SampleResultInputActivity){
-                    ((SampleResultInputActivity)activity).setSampleId(list.get(position).getId());
-                }else if (activity instanceof  SampleResultInputPDAActivity){
+//                if (activity instanceof SampleResultInputActivity){
+//                    ((SampleResultInputActivity)activity).setSampleId(list.get(position).getId());
+//                }else if (activity instanceof  SampleResultInputPDAActivity){
+                if (activity instanceof SampleResultInputPADActivity){
+                    ((SampleResultInputPADActivity)activity).setSampleId(list.get(position).getId(),list.get(position).getCode());
+                }else if (activity instanceof SampleResultInputActivity){
                     Bundle bundle = new Bundle();
                     bundle.putLong("sampleId",list.get(position).getId());
                     if (!StringUtil.isEmpty(list.get(position).getName()) && !StringUtil.isEmpty(list.get(position).getCode())){

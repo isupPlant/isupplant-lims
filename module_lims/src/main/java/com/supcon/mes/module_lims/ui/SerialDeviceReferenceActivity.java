@@ -39,6 +39,8 @@ import com.supcon.mes.module_lims.model.contract.SerialDeviceRefContract;
 import com.supcon.mes.module_lims.presenter.SerialDeviceRefPresenter;
 import com.supcon.mes.module_lims.service.SerialWebSocketService;
 import com.supcon.mes.module_lims.ui.adapter.SerialDeviceReferenceAdapter;
+import com.supcon.mes.module_lims.utils.ConnectStatus;
+import com.supcon.mes.module_lims.utils.WebSocketUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -101,7 +103,7 @@ public class SerialDeviceReferenceActivity extends BaseRefreshRecyclerActivity<S
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(getString(R.string.lims_sampling_point_reference));
+        titleText.setText(getString(R.string.lims_serial_ref_eam));
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -163,24 +165,29 @@ public class SerialDeviceReferenceActivity extends BaseRefreshRecyclerActivity<S
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        list.clear();
-                        for (int i = 0; i < adapter.getList().size(); i++) {
-                            if (adapter.getList().get(i).isSelect()) {
-                                list.add(adapter.getList().get(i));
+                        for (SerialDeviceEntity entity : adapter.getList()) {
+                            if (entity.isSelect()) {
+                                EventBus.getDefault().post(new SelectDataEvent<>(entity, "deviceUrl"));
+                                finish();
+                                return;
                             }
                         }
-                        if (list.size() > 0) {
-                            String openSendMsg = "commConf:"+list.get(0).getSerialPort()+","+list.get(0).getBaudRate()+","+list.get(0).getCheckDigit()+","+list.get(0).getDataBits()+","+list.get(0).getStopBits();
-                            Intent intent = new Intent(SupPlantApplication.getAppContext(), SerialWebSocketService.class);
-                            intent.setAction(SerialWebSocketService.START_SERIAL_SERVICE);
-                            intent.putExtra("url",list.get(0).getSerialServerIp());
-                            intent.putExtra("openSendMsg",openSendMsg);
-                            SupPlantApplication.getAppContext().startService(intent);
-                            EventBus.getDefault().post(new SelectDataEvent<>(list.get(0), selectTag));
-                            finish();
-                        } else {
-                            ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_at_last_one_data));
-                        }
+
+//                        if (list.size() > 0) {
+//                            String openSendMsg = "commConf:"+list.get(0).getSerialPort()+","+list.get(0).getBaudRate()+","+list.get(0).getCheckDigit()+","+list.get(0).getDataBits()+","+list.get(0).getStopBits();
+//                            Intent intent = new Intent(SupPlantApplication.getAppContext(), SerialWebSocketService.class);
+//                            intent.setAction(SerialWebSocketService.START_SERIAL_SERVICE);
+//                            intent.putExtra("url",list.get(0).getSerialServerIp());
+//                            intent.putExtra("openSendMsg",openSendMsg);
+//                            SupPlantApplication.getAppContext().startService(intent);
+//                            EventBus.getDefault().post(new SelectDataEvent<>(list.get(0), selectTag));
+//                            finish();
+//                        } else {
+//                            ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_at_last_one_data));
+//                        }
+
+                        ToastUtils.show(context, context.getResources().getString(R.string.lims_please_select_at_last_one_data));
+
                     }
                 });
     }
@@ -200,4 +207,5 @@ public class SerialDeviceReferenceActivity extends BaseRefreshRecyclerActivity<S
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }
+
 }

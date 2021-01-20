@@ -34,6 +34,9 @@ public interface LimsConstant {
     }
     interface BAPQuery{
         String REGISTER_TIME="REGISTER_TIME";//注册时间
+        String C_NAME="C_NAME";//文件名
+        String C_MD5="C_MD5";//md5值
+        String LIMS_REFED="LIMS_REFED";//读取标记
     }
 
 
@@ -112,9 +115,11 @@ public interface LimsConstant {
         String LIMS_InspectionItemPda = "LIMS_InspectionItemPda";
         String LIMS_InspectionItem = "LIMS_InspectionItem"; //检验分项
         String LIMS_SAMPLE_FILE_ANALYSE="LIMS_SAMPLE_FILE_ANALYSE";
+
         String SAMPLE_REF="SAMPLE_REF";
         String SAMPLE_UNIT_REF="SAMPLE_UNIT_REF";
         String WARE_STORE_REF="WARE_STORE_REF";
         String retentionEdit="retentionEdit";
+
     }
 }

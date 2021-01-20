@@ -2,17 +2,16 @@ package com.supcon.mes.module_sample.ui.input.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-
-
 import android.widget.LinearLayout;
-
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
@@ -24,46 +23,41 @@ import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
-import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
-import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
-import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.CalculationController;
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
-
-import com.supcon.mes.module_lims.utils.FileUtils;
-import com.supcon.mes.module_lims.utils.Util;
-
+import com.supcon.mes.module_lims.model.bean.SerialDeviceEntity;
+import com.supcon.mes.module_lims.service.SerialWebSocketService;
 import com.supcon.mes.module_lims.utils.SpaceItemDecoration;
-
-import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
 import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
+import com.supcon.mes.module_sample.model.api.SampleAnalyseCollectDataAPI;
 import com.supcon.mes.module_sample.model.api.SingleSampleResultInputAPI;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
-import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
-import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
+import com.supcon.mes.module_sample.model.contract.SampleAnalyseCollectDataContract;
 import com.supcon.mes.module_sample.model.contract.SingleSampleResultInputContract;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresenter;
-import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
+import com.supcon.mes.module_sample.presenter.SampleAnalyseCollectDataPresenter;
 import com.supcon.mes.module_sample.presenter.SingleSampleResultInputPresenter;
-import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
 import com.supcon.mes.module_sample.ui.adapter.SingleProjectAdapter;
-import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
-import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+import com.supcon.mes.module_sample.ui.input.SampleResultInputPADActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputItemActivity;
 import com.supcon.mes.module_sample.ui.input.SingleSampleResultInputPADActivity;
 
@@ -77,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
@@ -86,9 +81,9 @@ import io.reactivex.functions.Consumer;
  * Created by wanghaidong on 2020/8/13
  * Email:wanghaidong1@supcon.com
  */
-@Presenter(value = {SingleSampleResultInputPresenter.class, InspectionSubProjectColumnPresenter.class})
+@Presenter(value = {SingleSampleResultInputPresenter.class, InspectionSubProjectColumnPresenter.class, SampleAnalyseCollectDataPresenter.class})
 @Controller(value = {SystemConfigController.class, CalculationController.class, LimsFileUpLoadController.class, SampleRecordResultSubmitController.class})
-public class SingleProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEntity> implements SingleSampleResultInputContract.View {
+public class SingleProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEntity> implements SingleSampleResultInputContract.View, SampleAnalyseCollectDataContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -104,10 +99,15 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
     @BindByTag("rl_submit")
     RelativeLayout rl_submit;
-
-
+    @BindByTag("tvSerial")
+    TextView tvSerial;
+    @BindByTag("tvFileAnalyse")
+    TextView tvFileAnalyse;
+    @BindByTag("tvAutoCollection")
+    TextView tvAutoCollection;
     private SingleProjectAdapter adapter;
     private Long sampleTesId;
+    private String sampleCode;
     private String filePath;
     BaseFragmentActivity activity;
     SpaceItemDecoration spaceItemDecoration;
@@ -127,14 +127,14 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         super.onAttach(context);
         if (context instanceof SingleSampleResultInputItemActivity) {
             activity = (SingleSampleResultInputItemActivity) context;
-        }else if (context instanceof SingleSampleResultInputPADActivity){
+        } else if (context instanceof SingleSampleResultInputPADActivity) {
             activity = (SingleSampleResultInputPADActivity) context;
         }
     }
 
     @Override
     protected IListAdapter<InspectionSubEntity> createAdapter() {
-        adapter = new SingleProjectAdapter(context,contentView);
+        adapter = new SingleProjectAdapter(context, contentView);
         return adapter;
     }
 
@@ -163,25 +163,11 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         contentView.setLayoutManager(linearLayoutManager);
         contentView.addItemDecoration(linearSpaceItemDecoration);
 
-
-        if (activity instanceof SampleResultInputActivity) {
-            int orientation = ((SampleResultInputActivity) activity).getOrientation();
-            if (orientation == 2) { //横向
-                contentView.setLayoutManager(gridLayoutManager);
-                contentView.addItemDecoration(spaceItemDecoration);
-            } else if (orientation == 1) { //竖向
-                contentView.setLayoutManager(linearLayoutManager);
-                contentView.addItemDecoration(linearSpaceItemDecoration);
-            }
+        if (activity instanceof SingleSampleResultInputPADActivity) {
+            ll_bottom.setVisibility(View.VISIBLE);
         } else {
-            contentView.setLayoutManager(linearLayoutManager);
-            contentView.addItemDecoration(linearSpaceItemDecoration);
-
-            if (activity instanceof SingleSampleResultInputPADActivity) {
-                ll_bottom.setVisibility(View.VISIBLE);
-            } else {
-                ll_bottom.setVisibility(View.GONE);
-            }
+            ll_bottom.setVisibility(View.GONE);
+        }
 //        if (activity instanceof SampleResultInputPADActivity) {
 //            int orientation = ((SampleResultInputPADActivity) activity).getOrientation();
 //            if (orientation == 2) { //横向
@@ -194,28 +180,73 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 //        } else {
 //
 //        }
-        }
-        submitController=new SampleRecordResultSubmitController();
+
+        submitController = new SampleRecordResultSubmitController();
     }
 
+    public static int selectPosition = -1;
     InspectionSubEntity itemEntity;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDataEvent(SelectDataEvent dataEvent){
-        if ("deleteIds".equals(dataEvent.getSelectTag())){
-            List<AttachmentSampleInputEntity> attachmentEntitys= (List<AttachmentSampleInputEntity>) dataEvent.getEntity();
-            if (attachmentEntitys!=null && !attachmentEntitys.isEmpty()){
-                List<String> deleteIds=itemEntity.getFileUploadFileDeleteIds();
-                for(AttachmentSampleInputEntity attachmentEntity:attachmentEntitys){
-                    if (!TextUtils.isEmpty(attachmentEntity.getId())){
+    public void onDataEvent(SelectDataEvent dataEvent) {
+        if ("deleteIds".equals(dataEvent.getSelectTag())) {
+            List<AttachmentSampleInputEntity> attachmentEntitys = (List<AttachmentSampleInputEntity>) dataEvent.getEntity();
+            if (attachmentEntitys != null && !attachmentEntitys.isEmpty()) {
+                List<String> deleteIds = itemEntity.getFileUploadFileDeleteIds();
+                for (AttachmentSampleInputEntity attachmentEntity : attachmentEntitys) {
+                    if (!TextUtils.isEmpty(attachmentEntity.getId())) {
                         deleteIds.add(attachmentEntity.getId());
                     }
                 }
                 itemEntity.setFileUploadFileDeleteIds(deleteIds);
                 itemEntity.getAttachmentSampleInputEntities().removeAll(attachmentEntitys);
-                adapter.change=true;
+                adapter.change = true;
+            }
+        } else if ("SampleAnalyseFile".equals(dataEvent.getSelectTag())) {
+            boolean match=false;
+            List<Map<String, Object>> maps = (List<Map<String, Object>>) dataEvent.getEntity();
+            for (Map<String, Object> map : maps) {
+                outer:for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    List<InspectionSubEntity> entities = adapter.getList();
+                    int count = entities.size();
+                    for (int i = 0; i < count; i++) {
+                        InspectionSubEntity data = adapter.getItem(i);
+                        if (entry.getKey().equals(data.getComName())) {
+                            match = true;
+                            adapter.setOriginalValueChangeListener(i, entry.getValue().toString());
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break outer;
+                        }
+                    }
+                }
+            }
+            if (!match)
+                ToastUtils.show(context,context.getResources().getString(R.string.lims_no_match_inspect_item));
+
+        } else if ("WebSocketData".equals(dataEvent.getSelectTag())) {
+            String originalValue = dataEvent.getEntity().toString();
+            adapter.setOriginalValueChangeListener(selectPosition, originalValue);
+        } else if ("deviceUrl".equals(dataEvent.getSelectTag())) {
+            SerialDeviceEntity entity = (SerialDeviceEntity) dataEvent.getEntity();
+            Intent intent = new Intent(SupPlantApplication.getAppContext(), SerialWebSocketService.class);
+            intent.setAction(SerialWebSocketService.START_SERIAL_SERVICE);
+            intent.putExtra("url", entity.getSerialServerIp());
+            SupPlantApplication.getAppContext().startService(intent);
+        }else if ("refreshData".equals(dataEvent.getSelectTag())){
+            if (adapter!=null){
+                sampleTesId=null;
+                sampleCode=null;
+                adapter.clear();
+                adapter.notifyDataSetChanged();
             }
         }
+
     }
+
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
@@ -227,12 +258,46 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         if (activity instanceof SingleSampleResultInputPADActivity){
             ((SingleSampleResultInputPADActivity)activity).setOnNotifySubRefreshListener(new SingleSampleResultInputPADActivity.OnNotifySubRefreshListener() {
                 @Override
-                public void NotifySubRefresh(Long sampleId) {
+                public void NotifySubRefresh(Long sampleId,String sampleCode) {
                     sampleTesId = sampleId == null ? 0L : sampleId;
+                    SingleProjectFragment.this.sampleCode=sampleCode;
                     refreshListController.refreshBegin();
                 }
             });
         }
+        tvSerial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SingleSampleFragment.selectPosition==-1){
+                    ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                    return;
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.IntentKey.SELECT_TAG,tvSerial.getTag().toString());
+                IntentRouter.go(context, LimsConstant.AppCode.LIMS_SerialRef);
+            }
+        });
+
+        RxView.clicks(tvAutoCollection)
+                .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (SingleSampleFragment.selectPosition==-1){
+                        ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                        return;
+                    }
+                    String url = "http://" + SupPlantApplication.getIp() + ":9410//lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode?collectCode="+sampleCode;
+                    onLoading(context.getResources().getString(R.string.lims_parsing));
+                    presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode(url);
+                });
+        RxView.clicks(tvFileAnalyse)
+                .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (SingleSampleFragment.selectPosition==-1){
+                        ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                        return;
+                    }
+                    IntentRouter.go(context, LimsConstant.AppCode.LIMS_SAMPLE_FILE_ANALYSE);
+                });
 
         adapter.setEngine(getController(CalculationController.class).getEngine());
 
@@ -247,6 +312,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 itemEntity = adapter.getItem(position);
+                selectPosition=position;
                 if (action == 1) {
                     getController(LimsFileUpLoadController.class).
                             showPopup(getActivity(), SingleProjectFragment.this)
@@ -326,8 +392,8 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
             }
         });
 
-        if (activity instanceof SampleResultInputActivity) {
-            ((SampleResultInputActivity) activity).setOnOrientationChangeListener(new SampleResultInputActivity.OnOrientationChangeListener() {
+        if (activity instanceof SampleResultInputPADActivity) {
+            ((SampleResultInputPADActivity) activity).setOnOrientationChangeListener(new SampleResultInputPADActivity.OnOrientationChangeListener() {
                 @Override
                 public void orientationChange(int orientation) {
                     if (orientation == 2) { //横向
@@ -371,6 +437,10 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (SingleSampleFragment.selectPosition==-1){
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                            return;
+                        }
                         if (!change()){
                             ToastUtils.show(context,context.getResources().getString(R.string.lims_project_check_change));
                             return;
@@ -383,6 +453,10 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         RxView.clicks(rl_submit)
                 .throttleFirst(300,TimeUnit.MILLISECONDS)
                 .subscribe(o ->  {
+                    if (SingleSampleFragment.selectPosition==-1){
+                        ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                        return;
+                    }
                     List<InspectionSubEntity> inspectionSubList = getInspectionSubList();
                     SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("submit",sampleTesId,inspectionSubList);
                     submitController.recordResultSubmit(activity,1,submitEntity);
@@ -392,6 +466,10 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (SingleSampleFragment.selectPosition==-1){
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                            return;
+                        }
                         manualCalculate();
                     }
                 });
@@ -531,6 +609,22 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void getFormatDataByCollectCodeSuccess(List entity) {
+        if (entity != null && entity.size() > 0) {
+            SelectDataEvent<List> selectDataEvent=new SelectDataEvent<>(entity,"SampleAnalyseFile");
+            EventBus.getDefault().post(selectDataEvent);
+            onLoadSuccess(context.getResources().getString(R.string.lims_parse_success));
+        } else {
+            onLoadFailed(context.getResources().getString(R.string.lims_no_parse_data));
+        }
+    }
+
+    @Override
+    public void getFormatDataByCollectCodeFailed(String errorMsg) {
+        onLoadFailed(errorMsg);
     }
 }
 

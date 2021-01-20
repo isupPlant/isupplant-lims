@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sample.ui.input;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,12 @@ import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
+import com.supcon.mes.module_lims.service.SerialWebSocketService;
+import com.supcon.mes.module_lims.utils.ConnectStatus;
+import com.supcon.mes.module_lims.utils.WebSocketUtils;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleInputController;
 import com.supcon.mes.module_sample.ui.input.fragment.InspectionProjectFragment;
@@ -59,6 +64,7 @@ public class SampleResultInputPADActivity extends BaseFragmentActivity {
     private int orientation = 0;
 
     private Long sampleId,sampleTesId;
+    public String sampleCode;
     private List<String> searchTypeList = new ArrayList<>();
     private String searchKey;
     private String title;
@@ -176,8 +182,9 @@ public class SampleResultInputPADActivity extends BaseFragmentActivity {
 //        return sampleFragment;
 //    }
 
-    public void setSampleId(Long sampleId){
+    public void setSampleId(Long sampleId,String sampleCode){
         this.sampleId = sampleId;
+        this.sampleCode=sampleCode;
         if (null != mOnRefreshInspectionItemListener){
             mOnRefreshInspectionItemListener.onRefreshInspectionItem(sampleId);
         }
@@ -246,5 +253,13 @@ public class SampleResultInputPADActivity extends BaseFragmentActivity {
             mOnOrientationChangeListener.orientationChange(orientation);
         }
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (WebSocketUtils.instance!=null && WebSocketUtils.instance.getStatus()== ConnectStatus.Open){
+            WebSocketUtils.getInstance().cancel();
+        }
     }
 }

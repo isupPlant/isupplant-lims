@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sample.ui.input.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,8 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
@@ -25,11 +28,14 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.CalculationController;
 
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
+import com.supcon.mes.module_lims.model.bean.SerialDeviceEntity;
+import com.supcon.mes.module_lims.service.SerialWebSocketService;
 import com.supcon.mes.module_lims.utils.SpaceItemDecoration;
-import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.LimsFileUpLoadController;
 import com.supcon.mes.module_sample.custom.LinearSpaceItemDecoration;
@@ -57,6 +63,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -86,6 +98,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
     private List<InspectionSubEntity> myInspectionSubList = new ArrayList<>();
     private List<InspectionSubEntity> recordList = new ArrayList<>();
 
+    public int selectPosition = -1;
 
     @Override
     public void onAttach(Context context) {
@@ -100,7 +113,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     @Override
     protected IListAdapter<InspectionSubEntity> createAdapter() {
-        adapter = new ProjectAdapter(context,contentView);
+        adapter = new ProjectAdapter(context, contentView);
         return adapter;
     }
 
@@ -140,28 +153,60 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             contentView.setLayoutManager(linearLayoutManager);
             contentView.addItemDecoration(linearSpaceItemDecoration);
         }
-
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDataEvent(SelectDataEvent dataEvent){
-        if ("deleteIds".equals(dataEvent.getSelectTag())){
-            List<AttachmentSampleInputEntity> attachmentEntitys= (List<AttachmentSampleInputEntity>) dataEvent.getEntity();
-            if (attachmentEntitys!=null && !attachmentEntitys.isEmpty()){
-                List<String> deleteIds=itemEntity.getFileUploadFileDeleteIds();
-                for(AttachmentSampleInputEntity attachmentEntity:attachmentEntitys){
-                    if (!TextUtils.isEmpty(attachmentEntity.getId())){
+    public void onDataEvent(SelectDataEvent dataEvent) {
+        if ("deleteIds".equals(dataEvent.getSelectTag())) {
+            List<AttachmentSampleInputEntity> attachmentEntitys = (List<AttachmentSampleInputEntity>) dataEvent.getEntity();
+            if (attachmentEntitys != null && !attachmentEntitys.isEmpty()) {
+                List<String> deleteIds = itemEntity.getFileUploadFileDeleteIds();
+                for (AttachmentSampleInputEntity attachmentEntity : attachmentEntitys) {
+                    if (!TextUtils.isEmpty(attachmentEntity.getId())) {
                         deleteIds.add(attachmentEntity.getId());
                     }
                 }
                 itemEntity.setFileUploadFileDeleteIds(deleteIds);
                 itemEntity.getAttachmentSampleInputEntities().removeAll(attachmentEntitys);
-
             }
+        } else if ("SampleAnalyseFile".equals(dataEvent.getSelectTag())) {
+            boolean match = false;
+            List<Map<String, Object>> maps = (List<Map<String, Object>>) dataEvent.getEntity();
+            for (Map<String, Object> map : maps) {
+                outer:for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    List<InspectionSubEntity> entities = adapter.getList();
+                    int count = entities.size();
+                    for (int i = 0; i < count; i++) {
+                        InspectionSubEntity data = adapter.getItem(i);
+                        if (entry.getKey().equals(data.getComName())) {
+                            match = true;
+                            adapter.setOriginalValueChangeListener(i, entry.getValue().toString());
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break outer;
+                        }
+                    }
+                }
+            }
+            if (!match)
+                ToastUtils.show(context, context.getResources().getString(R.string.lims_no_match_inspect_item));
+        } else if ("WebSocketData".equals(dataEvent.getSelectTag())) {
+            String originalValue = dataEvent.getEntity().toString();
+            adapter.setOriginalValueChangeListener(selectPosition, originalValue);
+        } else if ("deviceUrl".equals(dataEvent.getSelectTag())) {
+            SerialDeviceEntity entity = (SerialDeviceEntity) dataEvent.getEntity();
+            Intent intent = new Intent(SupPlantApplication.getAppContext(), SerialWebSocketService.class);
+            intent.setAction(SerialWebSocketService.START_SERIAL_SERVICE);
+            intent.putExtra("url", entity.getSerialServerIp());
+            SupPlantApplication.getAppContext().startService(intent);
         }
     }
+
     InspectionSubEntity itemEntity;
+
     @Override
     protected void initListener() {
         super.initListener();
@@ -185,23 +230,23 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                                 @Override
                                 public void onSuccess(FileDataEntity fileDataEntity) {//上传成功附件之后，如果之前已有附件就把之前的附件ID记录下来，保存的时候，将之前的附件删除掉
 
-                                    File file=new File(fileDataEntity.getLocalPath());
-                                    String name=file.getName();
-                                    List<String> fileUploadMultiFileNames=itemEntity.getFileUploadMultiFileNames();
+                                    File file = new File(fileDataEntity.getLocalPath());
+                                    String name = file.getName();
+                                    List<String> fileUploadMultiFileNames = itemEntity.getFileUploadMultiFileNames();
                                     fileUploadMultiFileNames.add(name);
                                     itemEntity.setFileUploadMultiFileNames(fileUploadMultiFileNames);
 
-                                    String path=fileDataEntity.getPath();
-                                    List<String> addPaths=itemEntity.getFileUploadFileAddPaths();
+                                    String path = fileDataEntity.getPath();
+                                    List<String> addPaths = itemEntity.getFileUploadFileAddPaths();
                                     addPaths.add(path);
                                     itemEntity.setFileUploadFileAddPaths(addPaths);
 
-                                    List<String> fileUploadMultiFileIcons=itemEntity.getFileUploadMultiFileIcons();
+                                    List<String> fileUploadMultiFileIcons = itemEntity.getFileUploadMultiFileIcons();
                                     fileUploadMultiFileIcons.add(fileDataEntity.getFileIcon());
                                     itemEntity.setFileUploadMultiFileIcons(fileUploadMultiFileIcons);
 
-                                    List<AttachmentSampleInputEntity> attachmentEntities=itemEntity.getAttachmentSampleInputEntities();
-                                    AttachmentSampleInputEntity attachmentSampleInputEntity=new AttachmentSampleInputEntity();
+                                    List<AttachmentSampleInputEntity> attachmentEntities = itemEntity.getAttachmentSampleInputEntities();
+                                    AttachmentSampleInputEntity attachmentSampleInputEntity = new AttachmentSampleInputEntity();
                                     attachmentSampleInputEntity.setName(name);
                                     attachmentSampleInputEntity.setFile(file);
                                     attachmentEntities.add(attachmentSampleInputEntity);
@@ -216,15 +261,16 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                     } else {
                         ToastUtils.show(context, context.getResources().getString(R.string.lims_not_file));
                     }
+                } else if (action == 3) {
+                    selectPosition = position;
                 }
             }
         });
 
 
-
         adapter.setOriginalValueChangeListener(new ProjectAdapter.OriginalValueChangeListener() {
             @Override
-            public void originalValueChange( String value, int position) {
+            public void originalValueChange(String value, int position) {
                 adapter.getList().get(position).setRecordOriginValue(value);
                 getController(CalculationController.class).originValOnChange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
                     @Override
@@ -236,15 +282,15 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         });
         adapter.setDispValueChangeListener(new ProjectAdapter.DispValueChangeListener() {
             @Override
-            public void dispValueChange( String value, int position) {
-                    adapter.getList().get(position).setRecordDispValue(value);
-                    getController(CalculationController.class).dispValueOnchange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
-                        @Override
-                        public void notifyRefreshAdapter(int position) {
-                            adapter.notifyItemChanged(position);
-                        }
-                    });
-                }
+            public void dispValueChange(String value, int position) {
+                adapter.getList().get(position).setRecordDispValue(value);
+                getController(CalculationController.class).dispValueOnchange(value, position, adapter.getList(), new CalculationController.NotifyRefreshAdapterListener() {
+                    @Override
+                    public void notifyRefreshAdapter(int position) {
+                        adapter.notifyItemChanged(position);
+                    }
+                });
+            }
         });
 
         if (activity instanceof SampleResultInputActivity) {
@@ -252,7 +298,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                 @Override
                 public void orientationChange(int orientation) {
                     if (orientation == 2) { //横向
-                        ToastUtils.show(context, "横向");
+//                        ToastUtils.show(context, "横向");
                         contentView.setLayoutManager(gridLayoutManager);
 
                         if (contentView.getItemDecorationCount() > 0) {
@@ -334,7 +380,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                 }
             }
         }
-        recordList = GsonUtil.jsonToList(GsonUtil.gsonString(myInspectionSubList),InspectionSubEntity.class);
+        recordList = GsonUtil.jsonToList(GsonUtil.gsonString(myInspectionSubList), InspectionSubEntity.class);
         refreshListController.refreshComplete(myInspectionSubList);
     }
 
@@ -383,8 +429,8 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                     }
                 }
 
-                if (conclusionList.get(i).getColumnList().size() > 0){
-                    l = j+1;
+                if (conclusionList.get(i).getColumnList().size() > 0) {
+                    l = j + 1;
                     break;
                 }
             }
@@ -411,14 +457,13 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
     }
 
-    public List<InspectionSubEntity> getInspectionSubList(){
+    public List<InspectionSubEntity> getInspectionSubList() {
         return adapter.getList();
     }
 
-    public List<InspectionSubEntity> getRecordList(){
+    public List<InspectionSubEntity> getRecordList() {
         return recordList;
     }
-
 
 
     @Override

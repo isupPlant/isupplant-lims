@@ -67,7 +67,7 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     public boolean change;
     private SinglePickController mSinglePickController;
     private RecyclerView recyclerView;
-
+    public int selectPosition=-1;
     public SingleProjectAdapter(Context context,RecyclerView recyclerView) {
         super(context);
         this.recyclerView = recyclerView;
@@ -80,6 +80,8 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     protected BaseRecyclerViewHolder<InspectionSubEntity> getViewHolder(int viewType) {
         return new SingleProjectAdapter.ViewHolder(context);
     }
+
+
 
     class ViewHolder extends BaseRecyclerViewHolder<InspectionSubEntity>{
         private ConclusionAdapter conclusionAdapter;
@@ -115,7 +117,8 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         ImageView imageUpDown;
         @BindByTag("imageFileView")
         ImageView imageFileView;
-
+        @BindByTag("llInspectionItems")
+        LinearLayout llInspectionItems;
 
         public ViewHolder(Context context) {
             super(context);
@@ -164,7 +167,15 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         protected void initListener() {
             super.initListener();
 
-
+            RxView.clicks(llInspectionItems)
+                    .throttleFirst(1,TimeUnit.SECONDS)
+                    .subscribe(o -> {
+                        if (selectPosition==getAdapterPosition())
+                            return;
+                        selectPosition=getAdapterPosition();
+                        onItemChildViewClick(itemView,3);
+                        notifyDataSetChanged();
+                    });
             RxView.clicks(imageUpDown)
                     .throttleFirst(2000,TimeUnit.MILLISECONDS)
                     .subscribe(o->{
@@ -336,10 +347,15 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
         @Override
         protected void update(InspectionSubEntity data) {
-            if (data.getValueSource()==null || TextUtils.isEmpty(data.getValueSource().getId())){
-                BaseIdValueEntity valueSource=new BaseIdValueEntity();
+            if (data.getValueSource()==null || TextUtils.isEmpty(data.getValueSource().getId())) {
+                BaseIdValueEntity valueSource = new BaseIdValueEntity();
                 valueSource.setId("LIMSSample_valueSource/enter");
                 data.setValueSource(valueSource);
+            }
+            if (selectPosition==getAdapterPosition()){
+                llInspectionItems.setBackground(context.getResources().getDrawable(R.drawable.shape_line_blue));
+            }else {
+                llInspectionItems.setBackgroundColor(context.getResources().getColor(R.color.white));
             }
             //检验项目
             ctInspectionProject.setValue(data.getSampleTestId() != null && data.getSampleTestId().getTestId() != null ? data.getSampleTestId().getTestId().getName() : "");
@@ -373,6 +389,22 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         }else {
                             if (StringUtil.isEmpty(data.getOriginValue())){  //原始值为空 并且默认值不为空  赋默认给原始 并去计算修约与报出
                                 ceOriginalValue.setContent(data.getDefaultValue());
+                                if (recyclerView.isComputingLayout()){
+                                    recyclerView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                                                originalValue = data.getDefaultValue();
+                                                mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                                            }
+                                        }
+                                    });
+                                }else {
+                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                                        originalValue = data.getDefaultValue();
+                                        mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                                    }
+                                }
                             }else {
                                 ceOriginalValue.setContent(data.getOriginValue());
                                 ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
@@ -497,6 +529,13 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                 llCeOriginalValue.setVisibility(View.GONE);
                 llCpOriginalValue.setVisibility(View.VISIBLE);
             }
+        }
+    }
+    public void setOriginalValueChangeListener(int position, String originValue) {
+        change=true;
+        getList().get(position).setOriginValue(originValue); //将输入的值设置为原始值
+        if (null != mOriginalValueChangeListener && position >= 0) { //调用监听事件 去执行计算
+            mOriginalValueChangeListener.originalValueChange(originValue, position);
         }
     }
     ScriptEngine engine;

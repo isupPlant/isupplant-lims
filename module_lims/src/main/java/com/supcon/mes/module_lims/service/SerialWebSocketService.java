@@ -2,13 +2,20 @@ package com.supcon.mes.module_lims.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.controller.NetworkChangeController;
 import com.supcon.mes.middleware.model.event.NetworkChangeEvent;
-import com.supcon.mes.middleware.util.StringUtil;
-import com.supcon.mes.module_lims.controller.SerialDeviceController;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
+import com.supcon.mes.module_lims.utils.ConnectStatus;
 import com.supcon.mes.module_lims.utils.WebSocketUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,9 +58,10 @@ public class SerialWebSocketService extends Service {
         url = intent.getStringExtra("url");
         openSendMsg = intent.getStringExtra("openSendMsg");
         if (intent.getAction().equals(START_SERIAL_SERVICE)){
-            changeController = new NetworkChangeController(this);
-            changeController.onStart();
-
+            if (changeController==null){
+                changeController = new NetworkChangeController(this);
+                changeController.onStart();
+            }
             startConnect();
         }else if (intent.getAction().equals(STOP_SERIAL_SERVICE)){
             stopConnect();
@@ -77,33 +85,51 @@ public class SerialWebSocketService extends Service {
     }
 
     private void startConnect() {
-        if (null == webSocketUtils){
+        if (null == webSocketUtils) {
             webSocketUtils = WebSocketUtils.getInstance();
-            webSocketUtils.setConnect(url, new WebSocketUtils.WebSocketCallBack() {
-                @Override
-                public void onOpen(WebSocket webSocket, Response response) {
-                    webSocket.send(openSendMsg);
-                }
-
-                @Override
-                public void onMessage(String text) {
-                    String msg = text;
-                }
-            });
         }
+        if (!TextUtils.isEmpty(webSocketUtils.url) && webSocketUtils.url.equals(url) && webSocketUtils.getStatus()== ConnectStatus.Open)
+            return;
+
+        if (webSocketUtils.getStatus()==ConnectStatus.Open){
+            webSocketUtils.cancel();
+        }
+        webSocketUtils.setConnect(url, new WebSocketUtils.WebSocketCallBack() {
+            @Override
+            public void onOpen(WebSocket webSocket, Response response) {
+                handler.sendEmptyMessage(100);
+            }
+
+            @Override
+            public void onMessage(String text) {
+                if (!TextUtils.isEmpty(text)) {
+                    SelectDataEvent dataEvent = new SelectDataEvent(text, "WebSocketData");
+                    EventBus.getDefault().post(dataEvent);
+                }
+            }
+        });
 
     }
 
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what==100){
+                ToastUtils.show(SupPlantApplication.getAppContext(),"设备连接成功！");
+            }
+        }
+    };
     private void stopConnect(){
         if (webSocketUtils != null){
-            webSocketUtils.stop();
+            webSocketUtils.close();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNetworkChange(NetworkChangeEvent event) {
         LogUtil.e("service has receive the network change message");
-        if (webSocketUtils != null) {
+        if (webSocketUtils != null ) {
             webSocketUtils.reconnect();
         }
     }
