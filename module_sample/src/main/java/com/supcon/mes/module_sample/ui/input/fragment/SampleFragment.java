@@ -407,6 +407,8 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
             EventBus.getDefault().post(dataEvent);
 //            if (activity instanceof SampleResultInputActivity){
 //                ((SampleResultInputActivity)activity).sampleRefresh();
+//            if (activity instanceof SampleResultInputPADActivity){
+//                ((SampleResultInputPADActivity)activity).sampleRefresh();
 //            }
         }
 

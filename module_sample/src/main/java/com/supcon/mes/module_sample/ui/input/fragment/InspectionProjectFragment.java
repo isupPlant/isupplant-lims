@@ -18,6 +18,7 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.listener.InspectionSubRefreshListener;
@@ -28,6 +29,10 @@ import com.supcon.mes.module_sample.presenter.InspectionItemsPresenter;
 import com.supcon.mes.module_sample.ui.adapter.InspectionItemsListAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +91,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
         title.setText(mTitle);
 
         refreshListController.setAutoPullDownRefresh(false);
@@ -294,4 +300,20 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
 
 
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshEvent(SelectDataEvent dataEvent){
+        if ("refreshData".equals(dataEvent.getSelectTag())){
+            if (adapter!=null) {
+                adapter.clear();
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+
+    }
 }

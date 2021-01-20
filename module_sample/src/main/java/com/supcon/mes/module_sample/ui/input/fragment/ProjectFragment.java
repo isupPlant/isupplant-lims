@@ -202,6 +202,12 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
             intent.setAction(SerialWebSocketService.START_SERIAL_SERVICE);
             intent.putExtra("url", entity.getSerialServerIp());
             SupPlantApplication.getAppContext().startService(intent);
+        }else  if ("refreshData".equals(dataEvent.getSelectTag())){
+            if (adapter!=null) {
+                selectPosition = -1;
+                adapter.clear();
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 

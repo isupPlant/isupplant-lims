@@ -144,6 +144,10 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (SampleFragment.selectPosition==-1){
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                            return;
+                        }
                         projectFragment.manualCalculate();
                     }
                 });
@@ -153,6 +157,10 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (SampleFragment.selectPosition==-1){
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                            return;
+                        }
                         List<InspectionSubEntity> recordList = projectFragment.getRecordList();
                         List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
 
@@ -186,6 +194,10 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (SampleFragment.selectPosition==-1){
+                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                            return;
+                        }
                         List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
                         List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
                         List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
@@ -202,6 +214,10 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
         controller.setSubmitOnSuccessListener(new OnSuccessListener<Integer>() {
             @Override
             public void onSuccess(Integer result) {
+                if (SampleFragment.selectPosition==-1){
+                    ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
+                    return;
+                }
                 if (result == 1){//保存
                     if (null != activity.getInspectionProjectFragment()){
                         ((InspectionProjectFragment)activity.getInspectionProjectFragment()).againRefresh();
