@@ -1264,7 +1264,7 @@ public class TestReportEditController extends BaseViewController implements Qual
             if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size() > 0){
                 for (int i = 0; i < ptList.size(); i++) {
                     for (int j = 0; j < conclusionList.size(); j++) {
-                        if (!StringUtil.isEmpty(ptList.get(i).checkResult)){
+                        if (conclusionList.get(j)!=null && ptList.get(i)!=null && !StringUtil.isEmpty(ptList.get(i).checkResult)){
                             if (ptList.get(i).checkResult.equals(conclusionList.get(j).getName())){
                                 if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
                                     unQualified++;

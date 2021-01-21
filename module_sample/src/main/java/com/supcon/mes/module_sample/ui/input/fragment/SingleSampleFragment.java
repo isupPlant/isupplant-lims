@@ -265,7 +265,10 @@ public class SingleSampleFragment extends BaseRefreshRecyclerFragment<SampleEnti
         refreshListController.refreshComplete();
         if (scan) {
             onLoadFailed(errorMsg);
-        } else
+        } else {
             ToastUtils.show(context, errorMsg);
+            SelectDataEvent<String> dataEvent=new SelectDataEvent<>("refreshData","refreshData");
+            EventBus.getDefault().post(dataEvent);
+        }
     }
 }

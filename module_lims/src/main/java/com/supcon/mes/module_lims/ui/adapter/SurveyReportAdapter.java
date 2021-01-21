@@ -90,19 +90,19 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
                         SurveyReportEntity entity=getItem(getAdapterPosition());
                         bundle.putSerializable("resportEntity",entity);
                         if (entity.getTableNo().startsWith("manuReport_")){
-                            if (entity.getPending() != null && entity.getPending().openUrl != null && entity.getPending().openUrl.contains("Edit")){
+                            if (entity.getPending() != null && entity.getPending().id != null && entity.getPending().openUrl.contains("Edit")){
                                 IntentRouter.go(context, Constant.AppCode.LIMS_ProductTestReportEdit,setBundle(entity));
                             }else {
                                 IntentRouter.go(context, Constant.Router.PRODUCT_INSPREPORT_VIEW,bundle);
                             }
                         }else if(entity.getTableNo().startsWith("purchReport_")){
-                            if (entity.getPending() != null && entity.getPending().openUrl != null && entity.getPending().openUrl.contains("Edit")){
+                            if (entity.getPending() != null && entity.getPending().id != null && entity.getPending().openUrl.contains("Edit")){
                                 IntentRouter.go(context, Constant.AppCode.LIMS_IncomingTestReportEdit,setBundle(entity));
                             }else {
                                 IntentRouter.go(context, Constant.Router.PURCH_INSPREPORT_VIEW,bundle);
                             }
                         } else if (entity.getTableNo().startsWith("otherReport_")){
-                            if (entity.getPending() != null && entity.getPending().openUrl != null && entity.getPending().openUrl.contains("Edit")){
+                            if (entity.getPending() != null && entity.getPending().id != null && entity.getPending().openUrl.contains("Edit")){
                                 IntentRouter.go(context, Constant.AppCode.LIMS_OtherTestReportEdit,setBundle(entity));
                             }else {
                                 IntentRouter.go(context, Constant.Router.OTHER_INSPREPORT_VIEW,bundle);
@@ -131,7 +131,7 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
             }
 
             //批号
-            tvBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "--" : data.getBatchCode());
+            tvBatchNumber.setContent(StringUtil.isEmpty(data.getBatchCode()) ? "--" :data.getBatchCode());
 
             //制单人
             if (null == data.getCreateStaff()){
