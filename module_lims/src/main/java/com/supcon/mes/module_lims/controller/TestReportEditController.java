@@ -1290,7 +1290,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 if (unQualified > 0){  //不合格为最高优先级 只要有不合格的  表头检验结论必为不合格
                     csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.warningRed));
                     for (int i = 0; i < conclusionList.size(); i++) {
-                        if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
+                        if (conclusionList.get(i)!=null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
                             csTestConclusion.setContent(conclusionList.get(i).getName());
                             this.entity.setCheckResult(conclusionList.get(i).getName());
                             break;
@@ -1300,7 +1300,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                     csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.lightGreen));
                     if (qualified > 0){  //合格优先级排第二，如果在没有不合格的前提下  只要存在一个合格  表头检验结论必为合格
                         for (int i = 0; i < conclusionList.size(); i++) {
-                            if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)){
+                            if (conclusionList.get(i)!=null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)){
                                 csTestConclusion.setContent(conclusionList.get(i).getName());
                                 this.entity.setCheckResult(conclusionList.get(i).getName());
                                 break;
@@ -1310,9 +1310,11 @@ public class TestReportEditController extends BaseViewController implements Qual
                         if (firstGrade > 0){
                             for (int i = 0; i < conclusionList.size(); i++) {
                                 if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)){
-                                    csTestConclusion.setContent(conclusionList.get(i).getName());
-                                    this.entity.setCheckResult(conclusionList.get(i).getName());
-                                    break;
+                                    if (conclusionList.get(i)!=null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
+                                        csTestConclusion.setContent(conclusionList.get(i).getName());
+                                        this.entity.setCheckResult(conclusionList.get(i).getName());
+                                        break;
+                                    }
                                 }
                             }
                         }else {
@@ -1329,19 +1331,6 @@ public class TestReportEditController extends BaseViewController implements Qual
                                 csTestConclusion.setContent("");
                                 this.entity.setCheckResult("");
                             }
-//                            if (highGrade == ptList.size()){
-//                                for (int i = 0; i < conclusionList.size(); i++) {
-//                                    if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
-//                                        csTestConclusion.setContent(conclusionList.get(i).getName());
-//                                        this.entity.setCheckResult(conclusionList.get(i).getName());
-//                                        break;
-//                                    }
-//                                }
-//                            }else if (ptCheckResult == ptList.size()){ //表示所有的pt数据，结论均为空
-//
-//                            }else {
-//
-//                            }
 
                         }
 

@@ -22,6 +22,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+import okio.ByteString;
 
 /**
  * author huodongsheng
@@ -77,6 +78,36 @@ public class WebSocketUtils {
     }
 
 
+
+
+    /**
+     * 判断是否成功连接远程服务
+     * @return
+     */
+    public boolean connected(){
+        return webSocket!=null && status==ConnectStatus.Open;
+    }
+    /**
+     *发送纯文本数据
+     * @param data
+     */
+    public void sendData(String data){
+        if (webSocket!=null && status==ConnectStatus.Open){
+            webSocket.send(data);
+        }
+    }
+
+
+    /**
+     * 发送非纯文本数据
+     * @param data
+     */
+    public void sendData(byte[] data){
+        if (webSocket!=null && status==ConnectStatus.Open){
+            webSocket.send(ByteString.of(data));
+        }
+    }
+
     /**
      * 丢弃所有已经在队列中的消息然后残忍地关闭socket。
      */
@@ -86,13 +117,12 @@ public class WebSocketUtils {
             webSocket.cancel();
         }
     }
-
     /**
      * 请求服务器优雅地关闭连接然后等待确认。在关闭之前，所有已经在队列中的消息将被传送完毕。
      */
     public void close() {
         if (webSocket != null) {
-            webSocket.close(1000, null);
+            webSocket.close(NORMAL_CLOSURE_STATUS, null);
         }
     }
 
@@ -129,10 +159,15 @@ public class WebSocketUtils {
         }
 
         @Override
-        public void onMessage(WebSocket webSocket, String text) {
+        public void onMessage(WebSocket webSocket, String text) {//接收纯文本数据
             super.onMessage(webSocket, text);
             if (null != mWebSocketCallBack)
                 mWebSocketCallBack.onMessage(text);
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, ByteString bytes) {//接收非纯文本数据，如图片、音频文件
+            super.onMessage(webSocket, bytes);
         }
 
         @Override
