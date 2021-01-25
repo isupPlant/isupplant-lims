@@ -21,7 +21,7 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 @Controller(value = {
         SurverReportDetailController.class
 })
-@Router(value = Constant.Router.PURCH_INSPREPORT_VIEW,viewCode = "purchInspReportEdit")
+@Router(value = Constant.Router.PURCH_INSPREPORT_VIEW)
 public class PurchSurveyReportDetailActivity extends BaseRefreshActivity {
     @BindByTag("titleText")
     TextView titleText;

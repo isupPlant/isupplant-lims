@@ -22,7 +22,7 @@ import com.supcon.mes.module_product.R;
 @Controller(value = {
         SurverReportDetailController.class
 })
-@Router(value = Constant.Router.PRODUCT_INSPREPORT_VIEW,viewCode ="manuInspReportEdit")
+@Router(value = Constant.Router.PRODUCT_INSPREPORT_VIEW)
 public class ProductSurveyReportDetailActivity extends BaseRefreshActivity {
     @BindByTag("titleText")
     TextView titleText;

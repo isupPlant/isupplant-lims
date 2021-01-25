@@ -370,12 +370,19 @@ public interface ApiService {
 
     /**
      * 获取检验报告（编辑状态下）
-     * @param pendingId
      * @return
      */
     @GET("/msService/QCS/inspectReport/inspectReport/data/{id}")
-    Flowable<BAP5CommonEntity<TestReportEditHeadEntity>> getTestReportEdit(@Path("id") String id, @Query("pendingId") String pendingId);
+    Flowable<BAP5CommonEntity<TestReportEditHeadEntity>> getTestReportEdit(@Path("id") String id);
 
+    /**
+     * 通过待办获取检验申请当前列表item的数据
+     * @param moduleId
+     * @param pendingId
+     * @return
+     */
+    @GET("/msService/QCS/inspectReport/inspectReport/data/{moduleId}")
+    Flowable<BAP5CommonEntity<TestReportEditHeadEntity>> getTestReportEdit(@Path("moduleId") String moduleId, @Query("pendingId") String pendingId);
     /**
      * 根据质量标准id 获取结论
      * @param stdVersionId

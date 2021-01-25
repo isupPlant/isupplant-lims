@@ -154,7 +154,6 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
             }
         });
 
-
     }
 
     private void goRefresh() {

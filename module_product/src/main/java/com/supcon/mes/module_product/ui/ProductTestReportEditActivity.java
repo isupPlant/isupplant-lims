@@ -1,6 +1,7 @@
 package com.supcon.mes.module_product.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.WorkFlowButtonInfo;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_lims.controller.InspectionApplicationDetailController;
 import com.supcon.mes.module_lims.controller.TestReportEditController;
 import com.supcon.mes.module_lims.model.api.InspectionApplicationDetailAPI;
@@ -50,10 +52,14 @@ import io.reactivex.functions.Consumer;
  */
 @Controller(value = {TestReportEditController.class})
 @Presenter(value = {TestReportEditPresenter.class, StdJudgeSpecPresenter.class, TableTypePresenter.class})
-@Router(Constant.AppCode.LIMS_ProductTestReportEdit)
+@Router(value = "manuInspReportEdit")
 public class ProductTestReportEditActivity extends BaseRefreshActivity implements TestReportEditContract.View,
         StdJudgeSpecContract.View, TableTypeContract.View {
 
+    private boolean isAdd;
+    private String id;
+    private String pendingId;
+    PendingEntity pendingEntity;
     @BindByTag("titleText")
     TextView titleText;
 
@@ -63,9 +69,6 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
     @BindByTag("ctSupplier")
     CustomTextView ctSupplier;
 
-    private boolean isAdd;
-    private String id;
-    private String pendingId;
     private WorkFlowButtonInfo info;
 
     @Override
@@ -89,6 +92,13 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
         id = getIntent().getStringExtra("id") == null ? "" : getIntent().getStringExtra("id");
         pendingId = getIntent().getStringExtra("pendingId") == null ? "" : getIntent().getStringExtra("pendingId");
         info = (WorkFlowButtonInfo) getIntent().getSerializableExtra("info");
+        Intent intent=getIntent();
+        if (intent.hasExtra(Constant.IntentKey.PENDING_ENTITY)){
+            pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
+        }
+
+        ctSupplier.setVisibility(View.GONE);
+        titleText.setText(context.getResources().getString(R.string.lims_product_inspection_report));
     }
 
     @SuppressLint("CheckResult")
@@ -107,7 +117,11 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(id,pendingId);
+                if (pendingEntity!=null && pendingEntity.id!=null){
+                    presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(pendingEntity.modelId+"",pendingEntity.id+"");
+                }else {
+                    presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(id,"");
+                }
             }
         });
 

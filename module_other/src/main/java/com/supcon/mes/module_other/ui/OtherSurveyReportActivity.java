@@ -150,7 +150,6 @@ public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<Surve
                 presenterRouter.create(SurveyReportAPI.class).getSurveyReportList(LimsConstant.Report.OTHER_REPORT, isWhole, pageIndex, params);
             }
         });
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

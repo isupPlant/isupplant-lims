@@ -271,7 +271,7 @@ public class TestReportEditController extends BaseViewController implements Qual
 
         try {
             ScriptEngineManager manager = new ScriptEngineManager();
-            engine = manager.getEngineByName("javascript");
+            engine = manager.getEngineByExtension("js");
 
             String path1 = getAssetsCacheFile(context, "numeric.js");
             String path2 = getAssetsCacheFile(context, "numeral.min.js");
@@ -285,11 +285,14 @@ public class TestReportEditController extends BaseViewController implements Qual
             FileReader reader4 = new FileReader(path4);
             FileReader reader5 = new FileReader(path5);
 
+
             engine.eval(reader1);
             engine.eval(reader2);
             engine.eval(reader3);
             engine.eval(reader4);
             engine.eval(reader5);
+            adapter.engine=engine;
+            adapter.testReportEditController=this;
         } catch (Exception e) {
             e.printStackTrace();
         }
