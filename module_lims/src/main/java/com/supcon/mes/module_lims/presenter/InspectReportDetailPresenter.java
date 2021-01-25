@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
+import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.model.bean.InspectHeadReportEntity;
 import com.supcon.mes.module_lims.model.bean.InspectReportDetailListEntity;
@@ -82,7 +83,7 @@ public class InspectReportDetailPresenter extends InspectReportDetailContract.Pr
                         .getInspectReportDetails(url, params)
                         .onErrorReturn(error -> {
                             InspectReportDetailListEntity inspectReportDetailListEntity = new InspectReportDetailListEntity();
-                            inspectReportDetailListEntity.msg = error.getMessage();
+                            inspectReportDetailListEntity.msg = ErrorMsgHelper.msgParse(error.getMessage());
                             inspectReportDetailListEntity.success = false;
                             return inspectReportDetailListEntity;
                         })
@@ -103,11 +104,7 @@ public class InspectReportDetailPresenter extends InspectReportDetailContract.Pr
                         .submitInspectReport(path, params, reportSubmitEntity)
                         .onErrorReturn(error -> {
                             SubmitResultEntity entity = new SubmitResultEntity();
-                            if (error.getMessage().contains("503")) {
-                                entity.msg = SupPlantApplication.getAppContext().getResources().getString(R.string.lims_service_not_exist);
-                            } else {
-                                entity.msg = error.getMessage();
-                            }
+                            entity.msg = ErrorMsgHelper.msgParse(error.getMessage());
                             entity.success = false;
                             return entity;
                         })

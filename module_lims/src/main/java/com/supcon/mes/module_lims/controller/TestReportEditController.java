@@ -3,6 +3,7 @@ package com.supcon.mes.module_lims.controller;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,6 +85,7 @@ import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerComIdListEntity;
 import com.supcon.mes.module_lims.model.bean.StdVerIdEntity;
+import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.TableTypeIdEntity;
 import com.supcon.mes.module_lims.model.bean.TemporaryQualityStandardEntity;
 import com.supcon.mes.module_lims.model.bean.TestNumEntity;
@@ -231,6 +233,8 @@ public class TestReportEditController extends BaseViewController implements Qual
     private TableTypeIdEntity tableType;
     private Long asId;
     private boolean isNeedSetHead = false; //是否需求回调完成表头数据装载
+
+    SurveyReportEntity surveyReport;
     public TestReportEditController(View rootView) {
         super(rootView);
     }
@@ -239,6 +243,13 @@ public class TestReportEditController extends BaseViewController implements Qual
     public void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
+        Intent intent=getIntent();
+        if (intent.hasExtra("resportEntity")){
+            surveyReport= (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
+        }
+        if (intent.hasExtra(Constant.IntentKey.PENDING_ENTITY)) {
+            pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
+        }
     }
 
     @Override
@@ -733,7 +744,11 @@ public class TestReportEditController extends BaseViewController implements Qual
         this.entity = entity;
         this.type = type;
         if (null != entity){
-            pendingEntity = entity.getPending();
+            if (surveyReport!=null){
+                pendingEntity=surveyReport.pending;
+            }else
+                pendingEntity = entity.getPending();
+
             if (entity.getInspectId() != null){
                 //检验申请单号
                 ctTestRequestNo.setContent(entity.getInspectId().getTableNo() == null ?
