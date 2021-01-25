@@ -43,6 +43,7 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
         Bundle bundle = new Bundle();
         bundle.putString("id",entity.getId()+"");
         bundle.putString("pendingId",entity.getPending().id+"");
+        bundle.putSerializable("resportEntity",entity);
         return bundle;
     }
 

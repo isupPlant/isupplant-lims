@@ -749,6 +749,7 @@ public class TestReportEditController extends BaseViewController implements Qual
             }else
                 pendingEntity = entity.getPending();
 
+            entity.setPending(pendingEntity);
             if (entity.getInspectId() != null){
                 //检验申请单号
                 ctTestRequestNo.setContent(entity.getInspectId().getTableNo() == null ?
