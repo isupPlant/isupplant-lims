@@ -1456,6 +1456,8 @@ public class InspectionApplicationDetailController extends BaseViewController im
 
     @Override
     public void addTestRequestSaveSuccess(PendingEntity entity) {
+        if (!TextUtils.isEmpty(from))
+            from="pengding";
         ((BaseActivity)context).onLoadSuccessAndExit("操作成功", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
