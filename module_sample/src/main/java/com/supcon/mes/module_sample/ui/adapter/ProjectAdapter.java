@@ -29,6 +29,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.constant.LimsConstant;
@@ -277,6 +278,11 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
 
         @Override
         protected void update(InspectionSubEntity data) {
+            if (data.getValueSource()==null || TextUtils.isEmpty(data.getValueSource().getId())){
+                BaseIdValueEntity valueSource=new BaseIdValueEntity();
+                valueSource.setId("LIMSSample_valueSource/enter");
+                data.setValueSource(valueSource);
+            }
             //检验项目
             ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "" : data.getComName());
             ceOriginalValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);

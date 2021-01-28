@@ -48,6 +48,7 @@ public class InspectionSubEntity extends BaseEntity {
     private String recordOriginValue;
     private String recordDispValue;
     private String optionNames;
+    private BaseIdValueEntity valueSource;//来源
     private boolean conclusionState = true;  //结论状态，作用于 不合格为红色分项/合格为正常分项
     private boolean isOpen = false; //是否展开子项
     private List<String> fileUploadMultiFileIcons;//附件类型
@@ -79,6 +80,14 @@ public class InspectionSubEntity extends BaseEntity {
 
     public void setCalculateParamNames(String calculateParamNames) {
         this.calculateParamNames = calculateParamNames;
+    }
+
+    public void setValueSource(BaseIdValueEntity valueSource) {
+        this.valueSource = valueSource;
+    }
+
+    public BaseIdValueEntity getValueSource() {
+        return valueSource;
     }
 
     public String getCarryFormula() {

@@ -964,6 +964,9 @@ public class InspectionApplicationDetailController extends BaseViewController im
             if (mHeadEntity.getId()!= null) {
                 params.put("id", mHeadEntity.getId());
             }
+            if (TextUtils.isEmpty(_pc_)){
+                _pc_="111";
+            }
             params.put("__pc__", _pc_);
             presenterRouter.create(InspectApplicationSubmitAPI.class).submitInspectApplication(path, params, entity);
         }
