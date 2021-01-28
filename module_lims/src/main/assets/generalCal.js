@@ -201,6 +201,9 @@ function minus(arg1,arg2){
 }
 //求平均值函数，用来得到精确的平均值结果
 function ave(range){
+	if(range.length === 1){
+		return range[0];
+	}
 	return formulajs.AVERAGE(range);
 }
 //绝对值函数，用来得到精确的绝对值结果
@@ -214,7 +217,7 @@ function sin(arg1){
 }
 //三角函数cos
 function cos(arg1){
-	return formulajs.COS(agr1);
+	return formulajs.COS(arg1);
 }
 //三角函数tan
 function tan(agr1){
@@ -223,6 +226,10 @@ function tan(agr1){
 //标准偏差
 function stdev(range){
 	return formulajs.STDEV.S(range);
+}
+//基于以参数形式给出的整个样本总体计算标准偏差
+function stdevp(range){
+	return formulajs.STDEV.P(range);
 }
 //相对偏差
 function rstdev(range){
@@ -333,6 +340,9 @@ function acot(arg1){
 }
 //求和
 function sum(range){
+  	if(range === undefined || range === null){
+       return Error;
+    }
 	return formulajs.SUM(range);
 }
 
@@ -393,8 +403,9 @@ function subparam(arg1){
 	var t1=0;
 	try{t1=arg1.toString().split(".")[1].length}catch(e){}
 
-	if(t1>7){
-		arg1=arg1.toString().substr(0,arg1.toString().indexOf('.')+8);
+  	//hfq 2020-12-09 从7位改为16位
+	if(t1 > 16){
+		arg1=arg1.toString().substr(0,arg1.toString().indexOf('.')+17);
 	}
 	return arg1;
 }
@@ -553,6 +564,18 @@ function autoCastDispValue(originValue,carrySpace,carryRule,digitType,limitType,
 *	roundingUp进一法    add by hfq  2016/04/12
 **/
 function carrySpaceDataCarry(dData,dPrecision,carryRule) {
+	dPrecision = dPrecision.toString();
+	//定位方式为修约间隔
+	var newValueResult = carrySpaceData(dData, parseFloat(dPrecision), carryRule);
+	var decLength = 0;
+	if(dPrecision.indexOf(".")!=-1){
+		decLength = dPrecision.substring(dPrecision.indexOf(".")+1).length;
+	}
+	return parseFloat(newValueResult).toFixed(decLength);
+}
+
+
+function carrySpaceData(dData,dPrecision,carryRule) {
 	var tempData;
 	var tempstr;
 	var pos = 0;
@@ -616,8 +639,11 @@ function carrySpaceDataCarry(dData,dPrecision,carryRule) {
 *	roundingUp:	进一法    add by hfq  2016/04/12
 **/
 function decLengthDataCarry(dData, decimalDigit, carryRule){
-	var res = carrySpaceDataCarry(dData, accDiv(1,Math.pow(10,decimalDigit)), carryRule);
-	return res;
+	var carrySpaceNew = Math.pow(10, -1 * parseInt(decimalDigit));
+	carrySpaceNew = parseFloat(carrySpaceNew.toFixed(abs(decimalDigit)));
+	//定位方式为小数位数
+	var newValueResult = carrySpaceData(dData, carrySpaceNew, carryRule);
+	return parseFloat(newValueResult).toFixed(parseInt(decimalDigit));
 }
 
 /**
@@ -629,24 +655,17 @@ function decLengthDataCarry(dData, decimalDigit, carryRule){
 *	roundingUp:	进一法    add by hfq  2016/04/12
 **/
 function significanceDigitDataCarry(dData, significanceDigit, carryRule){
-
-	var tempData;
-	var tempstr;
-	var pos = 0;
-	var intPart;
-	var decPart;
-	var res;
-	var tmpFlag = true; ////正负数的判断的标志  true为正数
-
-	tempData = Math.abs(dData);//绝对值
-	tempstr = String(tempData);
-	pos = tempstr.length - tempstr.indexOf('.') - 1;
-	tempData = accMul(tempData, Math.pow(10, pos));
-  	tempstr = String(tempData);
-	tempData = parseInt(accDiv(tempData, Math.pow(10, tempstr.length - significanceDigit -1)));
-	res = carrySpaceDataCarry(tempData, 10, carryRule);
-	res = accDiv(res, Math.pow(10, pos - (tempstr.length - significanceDigit - 1)));
-	return res;
+	var decLength = 0;
+	var originValueNew  = dData;
+	do{  //循环乘，直到没小数
+		decLength--;
+	} while((originValueNew = accMul(originValueNew,10)).toString().indexOf('.')!=-1);
+	decLength += originValueNew.toString().length;//最高位数
+	var fixed = parseInt(decLength)-parseInt(significanceDigit);
+	var carrySpaceNew = Math.pow(10, fixed); //计算修约间隔
+	carrySpaceNew = parseFloat(carrySpaceNew.toFixed(abs(fixed)));
+	var newValueResult = carrySpaceData(dData, carrySpaceNew, carryRule);
+	return parseFloat(newValueResult).toFixed(fixed<0?-fixed:0);
 }
 
 
@@ -660,7 +679,7 @@ function significanceDigitDataCarry(dData, significanceDigit, carryRule){
 **/
 function roundingValue(originValue, digitType, carrySpace, carryType, carryFormula){
 	//如果修约规则和自定义修约规则都为空，表示不需要修约
-	if(digitType == null && (carryFormula == null || carryFormula == "")){
+	if((digitType == null || carrySpace === null || carryType === null) && (carryFormula === null || carryFormula === "")){
 		return originValue;
 	}
 
@@ -673,16 +692,32 @@ function roundingValue(originValue, digitType, carrySpace, carryType, carryFormu
 		//修约规则为空，使用修约规则修约
 
 		if(digitType.id == "LIMSBasic_digitType/decLength"){
+          	var carrySpaceNew = Math.pow(10, -1 * parseInt(carrySpace));
+          	carrySpaceNew = parseFloat(carrySpaceNew.toFixed(abs(carrySpace)));
 			//定位方式为小数位数
-			return decLengthDataCarry(originValue, parseFloat(carrySpace), carryType.id.split("/")[1]);
+          	var newValueResult = carrySpaceData(originValue, carrySpaceNew, carryType.id.split("/")[1]);
+          	return parseFloat(newValueResult).toFixed(parseInt(carrySpace));
 
 		}else if(digitType.id == "LIMSBasic_digitType/carrySpace"){
 			//定位方式为修约间隔
-			return carrySpaceDataCarry(originValue, parseFloat(carrySpace), carryType.id.split("/")[1]);
-
+			var newValueResult = carrySpaceData(originValue, parseFloat(carrySpace), carryType.id.split("/")[1]);
+			var decLength = 0;
+            if(carrySpace.indexOf(".")!=-1){
+                decLength = carrySpace.substring(carrySpace.indexOf(".")+1).length;
+            }
+          	return parseFloat(newValueResult).toFixed(decLength);
 		}else if(digitType.id == "LIMSBasic_digitType/significanceDigit"){
-			//定位方式为有效数字
-			return significanceDigitDataCarry(originValue, parseFloat(carrySpace), carryType.id.split("/")[1]);
+          	var decLength = 0;
+            var originValueNew  = originValue;
+            do{  //循环乘，直到没小数
+                decLength--;
+            } while((originValueNew = accMul(originValueNew,10)).toString().indexOf('.')!=-1);
+            decLength += originValueNew.toString().length;//最高位数
+            var fixed = parseInt(decLength)-parseInt(carrySpace);
+			var carrySpaceNew = Math.pow(10, fixed); //计算修约间隔
+          	carrySpaceNew = parseFloat(carrySpaceNew.toFixed(abs(fixed)));
+			var newValueResult = carrySpaceData(originValue, carrySpaceNew, carryType.id.split("/")[1]);
+          	return parseFloat(newValueResult).toFixed(fixed<0?-fixed:0);
 		}
 	}
   	return null;
@@ -772,6 +807,11 @@ function gradeDetermine(value, limits, specialResultStr, limitType){
 	if(limits != null && limits.length > 0){
 		var gradeSort = -1;
 		for(var i = 0; i < limits.length; i++){
+          	if(limits[i].judgeCond === null ){
+            	otherRes = null;
+              	gradeFlag = true;
+              	continue;
+            }
 			var judgeCond = limits[i].judgeCond;
           	var str = new String(judgeCond);
 			judgeCond = str.replace(/\[Result]/g, "resultVal");
@@ -794,4 +834,3 @@ function gradeDetermine(value, limits, specialResultStr, limitType){
 	}
 	return limits[0].unQualifiedValue;
 }
-
