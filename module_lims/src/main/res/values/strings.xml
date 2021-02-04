@@ -239,12 +239,9 @@
     <string name="lims_insert">添加</string>
     <string name="lims_report_review">报告审核中</string>
     <string name="lims_acquisition_mode_error">移动端暂不支持该设备的采集方式</string>
-    <string name="lims_retention_generate">生成</string>
     <string name="lims_day">日</string>
     <string name="lims_year">年</string>
     <string name="lims_month">月</string>
-    <string name="lims_retention_date_tip">留样日期不能为空!</string>
-    <string name="lims_retention_days_tips">留样日期不能为空!</string>
     <string name="lims_no_table">该单据不存在,请保存后进行操作!</string>
     <string name="lims_retention_unit_tip">计量单位不允许为空！</string>
     <string name="lims_retention_quantity_tip">留样数量不允许为空！</string>
@@ -264,4 +261,16 @@
     <string name="lims_parsing">正在解析文件...</string>
     <string name="lims_select_parse_file">请选择一个解析的文件!</string>
     <string name="lims_no_parse_file">没有可解析的文件!</string>
+    <string name="lims_retention_generate">生成</string>
+    <string name="lims_retention_date_tip">留样日期不能为空!</string>
+    <string name="lims_retention_days_tips">留样日期不能为空!</string>
+    <string name="lims_unit">单位</string>
+    <string name="lims_unit_ref">单位参照</string>
+    <string name="lims_unit_name">单位名称</string>
+    <string name="lims_unit_code">单位编码</string>
+    <string name="lims_sample_ref">样品参照</string>
+    <string name="lims_ware">仓库</string>
+    <string name="lims_ware_store">货位</string>
+    <string name="lims_ware_store_name">货位名称</string>
+    <string name="lims_ware_store_code">货位编码</string>
 </resources>

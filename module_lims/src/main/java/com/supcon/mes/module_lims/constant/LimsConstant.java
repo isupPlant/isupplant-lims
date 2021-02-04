@@ -120,6 +120,5 @@ public interface LimsConstant {
         String SAMPLE_UNIT_REF="SAMPLE_UNIT_REF";
         String WARE_STORE_REF="WARE_STORE_REF";
         String retentionEdit="retentionEdit";
-
     }
 }

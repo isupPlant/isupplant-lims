@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        android:background="@drawable/shape_frame_gray"
+        >
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/sampleUnitTv"
+            style="@style/yh_custom_view_horizontal_style"
+            android:tag="sampleUnitTv"
+            app:gravity="right|center_vertical"
+            app:text="@string/lims_unit"
+            app:text_color="@color/font_333333"
+            app:content_value="111"
+            app:content_color="@color/black_text"
+            />
+    </LinearLayout>
+</LinearLayout>

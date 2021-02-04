@@ -241,12 +241,9 @@
     <string name="lims_request_reference">Inspection application reference</string>
     <string name="lims_insert">Add</string>
     <string name="lims_acquisition_mode_error">The mobile terminal does not support the acquisition mode of the device</string>
-    <string name="lims_retention_generate">Generate</string>
     <string name="lims_day">Day</string>
     <string name="lims_year">Year</string>
     <string name="lims_month">Month</string>
-    <string name="lims_retention_date_tip">Sample retention date cannot be blank!</string>
-    <string name="lims_retention_days_tips">Sample retention date cannot be blank!</string>
     <string name="lims_no_table">This document does not exist. Please save it!</string>
     <string name="lims_retention_unit_tip">Unit of measurement cannot be empty！</string>
     <string name="lims_retention_quantity_tip">Sample quantity cannot be empty！</string>
@@ -265,5 +262,16 @@
     <string name="lims_parsing">Parsing file...</string>
     <string name="lims_select_parse_file">Please select a parsed file!</string>
     <string name="lims_no_parse_file">No files to parse!</string>
-
+    <string name="lims_retention_generate">Generate</string>
+    <string name="lims_retention_date_tip">Sample retention date cannot be blank!</string>
+    <string name="lims_retention_days_tips">Sample retention date cannot be blank!</string>
+    <string name="lims_unit">Unit</string>
+    <string name="lims_unit_ref">Unit list reference</string>
+    <string name="lims_unit_name">Unit Name</string>
+    <string name="lims_unit_code">Unit Code</string>
+    <string name="lims_sample_ref">Sample list reference</string>
+    <string name="lims_ware">WareHouse</string>
+    <string name="lims_ware_store">Store</string>
+    <string name="lims_ware_store_name">Store Name</string>
+    <string name="lims_ware_store_code">Store Code</string>
 </resources>

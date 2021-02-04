@@ -8,6 +8,12 @@ import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
 import com.supcon.mes.module_lims.model.bean.ProductIdEntity;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
+import com.supcon.mes.middleware.model.bean.SafetyHiddenEntity;
+import com.supcon.mes.middleware.model.bean.Unit;
+import com.supcon.mes.middleware.model.bean.wom.MaterialEntity;
+import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
+import com.supcon.mes.module_lims.model.bean.ProductIdEntity;
+import com.supcon.mes.module_lims.model.bean.SampleIdEntity;
 
 /**
  * Created by wanghaidong on 2020/8/5

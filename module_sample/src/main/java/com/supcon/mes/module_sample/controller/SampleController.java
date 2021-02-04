@@ -1,24 +1,18 @@
-package com.supcon.mes.module_retention.controller;
+package com.supcon.mes.module_sample.controller;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.controller.BaseViewController;
-import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
 import com.supcon.mes.middleware.model.event.EventInfo;
-import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
-import com.supcon.mes.module_lims.listener.OnTabClickListener;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,31 +28,15 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.functions.Consumer;
 
 /**
- * author huodongsheng
- * on 2020/7/6
- * class name 检验报告列表Controller
+ * author 王海东
+ * on 2020/8/29
+ * class name 样品结果录入
  */
-public class RetentionController extends BaseViewController {
+public class SampleController extends BaseViewController {
 
-    @BindByTag("filterAll")
-    RadioButton filterAll;
-
-    @BindByTag("filterBacklog")
-    RadioButton filterBacklog;
-
-    @BindByTag("tvAllLine")
-    TextView tvAllLine;
-
-    @BindByTag("tvBacklogLine")
-    TextView tvBacklogLine;
 
     @BindByTag("searchTitle")
     SearchTitleBar searchTitle;
-
-    @BindByTag("leftBtn")
-    CustomImageButton leftBtn;
-
-    private OnTabClickListener mOnTabClickListener;
     private OnSearchOverListener mOnSearchOverListener;
 
     private SearchResultEntity resultEntity;
@@ -70,7 +48,7 @@ public class RetentionController extends BaseViewController {
     private List<String> searchTypeList = new ArrayList<>();
     private Map<String, Object> params = new HashMap<>();
 
-    public RetentionController(View rootView) {
+    public SampleController(View rootView) {
         super(rootView);
     }
 
@@ -79,31 +57,21 @@ public class RetentionController extends BaseViewController {
         super.onInit();
         EventBus.getDefault().register(this);
 
-        searchTypeList.add(getRootView().getResources().getString(R.string.lims_sample_code));
-        searchTypeList.add(getRootView().getResources().getString(R.string.lims_batch_number));
-        searchTypeList.add(getRootView().getResources().getString(R.string.lims_materiel_name));
-        searchTypeList.add(getRootView().getResources().getString(R.string.lims_materiel_code));
-        searchTypeList.add(getRootView().getResources().getString(R.string.lims_document_number));
-        searchTypeList.add(getRootView().getResources().getString(R.string.lims_sampling_point));
-        searchTypeList.add(getRootView().getResources().getString(R.string.lims_keeper));
+        searchTypeList.add(getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_code));
+        searchTypeList.add(getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_name));
     }
 
     @Override
     public void initView() {
         super.initView();
-
+        searchTitle.showScan(false);
     }
 
     @SuppressLint("CheckResult")
     @Override
     public void initListener() {
         super.initListener();
-        leftBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((Activity)context).onBackPressed();
-            }
-        });
+
 
         //当前页面搜索图标的的点击事件
         RxView.clicks(searchTitle.getSearchBtn())
@@ -152,29 +120,6 @@ public class RetentionController extends BaseViewController {
             }
         });
 
-        RxView.clicks(filterAll)
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        if (null != mOnTabClickListener) {
-                            setVisibilityLine(true);
-                            mOnTabClickListener.onTabClick(true);
-                        }
-                    }
-                });
-
-        RxView.clicks(filterBacklog)
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        if (null != mOnTabClickListener) {
-                            setVisibilityLine(false);
-                            mOnTabClickListener.onTabClick(false);
-                        }
-                    }
-                });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -187,20 +132,11 @@ public class RetentionController extends BaseViewController {
                 searchTitle.showSearchBtn(title, searchKey);
             }
             cleanParams();
-            if (getRootView().getResources().getString(R.string.lims_sample_code).equals(resultEntity.key)){
+
+            if (getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_code).equals(resultEntity.key)){
                 params.put(Constant.BAPQuery.CODE, resultEntity.result);
-            }else if (getRootView().getResources().getString(R.string.lims_batch_number).equals(resultEntity.key)){
-                params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
-            }else if (getRootView().getResources().getString(R.string.lims_materiel_name).equals(resultEntity.key)){
-                params.put("MATER_NAME",resultEntity.result);
-            }else if (getRootView().getResources().getString(R.string.lims_materiel_code).equals(resultEntity.key)){
-                params.put("MATER_CODE",resultEntity.result);
-            }else if (getRootView().getResources().getString(R.string.lims_document_number).equals(resultEntity.key)){
-                params.put(Constant.BAPQuery.TABLE_NO, resultEntity.result);
-            }else if (getRootView().getResources().getString(R.string.lims_sampling_point).equals(resultEntity.key)){
-                params.put(Constant.BAPQuery.PICKSITE, resultEntity.result);
-            }else if (getRootView().getResources().getString(R.string.lims_keeper).equals(resultEntity.key)){
-                params.put(Constant.BAPQuery.STAFF_NAME,resultEntity.result);
+            }else if (getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_name).equals(resultEntity.key)){
+                params.put(Constant.BAPQuery.NAME, resultEntity.result);
             }
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);
@@ -232,25 +168,8 @@ public class RetentionController extends BaseViewController {
         EventBus.getDefault().unregister(this);
     }
 
-
-    public void setTabClickListener(OnTabClickListener mTabClickListener) {
-        this.mOnTabClickListener = mTabClickListener;
-    }
-
     public void setSearchOverListener(OnSearchOverListener mOnSearchOverListener) {
         this.mOnSearchOverListener = mOnSearchOverListener;
     }
-
-    private void setVisibilityLine(boolean showAll){
-        if (showAll){
-            tvAllLine.setVisibility(View.VISIBLE);
-            tvBacklogLine.setVisibility(View.GONE);
-        }else {
-            tvAllLine.setVisibility(View.GONE);
-            tvBacklogLine.setVisibility(View.VISIBLE);
-        }
-
-    }
-
 
 }

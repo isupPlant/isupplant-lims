@@ -50,7 +50,7 @@
             android:background="@drawable/sl_press_no_stroke"
             android:id="@+id/cancelTv"
             android:tag="cancelTv"
-            android:text="@string/common_cancel"
+            android:text="@string/cancel"
             android:textColor="@color/black"
             android:gravity="center"/>
         <View

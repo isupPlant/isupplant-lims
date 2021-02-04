@@ -101,7 +101,7 @@
                     android:layout_height="0.5dp"
                     android:background="#ffdcdcdc" />
 
-                <com.supcon.mes.mbap.view.CustomEditText
+                <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/retainQtyTv"
                     style="@style/yh_custom_view_horizontal_style"
                     android:tag="retainQtyTv"

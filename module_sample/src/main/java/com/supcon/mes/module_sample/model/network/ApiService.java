@@ -6,6 +6,8 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
+import com.supcon.mes.middleware.model.bean.Unit;
+import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
@@ -21,17 +23,21 @@ import com.supcon.mes.module_sample.model.bean.SampleSignatureEntity;
 import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
+import com.supcon.mes.module_sample.model.bean.WareStoreEntity;
 
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -156,9 +162,9 @@ public interface ApiService {
     @GET("/inter-api/signature/buttonSignature/getSignatureEnabled")
     Flowable<BAP5CommonEntity<SampleSignatureEntity>> getSignatureEnabled(@Query("buttonCode") String buttonCode);
 
-//    @POST("/msService/baseService/workbench/uploadFile")
-//    @Multipart
-//    Flowable<BAP5CommonEntity<FileDataEntity>> bapUploadFile(@Part List<MultipartBody.Part> partList);
+    @POST("/msService/baseService/workbench/uploadFile")
+    @Multipart
+    Flowable<BAP5CommonEntity<FileDataEntity>> bapUploadFile(@Part List<MultipartBody.Part> partList);
 
     /**
      * 获取样品台账列表数据
@@ -191,5 +197,29 @@ public interface ApiService {
      */
     @GET
     Flowable<List<Map<String,Object>>> getFormatDataByCollectCode(@Url String url);
+
+    /**
+     * 获取样品参照列表
+     * @param params
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleInfo/sampleInfoRefPart-query")
+    Flowable<BAP5CommonEntity<CommonListEntity<SampleEntity>>> getSampleRefInfo(@Body Map<String,Object> params);
+
+    /**
+     * 获取样品参照的单位列表
+     * @param params
+     * @return
+     */
+    @POST("/msService/BaseSet/unit/unit/unitRef-query")
+    Flowable<BAP5CommonEntity<CommonListEntity<BaseSystemBackEntity>>> getSampleUnitRefInfo(@Body Map<String,Object> params);
+
+    /**
+     * 获取仓库货位参照列表
+     * @param params
+     * @return
+     */
+    @POST("/msService/BaseSet/warehouse/storeSet/storeSetFilterRef-query")
+    Flowable<BAP5CommonEntity<CommonListEntity<WareStoreEntity>>> getWareStoreRefInfo(@Body Map<String,Object> params);
 
 }

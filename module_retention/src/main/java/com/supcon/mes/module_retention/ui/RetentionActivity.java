@@ -23,6 +23,7 @@ import com.supcon.mes.middleware.model.api.DeploymentAPI;
 import com.supcon.mes.middleware.model.bean.DeploymentEntity;
 import com.supcon.mes.middleware.model.contract.DeploymentContract;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.presenter.DeploymentPresenter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
@@ -54,7 +55,7 @@ import java.util.concurrent.TimeUnit;
  * Email:wanghaidong1@supcon.com
  */
 @Router(Constant.AppCode.LIMS_Retention)
-@Presenter({RetentionPresenter.class})
+@Presenter({RetentionPresenter.class, DeploymentPresenter.class})
 @Controller({RetentionController.class})
 public class RetentionActivity extends BaseRefreshRecyclerActivity<RetentionEntity> implements RetentionContract.View, DeploymentContract.View {
     @BindByTag("titleText")
@@ -141,7 +142,6 @@ public class RetentionActivity extends BaseRefreshRecyclerActivity<RetentionEnti
         });
 
         presenterRouter.create(DeploymentAPI.class).getCurrentDeployment("retentionWorkFlow");
-
         getController(RetentionController.class).setSearchOverListener(new OnSearchOverListener() {
             @Override
             public void onSearchOverClick(Map<String, Object> map) {

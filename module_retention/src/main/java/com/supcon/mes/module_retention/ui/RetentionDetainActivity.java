@@ -266,7 +266,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
             materialTv.setValue(String.format("%s(%s)", retentionEntity.productId.getName(), retentionEntity.productId.getCode()));
         }
         batchCodeTv.setValue(retentionEntity.batchCode);
-        unitTv.setValue(retentionEntity.unitId != null ? retentionEntity.unitId.name : "");
+        unitTv.setValue(retentionEntity.unitId != null ? retentionEntity.unitId.getName() : "");
         retainQtyTv.setValue(Util.big2(retentionEntity.retainQty));
         retainDateTv.setValue(retentionEntity.retainDate != null ? DateUtil.dateFormat(retentionEntity.retainDate) : "");
         retainDaysTv.setValue(String.format("%s%s", retentionEntity.retainDays != null ? retentionEntity.retainDays.toString() : "", retentionEntity.retainUnit != null ? retentionEntity.retainUnit.getValue() : ""));
