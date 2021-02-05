@@ -21,6 +21,8 @@ import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.utils.GridSpaceItemDecoration;
+import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
@@ -83,21 +85,11 @@ public class SampleListActivity extends BaseRefreshRecyclerActivity<SampleEntity
         titleText.setText(R.string.lims_sample_ref);
         if (DeivceHelper.getInstance().isTabletDevice(SupPlantApplication.getAppContext())){
             contentView.setLayoutManager(new GridLayoutManager(context,2));
+            contentView.addItemDecoration(new GridSpaceItemDecoration(DisplayUtil.dip2px(5, context),2));
         }else {
             contentView.setLayoutManager(new LinearLayoutManager(context));
+            contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         }
-        contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                int childLayoutPosition = parent.getChildAdapterPosition(view);
-                if (childLayoutPosition == 0) {
-                    outRect.set(DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(13, context), DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(13, context));
-                } else {
-                    outRect.set(DisplayUtil.dip2px(12, context), 0, DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(13, context));
-                }
-            }
-        });
         scanRightBtn.setVisibility(View.GONE);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
