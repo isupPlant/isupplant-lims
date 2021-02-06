@@ -110,6 +110,8 @@ public class SampleListActivity extends BaseRefreshRecyclerActivity<SampleEntity
             public void onSearchOverClick(Map<String, Object> map) {
                 queryParam.clear();
                 queryParam.putAll(map);
+                adapter.clear();
+                adapter.notifyDataSetChanged();
                 refreshListController.refreshBegin();
             }
         });
