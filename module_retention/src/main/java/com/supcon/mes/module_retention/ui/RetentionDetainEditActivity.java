@@ -684,6 +684,15 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         }
         remainDaysUnitTv.setText(retentionEntity.retainUnit != null ? retentionEntity.retainUnit.getValue() : "");
 
+        if (retentionEntity.retainUnit!=null && !TextUtils.isEmpty(retentionEntity.retainUnit.getId())){
+            for (int i = 0; i < remainDaysBaseIdValueEntities.size(); i++) {
+                BaseIdValueEntity baseIdValueEntity=remainDaysBaseIdValueEntities.get(i);
+                if (retentionEntity.retainUnit.getId().equals(baseIdValueEntity.getId())){
+                    selectDateType=i;
+                    break;
+                }
+            }
+        }
         validDateTv.setDate(retentionEntity.validDate != null ? DateUtil.dateFormat(retentionEntity.validDate) : "");
         validDateTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         staffTv.setValue(retentionEntity.staffId != null ? retentionEntity.staffId.getName() : "");
