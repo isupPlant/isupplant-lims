@@ -30,12 +30,12 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.TimeUtil;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleInputController;
 
 import com.supcon.mes.module_sample.model.api.SampleListAPI;
-import com.supcon.mes.module_sample.model.bean.SampleEntity;
 
 import com.supcon.mes.module_sample.model.contract.SampleListContract;
 import com.supcon.mes.module_sample.presenter.SingleSamplePresenter;

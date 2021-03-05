@@ -30,6 +30,7 @@ import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.R;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.ReferenceController;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.model.api.SerialDeviceRefAPI;
@@ -54,7 +55,7 @@ import io.reactivex.functions.Consumer;
  * on 2021/1/11
  * class name
  */
-@Router(value = Constant.AppCode.LIMS_SerialRef)
+@Router(value = LimsConstant.AppCode.LIMS_SerialRef)
 @Presenter(value = {SerialDeviceRefPresenter.class})
 @Controller(value = {ReferenceController.class})
 public class SerialDeviceReferenceActivity extends BaseRefreshRecyclerActivity<SerialDeviceEntity> implements SerialDeviceRefContract.View {
@@ -64,16 +65,10 @@ public class SerialDeviceReferenceActivity extends BaseRefreshRecyclerActivity<S
     @BindByTag("titleText")
     TextView titleText;
 
-    @BindByTag("ll_select_all")
-    LinearLayout ll_select_all;
-
-    @BindByTag("iv_select")
-    ImageView iv_select;
 
     @BindByTag("btn_confirm")
     TextView btn_confirm;
 
-    //private boolean isSelectAll = false;
     private SerialDeviceReferenceAdapter adapter;
     private String selectTag;
     private Map<String, Object> params = new HashMap<>();
@@ -158,40 +153,10 @@ public class SerialDeviceReferenceActivity extends BaseRefreshRecyclerActivity<S
                     }
                     adapter.getItem(position).setSelect(true);
                     adapter.notifyDataSetChanged();
-//                    int a = 0;
-//                    for (int i = 0; i < adapter.getList().size(); i++) {
-//                        if (adapter.getList().get(i).isSelect()) { //集合中存在勾选状态的 数据的话
-//                            a++;
-//                        }
-//                    }
-//                    if (a == adapter.getList().size()) {
-//                        setSelectAllStyle(true);
-//                    } else {
-//                        setSelectAllStyle(false);
-//                    }
                 }
             }
         });
 
-//        RxView.clicks(ll_select_all)
-//                .throttleFirst(300, TimeUnit.MILLISECONDS)
-//                .subscribe(new Consumer<Object>() {
-//                    @Override
-//                    public void accept(Object o) throws Exception {
-//                        if (!isSelectAll) {
-//                            for (int i = 0; i < adapter.getList().size(); i++) {
-//                                adapter.getList().get(i).setSelect(true);
-//                            }
-//                        } else {
-//                            for (int i = 0; i < adapter.getList().size(); i++) {
-//                                adapter.getList().get(i).setSelect(false);
-//                            }
-//                        }
-//                        isSelectAll = !isSelectAll;
-//                        setSelectAllStyle(isSelectAll);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                });
 
         RxView.clicks(btn_confirm)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
@@ -220,13 +185,6 @@ public class SerialDeviceReferenceActivity extends BaseRefreshRecyclerActivity<S
                 });
     }
 
-//    private void setSelectAllStyle(boolean isSelectAll) {
-//        if (isSelectAll) {
-//            iv_select.setImageResource(R.drawable.ic_check_yes);
-//        } else {
-//            iv_select.setImageResource(R.drawable.ic_check_no);
-//        }
-//    }
 
     private void goRefresh() {
         refreshListController.refreshBegin();

@@ -12,7 +12,7 @@ public class BaseSystemBackEntity extends BaseEntity {
     private Long id;
     private Integer version;
     private String code;
-    private String name;
+    public String name;
 
 
 

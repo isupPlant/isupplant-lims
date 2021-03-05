@@ -16,6 +16,7 @@ public class ProductIdEntity extends BaseEntity {
     private BaseIdValueEntity isBatch;
     private BaseLongIdNameEntity mainUnit;
     private Unit unitId;
+    private BaseSystemBackEntity sampleUnit;
 
     public String getCode() {
         return code;
@@ -73,5 +74,13 @@ public class ProductIdEntity extends BaseEntity {
 
     public void setUnitId(Unit unitId) {
         this.unitId = unitId;
+    }
+
+    public BaseSystemBackEntity getSampleUnit() {
+        return sampleUnit;
+    }
+
+    public void BaseSystemBackEntity(BaseSystemBackEntity sampleUnit) {
+        this.sampleUnit = sampleUnit;
     }
 }

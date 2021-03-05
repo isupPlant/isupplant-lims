@@ -74,7 +74,7 @@ import java.util.concurrent.TimeUnit;
         GetPowerCodeController.class,
         WorkFlowViewController.class
 })
-@Router(value = Constant.Router.RETENTION_VIEW, viewCode = "retentionEdit")
+@Router(value = Constant.Router.RETENTION_VIEW)
 public class RetentionDetainActivity extends BaseRefreshActivity implements RetentionDetailContract.View {
 
     @BindByTag("leftBtn")

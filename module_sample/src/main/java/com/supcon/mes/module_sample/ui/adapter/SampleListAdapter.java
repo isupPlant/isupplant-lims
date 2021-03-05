@@ -2,7 +2,6 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,8 +11,8 @@ import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.bean.SampleEntity;
 
 /**
  * author huodongsheng

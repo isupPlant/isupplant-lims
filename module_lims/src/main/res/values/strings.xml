@@ -240,5 +240,18 @@
     <string name="lims_report_review">报告审核中</string>
     <string name="lims_acquisition_mode_error">移动端暂不支持该设备的采集方式</string>
     <string name="lims_select_sample_data">请选择一个样品!</string>
+    <string name="lims_retention_generate">生成</string>
+    <string name="lims_day">日</string>
+    <string name="lims_year">年</string>
+    <string name="lims_month">月</string>
+    <string name="lims_retention_date_tip">留样日期不能为空!</string>
+    <string name="lims_retention_days_tips">留样日期不能为空!</string>
+    <string name="lims_no_table">该单据不存在,请保存后进行操作!</string>
+    <string name="lims_retention_unit_tip">计量单位不允许为空！</string>
+    <string name="lims_retention_quantity_tip">留样数量不允许为空！</string>
+    <string name="lims_retention_staff_tip">留样人不允许为空！</string>
+    <string name="lims_retention_dept_tip">留样部门不允许为空！</string>
+    <string name="lims_retention_keeper_tip">保管员不允许为空！</string>
+
 
 </resources>

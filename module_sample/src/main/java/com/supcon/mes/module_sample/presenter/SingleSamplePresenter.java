@@ -9,7 +9,7 @@ import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.SubcondEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.constant.LimsConstant;
-import com.supcon.mes.module_sample.model.bean.SampleEntity;
+import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.contract.SampleListContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 

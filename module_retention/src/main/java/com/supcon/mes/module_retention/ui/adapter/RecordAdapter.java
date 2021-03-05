@@ -3,6 +3,7 @@ package com.supcon.mes.module_retention.ui.adapter;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -44,6 +45,8 @@ public class RecordAdapter extends BaseListDataRecyclerViewAdapter<RecordEntity>
         LinearLayout ll_real;
         @BindByTag("ll_state")
         LinearLayout ll_state;
+        @BindByTag("itemViewDelBtn")
+        TextView itemViewDelBtn;
         public RecordViewHolder(Context context) {
             super(context);
         }
@@ -67,6 +70,12 @@ public class RecordAdapter extends BaseListDataRecyclerViewAdapter<RecordEntity>
                         .subscribe(o -> {
                             selectPosition = getAdapterPosition();
                             notifyDataSetChanged();
+                        });
+            }else {
+                RxView.clicks(itemViewDelBtn)
+                        .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                        .subscribe(o -> {
+                            onItemChildViewClick(itemView,1);
                         });
             }
         }

@@ -242,4 +242,16 @@
     <string name="lims_insert">Add</string>
     <string name="lims_acquisition_mode_error">The mobile terminal does not support the acquisition mode of the device</string>
     <string name="lims_select_sample_data">Please select a sample!</string>
+    <string name="lims_retention_generate">Generate</string>
+    <string name="lims_day">Day</string>
+    <string name="lims_year">Year</string>
+    <string name="lims_month">Month</string>
+    <string name="lims_retention_date_tip">Sample retention date cannot be blank!</string>
+    <string name="lims_retention_days_tips">Sample retention date cannot be blank!</string>
+    <string name="lims_no_table">This document does not exist. Please save it!</string>
+    <string name="lims_retention_unit_tip">Unit of measurement cannot be empty！</string>
+    <string name="lims_retention_quantity_tip">Sample quantity cannot be empty！</string>
+    <string name="lims_retention_staff_tip">Sample holder cannot be empty！</string>
+    <string name="lims_retention_dept_tip">Sample retention department cannot be empty！</string>
+    <string name="lims_retention_keeper_tip">Keeper cannot be empty！</string>
 </resources>

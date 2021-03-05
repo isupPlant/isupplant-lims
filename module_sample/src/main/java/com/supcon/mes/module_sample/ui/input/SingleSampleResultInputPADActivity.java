@@ -2,15 +2,12 @@ package com.supcon.mes.module_sample.ui.input;
 
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
-import android.widget.FrameLayout;
 
-import com.app.annotation.BindByTag;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.ui.input.fragment.SingleProjectFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.SingleSampleFragment;
 

@@ -14,6 +14,7 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.StringUtil;
+import com.supcon.mes.middleware.util.UrlUtil;
 import com.supcon.mes.module_retention.IntentRouter;
 import com.supcon.mes.module_retention.R;
 import com.supcon.mes.module_retention.model.bean.RetentionEntity;
@@ -75,9 +76,15 @@ public class RetentionAdapter extends BaseListDataRecyclerViewAdapter<RetentionE
             RxView.clicks(itemView)
                     .throttleFirst(2000, TimeUnit.MICROSECONDS)
                     .subscribe(o -> {
+                        RetentionEntity data=getItem(getAdapterPosition());
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("retentionEntity", getItem(getAdapterPosition()));
-                        IntentRouter.go(context, Constant.Router.RETENTION_VIEW, bundle);
+                        String viewCode = UrlUtil.getPendingViewCode(data.pending.openUrl);
+                        bundle.putSerializable("retentionEntity", data);
+                        if(!TextUtils.isEmpty(viewCode))
+                            IntentRouter.go(context, viewCode, bundle);
+                        else {
+                            IntentRouter.go(context, Constant.Router.RETENTION_VIEW, bundle);
+                        }
                     });
         }
 
