@@ -1,7 +1,6 @@
 package com.supcon.mes.module_other.ui;
 
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +12,11 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
-import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -36,6 +33,7 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.contract.SurveyReportContract;
 import com.supcon.mes.module_lims.presenter.SurveyReportPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SurveyReportAdapter;
+import com.supcon.mes.module_lims.utils.LIMSEmptyAdapterHelper;
 import com.supcon.mes.module_lims.utils.SpaceItemDecoration;
 import com.supcon.mes.module_other.R;
 
@@ -45,9 +43,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -73,6 +68,7 @@ public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<Surve
     private SurveyReportAdapter adapter;
     SpaceItemDecoration spaceItemDecoration;
     GridLayoutManager gridLayoutManager;
+
     @Override
     protected int getLayoutID() {
         return R.layout.activity_other_survey_report;
@@ -87,25 +83,29 @@ public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<Surve
     @Override
     protected void onInit() {
         super.onInit();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         EventBus.getDefault().register(this);
+
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+        refreshListController.setEmpterAdapter(LIMSEmptyAdapterHelper.getLIMSRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+
+        getController(SurveyReportController.class).setType(3);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_other_inspection_report));
 
         boolean isPad = DeivceHelper.getInstance().isTabletDevice(SupPlantApplication.getAppContext());
         spaceItemDecoration = new SpaceItemDecoration(10, 2);
         gridLayoutManager = new GridLayoutManager(context, 2);
-        if (isPad){
+        if (isPad) {
             contentView.setLayoutManager(gridLayoutManager);
             contentView.addItemDecoration(spaceItemDecoration);
-        }else {
+        } else {
             contentView.setLayoutManager(new LinearLayoutManager(context));
             contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
@@ -117,11 +117,11 @@ public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<Surve
                     } else {
                         outRect.set(DisplayUtil.dip2px(12, context), 0, DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
                     }
-            }
-        });
+                }
+            });
 
         }
-        //getController(SurveyReportController.class).setType(3);
+
         goRefresh();
     }
 
@@ -156,6 +156,7 @@ public class OtherSurveyReportActivity extends BaseRefreshRecyclerActivity<Surve
     public void onRefresh(RefreshEvent event) {
         refreshListController.refreshBegin();
     }
+
     private void goRefresh() {
         refreshListController.refreshBegin();
     }

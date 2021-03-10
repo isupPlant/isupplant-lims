@@ -27,6 +27,7 @@ import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
@@ -55,7 +56,7 @@ import io.reactivex.functions.Consumer;
  * on 2020/8/7
  * class name
  */
-@Router(Constant.AppCode.LIMS_InspectionItem)
+@Router(LimsConstant.AppCode.LIMS_InspectionItem)
 public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
     @BindByTag("tabLayout")

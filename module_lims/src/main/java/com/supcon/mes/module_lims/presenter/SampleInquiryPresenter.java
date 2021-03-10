@@ -132,66 +132,66 @@ public class SampleInquiryPresenter extends SampleInquiryContract.Presenter {
         }));
     }
 
-    @Override
-    public void getSampleScanList(String type, int pageNo, Map<String, Object> params) {
-        String query = "";
-        Map<String,String> customCondition = new HashMap<>();
-        String viewCode = "";
-        String modelAlias = "sampleInfo";
-
-        FastQueryCondEntity fastQuery;
-        if (type.equals(LimsConstant.Sample.SAMPLE_COLLECTION)){
-            query = "receiveListPart-query";
-            //customCondition = new Gson().toJson(new ConditionEntity("sampleReceive"));
-            customCondition.put("menuCode","sampleReceive");
-            viewCode = "LIMSSample_5.0.0.0_sample_receiveListLayout";
-        }else if (type.equals(LimsConstant.Sample.SAMPLING)){
-            query = "collectListPart-query";
-            //customCondition = new Gson().toJson(new ConditionEntity("sampleCollect"));
-            customCondition.put("menuCode","sampleCollect");
-            viewCode = "LIMSSample_5.0.0.0_sample_collectListLayout";
-        }
-
-        Map<String, Object> firstParams = new HashMap();
-        //从外层传进的集合中取出 检索条件 CODE | NAME | BATCH_CODE
-        if (params.containsKey(Constant.BAPQuery.CODE)) {
-            firstParams.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
-
-        }
-
-        fastQuery = BAPQueryHelper.createSingleFastQueryCond(firstParams);
-
-
-        fastQuery.viewCode = viewCode;
-        fastQuery.modelAlias = modelAlias;
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("fastQueryCond", fastQuery.toString());
-        map.put("customCondition",customCondition);
-        // map.put("permissionCode","LIMSSample_5.0.0.0_sample_collectListLayout");
-        //map.put("classifyCodes","");
-        map.put("pageNo", pageNo);
-        map.put("pageSize", 10);
-        map.put("paging", true);
-
-        mCompositeSubscription.add(BaseLimsHttpClient.sampleInquiryList(query,map).onErrorReturn(new Function<Throwable, SampleInquiryListEntity>() {
-            @Override
-            public SampleInquiryListEntity apply(Throwable throwable) throws Exception {
-                SampleInquiryListEntity entity = new SampleInquiryListEntity();
-                entity.msg = throwable.getMessage();
-                entity.success = false;
-                return entity;
-            }
-        }).subscribe(new Consumer<SampleInquiryListEntity>() {
-            @Override
-            public void accept(SampleInquiryListEntity entity) throws Exception {
-                if (entity.success){
-                    getView().getSampleScanListSuccess(entity);
-                }else {
-                    getView().getSampleScanListFailed(entity.msg);
-                }
-            }
-        }));
-
-    }
+//    @Override
+//    public void getSampleScanList(String type, int pageNo, Map<String, Object> params) {
+//        String query = "";
+//        Map<String,String> customCondition = new HashMap<>();
+//        String viewCode = "";
+//        String modelAlias = "sampleInfo";
+//
+//        FastQueryCondEntity fastQuery;
+//        if (type.equals(LimsConstant.Sample.SAMPLE_COLLECTION)){
+//            query = "receiveListPart-query";
+//            //customCondition = new Gson().toJson(new ConditionEntity("sampleReceive"));
+//            customCondition.put("menuCode","sampleReceive");
+//            viewCode = "LIMSSample_5.0.0.0_sample_receiveListLayout";
+//        }else if (type.equals(LimsConstant.Sample.SAMPLING)){
+//            query = "collectListPart-query";
+//            //customCondition = new Gson().toJson(new ConditionEntity("sampleCollect"));
+//            customCondition.put("menuCode","sampleCollect");
+//            viewCode = "LIMSSample_5.0.0.0_sample_collectListLayout";
+//        }
+//
+//        Map<String, Object> firstParams = new HashMap();
+//        //从外层传进的集合中取出 检索条件 CODE | NAME | BATCH_CODE
+//        if (params.containsKey(Constant.BAPQuery.CODE)) {
+//            firstParams.put(Constant.BAPQuery.CODE, params.get(Constant.BAPQuery.CODE));
+//
+//        }
+//
+//        fastQuery = BAPQueryHelper.createSingleFastQueryCond(firstParams);
+//
+//
+//        fastQuery.viewCode = viewCode;
+//        fastQuery.modelAlias = modelAlias;
+//
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("fastQueryCond", fastQuery.toString());
+//        map.put("customCondition",customCondition);
+//        // map.put("permissionCode","LIMSSample_5.0.0.0_sample_collectListLayout");
+//        //map.put("classifyCodes","");
+//        map.put("pageNo", pageNo);
+//        map.put("pageSize", 10);
+//        map.put("paging", true);
+//
+//        mCompositeSubscription.add(BaseLimsHttpClient.sampleInquiryList(query,map).onErrorReturn(new Function<Throwable, SampleInquiryListEntity>() {
+//            @Override
+//            public SampleInquiryListEntity apply(Throwable throwable) throws Exception {
+//                SampleInquiryListEntity entity = new SampleInquiryListEntity();
+//                entity.msg = throwable.getMessage();
+//                entity.success = false;
+//                return entity;
+//            }
+//        }).subscribe(new Consumer<SampleInquiryListEntity>() {
+//            @Override
+//            public void accept(SampleInquiryListEntity entity) throws Exception {
+//                if (entity.success){
+//                    getView().getSampleScanListSuccess(entity);
+//                }else {
+//                    getView().getSampleScanListFailed(entity.msg);
+//                }
+//            }
+//        }));
+//
+//    }
 }

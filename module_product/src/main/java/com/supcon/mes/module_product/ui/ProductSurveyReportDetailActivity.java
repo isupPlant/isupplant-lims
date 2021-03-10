@@ -9,7 +9,6 @@ import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.controller.GetPowerCodeController;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_lims.controller.SurverReportDetailController;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
@@ -34,29 +33,32 @@ public class ProductSurveyReportDetailActivity extends BaseRefreshActivity {
 
     SurveyReportEntity resportEntity;
     PendingEntity pendingEntity;
+
     @Override
     protected void onInit() {
         super.onInit();
-        Intent intent=getIntent();
-        resportEntity= (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
+        Intent intent = getIntent();
+        resportEntity = (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
         pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         titleText.setText(getString(R.string.lims_product_inspection_report));
-        getController(SurverReportDetailController.class).setRefreshController(this,refreshController);
+        getController(SurverReportDetailController.class).setRefreshController(this, refreshController);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        if (pendingEntity!=null){
-            getController(SurverReportDetailController.class).setReportPending(1,pendingEntity);
-        }else {
-            getController(SurverReportDetailController.class).setReportHead(1,resportEntity);
+        if (pendingEntity != null) {
+            getController(SurverReportDetailController.class).setReportPending(1, pendingEntity);
+        } else {
+            getController(SurverReportDetailController.class).setReportHead(1, resportEntity);
         }
     }
 }

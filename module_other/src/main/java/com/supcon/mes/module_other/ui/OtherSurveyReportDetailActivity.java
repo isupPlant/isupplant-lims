@@ -36,6 +36,8 @@ public class OtherSurveyReportDetailActivity extends BaseRefreshActivity {
     @Override
     protected void onInit() {
         super.onInit();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         Intent intent=getIntent();
         resportEntity= (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
         pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
@@ -44,8 +46,8 @@ public class OtherSurveyReportDetailActivity extends BaseRefreshActivity {
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_other_inspection_report));
+
         getController(SurverReportDetailController.class).setRefreshController(this,refreshController);
     }
 

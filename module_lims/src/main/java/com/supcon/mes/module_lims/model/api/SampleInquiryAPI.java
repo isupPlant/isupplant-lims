@@ -19,5 +19,5 @@ public interface SampleInquiryAPI {
 
     void sampleSubmit(String type, String time, String ids, List<SampleInquiryEntity> submitList);
 
-    void getSampleScanList(String type,int pageNo, Map<String, Object> params);
+    //void getSampleScanList(String type,int pageNo, Map<String, Object> params);
 }

@@ -2,7 +2,6 @@ package com.supcon.mes.module_product.ui;
 
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +13,6 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
@@ -24,7 +22,6 @@ import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.DeivceHelper;
-import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.SurveyReportController;
@@ -36,8 +33,8 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.contract.SurveyReportContract;
 import com.supcon.mes.module_lims.presenter.SurveyReportPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SurveyReportAdapter;
+import com.supcon.mes.module_lims.utils.LIMSEmptyAdapterHelper;
 import com.supcon.mes.module_lims.utils.SpaceItemDecoration;
-import com.supcon.mes.module_product.IntentRouter;
 import com.supcon.mes.module_product.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,9 +43,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -65,7 +59,6 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
 
     @BindByTag("contentView")
     RecyclerView contentView;
-
 
     private boolean isWhole = false;
 
@@ -88,20 +81,27 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
     @Override
     protected void onInit() {
         super.onInit();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         EventBus.getDefault().register(this);
+
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+        refreshListController.setEmpterAdapter(LIMSEmptyAdapterHelper.getLIMSRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+
+        getController(SurveyReportController.class).setType(1);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_product_inspection_report));
+
         boolean isPad = DeivceHelper.getInstance().isTabletDevice(SupPlantApplication.getAppContext());
+
         spaceItemDecoration = new SpaceItemDecoration(10, 2);
         gridLayoutManager = new GridLayoutManager(context, 2);
+
         if (isPad){
             contentView.setLayoutManager(gridLayoutManager);
             contentView.addItemDecoration(spaceItemDecoration);
@@ -121,7 +121,6 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
         });
 
         }
-        //getController(SurveyReportController.class).setType(1);
         goRefresh();
     }
 
@@ -174,6 +173,7 @@ public class ProductSurveyReportActivity extends BaseRefreshRecyclerActivity<Sur
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }
+
 
     @Override
     protected void onDestroy() {

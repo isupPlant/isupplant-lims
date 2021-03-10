@@ -76,12 +76,10 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 
     private SampleInquiryAdapter adapter;
     private Map<String, Object> params = new HashMap<>();
-    private Map<String, Object> scanParams = new HashMap<>();
     private List<SampleInquiryEntity> submitList = new ArrayList<>();
 
     private boolean isSelectAll = false;
-    private boolean isScan = false;
-    private boolean isScanComplete = false;
+
     @Override
     protected IListAdapter createAdapter() {
         adapter = new SampleInquiryAdapter(context);
@@ -96,6 +94,8 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
     @Override
     protected void onInit() {
         super.onInit();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
@@ -104,7 +104,6 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_sample_collection));
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
@@ -139,18 +138,8 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
         getController(SampleInquiryController.class).setScanToResultListener(new OnScanToResultListener() {
             @Override
             public void scanToResultClick(String result) {
-//                for (int i = 0; i < adapter.getList().size(); i++) {
-//                    if (adapter.getList().get(i).getCode().equals(result)){
-//                        adapter.getList().get(i).setSelect(true);
-//                        break;
-//                    }
-//                }
-//                adapter.notifyDataSetChanged();
-                isScan = true;
-                scanParams.clear();
-                scanParams.put(Constant.BAPQuery.CODE,result);
                 params.clear();
-                params.put(Constant.BAPQuery.CODE,result);
+                params.put(Constant.BAPQuery.CODE, result);
                 goRefresh();
             }
         });
@@ -158,7 +147,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (action == 0){
+                if (action == 0) {
                     adapter.getItem(position).setSelect(!adapter.getItem(position).isSelect());
                     adapter.notifyDataSetChanged();
                     int a = 0;
@@ -172,8 +161,6 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
                     } else {
                         setSelectAllStyle(false);
                     }
-                }else if (action == 1){
-                    //ToastUtils.show(context,"进入打印页面");
                 }
             }
         });
@@ -189,17 +176,17 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
                 });
 
         RxView.clicks(btn_sample_collect)
-                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
                         submitList.clear();
                         for (int i = 0; i < adapter.getList().size(); i++) {
-                            if (adapter.getList().get(i).isSelect()){
+                            if (adapter.getList().get(i).isSelect()) {
                                 submitList.add(adapter.getList().get(i));
                             }
                         }
-                        if (submitList.size() > 0){
+                        if (submitList.size() > 0) {
                             //弹出窗口 询问用户 是否收样
 //                            new AlertDialog.Builder(context)
 //                                    .setTitle("提示")
@@ -215,11 +202,11 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 //                                    .setNegativeButton("取消", null)
 //                                    .show();
                             onLoading(context.getResources().getString(R.string.lims_sample_collection_process));
-                            String time = DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
-                            presenterRouter.create(SampleInquiryAPI.class).sampleSubmit(LimsConstant.Sample.SAMPLE_COLLECTION,time, SupPlantApplication.getAccountInfo().staffId+"",submitList);
+                            String time = DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss");
+                            presenterRouter.create(SampleInquiryAPI.class).sampleSubmit(LimsConstant.Sample.SAMPLE_COLLECTION, time, SupPlantApplication.getAccountInfo().staffId + "", submitList);
 
-                        }else {
-                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample));
+                        } else {
+                            ToastUtils.show(context, context.getResources().getString(R.string.lims_select_sample));
                         }
                     }
                 });
@@ -227,12 +214,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                if (isScan){
-                    isScan = false;
-                    presenterRouter.create(SampleInquiryAPI.class).getSampleScanList(LimsConstant.Sample.SAMPLE_COLLECTION, pageIndex, scanParams);
-                }else {
-                    presenterRouter.create(SampleInquiryAPI.class).getSampleInquiryList(LimsConstant.Sample.SAMPLE_COLLECTION, pageIndex, params);
-                }
+                presenterRouter.create(SampleInquiryAPI.class).getSampleInquiryList(LimsConstant.Sample.SAMPLE_COLLECTION, pageIndex, params);
             }
         });
 
@@ -245,12 +227,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 
     @Override
     public void getSampleInquiryListSuccess(SampleInquiryListEntity entity) {
-        if (isScanComplete){
-            isScanComplete = false;
-            refreshListController.refreshComplete(null);
-            return;
-        }
-        if (entity.data.result.size() > 0){
+        if (entity.data.result.size() > 0) {
             setSelectAllStyle(false);
         }
         refreshListController.refreshComplete(entity.data.result);
@@ -258,11 +235,6 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
 
     @Override
     public void getSampleInquiryListFailed(String errorMsg) {
-        if (isScanComplete){
-            isScanComplete = false;
-            refreshListController.refreshComplete(null);
-            return;
-        }
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }
@@ -282,23 +254,6 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
         onLoadFailed(errorMsg);
     }
 
-    @Override
-    public void getSampleScanListSuccess(SampleInquiryListEntity entity) {
-        isSelectAll = false;
-        if (entity.data.result.size() > 0){
-            adapter.setList(entity.data.result);
-            setClickAll();
-        }
-        refreshListController.refreshComplete(entity.data.result);
-        isScanComplete = true;
-    }
-
-    @Override
-    public void getSampleScanListFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
-        refreshListController.refreshComplete(null);
-        isScanComplete = true;
-    }
 
     private void setSelectAllStyle(boolean isSelectAll) {
         if (isSelectAll) {
@@ -308,7 +263,7 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
         }
     }
 
-    private void setClickAll(){
+    private void setClickAll() {
         if (!isSelectAll) {
             for (int i = 0; i < adapter.getList().size(); i++) {
                 adapter.getList().get(i).setSelect(true);

@@ -13,7 +13,6 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -43,9 +42,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -84,16 +80,19 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
+
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+
         getController(InspectionApplicationController.class).setType(2);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_incoming_inspection_application));
 
         adapter.setType(2);
@@ -111,6 +110,7 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
                 }
             }
         });
+
         goRefresh();
     }
 
@@ -144,11 +144,11 @@ public class IncomingInspectionApplicationActivity extends BaseRefreshRecyclerAc
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (action == 0){
+                if (action == 0) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("id",adapter.getItem(position).getId()+"");
-                    bundle.putString("pendingId",adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id+"");
-                    IntentRouter.go(context,Constant.AppCode.LIMS_PurchInspectView,bundle);
+                    bundle.putString("id", adapter.getItem(position).getId() + "");
+                    bundle.putString("pendingId", adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id + "");
+                    IntentRouter.go(context, Constant.AppCode.LIMS_PurchInspectView, bundle);
                 }
             }
         });

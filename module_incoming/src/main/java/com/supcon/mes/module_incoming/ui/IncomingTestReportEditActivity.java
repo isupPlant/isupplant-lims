@@ -47,11 +47,11 @@ import io.reactivex.functions.Consumer;
  */
 @Controller(value = {TestReportEditController.class})
 @Presenter(value = {TestReportEditPresenter.class, StdJudgeSpecPresenter.class, TableTypePresenter.class})
-@Router(value = "purchInspReportEdit")
+@Router(value = Constant.AppCode.LIMS_IncomingTestReportEdit)
 public class IncomingTestReportEditActivity extends BaseRefreshActivity implements TestReportEditContract.View, StdJudgeSpecContract.View, TableTypeContract.View {
     private boolean isAdd;
     private String id;
-    private String pendingId;
+    //private String pendingId;
     PendingEntity pendingEntity;
 
     @BindByTag("titleText")
@@ -72,25 +72,30 @@ public class IncomingTestReportEditActivity extends BaseRefreshActivity implemen
     }
 
     @Override
-    protected void initView() {
-        super.initView();
+    protected void onInit() {
+        super.onInit();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(context.getResources().getString(R.string.lims_incoming_inspection_report));
 
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
 
-        ctSupplier.setVisibility(View.VISIBLE);
-
         isAdd = getIntent().getBooleanExtra("isAdd", false);
         id = getIntent().getStringExtra("id") == null ? "" : getIntent().getStringExtra("id");
-        pendingId = getIntent().getStringExtra("pendingId") == null ? "" : getIntent().getStringExtra("pendingId");
+        //pendingId = getIntent().getStringExtra("pendingId") == null ? "" : getIntent().getStringExtra("pendingId");
+        info = (WorkFlowButtonInfo) getIntent().getSerializableExtra("info");
+
         Intent intent = getIntent();
         if (intent.hasExtra(Constant.IntentKey.PENDING_ENTITY)) {
             pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
         }
-        ctSupplier.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         titleText.setText(context.getResources().getString(R.string.lims_incoming_inspection_report));
+
+        ctSupplier.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("CheckResult")
@@ -149,34 +154,21 @@ public class IncomingTestReportEditActivity extends BaseRefreshActivity implemen
     @Override
     protected void initData() {
         super.initData();
-//        if (isAdd){
-//            if (null != info){
-//                presenterRouter.create(TableTypeAPI.class).getTableTypeByCode("purch");
-//                getController(TestReportEditController.class).setIsFrom("add");
-//                getController(TestReportEditController.class).setDeploymentId(info.getDeploymentId(),"TaskEvent_02g4ihu");
-//                getController(TestReportEditController.class).setStartTabHead(2, new TestReportEditController.TableHeadDataOverListener() {
-//                    @Override
-//                    public void tableHeadOver(String inspectId, String stdVerId) {
-//                        Map<String, Object> map = new HashMap<>();
-//                        map.put("inspectId",inspectId);
-//                        map.put("stdVerId",stdVerId);
-//                        presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(map);
-//                    }
-//                });
-//            }
-//        }else {
         if (isAdd) {
-            getController(TestReportEditController.class).setIsFrom("add");
-            presenterRouter.create(TableTypeAPI.class).getTableTypeByCode("purch");
-            getController(TestReportEditController.class).setStartTabHead(2, new TestReportEditController.TableHeadDataOverListener() {
-                @Override
-                public void tableHeadOver(String inspectId, String stdVerId) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("inspectId", inspectId);
-                    map.put("stdVerId", stdVerId);
-                    presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(map);
-                }
-            });
+            if (null != info) {
+                presenterRouter.create(TableTypeAPI.class).getTableTypeByCode("purch");
+                getController(TestReportEditController.class).setIsFrom("add");
+                getController(TestReportEditController.class).setDeploymentId(info.getDeploymentId(), "TaskEvent_02g4ihu");
+                getController(TestReportEditController.class).setStartTabHead(2, new TestReportEditController.TableHeadDataOverListener() {
+                    @Override
+                    public void tableHeadOver(String inspectId, String stdVerId) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("inspectId", inspectId);
+                        map.put("stdVerId", stdVerId);
+                        presenterRouter.create(StdJudgeSpecAPI.class).getReportComList(map);
+                    }
+                });
+            }
         } else {
             goRefresh();
         }

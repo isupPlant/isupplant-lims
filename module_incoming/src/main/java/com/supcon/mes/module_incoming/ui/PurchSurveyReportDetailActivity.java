@@ -26,35 +26,39 @@ public class PurchSurveyReportDetailActivity extends BaseRefreshActivity {
     @BindByTag("titleText")
     TextView titleText;
     PendingEntity pendingEntity;
+
     @Override
     protected int getLayoutID() {
         return R.layout.ac_inpect_resport_detail;
     }
 
     SurveyReportEntity resportEntity;
+
     @Override
     protected void onInit() {
         super.onInit();
-        Intent intent=getIntent();
-        resportEntity= (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
+        Intent intent = getIntent();
+        resportEntity = (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
         pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getResources().getString(R.string.lims_incoming_inspection_report));
-        getController(SurverReportDetailController.class).setRefreshController(this,refreshController);
+
+        getController(SurverReportDetailController.class).setRefreshController(this, refreshController);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        if (pendingEntity!=null){
-            getController(SurverReportDetailController.class).setReportPending(2,pendingEntity);
-        }else {
-            getController(SurverReportDetailController.class).setReportHead(2,resportEntity);
+        if (pendingEntity != null) {
+            getController(SurverReportDetailController.class).setReportPending(2, pendingEntity);
+        } else {
+            getController(SurverReportDetailController.class).setReportHead(2, resportEntity);
         }
     }
 }

@@ -13,7 +13,6 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -43,9 +42,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -83,19 +79,25 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
     @Override
     protected void onInit() {
         super.onInit();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         EventBus.getDefault().register(this);
+
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+
         getController(InspectionApplicationController.class).setType(3);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         titleText.setText(getString(R.string.lims_other_inspection_application));
+
         adapter.setType(3);
+
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -109,6 +111,7 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
                 }
             }
         });
+
         goRefresh();
     }
 
@@ -142,11 +145,11 @@ public class OtherInspectionApplicationActivity extends BaseRefreshRecyclerActiv
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (action == 0){
+                if (action == 0) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("id",adapter.getItem(position).getId()+"");
-                    bundle.putString("pendingId",adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id+"");
-                    IntentRouter.go(context,Constant.AppCode.LIMS_OtherInspectView,bundle);
+                    bundle.putString("id", adapter.getItem(position).getId() + "");
+                    bundle.putString("pendingId", adapter.getItem(position).getPending() == null ? "" : adapter.getItem(position).getPending().id + "");
+                    IntentRouter.go(context, Constant.AppCode.LIMS_OtherInspectView, bundle);
                 }
             }
         });

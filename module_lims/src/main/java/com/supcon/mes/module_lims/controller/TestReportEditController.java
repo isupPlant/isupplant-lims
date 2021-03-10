@@ -1329,11 +1329,9 @@ public class TestReportEditController extends BaseViewController implements Qual
                         if (firstGrade > 0){
                             for (int i = 0; i < conclusionList.size(); i++) {
                                 if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)){
-                                    if (conclusionList.get(i)!=null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
                                         csTestConclusion.setContent(conclusionList.get(i).getName());
                                         this.entity.setCheckResult(conclusionList.get(i).getName());
                                         break;
-                                    }
                                 }
                             }
                         }else {

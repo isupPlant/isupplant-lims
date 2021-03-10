@@ -13,7 +13,6 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -43,9 +42,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -56,7 +53,7 @@ import io.reactivex.functions.Consumer;
 @Router(Constant.AppCode.LIMS_ProductApplicationInspection)
 @Presenter(value = {InspectionApplicationPresenter.class})
 @Controller(value = {InspectionApplicationController.class})
-public class ProductInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationContract.View {
+public class  ProductInspectionApplicationActivity extends BaseRefreshRecyclerActivity<InspectionApplicationEntity> implements InspectionApplicationContract.View {
 
     private InspectionApplicationAdapter adapter;
 

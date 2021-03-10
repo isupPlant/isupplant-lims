@@ -1,7 +1,6 @@
 package com.supcon.mes.module_incoming.ui;
 
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +12,11 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
-import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -37,6 +34,7 @@ import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
 import com.supcon.mes.module_lims.model.contract.SurveyReportContract;
 import com.supcon.mes.module_lims.presenter.SurveyReportPresenter;
 import com.supcon.mes.module_lims.ui.adapter.SurveyReportAdapter;
+import com.supcon.mes.module_lims.utils.LIMSEmptyAdapterHelper;
 import com.supcon.mes.module_lims.utils.SpaceItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,9 +43,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * author huodongsheng
@@ -59,13 +54,11 @@ import io.reactivex.functions.Consumer;
 @Presenter(value = {SurveyReportPresenter.class})
 @Controller(value = {SurveyReportController.class})
 public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<SurveyReportEntity> implements SurveyReportContract.View {
-
     @BindByTag("titleText")
     TextView titleText;
 
     @BindByTag("contentView")
     RecyclerView contentView;
-
 
     private boolean isWhole = false;
 
@@ -74,6 +67,7 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
     private SurveyReportAdapter adapter;
     SpaceItemDecoration spaceItemDecoration;
     GridLayoutManager gridLayoutManager;
+
     @Override
     protected int getLayoutID() {
         return R.layout.activity_incoming_survey_report;
@@ -90,24 +84,29 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
         super.onInit();
         EventBus.getDefault().register(this);
 
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+        refreshListController.setEmpterAdapter(LIMSEmptyAdapterHelper.getLIMSRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+
+        getController(SurveyReportController.class).setType(2);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(getString(R.string.lims_incoming_inspection_report));
 
         boolean isPad = DeivceHelper.getInstance().isTabletDevice(SupPlantApplication.getAppContext());
+
         spaceItemDecoration = new SpaceItemDecoration(10, 2);
         gridLayoutManager = new GridLayoutManager(context, 2);
-        if (isPad){
+
+        if (isPad) {
             contentView.setLayoutManager(gridLayoutManager);
             contentView.addItemDecoration(spaceItemDecoration);
-        }else {
+        } else {
             contentView.setLayoutManager(new LinearLayoutManager(context));
             contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
@@ -122,12 +121,15 @@ public class IncomingSurveyReportActivity extends BaseRefreshRecyclerActivity<Su
                 }
             });
         }
+
         goRefresh();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefresh(RefreshEvent event) {
         refreshListController.refreshBegin();
     }
+
     @Override
     protected void initListener() {
         super.initListener();
