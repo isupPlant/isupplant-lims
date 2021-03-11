@@ -62,5 +62,6 @@ dependencies {
     annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
 
     implementation 'io.apisense:rhino-android:1.1.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
 }
