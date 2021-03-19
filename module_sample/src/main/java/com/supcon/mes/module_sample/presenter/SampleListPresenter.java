@@ -7,9 +7,11 @@ import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.SubcondEntity;
+import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
+import com.supcon.mes.module_lims.utils.BAPQueryHelper;
 import com.supcon.mes.module_sample.model.contract.SampleListContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
@@ -37,6 +39,9 @@ public class SampleListPresenter extends SampleListContract.Presenter {
     public void getSampleList(Map<String,Object> timeMap,Map<String, Object> params) {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordBySample";
         String modelAlias = "sampleInfo";
+        String joinInfo = "LIMSBA_PICKSITE,ID,LIMSSA_SAMPLE_INFOS,PS_ID";
+        FastQueryCondEntity fastQuery = null;
+
         Map<String, Object> map = new HashMap<>();
 
         Map<String,Object> paramMap=new HashMap<>();
@@ -45,11 +50,25 @@ public class SampleListPresenter extends SampleListContract.Presenter {
         if (!params.isEmpty())
             paramMap.putAll(params);
         if (!paramMap.isEmpty()) {
-            FastQueryCondEntity fastQueryCondEntity = getFastQueryEntity(paramMap);
-            fastQueryCondEntity.viewCode = viewCode;
-            fastQueryCondEntity.modelAlias = modelAlias;
-            map.put("fastQueryCond",fastQueryCondEntity.toString());
+            if (paramMap.containsKey(LimsConstant.BAPQuery.SAMPLING_POINT)){
+                String value = (String) paramMap.get(LimsConstant.BAPQuery.SAMPLING_POINT);
+
+                paramMap.put(Constant.BAPQuery.NAME,value);
+                paramMap.remove(LimsConstant.BAPQuery.SAMPLING_POINT);
+
+                fastQuery = BAPQueryHelper.createSingleFastQueryCond(new HashMap<>());
+                fastQuery.subconds.add(BAPQueryParamsHelper.crateJoinSubcondEntity(paramMap,joinInfo));
+                fastQuery.viewCode = viewCode;
+                fastQuery.modelAlias = modelAlias;
+
+            }else {
+                fastQuery = getFastQueryEntity(paramMap);
+                fastQuery.viewCode = viewCode;
+                fastQuery.modelAlias = modelAlias;
+            }
+            map.put("fastQueryCond",fastQuery.toString());
         }
+
         map.put("permissionCode","LIMSSample_5.0.0.0_sample_recordBySample");
         map.put("pageNo",1);
         map.put("pageSize",10);

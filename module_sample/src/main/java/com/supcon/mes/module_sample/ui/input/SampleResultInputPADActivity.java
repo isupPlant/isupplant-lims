@@ -83,6 +83,8 @@ public class SampleResultInputPADActivity extends BaseFragmentActivity {
         searchTypeList.add(getString(R.string.lims_sample_code));
         searchTypeList.add(getString(R.string.lims_sample_name));
         searchTypeList.add(getString(R.string.lims_batch_number));
+        searchTypeList.add(getString(R.string.lims_sampling_point));
+
     }
 
     @Override

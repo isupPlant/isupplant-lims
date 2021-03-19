@@ -37,6 +37,7 @@ public interface LimsConstant {
         String C_NAME="C_NAME";//文件名
         String C_MD5="C_MD5";//md5值
         String LIMS_REFED="LIMS_REFED";//读取标记
+        String SAMPLING_POINT = "SAMPLING_POINT";
     }
 
 

@@ -424,4 +424,11 @@ public interface ApiService {
     @POST("/msService/BaseSet/eamInfo/eamInfo/serialRef-query")
     Flowable<BAP5CommonEntity<CommonBAPListEntity<SerialDeviceEntity>>> getSerialDeviceRef(@Body Map<String, Object> map);
 
+    /**
+     * 根据检验申请的id获取质量标准
+     * @param inspectId
+     * @return
+     */
+    @POST("/msService/QCS/inspect/inspectStd/getStdVerByInspectId")
+    Flowable<BAP5CommonListEntity<FirstStdVerEntity>> getStdVerByInspectId(@Query("inspectId") String inspectId);
 }

@@ -5,10 +5,12 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
@@ -27,7 +29,9 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.util.DeivceHelper;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.ScreenUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.controller.SampleInquiryController;
@@ -48,6 +52,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
+import utilcode.util.DeviceUtils;
 
 /**
  * author huodongsheng
@@ -77,12 +82,11 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
 
     private SampleInquiryAdapter adapter;
     private Map<String, Object> params = new HashMap<>();
-    //private Map<String, Object> scanParams = new HashMap<>();
     private List<SampleInquiryEntity> submitList = new ArrayList<>();
-
+    private List<Integer> indexList;
     private boolean isSelectAll = false;
-//    private boolean isScan = false;
-//    private boolean isScanComplete = false;
+    private StringBuilder sb;
+    private boolean isPad = false;
 
     @Override
     protected int getLayoutID() {
@@ -127,6 +131,14 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
         goRefresh();
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        indexList = new ArrayList<>();
+        sb = new StringBuilder();
+        isPad = DeivceHelper.getInstance().isTabletDevice(SupPlantApplication.getAppContext());
+    }
+
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
@@ -143,18 +155,6 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
         getController(SampleInquiryController.class).setScanToResultListener(new OnScanToResultListener() {
             @Override
             public void scanToResultClick(String result) {
-//                for (int i = 0; i < adapter.getList().size(); i++) {
-//                    if (adapter.getList().get(i).getCode().equals(result)){
-//                        adapter.getList().get(i).setSelect(true);
-//                        break;
-//                    }
-//                }
-//                adapter.notifyDataSetChanged();
-//                isScan = true;
-//                scanParams.clear();
-//                scanParams.put(Constant.BAPQuery.CODE,result);
-//                goRefresh();
-                //presenterRouter.create(SampleInquiryAPI.class).getSampleInquiryList(LimsConstant.Sample.SAMPLING, 1, params);
                 params.clear();
                 params.put(Constant.BAPQuery.CODE,result);
                 goRefresh();
@@ -165,6 +165,11 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 if (action == 0){
+                    if (!checkLevelEqual(adapter.getItem(position).getCid(),position)){
+                        ToastUtils.show(context,context.getResources().getString(R.string.lims_unable_to_operate_non_company_data));
+                        return;
+                    }
+
                     adapter.getItem(position).setSelect(!adapter.getItem(position).isSelect());
                     adapter.notifyDataSetChanged();
                     int a = 0;
@@ -178,8 +183,6 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
                     } else {
                         setSelectAllStyle(false);
                     }
-                }else if (action == 1){
-//                   ToastUtils.show(context,"进入打印页面");
                 }
             }
         });
@@ -225,20 +228,13 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
                         }else {
                             ToastUtils.show(context,getResources().getString(R.string.lims_select_sampling_sample));
                         }
-//                        IntentRouter.go(context,"LIMS_QualityStdVerRef");
                     }
                 });
 
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-//                if (isScan){
-//                    isScan = false;
-//                    presenterRouter.create(SampleInquiryAPI.class).getSampleScanList(LimsConstant.Sample.SAMPLING, pageIndex, scanParams);
-//                }else {
-                    presenterRouter.create(SampleInquiryAPI.class).getSampleInquiryList(LimsConstant.Sample.SAMPLING, pageIndex, params);
-                //}
-
+                presenterRouter.create(SampleInquiryAPI.class).getSampleInquiryList(LimsConstant.Sample.SAMPLING, pageIndex, params);
             }
         });
 
@@ -251,24 +247,20 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
 
     @Override
     public void getSampleInquiryListSuccess(SampleInquiryListEntity entity) {
-//        if (isScanComplete){
-//            isScanComplete = false;
-//            refreshListController.refreshComplete(null);
-//            return;
-//        }
         if (entity.data.result.size() > 0){
             setSelectAllStyle(false);
         }
-        refreshListController.refreshComplete(entity.data.result);
+
+        List<SampleInquiryEntity> list =  entity.data.result;
+        for (int i = 0; i < list.size(); i++) {
+            checkLevelEqual(list.get(i).getCid(), i);
+            list.get(i).isThisCompany = checkLevelEqual(list.get(i).getCid(),i);
+        }
+        refreshListController.refreshComplete(list);
     }
 
     @Override
     public void getSampleInquiryListFailed(String errorMsg) {
-//        if (isScanComplete){
-//            isScanComplete = false;
-//            refreshListController.refreshComplete(null);
-//            return;
-//        }
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }
@@ -288,34 +280,51 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
         onLoadFailed(errorMsg);
     }
 
-//    @Override
-//    public void getSampleScanListSuccess(SampleInquiryListEntity entity) {
-//        isSelectAll = false;
-//        if (entity.data.result.size() > 0){
-//            adapter.setList(entity.data.result);
-//            setClickAll();
-//        }
-//        refreshListController.refreshComplete(entity.data.result);
-//        isScanComplete = true;
-//    }
-//
-//    @Override
-//    public void getSampleScanListFailed(String errorMsg) {
-//        SnackbarHelper.showError(rootView, errorMsg);
-//        refreshListController.refreshComplete(null);
-//        isScanComplete = true;
-//    }
 
     private void setClickAll(){
+        indexList.clear();
         if (!isSelectAll) {
             for (int i = 0; i < adapter.getList().size(); i++) {
-                adapter.getList().get(i).setSelect(true);
+                if (!checkLevelEqual(adapter.getList().get(i).getCid(),i)){  //当前item 非本公司数据
+                    indexList.add(i+1);
+                    adapter.getList().get(i).setSelect(false);
+                }else {
+                    adapter.getList().get(i).setSelect(true);
+                }
             }
         } else {
             for (int i = 0; i < adapter.getList().size(); i++) {
-                adapter.getList().get(i).setSelect(false);
+                if (!checkLevelEqual(adapter.getList().get(i).getCid(),i)){
+                    indexList.add(i+1);
+                    adapter.getList().get(i).setSelect(false);
+                }else {
+                    adapter.getList().get(i).setSelect(false);
+                }
             }
         }
+
+        if (indexList.size() > 0){
+            for (int i = 0; i < indexList.size(); i++) {
+                if (i+1 == indexList.size()){
+                    sb.append(indexList.get(i));
+                }else {
+                    sb.append(indexList.get(i)).append(",");
+                }
+            }
+
+            String string = context.getResources().getString(R.string.lims_data_not_company);
+            String format = String.format(string, sb);
+
+            if (isPad){
+                Toast toast =  Toast.makeText(context,format,Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM,0, ScreenUtil.getScreenHeight(context)/3);
+                toast.show();
+            }else {
+                ToastUtils.show(context,format);
+            }
+            sb.delete(0,sb.length());
+        }
+
         isSelectAll = !isSelectAll;
         setSelectAllStyle(isSelectAll);
         adapter.notifyDataSetChanged();
@@ -327,5 +336,13 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
         } else {
             iv_select.setImageResource(R.drawable.ic_check_no);
         }
+    }
+
+
+    private Boolean checkLevelEqual(Long cid,int position){
+        if (null != cid){
+            return cid.equals(SupPlantApplication.getAccountInfo().getCompanyId());
+        }
+        throw new NullPointerException("row"+position+1+ "cid is null");
     }
 }

@@ -30,6 +30,7 @@ public class SampleInquiryEntity extends BaseEntity {
     private Boolean valid;
     private Integer version;
     private boolean isSelect = false;
+    public boolean isThisCompany = false;
 
     public Map getAttrMap() {
         return attrMap;

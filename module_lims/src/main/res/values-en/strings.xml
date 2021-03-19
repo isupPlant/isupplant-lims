@@ -274,4 +274,6 @@
     <string name="lims_ware_store">Store</string>
     <string name="lims_ware_store_name">Store Name</string>
     <string name="lims_ware_store_code">Store Code</string>
+    <string name="lims_data_not_company">The data of row【%1$s】belongs another company!</string>
+    <string name="lims_unable_to_operate_non_company_data">Unable to operate non company data!</string>
 </resources>

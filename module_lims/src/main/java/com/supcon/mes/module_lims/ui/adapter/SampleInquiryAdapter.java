@@ -61,15 +61,15 @@ public class SampleInquiryAdapter extends BaseListDataRecyclerViewAdapter<Sample
             ll_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemChildViewClick(v,1);
-                }
-            });
-            rl_select.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
                     onItemChildViewClick(v,0);
                 }
             });
+//            rl_select.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    onItemChildViewClick(v,0);
+//                }
+//            });
 
         }
 
@@ -102,6 +102,11 @@ public class SampleInquiryAdapter extends BaseListDataRecyclerViewAdapter<Sample
 
             //登记时间
             tvRegistrationTime.setContent(data.getRegisterTime() == null ? "--" : DateUtil.dateFormat(data.getRegisterTime(), "yyyy-MM-dd HH:mm:ss"));
+            if (data.isThisCompany){
+                iv_select.setVisibility(View.VISIBLE);
+            }else {
+                iv_select.setVisibility(View.INVISIBLE);
+            }
 
             if (data.isSelect()){
                 iv_select.setImageResource(R.drawable.ic_check_yes);

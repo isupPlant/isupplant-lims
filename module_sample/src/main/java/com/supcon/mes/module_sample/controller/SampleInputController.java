@@ -17,6 +17,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.SearchResultEntity;
 import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.module_lims.R;
+import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_lims.listener.OnTabClickListener;
 import com.supcon.mes.module_search.ui.view.SearchTitleBar;
@@ -66,6 +67,7 @@ public class SampleInputController extends BaseViewController {
         searchTypeList.add(getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_code));
         searchTypeList.add(getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_sample_name));
         searchTypeList.add(getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_batch_number));
+        searchTypeList.add(getRootView().getResources().getString(R.string.lims_sampling_point));
     }
 
     @Override
@@ -146,6 +148,8 @@ public class SampleInputController extends BaseViewController {
                 params.put(Constant.BAPQuery.NAME, resultEntity.result);
             }else if (getRootView().getResources().getString(com.supcon.mes.module_sample.R.string.lims_batch_number).equals(resultEntity.key)){
                 params.put(Constant.BAPQuery.BATCH_CODE, resultEntity.result);
+            }else if (getRootView().getResources().getString(R.string.lims_sampling_point).equals(resultEntity.key)){
+                params.put(LimsConstant.BAPQuery.SAMPLING_POINT, resultEntity.result);
             }
             if (null != mOnSearchOverListener) {
                 mOnSearchOverListener.onSearchOverClick(params);

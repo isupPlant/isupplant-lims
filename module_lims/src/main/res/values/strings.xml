@@ -273,4 +273,6 @@
     <string name="lims_ware_store">货位</string>
     <string name="lims_ware_store_name">货位名称</string>
     <string name="lims_ware_store_code">货位编码</string>
+    <string name="lims_data_not_company">第【%1$s】行数据为非本公司数据，无法操作!</string>
+    <string name="lims_unable_to_operate_non_company_data">无法操作非本公司数据!</string>
 </resources>

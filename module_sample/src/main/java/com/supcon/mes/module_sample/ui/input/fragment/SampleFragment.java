@@ -23,6 +23,7 @@ import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DateFilterController;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
@@ -124,6 +125,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         searchTypeList.add(getString(R.string.lims_sample_code));
         searchTypeList.add(getString(R.string.lims_sample_name));
         searchTypeList.add(getString(R.string.lims_batch_number));
+        searchTypeList.add(getString(R.string.lims_sampling_point));
 
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -164,7 +166,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(SampleListAPI.class).getSampleList(timeMap,mParams);
+                 presenterRouter.create(SampleListAPI.class).getSampleList(timeMap,mParams);
             }
         });
 
@@ -301,6 +303,8 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 mParams.put(Constant.BAPQuery.NAME,title);
             }else if (searchKey.equals(getString(R.string.lims_batch_number))){
                 mParams.put(Constant.BAPQuery.BATCH_CODE,title);
+            }else if (searchKey.equals(getString(R.string.lims_sampling_point))){
+                mParams.put(LimsConstant.BAPQuery.SAMPLING_POINT,title);
             }
 
             if (activity instanceof SampleResultInputPADActivity){

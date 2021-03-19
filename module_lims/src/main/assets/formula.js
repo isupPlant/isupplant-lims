@@ -1028,7 +1028,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		//return exports.MULTIPLY((r1/r2), "1e"+(t2-t1));
 	  }
 	};
-
+	
 	exports.MULTIPLY = function (factor1, factor2) {
 	  if (arguments.length !== 2) {
 	    return error.na;
@@ -1043,7 +1043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	  return factor1*factor2/Math.pow(10,m);
 	};
-
+	
 	exports.GTE = function (num1, num2) {
 	  if (arguments.length !== 2) {
 	    return error.na;

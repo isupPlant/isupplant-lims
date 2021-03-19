@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,21 +42,15 @@ import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.constant.FilterInputType;
 import com.supcon.mes.middleware.controller.GetPowerCodeController;
 import com.supcon.mes.middleware.controller.WorkFlowViewController;
-import com.supcon.mes.middleware.model.api.DeploymentAPI;
 import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
-import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentEntity;
-import com.supcon.mes.middleware.model.bean.DeploymentEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
-import com.supcon.mes.middleware.model.contract.DeploymentContract;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
-import com.supcon.mes.middleware.presenter.DeploymentPresenter;
 import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.module_lims.R;
 import com.supcon.mes.module_lims.constant.LimsConstant;
@@ -66,15 +59,14 @@ import com.supcon.mes.module_lims.event.StdVerComEvent;
 import com.supcon.mes.module_lims.event.TestRequestNoEvent;
 import com.supcon.mes.module_lims.model.api.AvailableStdIdAPI;
 import com.supcon.mes.module_lims.model.api.FirstStdVerAPI;
-import com.supcon.mes.module_lims.model.api.InspectReportDetailAPI;
 import com.supcon.mes.module_lims.model.api.QualityStdIdByConclusionAPI;
+import com.supcon.mes.module_lims.model.api.StdVerByInspectIdAPI;
 import com.supcon.mes.module_lims.model.api.TestNumAPI;
 import com.supcon.mes.module_lims.model.api.TestReportEditSubmitAPI;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.FirstStdVerEntity;
 import com.supcon.mes.module_lims.model.bean.InspectIdEntity;
-import com.supcon.mes.module_lims.model.bean.InspectReportSubmitEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionDetailPtEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStandardReferenceEntity;
 import com.supcon.mes.module_lims.model.bean.QualityStdConclusionEntity;
@@ -95,11 +87,13 @@ import com.supcon.mes.module_lims.model.bean.TestRequestNoEntity;
 import com.supcon.mes.module_lims.model.contract.AvailableStdIdContract;
 import com.supcon.mes.module_lims.model.contract.FirstStdVerContract;
 import com.supcon.mes.module_lims.model.contract.QualityStdIdByConclusionContract;
+import com.supcon.mes.module_lims.model.contract.StdVerByInspectIdContract;
 import com.supcon.mes.module_lims.model.contract.TestNumContract;
 import com.supcon.mes.module_lims.model.contract.TestReportEditSubmitContract;
 import com.supcon.mes.module_lims.presenter.AvailableStdPresenter;
 import com.supcon.mes.module_lims.presenter.FirstStdVerPresenter;
 import com.supcon.mes.module_lims.presenter.QualityStdIdByConclusionPresenter;
+import com.supcon.mes.module_lims.presenter.StdVerByInspectIdPresenter;
 import com.supcon.mes.module_lims.presenter.TestNumPresenter;
 import com.supcon.mes.module_lims.presenter.TestReportEditSubmitPresenter;
 import com.supcon.mes.module_lims.ui.adapter.TestReportEditPtAdapter;
@@ -135,9 +129,9 @@ import io.reactivex.functions.Consumer;
 
 @Presenter(value = {QualityStdIdByConclusionPresenter.class, TestReportEditSubmitPresenter.class,
         FirstStdVerPresenter.class,QualityStdIdByConclusionPresenter.class, TestNumPresenter.class,
-         AvailableStdPresenter.class})
+         AvailableStdPresenter.class, StdVerByInspectIdPresenter.class})
 public class TestReportEditController extends BaseViewController implements QualityStdIdByConclusionContract.View,
-        TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, AvailableStdIdContract.View {
+        TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, AvailableStdIdContract.View, StdVerByInspectIdContract.View {
     // DeploymentContract.View,DeploymentPresenter.class,
 
     @BindByTag("ctTestRequestNo")
@@ -210,6 +204,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private List<String> stringConclusionList;
     private List<String> deletePtIds;
     private List<String> myDeleteList = new ArrayList<>();
+    private List<FirstStdVerEntity> stdVerList;
     private TestReportEditPtAdapter adapter;
     private boolean expand=false;
 
@@ -223,7 +218,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private int type = -1;//产品、来料、其他用1，2，3来表示
 
     private String inspectId = "";
-    private String stdVerId = "";
+    private Long stdVerId;
     private PendingEntity pendingEntity;
     private InspectIdEntity inspectIdEntity;
     private TestRequestNoEntity testRequestNoEntity;
@@ -263,6 +258,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         ptList = new ArrayList<>();
         conclusionList = new ArrayList<>();
         stringConclusionList = new ArrayList<>();
+        stdVerList = new ArrayList<>();
         initRecycler();
 
         powerCodeController=new GetPowerCodeController(context);
@@ -845,7 +841,11 @@ public class TestReportEditController extends BaseViewController implements Qual
                 this.entity.getInspectId().getNeedLab()));
         adapter.setConclusionOption(conclusionList);
         adapter.notifyDataSetChanged();
-        setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(), StringUtil.isEmpty(this.entity.getCheckResult()));
+
+        //当前选择的质量标准是否为检验申请中关联质量标准中的一条  如果是  则检验分项结论直接带过来就行   如果否 需要重新判定
+        if (!judgeTestApplyQSIsContainCurrentQS(stdVerId)){
+            setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(), StringUtil.isEmpty(this.entity.getCheckResult()));
+        }
     }
 
     public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){
@@ -965,7 +965,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 }
             }
 
-        }else if (selectDataEvent.getEntity() instanceof StdVerComEvent){
+        }else if (selectDataEvent.getEntity() instanceof StdVerComEvent){   //检验项目重新参照
             StdVerComEvent stdVerComEvent =  (StdVerComEvent)selectDataEvent.getEntity();
             if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())){
                 if (selectDataEvent.getSelectTag().equals(llReference.getTag() + "")){
@@ -1028,6 +1028,7 @@ public class TestReportEditController extends BaseViewController implements Qual
 
                         presenterRouter.create(TestNumAPI.class).getTestNum(testRequestNoEntity.getId()+""); //获取数量
 
+                        presenterRouter.create(StdVerByInspectIdAPI.class).getStdVerByInspectId(testRequestNoEntity.getId()+"");
 
                     }
                 }
@@ -1071,7 +1072,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         conclusionList.clear();
         conclusionList.addAll(entity.data);
         if (isNeedSetHead){
-            this.mTableHeadDataOverListener.tableHeadOver(inspectId,stdVerId);
+            this.mTableHeadDataOverListener.tableHeadOver(inspectId,stdVerId+"");
         }
 
     }
@@ -1118,7 +1119,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     @Override
     public void getFirstStdVerSuccess(FirstStdVerEntity entity) {
         if (null != entity){
-            stdVerId = entity.getStdVerId().getId()+"";
+            stdVerId = entity.getStdVerId().getId();
 
             ctQualityStd.setEditable(true);
             ctQualityStd.setContent(entity.getStdVerId().getStdId().getName());
@@ -1209,6 +1210,17 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     @Override
     public void getDefaultInspProjByStdVerIdFailed(String errorMsg) {
+
+    }
+
+    @Override
+    public void getStdVerByInspectIdSuccess(BAP5CommonListEntity entity) {
+        stdVerList.clear();
+        stdVerList.addAll(entity.data);
+    }
+
+    @Override
+    public void getStdVerByInspectIdFailed(String errorMsg) {
 
     }
 
@@ -1370,6 +1382,21 @@ public class TestReportEditController extends BaseViewController implements Qual
             this.entity.setCheckResult(checkResult);
 
         }
+    }
+
+    private boolean judgeTestApplyQSIsContainCurrentQS(Long qsId){
+        if (null == qsId){
+            return false;
+        }
+        boolean isContain = false;
+        for (int i = 0; i < stdVerList.size(); i++) {
+            if (stdVerList.get(i).getId().equals(qsId)){
+                isContain = true;
+                break;
+            }
+        }
+        return isContain;
+
     }
 
     @Override
