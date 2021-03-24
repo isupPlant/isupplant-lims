@@ -92,19 +92,19 @@ public class SurveyReportAdapter extends BaseListDataRecyclerViewAdapter<SurveyR
                         bundle.putSerializable("resportEntity",entity);
                         if (entity.getTableNo().startsWith("manuReport_")){
                             if (entity.getPending() != null && entity.getPending().id != null && entity.getPending().openUrl.contains("Edit")){
-                                IntentRouter.go(context, "manuInspReportEdit",setBundle(entity));
+                                IntentRouter.go(context, Constant.AppCode.LIMS_ProductTestReportEdit,setBundle(entity));
                             }else {
                                 IntentRouter.go(context, Constant.Router.PRODUCT_INSPREPORT_VIEW,bundle);
                             }
                         }else if(entity.getTableNo().startsWith("purchReport_")){
                             if (entity.getPending() != null && entity.getPending().id != null && entity.getPending().openUrl.contains("Edit")){
-                                IntentRouter.go(context, "purchInspReportEdit",setBundle(entity));
+                                IntentRouter.go(context, Constant.AppCode.LIMS_IncomingTestReportEdit,setBundle(entity));
                             }else {
                                 IntentRouter.go(context, Constant.Router.PURCH_INSPREPORT_VIEW,bundle);
                             }
                         } else if (entity.getTableNo().startsWith("otherReport_")){
                             if (entity.getPending() != null && entity.getPending().id != null && entity.getPending().openUrl.contains("Edit")){
-                                IntentRouter.go(context,"otherInspReportEdit",setBundle(entity));
+                                IntentRouter.go(context,Constant.AppCode.LIMS_OtherTestReportEdit,setBundle(entity));
                             }else {
                                 IntentRouter.go(context, Constant.Router.OTHER_INSPREPORT_VIEW,bundle);
                             }

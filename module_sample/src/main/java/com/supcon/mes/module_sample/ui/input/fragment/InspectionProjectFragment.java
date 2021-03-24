@@ -287,7 +287,7 @@ public class InspectionProjectFragment extends BaseRefreshRecyclerFragment<Inspe
 
     @Override
     public void getInspectionItemListFailed(String errorMsg) {
-        ToastUtils.show(context, errorMsg);
+        //ToastUtils.show(context, errorMsg);
         refreshListController.refreshComplete(null);
         if (isOutNotify) {
             if (notifyType.equals("submit")) { //提交
