@@ -1,5 +1,6 @@
 package com.supcon.mes.module_retention.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -61,23 +62,25 @@ public class RecordAdapter extends BaseListDataRecyclerViewAdapter<RecordEntity>
             super.initView();
         }
 
+        @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
-            if (!edit) {
-                RxView.clicks(itemView)
-                        .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                RxView.clicks(ll_item)
+                        .throttleFirst(500, TimeUnit.MILLISECONDS)
                         .subscribe(o -> {
-                            selectPosition = getAdapterPosition();
-                            notifyDataSetChanged();
+                            if (!edit){
+                                selectPosition = getAdapterPosition();
+                                notifyDataSetChanged();
+                            }
+
                         });
-            }else {
                 RxView.clicks(itemViewDelBtn)
-                        .throttleFirst(2000,TimeUnit.MILLISECONDS)
+                        .throttleFirst(500,TimeUnit.MILLISECONDS)
                         .subscribe(o -> {
+                            if (edit)
                             onItemChildViewClick(itemView,1);
                         });
-            }
         }
 
         @Override

@@ -1,5 +1,6 @@
 package com.supcon.mes.module_lims.presenter;
 
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_lims.model.bean.MaterialReferenceListEntity;
 import com.supcon.mes.module_lims.model.contract.MaterialReferenceContract;
@@ -28,14 +29,18 @@ public class MaterialReferencePresenter extends MaterialReferenceContract.Presen
         fastQuery.viewCode = viewCode;
         fastQuery.modelAlias = modelAlias;
 
+        Map<String, Object> customConditionMap = new HashMap<>();
+        customConditionMap.put("cid", SupPlantApplication.getAccountInfo().getCompanyId());
         Map<String, Object> map = new HashMap<>();
         if (params.size()>0){
             map.put("fastQueryCond",fastQuery.toString());
         }
         map.put("pageNo",pageNo);
         map.put("paging",true);
-        map.put("customCondition",new MaterialReferenceListEntity());
+        map.put("customCondition",customConditionMap);
         map.put("pageSize",10);
+        map.put("crossCompanyFlag","false");
+        map.put("permissionCode","BaseSet_1.0.0_material_materialRefLayout");
 
         mCompositeSubscription.add(BaseLimsHttpClient.getMaterialReference(map).onErrorReturn(new Function<Throwable, MaterialReferenceListEntity>() {
             @Override

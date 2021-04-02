@@ -16,6 +16,7 @@ import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.CalcParamInfoEntity;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
+import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_lims.model.bean.SampleComResEntity;
 import com.supcon.mes.module_lims.model.bean.SpecLimitEntity;
@@ -52,6 +53,8 @@ public class CalculationController extends BaseViewController {
     private NotifyRefreshAdapterListener mNotifyRefreshAdapterListener;
 
     List<Double> list = new ArrayList<>();
+    List<InspectionItemColumnEntity> columnRangeList;
+    List<SpecLimitEntity> specLimitsIndex = new ArrayList<>();
 
     public CalculationController(View rootView) {
         super(rootView);
@@ -154,6 +157,7 @@ public class CalculationController extends BaseViewController {
 
     //报出值改变函数
     public void dispValueChange(String value, int nRow, List<InspectionSubEntity> adapterList) {
+        specLimitsIndex.clear();
         //检测分项pt
         InspectionSubEntity sampleCom = adapterList.get(nRow);
         List<String> specLimitList = null;
@@ -170,7 +174,32 @@ public class CalculationController extends BaseViewController {
             for (int i = 0; i < specLimitList.size(); i++) {
                 String resultGrade = null;
                 List<SpecLimitEntity> specLimits = GsonUtil.jsonToList(specLimitList.get(i), SpecLimitEntity.class);
-                Object[] specListsArr = specLimits.toArray();
+                Object[] specListsArr = null;
+
+                if (null != columnRangeList && columnRangeList.size() > 0){
+                    for (int a = 0; a < columnRangeList.size(); a++) {
+                        if (columnRangeList.get(a).getColumnKey().split("_")[0].equals(specLimits.get(0).getResultKey().split("_")[0]) &&
+                                columnRangeList.get(a).getColumnType().equals("grade")){
+                            boolean flag = false;
+                            SpecLimitEntity specLimitObj = null;
+                            for (int b = 0; b < specLimits.size(); b++) {
+                                if (columnRangeList.get(a).getResult().equals(specLimits.get(b).getResultValue())){
+                                    specLimitObj = specLimits.get(b);
+                                    flag = true;
+                                }
+                            }
+                            if (!flag){
+                                if (null == specLimitObj){
+                                    specLimitObj = new SpecLimitEntity();
+                                }
+                                specLimitObj.setJudgeCond(null);
+                                specLimitObj.setResultValue(columnRangeList.get(a).getResult());
+                            }
+                            specLimitsIndex.add(specLimitObj);
+                            specListsArr = specLimitsIndex.toArray();
+                        }
+                    }
+                }
                 if (!StringUtil.isEmpty(value)) {
                     String limitType = "";
                     if (sampleCom.getLimitType() != null) {
@@ -682,6 +711,10 @@ public class CalculationController extends BaseViewController {
             return str;
         }
 
+    }
+
+    public void setColumnRangeList(List<InspectionItemColumnEntity> columnRangeList){
+        this.columnRangeList = columnRangeList;
     }
 
 

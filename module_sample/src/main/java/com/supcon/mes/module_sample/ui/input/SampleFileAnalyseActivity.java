@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sample.ui.input;
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,9 +24,13 @@ import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.middleware.SupPlantApplication;
+import com.supcon.mes.middleware.controller.SystemConfigController;
+import com.supcon.mes.middleware.model.bean.ModuleConfigEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
+import com.supcon.mes.module_lims.constant.TemporaryData;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleFileAnalyseController;
@@ -52,7 +57,7 @@ import java.util.concurrent.TimeUnit;
  * Email:wanghaidong1@supcon.com
  * desc:解析文件参照
  */
-@Controller(value = {SampleFileAnalyseController.class,})
+@Controller(value = {SampleFileAnalyseController.class, SystemConfigController.class})
 @Presenter(value = {SampleFileAnalyseListPresenter.class,SampleAnalyseCollectDataPresenter.class})
 @Router(value = LimsConstant.AppCode.LIMS_SAMPLE_FILE_ANALYSE)
 public class SampleFileAnalyseActivity extends BaseRefreshRecyclerActivity<FileAnalyseEntity> implements SampleFileAnalyseContract.View, SampleAnalyseCollectDataContract.View {
@@ -69,6 +74,8 @@ public class SampleFileAnalyseActivity extends BaseRefreshRecyclerActivity<FileA
     @BindByTag("btnConfirm")
     Button btnConfirm;
 
+    private String specialResultStr = "";
+    private String fileId = "";
 
     @Override
     protected IListAdapter<FileAnalyseEntity> createAdapter() {
@@ -101,11 +108,27 @@ public class SampleFileAnalyseActivity extends BaseRefreshRecyclerActivity<FileA
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(R.string.middleware_no_data)));
+
+        getController(SystemConfigController.class).getModuleConfig(LimsConstant.ModuleCode.LIMS_FILE_ANALYSIS_MENU_CODE, LimsConstant.Keys.LIMSDC_OCD_LIMSDCUrl, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object result) {
+                if (null != result){
+                    try {
+                        ModuleConfigEntity bean = (ModuleConfigEntity)result;
+                        specialResultStr = bean.getLimsDCUrl();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
     }
 
     Map<String, Object> queryParam = new HashMap<>();
     boolean remark = false;
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -142,15 +165,18 @@ public class SampleFileAnalyseActivity extends BaseRefreshRecyclerActivity<FileA
             }
         });
 
+
+
         RxView.clicks(btnConfirm)
                 .throttleFirst(2000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (adapter.getItemCount() > 0) {
                         for (FileAnalyseEntity entity : adapter.getList()) {
                             if (entity.check) {
-                                String url = "http://" + SupPlantApplication.getIp() + ":9410/lims-collection-web/ws/rs/analysisDataWS/queryDataByFileId?fileId="+entity.id;
+                                //String url = "http://" + SupPlantApplication.getIp() + ":9410/lims-collection-web/ws/rs/analysisDataWS/queryDataByFileId?fileId="+entity.id;
+                                fileId = entity.id+"";
                                 onLoading(context.getResources().getString(R.string.lims_parsing));
-                                presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode(url);
+                                presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode("http://" +specialResultStr+"/lims-collection-web/ws/rs/analysisDataWS/queryDataByFileId",false,entity.id+"");
                                 return;
                             }
                         }
@@ -181,6 +207,7 @@ public class SampleFileAnalyseActivity extends BaseRefreshRecyclerActivity<FileA
     public void getFormatDataByCollectCodeSuccess(List entity) {
         if (entity != null && entity.size() > 0) {
             onLoadSuccess(context.getResources().getString(R.string.lims_parse_success));
+            TemporaryData.temporaryFileId = fileId;
             SelectDataEvent<List> selectDataEvent=new SelectDataEvent<>(entity,"SampleAnalyseFile");
             EventBus.getDefault().post(selectDataEvent);
             finish();

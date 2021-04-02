@@ -7,9 +7,8 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
-import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
+import com.supcon.mes.module_lims.model.bean.WareStoreEntity;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.bean.WareStoreEntity;
 
 import java.util.concurrent.TimeUnit;
 

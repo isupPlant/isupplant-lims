@@ -30,10 +30,12 @@ import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
+import com.supcon.mes.middleware.model.bean.ModuleConfigEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
+import com.supcon.mes.module_lims.constant.TemporaryData;
 import com.supcon.mes.module_lims.controller.CalculationController;
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.model.bean.ConclusionEntity;
@@ -121,7 +123,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
     private List<InspectionSubEntity> myInspectionSubList = new ArrayList<>();
 
     SampleRecordResultSubmitController submitController;
-
+    private String specialResultStr = "";
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -180,7 +182,20 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 //        } else {
 //
 //        }
+        getController(SystemConfigController.class).getModuleConfig(LimsConstant.ModuleCode.LIMS_FILE_ANALYSIS_MENU_CODE, LimsConstant.Keys.LIMSDC_OCD_LIMSDCUrl, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object result) {
+                if (null != result){
+                    try {
+                        ModuleConfigEntity bean = (ModuleConfigEntity)result;
+                        specialResultStr = bean.getLimsDCUrl();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
+                }
+            }
+        });
         submitController = new SampleRecordResultSubmitController();
     }
 
@@ -224,8 +239,12 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                     }
                 }
             }
-            if (!match)
+            if (!match){
                 ToastUtils.show(context,context.getResources().getString(R.string.lims_no_match_inspect_item));
+            }
+
+            //走保存
+            goSave();
 
         } else if ("WebSocketData".equals(dataEvent.getSelectTag())) {
             String originalValue = dataEvent.getEntity().toString();
@@ -285,9 +304,9 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                         ToastUtils.show(context,context.getResources().getString(R.string.lims_select_sample_data));
                         return;
                     }
-                    String url = "http://" + SupPlantApplication.getIp() + ":9410//lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode?collectCode="+sampleCode;
+                    //String url = "http://" + SupPlantApplication.getIp() + ":9410//lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode?collectCode="+sampleCode;
                     onLoading(context.getResources().getString(R.string.lims_parsing));
-                    presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode(url);
+                    presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode("http://" +specialResultStr+"/lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode",true,sampleCode);
                 });
         RxView.clicks(tvFileAnalyse)
                 .throttleFirst(2000,TimeUnit.MILLISECONDS)
@@ -447,7 +466,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                         }
                         List<InspectionSubEntity> inspectionSubList = getInspectionSubList();
                         SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("save",sampleTesId,inspectionSubList);
-                        submitController.recordResultSubmit(activity,1,submitEntity);
+                        submitController.recordResultSubmit(activity,1,submitEntity, TemporaryData.temporaryFileId);
                     }
                 });
         RxView.clicks(rl_submit)
@@ -459,7 +478,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
                     }
                     List<InspectionSubEntity> inspectionSubList = getInspectionSubList();
                     SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("submit",sampleTesId,inspectionSubList);
-                    submitController.recordResultSubmit(activity,1,submitEntity);
+                    submitController.recordResultSubmit(activity,1,submitEntity,TemporaryData.temporaryFileId);
                 });
         RxView.clicks(rl_calculation)
                 .throttleFirst(300,TimeUnit.MILLISECONDS)
@@ -497,6 +516,10 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
         refreshListController.refreshBegin();
     }
 
+    public void getFormatDataByCollectCode(String url,String collectCode){
+        onLoading(context.getResources().getString(R.string.lims_parsing));
+        presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode(url,true,collectCode);
+    }
 
     public void manualCalculate() {
         //手动计算
@@ -560,6 +583,7 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
 
         columnList.clear();
         columnList.addAll(entity.data);
+        getController(CalculationController.class).setColumnRangeList(columnList);
         //先把数据中的结论摘出来 作为父级实体
         for (int i = 0; i < columnList.size(); i++) {
             if (columnList.get(i).getColumnType().equals("range")) { //表示是结论
@@ -597,6 +621,12 @@ public class SingleProjectFragment extends BaseRefreshRecyclerFragment<Inspectio
             }
         }
         presenterRouter.create(SingleSampleResultInputAPI.class).getSampleCom(sampleTesId);
+    }
+
+    private void goSave(){
+        List<InspectionSubEntity> inspectionSubList = getInspectionSubList();
+        SampleRecordResultSubmitEntity submitEntity=new SampleRecordResultSubmitEntity("save",sampleTesId,inspectionSubList);
+        submitController.recordResultSubmit(activity,1,submitEntity,TemporaryData.temporaryFileId);
     }
 
     @Override

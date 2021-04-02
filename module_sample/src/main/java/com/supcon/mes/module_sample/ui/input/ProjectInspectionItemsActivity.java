@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.input;
 
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,25 +20,37 @@ import android.widget.RelativeLayout;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
+import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomDialog;
+import com.supcon.mes.mbap.view.CustomImageButton;
+import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.SystemConfigController;
+import com.supcon.mes.middleware.model.bean.ModuleConfigEntity;
+import com.supcon.mes.middleware.model.bean.PopupWindowEntity;
+import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.constant.LimsConstant;
+import com.supcon.mes.module_lims.constant.TemporaryData;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.ui.popu.LIMSPopupWindow;
 import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
 import com.supcon.mes.module_sample.listener.InspectionSubRefreshListener;
+import com.supcon.mes.module_sample.model.api.SampleAnalyseCollectDataAPI;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
 import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
+import com.supcon.mes.module_sample.model.contract.SampleAnalyseCollectDataContract;
+import com.supcon.mes.module_sample.presenter.SampleAnalyseCollectDataPresenter;
 import com.supcon.mes.module_sample.ui.input.fragment.EquipmentFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.InspectionProjectFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.MaterialFragment;
@@ -57,7 +71,7 @@ import io.reactivex.functions.Consumer;
  * class name
  */
 @Router(LimsConstant.AppCode.LIMS_InspectionItem)
-public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
+public class ProjectInspectionItemsActivity extends BaseFragmentActivity{
 
     @BindByTag("tabLayout")
     TabLayout tabLayout;
@@ -90,15 +104,20 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     private Long sampleId ;
     private Long sampleIdTestId;
     private String mTitle;
+    private String sampleCode;
 
     private ImageView ivProject;
-
+    private CustomImageButton searchBtn;
     private SampleRecordResultSubmitController controller;
     List<InspectionSubEntity> inspectionSubList;
     List<TestDeviceEntity> testDeviceList ;
     List<TestMaterialEntity> testMaterialList ;
     String equipmentDelete;
     String materialDelete ;
+    private LIMSPopupWindow mCustomPopupWindow;
+    private List<PopupWindowEntity> popupWindowEntityList = new ArrayList<>();
+    private SystemConfigController mSystemConfigController;
+    private String specialResultStr = "";
     @Override
     protected int getLayoutID() {
         return R.layout.activity_project_inspection_items;
@@ -109,7 +128,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
         super.onInit();
 
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-
+        sampleCode = getIntent().getStringExtra("sampleCode");
         sampleId = getIntent().getLongExtra("sampleId",0);
         mTitle = getIntent().getStringExtra("title");
     }
@@ -118,10 +137,13 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     protected void initView() {
         super.initView();
 
-        searchTitle.showScan(false);
+        searchTitle.showScan(true);
         ivProject = searchTitle.findViewById(R.id.ivSearchBtn);
         ivProject.setImageResource(R.drawable.ic_lims_template);
         searchTitle.setTitle("");
+
+        searchBtn = searchTitle.findViewById(R.id.scanRightBtn);
+        searchBtn.setImageResource(R.drawable.ic_home_page_edit_more);
         leftBtn.setOnClickListener(v -> onBackPressed());
 
         projectFragment = new ProjectFragment();
@@ -145,6 +167,37 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
                 .commit();
 
         controller = new SampleRecordResultSubmitController();
+
+        PopupWindowEntity entity = new PopupWindowEntity();
+        entity.setText(getString(R.string.lims_automatic_acquisition));
+
+        PopupWindowEntity entity1 = new PopupWindowEntity();
+        entity1.setText(getString(R.string.lims_file_analysis));
+
+        PopupWindowEntity entity2 = new PopupWindowEntity();
+        entity2.setText(getString(R.string.lims_serial_port_acquisition));
+
+        popupWindowEntityList.clear();
+        popupWindowEntityList.add(entity);
+        popupWindowEntityList.add(entity1);
+        popupWindowEntityList.add(entity2);
+        mCustomPopupWindow = new LIMSPopupWindow(context,popupWindowEntityList);
+
+        mSystemConfigController = new SystemConfigController(context);
+        mSystemConfigController.getModuleConfig(LimsConstant.ModuleCode.LIMS_FILE_ANALYSIS_MENU_CODE, LimsConstant.Keys.LIMSDC_OCD_LIMSDCUrl, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object result) {
+                if (null != result){
+                    try {
+                        ModuleConfigEntity bean = (ModuleConfigEntity)result;
+                        specialResultStr = bean.getLimsDCUrl();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
     }
 
     @SuppressLint("CheckResult")
@@ -154,6 +207,38 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
         RxView.clicks(ivProject)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe(o -> openDrawLayout());
+
+        RxView.clicks(searchBtn)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        mCustomPopupWindow.showPopupWindow(searchBtn);
+                        mCustomPopupWindow.setOnItemClick(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                switch (position){
+                                    case 0: //自动采集
+                                        String url = "http://" + specialResultStr + "/lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode";
+                                        projectFragment.getFormatDataByCollectCode(url,sampleCode);
+                                        mCustomPopupWindow.dismiss();
+                                        break;
+                                    case 1: //文件解析
+                                        IntentRouter.go(context, LimsConstant.AppCode.LIMS_SAMPLE_FILE_ANALYSE);
+                                        mCustomPopupWindow.dismiss();
+                                        break;
+                                    case 2: //串口采集
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString(Constant.IntentKey.SELECT_TAG,"Serial");
+                                        IntentRouter.go(context, LimsConstant.AppCode.LIMS_SerialRef);
+                                        mCustomPopupWindow.dismiss();
+                                        break;
+                                }
+                            }
+                        });
+                    }
+                });
+
         viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -212,7 +297,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
                         SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("save",
                                 sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
-                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
+                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity, TemporaryData.temporaryFileId);
                     }
                 });
 
@@ -229,7 +314,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
 
                         SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
                                 sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
-                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity);
+                        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity,TemporaryData.temporaryFileId);
                     }
                 });
         controller.setSubmitOnSuccessListener(new OnSuccessListener<Integer>() {
@@ -280,6 +365,24 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity {
     }
 
 
+    public void goSave(){
+        List<InspectionSubEntity> recordList = projectFragment.getRecordList();
+        List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+
+        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+        List<TestDeviceEntity> deviceRecordList = equipmentFragment.getRecordList();
+
+        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+        List<TestMaterialEntity> materialRecordList = materialFragment.getRecordList();
+
+
+        String equipmentDelete = equipmentFragment.getDeleteList();
+        String materialDelete = materialFragment.getDeleteList();
+
+        SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("save",
+                sampleId,sampleIdTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
+        controller.recordResultSubmit(ProjectInspectionItemsActivity.this,2,entity,TemporaryData.temporaryFileId);
+    }
     public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
         public MyFragmentPagerAdapter(FragmentManager fm) {

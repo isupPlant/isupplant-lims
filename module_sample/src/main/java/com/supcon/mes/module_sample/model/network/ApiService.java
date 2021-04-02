@@ -6,13 +6,13 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAP5ListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
-import com.supcon.mes.middleware.model.bean.Unit;
 import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportListEntity;
+import com.supcon.mes.module_lims.model.bean.WareStoreEntity;
 import com.supcon.mes.module_sample.model.bean.FileAnalyseListEntity;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.bean.InspectionItemsEntity;
@@ -23,7 +23,6 @@ import com.supcon.mes.module_sample.model.bean.SampleSignatureEntity;
 import com.supcon.mes.module_sample.model.bean.SingleInspectionItemListEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
-import com.supcon.mes.module_sample.model.bean.WareStoreEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -195,8 +194,8 @@ public interface ApiService {
      * @param url
      * @return
      */
-    @GET
-    Flowable<List<Map<String,Object>>> getFormatDataByCollectCode(@Url String url);
+    @POST
+    Flowable<List<Map<String,Object>>> getFormatDataByCollectCode(@Url String url,@QueryMap Map<String, Object> map);
 
     /**
      * 获取样品参照列表

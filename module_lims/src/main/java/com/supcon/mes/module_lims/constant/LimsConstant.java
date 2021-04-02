@@ -6,7 +6,7 @@ package com.supcon.mes.module_lims.constant;
  * class name 业务类型
  */
 public interface LimsConstant {
-
+    public static String LIMS_FileId = "";
     //检验申请
     interface PleaseCheck{
         String PRODUCT_PLEASE_CHECK = "ProductPleaseCheck";
@@ -77,11 +77,15 @@ public interface LimsConstant {
         String LIMS_PRODUCT_REPORT_MENU_CODE = "QCS_5.0.0.0_inspectReport_manuInspReportList";
         String LIMS_INCOMING_REPORT_MENU_CODE = "QCS_5.0.0.0_inspectReport_purchInspReportList";
         String LIMS_OTHER_REPORT_MENU_CODE = "QCS_5.0.0.0_inspectReport_otherInspReportList";
+
+        String LIMS_FILE_ANALYSIS_MENU_CODE = "LIMSDC";
     }
 
     //配置项KEY
     interface Keys{
         String SPECIAL_RESULT = "LIMSBasic.specialResult";
+        String LIMSDC_OCD_LIMSDCUrl = "LIMSDC.LIMSDCUrl";
+
     }
 
 
@@ -121,5 +125,9 @@ public interface LimsConstant {
         String SAMPLE_UNIT_REF="SAMPLE_UNIT_REF";
         String WARE_STORE_REF="WARE_STORE_REF";
         String retentionEdit="retentionEdit";
+    }
+
+    interface TemporaryCode{
+
     }
 }

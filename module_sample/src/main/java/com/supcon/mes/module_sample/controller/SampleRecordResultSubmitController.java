@@ -65,13 +65,14 @@ public class SampleRecordResultSubmitController extends BasePresenterController 
      * @param submitEntity
      */
     int type;
-    public void recordResultSubmit(BaseFragmentActivity activity,int type,SampleRecordResultSubmitEntity submitEntity){
+    public void recordResultSubmit(BaseFragmentActivity activity,int type,SampleRecordResultSubmitEntity submitEntity,String fileId){
         this.activity=activity;
         this.type=type;
         paramsMap.put("dealMode",submitEntity.getDealMode());
         paramsMap.put("sampleId",submitEntity.getSampleId());
         paramsMap.put("sampleComListJson",submitEntity.getSampleComListJson());
         paramsMap.put("signatureInfo","");
+        paramsMap.put("fileId",fileId);
         if (type==2){
             paramsMap.put("sampleTestId",submitEntity.getSampleTestId());
             paramsMap.put("testDeviceListJson",submitEntity.getTestDeviceListJson());

@@ -276,4 +276,14 @@
     <string name="lims_ware_store_code">Store Code</string>
     <string name="lims_data_not_company">The data of row【%1$s】belongs another company!</string>
     <string name="lims_unable_to_operate_non_company_data">Unable to operate non company data!</string>
+    <string name="lims_serial_server_connection_timeout">Serial server connection timeout!</string>
+    <string name="lims_automatic_acquisition">Automatic acquisition</string>
+    <string name="lims_file_analysis">File analysis</string>
+    <string name="lims_serial_port_acquisition">Serial port acquisition</string>
+    <string name="lims_retention_storage_location_tip">Storage location cannot be empty！</string>
+    <string name="lims_cancel">Cancel</string>
+    <string name="lims_sample_retention_date_or_due_date_is_empty">Sample retention date or due date is empty, observation plan cannot be generated!</string>
+    <string name="lims_location_reference">Location reference</string>
+    <string name="lims_analysis_location_connection_timeout">Resolve address connection timeout</string>
+    <string name="lims_the_resolution_result_does_not_exist">The resolution result does not exist!</string>
 </resources>

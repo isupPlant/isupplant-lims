@@ -21,10 +21,10 @@ import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_lims.constant.LimsConstant;
 import com.supcon.mes.module_lims.listener.OnSearchOverListener;
+import com.supcon.mes.module_lims.model.bean.WareStoreEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.WareStoreController;
 import com.supcon.mes.module_sample.model.api.WareStoreRefAPI;
-import com.supcon.mes.module_sample.model.bean.WareStoreEntity;
 import com.supcon.mes.module_sample.model.contract.WareStoreRefContract;
 import com.supcon.mes.module_sample.presenter.WareStoreRefPresenter;
 import com.supcon.mes.module_sample.ui.adapter.WareStoreAdapter;
@@ -73,7 +73,7 @@ public class WareStoreListActivity extends BaseRefreshRecyclerActivity<WareStore
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(R.string.lims_unit_ref);
+        titleText.setText(R.string.lims_location_reference);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         scanRightBtn.setVisibility(View.GONE);
         refreshListController.setAutoPullDownRefresh(true);

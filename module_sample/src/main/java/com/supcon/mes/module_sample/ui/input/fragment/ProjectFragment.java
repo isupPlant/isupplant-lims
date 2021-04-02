@@ -44,11 +44,14 @@ import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.model.api.InspectionSubProjectAPI;
 import com.supcon.mes.module_sample.model.api.InspectionSubProjectColumnAPI;
+import com.supcon.mes.module_sample.model.api.SampleAnalyseCollectDataAPI;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.model.contract.InspectionSubProjectColumnContract;
 import com.supcon.mes.module_sample.model.contract.InspectionSubProjectContract;
+import com.supcon.mes.module_sample.model.contract.SampleAnalyseCollectDataContract;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectColumnPresenter;
 import com.supcon.mes.module_sample.presenter.InspectionSubProjectPresenter;
+import com.supcon.mes.module_sample.presenter.SampleAnalyseCollectDataPresenter;
 import com.supcon.mes.module_sample.ui.adapter.ProjectAdapter;
 import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.SampleResultInputPADActivity;
@@ -64,11 +67,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -76,9 +75,10 @@ import io.reactivex.schedulers.Schedulers;
  * on 2020/7/31
  * class name
  */
-@Presenter(value = {InspectionSubProjectPresenter.class, InspectionSubProjectColumnPresenter.class})
+@Presenter(value = {InspectionSubProjectPresenter.class, InspectionSubProjectColumnPresenter.class, SampleAnalyseCollectDataPresenter.class})
 @Controller(value = {SystemConfigController.class, CalculationController.class, LimsFileUpLoadController.class})
-public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEntity> implements InspectionSubProjectContract.View, InspectionSubProjectColumnContract.View {
+public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEntity> implements InspectionSubProjectContract.View,
+        InspectionSubProjectColumnContract.View, SampleAnalyseCollectDataContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -191,8 +191,10 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
                     }
                 }
             }
-            if (!match)
+            if (!match){
                 ToastUtils.show(context, context.getResources().getString(R.string.lims_no_match_inspect_item));
+            }
+            goSave();
         } else if ("WebSocketData".equals(dataEvent.getSelectTag())) {
             String originalValue = dataEvent.getEntity().toString();
             adapter.setOriginalValueChangeListener(selectPosition, originalValue);
@@ -403,6 +405,7 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
 
         columnList.clear();
         columnList.addAll(entity.data);
+        getController(CalculationController.class).setColumnRangeList(columnList);
         //先把数据中的结论摘出来 作为父级实体
         for (int i = 0; i < columnList.size(); i++) {
             if (columnList.get(i).getColumnType().equals("range")) { //表示是结论
@@ -471,11 +474,39 @@ public class ProjectFragment extends BaseRefreshRecyclerFragment<InspectionSubEn
         return recordList;
     }
 
+    public void getFormatDataByCollectCode(String url,String collectCode){
+        onLoading(context.getResources().getString(R.string.lims_parsing));
+        presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode(url,true,collectCode);
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void getFormatDataByCollectCodeSuccess(List entity) {
+        if (entity != null && entity.size() > 0) {
+            SelectDataEvent<List> selectDataEvent=new SelectDataEvent<>(entity,"SampleAnalyseFile");
+            EventBus.getDefault().post(selectDataEvent);
+            onLoadSuccess(context.getResources().getString(R.string.lims_parse_success));
+        } else {
+            onLoadFailed(context.getResources().getString(R.string.lims_no_parse_data));
+        }
+    }
+
+    private void goSave(){
+        if (activity instanceof SampleResultInputPADActivity){
+            ((SampleResultInputPADActivity) activity).goSave();
+        }else if (activity instanceof ProjectInspectionItemsActivity){
+            ((ProjectInspectionItemsActivity) activity).goSave();
+        }
+    }
+
+    @Override
+    public void getFormatDataByCollectCodeFailed(String errorMsg) {
+        onLoadFailed(errorMsg);
     }
 }
 

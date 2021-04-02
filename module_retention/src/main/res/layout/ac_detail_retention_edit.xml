@@ -75,13 +75,15 @@
                     android:layout_height="0.5dp"
                     android:background="#ffdcdcdc" />
 
-                <com.supcon.mes.mbap.view.CustomTextView
+                <com.supcon.mes.mbap.view.CustomEditText
                     android:id="@+id/batchCodeTv"
                     style="@style/yh_custom_view_horizontal_style"
                     android:tag="batchCodeTv"
                     app:gravity="right|center_vertical"
                     app:text="@string/lims_batch_number"
-                    app:text_color="@color/font_333333" />
+                    app:text_color="@color/font_333333"
+                    app:editable="false"
+                    />
 
                 <View
                     android:layout_width="match_parent"
@@ -101,7 +103,7 @@
                     android:layout_height="0.5dp"
                     android:background="#ffdcdcdc" />
 
-                <com.supcon.mes.mbap.view.CustomTextView
+                <com.supcon.mes.mbap.view.CustomEditText
                     android:id="@+id/retainQtyTv"
                     style="@style/yh_custom_view_horizontal_style"
                     android:tag="retainQtyTv"

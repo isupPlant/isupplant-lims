@@ -55,12 +55,16 @@ public class TestRequestNoPresenter extends TestRequestNoContract.Presenter {
             JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(supMap, joinInfo);
             fastQuery.subconds.add(joinSubcondEntity);
         }
+//        HashMap<String,Object> customConditionMap = new HashMap<>();
+//        customConditionMap.put("isBatch","true");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("pageNo",pageNo);
         map.put("paging",true);
         map.put("pageSize",10);
         map.put("permissionCode","QCS_5.0.0.0_inspect_"+query);
+        map.put("crossCompanyFlag","false");
+        //map.put("customCondition",customConditionMap);
         if (null != fastQuery){
             map.put("fastQueryCond",fastQuery.toString());
         }

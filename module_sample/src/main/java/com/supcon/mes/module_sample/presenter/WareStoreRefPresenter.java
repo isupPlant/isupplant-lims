@@ -7,9 +7,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.SubcondEntity;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
-import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
-import com.supcon.mes.module_sample.model.bean.WareStoreEntity;
-import com.supcon.mes.module_sample.model.contract.SampleUnitRefContract;
+import com.supcon.mes.module_lims.model.bean.WareStoreEntity;
 import com.supcon.mes.module_sample.model.contract.WareStoreRefContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
@@ -51,8 +49,8 @@ public class WareStoreRefPresenter extends WareStoreRefContract.Presenter {
                 fastQueryCondEntity.modelAlias = modelAlias;
                 map.put("fastQueryCond",fastQueryCondEntity.toString());
             }
-            JSONObject customCondition=new JSONObject();
-            customCondition.put("wareClassCode","LIMS");
+            Map<String, Object> customCondition=new HashMap();
+            customCondition.put("wareClassCode","LIMSCK");
             map.put("customCondition",customCondition);
             map.put("permissionCode","BaseSet_1.0.0_warehouse_storeSetFilterRef");
             map.put("pageNo",pageNo);

@@ -15,6 +15,7 @@ import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.controller.NetworkChangeController;
 import com.supcon.mes.middleware.model.event.NetworkChangeEvent;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.utils.ConnectStatus;
 import com.supcon.mes.module_lims.utils.WebSocketUtils;
 
@@ -88,8 +89,10 @@ public class SerialWebSocketService extends Service {
         if (null == webSocketUtils) {
             webSocketUtils = WebSocketUtils.getInstance();
         }
-        if (!TextUtils.isEmpty(webSocketUtils.url) && webSocketUtils.url.equals(url) && webSocketUtils.getStatus()== ConnectStatus.Open)
+        if (!TextUtils.isEmpty(webSocketUtils.url) && webSocketUtils.url.equals(url) && webSocketUtils.getStatus()== ConnectStatus.Open){
+            handler.sendEmptyMessage(100);
             return;
+        }
 
         if (webSocketUtils.getStatus()==ConnectStatus.Open){
             webSocketUtils.cancel();
@@ -108,6 +111,12 @@ public class SerialWebSocketService extends Service {
                 }
             }
         });
+        webSocketUtils.setOnSuccessListener(new OnSuccessListener<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                handler.sendEmptyMessage(-200);
+            }
+        });
 
     }
 
@@ -117,9 +126,13 @@ public class SerialWebSocketService extends Service {
             super.handleMessage(msg);
             if (msg.what==100){
                 ToastUtils.show(SupPlantApplication.getAppContext(),"设备连接成功！");
+            }else if (msg.what==-200){
+                ToastUtils.show(SupPlantApplication.getAppContext(),"设备已断开连接！");
             }
         }
     };
+
+
     private void stopConnect(){
         if (webSocketUtils != null){
             webSocketUtils.close();

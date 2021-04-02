@@ -55,14 +55,18 @@ import com.supcon.mes.middleware.model.bean.DepartmentEntity;
 import com.supcon.mes.middleware.model.bean.DeploymentEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
+import com.supcon.mes.middleware.model.bean.Unit;
 import com.supcon.mes.middleware.model.contract.DeploymentContract;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.presenter.DeploymentPresenter;
+import com.supcon.mes.middleware.util.StringUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_lims.constant.LimsConstant;
+import com.supcon.mes.module_lims.event.MaterialDateEvent;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
 import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
+import com.supcon.mes.module_lims.model.bean.ProductIdEntity;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_lims.model.bean.WareStoreEntity;
 import com.supcon.mes.module_retention.IntentRouter;
@@ -107,7 +111,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
         WorkFlowViewController.class
 })
 @Router(value = LimsConstant.AppCode.retentionEdit)
-public class RetentionDetainEditActivity extends BaseRefreshActivity implements RetentionDetailContract.View, DeploymentContract.View{
+public class RetentionDetainEditActivity extends BaseRefreshActivity implements RetentionDetailContract.View, DeploymentContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -119,7 +123,7 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
     @BindByTag("materialTv")
     CustomTextView materialTv;
     @BindByTag("batchCodeTv")
-    CustomTextView batchCodeTv;
+    CustomEditText batchCodeTv;
     @BindByTag("unitTv")
     CustomTextView unitTv;
     @BindByTag("retainQtyTv")
@@ -175,7 +179,7 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
 
     RetentionEntity retentionEntity;
     PendingEntity pendingEntity;
-
+    boolean isDismiss = false;
 
     @Override
     protected void onInit() {
@@ -301,9 +305,9 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
                 RecordEntity entity = adapter.getItem(position);
                 if (entity.id != null) {
                     dgDeletedIds.add(entity.id);
-                    adapter.remove(position);
-                    adapter.notifyItemRemoved(position);
                 }
+                adapter.remove(position);
+                adapter.notifyItemRemoved(position);
             }
         });
         if (add) {
@@ -334,6 +338,14 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 IntentRouter.go(context, LimsConstant.AppCode.SAMPLE_REF);
+            }
+        });
+        materialTv.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("radio", true);
+                IntentRouter.go(context, Constant.AppCode.LIMS_MaterialRef, bundle);
             }
         });
         RxTextView.textChanges(retainQtyTv.editText())
@@ -381,13 +393,13 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
                 .throttleFirst(2000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (retentionEntity.retainDate != null) {
-                        if (retentionEntity.retainDays != null) {
+                        if (retentionEntity.validDate != null) {
                             showTipDialog();
                         } else {
-                            ToastUtils.show(context, getString(R.string.lims_retention_days_tips));
+                            ToastUtils.show(context, getString(R.string.lims_sample_retention_date_or_due_date_is_empty));
                         }
                     } else {
-                        ToastUtils.show(context, getString(R.string.lims_retention_date_tip));
+                        ToastUtils.show(context, getString(R.string.lims_sample_retention_date_or_due_date_is_empty));
                     }
                 });
         retainDateTv.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -460,11 +472,11 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
                         doSave(workFlowVar);
                         break;
                     case 1:
-                        if (retentionEntity.id!=null){
+                        if (retentionEntity.id != null) {
                             operate = 1;
                             doSubmit(workFlowVar);
-                        }else {
-                            ToastUtils.show(context,getString(R.string.lims_no_table));
+                        } else {
+                            ToastUtils.show(context, getString(R.string.lims_no_table));
                         }
                         break;
                     case 2:
@@ -530,6 +542,7 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
     Long currentDate;
 
     private void showTipDialog() {
+
         CustomDialog customDialog = new CustomDialog(context);
         customDialog.getDialog().getWindow().setBackgroundDrawableResource(R.color.transparent); // 除去dialog设置四个圆角出现的黑色背景
         customDialog.layout(R.layout.dialog_retention_date, DisplayUtil.dip2px(300, context), WRAP_CONTENT);
@@ -550,6 +563,11 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
                 .subscribe(s -> {
                     timeInterval = !TextUtils.isEmpty(s) ? timeInterval = Integer.parseInt(s) : null;
                 });
+        for (int i = 0; i < remainDaysList.size(); i++) {
+            if (remainDaysList.get(i).equals(remainDaysUnitTv.getText().toString())) {
+                timeUnitType = i;
+            }
+        }
         timeUnitCs.setContent(remainDaysList.get(timeUnitType));
         timeUnitCs.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         timeUnitCs.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -568,6 +586,10 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
                 .bindClickListener(R.id.confirmTv, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (StringUtil.isEmpty(timeIntervalTv.getContent())) {
+                            ToastUtils.show(context, "间隔时间不可为空!");
+                            return;
+                        }
                         currentDate = null;
                         if (adapter.getItemCount() > 0) {
                             for (RecordEntity recordEntity : adapter.getList()) {
@@ -581,9 +603,6 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
                         while (true) {
                             if (currentDate == null) {
                                 currentDate = retentionEntity.retainDate;
-                                RecordEntity recordEntity = new RecordEntity();
-                                recordEntity.planDate = currentDate;
-                                adapter.addData(recordEntity);
                                 continue;
                             }
                             Calendar calendar = Calendar.getInstance();
@@ -605,8 +624,10 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
                             recordEntity.planDate = currentDate;
                             adapter.addData(recordEntity);
                         }
+                        customDialog.dismiss();
                     }
-                }, true);
+
+                }, false);
         customDialog.show();
     }
 
@@ -654,10 +675,13 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         retainQtyTv.setEditable(true);
         retainQtyTv.setNecessary(true);
         customWorkFlowView.setVisibility(View.VISIBLE);
+        if (add) {
+            materialTv.setEditable(true);
+            batchCodeTv.setEditable(true);
+        }
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(context));
 
     }
-
 
 
     private void setRetentionEntity() {
@@ -665,16 +689,20 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         if (retentionEntity.sampleId != null && retentionEntity.sampleId.getId() != null) {
             sampleTv.setValue(String.format("%s(%s)", retentionEntity.sampleId.getName(), retentionEntity.sampleId.getCode()));
             pSiteTv.setValue(retentionEntity.sampleId.getPsId() != null && retentionEntity.sampleId.getPsId().getId() != null ? retentionEntity.sampleId.getPsId().getName() : "");
-        }else {
+            materialTv.setEditable(false);
+        } else {
             sampleTv.setEditable(true);
+            materialTv.setEditable(true);
+            if (retentionEntity.productId!=null)
+                batchCodeTv.setEditable(retentionEntity.productId.isEnableBatch());
         }
         if (retentionEntity.productId != null && retentionEntity.productId.getId() != null) {
             materialTv.setValue(String.format("%s(%s)", retentionEntity.productId.getName(), retentionEntity.productId.getCode()));
         }
-        batchCodeTv.setValue(retentionEntity.batchCode);
+        batchCodeTv.setContent(retentionEntity.batchCode);
         unitTv.setValue(retentionEntity.unitId != null ? retentionEntity.unitId.getName() : "");
         unitTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-        unitTv.setEditable(retentionEntity.unitId==null || retentionEntity.unitId.getId()==null);
+        unitTv.setEditable(retentionEntity.unitId == null || retentionEntity.unitId.getId() == null);
         retainQtyTv.setContent(Util.big2(retentionEntity.retainQty));
         retainDateTv.setDate(retentionEntity.retainDate != null ? DateUtil.dateFormat(retentionEntity.retainDate) : "");
         retainDateTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
@@ -684,11 +712,11 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         }
         remainDaysUnitTv.setText(retentionEntity.retainUnit != null ? retentionEntity.retainUnit.getValue() : "");
 
-        if (retentionEntity.retainUnit!=null && !TextUtils.isEmpty(retentionEntity.retainUnit.getId())){
+        if (retentionEntity.retainUnit != null && !TextUtils.isEmpty(retentionEntity.retainUnit.getId())) {
             for (int i = 0; i < remainDaysBaseIdValueEntities.size(); i++) {
-                BaseIdValueEntity baseIdValueEntity=remainDaysBaseIdValueEntities.get(i);
-                if (retentionEntity.retainUnit.getId().equals(baseIdValueEntity.getId())){
-                    selectDateType=i;
+                BaseIdValueEntity baseIdValueEntity = remainDaysBaseIdValueEntities.get(i);
+                if (retentionEntity.retainUnit.getId().equals(baseIdValueEntity.getId())) {
+                    selectDateType = i;
                     break;
                 }
             }
@@ -703,6 +731,8 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         keeperTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         storeSetTv.setValue(retentionEntity.storeSetId != null ? retentionEntity.storeSetId.getName() : "");
         storeSetTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+        materialTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+        sampleTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
     }
 
     private boolean check() {
@@ -731,6 +761,10 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
             ToastUtils.show(context, getString(R.string.lims_retention_keeper_tip));
             return false;
         }
+        if (retentionEntity.storeSetId == null || retentionEntity.storeSetId.getId() == null) {
+            ToastUtils.show(context, getString(R.string.lims_retention_storage_location_tip));
+            return false;
+        }
 
         return true;
     }
@@ -750,7 +784,7 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         entity.deploymentId = pendingEntity != null ? pendingEntity.deploymentId + "" : mDeploymentId.toString();
         entity.taskDescription = pendingEntity != null ? pendingEntity.taskDescription : "";
         entity.activityName = pendingEntity != null ? pendingEntity.activityName : "TaskEvent_19t2axy";
-        if (pendingEntity!=null && pendingEntity.id != null)
+        if (pendingEntity != null && pendingEntity.id != null)
             entity.pendingId = pendingEntity.id.toString();
         entity.retention = retentionEntity;
         StringBuffer sb = new StringBuffer();
@@ -770,6 +804,9 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         Map<String, Object> params = new HashMap<>();
         if (retentionEntity.id != null) {
             params.put("id", retentionEntity.id);
+        }
+        if (pendingEntity!=null && !TextUtils.isEmpty(pendingEntity.openUrl) && TextUtils.isEmpty(_pc_)){
+            _pc_=pendingEntity.openUrl.substring(pendingEntity.openUrl.indexOf("__pc__=")+7,pendingEntity.openUrl.indexOf("&tableInfoId"));
         }
 
         params.put("__pc__", _pc_);
@@ -794,7 +831,7 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
             jsonObject.addProperty("idsMap", workFlowVar.idsMap.toString());
         }
 
-        if (operate==1) {
+        if (operate == 1) {
             String tip = getString(R.string.lims_retention) + getString(R.string.lims_cancellation);
             onLoading(tip);
             jsonObject.addProperty("outcomeType", "cancel");
@@ -904,7 +941,11 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
             unitTv.setValue(retentionEntity.unitId != null ? retentionEntity.unitId.getName() : "");
             unitTv.setEditable(!(retentionEntity.unitId != null && retentionEntity.unitId.getId() != null));
             unitTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-            batchCodeTv.setValue(retentionEntity.batchCode);
+            batchCodeTv.setContent(retentionEntity.batchCode);
+            materialTv.setEditable(false);
+            batchCodeTv.setEditable(false);
+            sampleTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+            materialTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         } else if ("UnitEntity".equals(dataEvent.getSelectTag())) {
             retentionEntity.unitId = (BaseSystemBackEntity) dataEvent.getEntity();
             unitTv.setValue(retentionEntity.unitId != null ? retentionEntity.unitId.getName() : "");
@@ -940,6 +981,28 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
             deptTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
 
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMaterialEvent(MaterialDateEvent event){
+        retentionEntity.productId=new ProductIdEntity();
+        retentionEntity.productId.setId(event.getData().getId());
+        retentionEntity.productId.setName(event.getData().getName());
+        retentionEntity.productId.setCode(event.getData().getCode());
+        retentionEntity.productId.setIsBatch(event.getData().getIsBatch());
+
+
+        BaseSystemBackEntity mainUnit=new BaseSystemBackEntity();
+        mainUnit.setId(event.getData().getMainUnit().getId());
+        mainUnit.setName(event.getData().getMainUnit().getName());
+        retentionEntity.unitId=mainUnit;
+        materialTv.setValue(String.format("%s(%s)", retentionEntity.productId.getName(), retentionEntity.productId.getCode()));
+        materialTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+        unitTv.setValue(retentionEntity.unitId != null ? retentionEntity.unitId.getName() : "");
+        unitTv.setEditable(!(retentionEntity.unitId != null && retentionEntity.unitId.getId() != null));
+        sampleTv.setEditable(false);
+        unitTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+        batchCodeTv.setEditable(retentionEntity.productId.isEnableBatch());
     }
 
     @Override

@@ -43,6 +43,8 @@ public class SamplingPointReferencePresenter extends SamplingPointContract.Prese
         map.put("pageNo",pageNo);
         map.put("paging",true);
         map.put("pageSize",10);
+        map.put("permissionCode","LIMSBasic_1.0.0_pickSite_pickSiteRefLayout");
+        map.put("crossCompanyFlag","false");
 
         mCompositeSubscription.add(BaseLimsHttpClient.getSamplingPointList(map).onErrorReturn(new Function<Throwable, SamplingPointListEntity>() {
             @Override

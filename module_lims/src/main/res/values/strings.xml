@@ -248,6 +248,7 @@
     <string name="lims_retention_staff_tip">留样人不允许为空！</string>
     <string name="lims_retention_dept_tip">留样部门不允许为空！</string>
     <string name="lims_retention_keeper_tip">保管员不允许为空！</string>
+    <string name="lims_retention_storage_location_tip">存放位置不允许为空！</string>
 
     <string name="lims_serial_ref_eam">设备参照</string>
     <string name="lims_file_name">文件名</string>
@@ -275,4 +276,13 @@
     <string name="lims_ware_store_code">货位编码</string>
     <string name="lims_data_not_company">第【%1$s】行数据为非本公司数据，无法操作!</string>
     <string name="lims_unable_to_operate_non_company_data">无法操作非本公司数据!</string>
+    <string name="lims_serial_server_connection_timeout">串口服务器连接超时!</string>
+    <string name="lims_automatic_acquisition">自动采集</string>
+    <string name="lims_file_analysis">文件解析</string>
+    <string name="lims_serial_port_acquisition">串口采集</string>
+    <string name="lims_cancel">取消</string>
+    <string name="lims_sample_retention_date_or_due_date_is_empty">留样日期或到期日期为空，不允许生成观察计划！</string>
+    <string name="lims_location_reference">货位参照</string>
+    <string name="lims_analysis_location_connection_timeout">解析地址连接超时!</string>
+    <string name="lims_the_resolution_result_does_not_exist">解析结果不存在!</string>
 </resources>

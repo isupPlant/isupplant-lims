@@ -23,9 +23,12 @@ import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.SystemConfigController;
+import com.supcon.mes.middleware.model.bean.ModuleConfigEntity;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.constant.LimsConstant;
+import com.supcon.mes.module_lims.constant.TemporaryData;
 import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
@@ -82,7 +85,8 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
     private SampleRecordResultSubmitController controller;
     private Long sampleId,sampleTestId;
     private String sampleCode;
-
+    private SystemConfigController mSystemConfigController;
+    private String specialResultStr = "";
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -118,6 +122,22 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
         tabLayout.setupWithViewPager(viewPage);
 
         controller = new SampleRecordResultSubmitController();
+
+        mSystemConfigController = new SystemConfigController(context);
+        mSystemConfigController.getModuleConfig(LimsConstant.ModuleCode.LIMS_FILE_ANALYSIS_MENU_CODE, LimsConstant.Keys.LIMSDC_OCD_LIMSDCUrl, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object result) {
+                if (null != result){
+                    try {
+                        ModuleConfigEntity bean = (ModuleConfigEntity)result;
+                        specialResultStr = bean.getLimsDCUrl();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
 
     }
 
@@ -182,7 +202,7 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
                         sampleTestId = activity.getSampleTesId();
                         SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("save",
                                 sampleId,sampleTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
-                        controller.recordResultSubmit(activity,2,entity);
+                        controller.recordResultSubmit(activity,2,entity, TemporaryData.temporaryFileId);
                     }
                 });
 
@@ -204,7 +224,7 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
                         sampleTestId = activity.getSampleTesId();
                         SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("submit",
                                 sampleId,sampleTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
-                        controller.recordResultSubmit(activity,2,entity);
+                        controller.recordResultSubmit(activity,2,entity,TemporaryData.temporaryFileId);
                     }
                 });
 
@@ -246,9 +266,9 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
                         return;
                     }
                     sampleCode=activity.sampleCode;
-                    String url = "http://" + SupPlantApplication.getIp() + ":9410//lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode?collectCode="+sampleCode;
+                    //String url = "http://" + SupPlantApplication.getIp() + ":9410//lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode?collectCode="+sampleCode;
                     onLoading(context.getResources().getString(R.string.lims_parsing));
-                    presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode(url);
+                    presenterRouter.create(SampleAnalyseCollectDataAPI.class).getFormatDataByCollectCode("http://" +specialResultStr+"/lims-collection-web/ws/rs/analysisDataWS/getFormatDataByCollectCode",true,sampleCode);
                 });
         tvSerial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,6 +292,26 @@ public class InspectionItemsFragment extends BasePresenterFragment implements Sa
                     }
                     IntentRouter.go(context, LimsConstant.AppCode.LIMS_SAMPLE_FILE_ANALYSE);
                 });
+    }
+
+    public void goSave(){
+        List<InspectionSubEntity> recordList = projectFragment.getRecordList();
+        List<InspectionSubEntity> inspectionSubList = projectFragment.getInspectionSubList();
+
+        List<TestDeviceEntity> testDeviceList = equipmentFragment.getTestDeviceList();
+        List<TestDeviceEntity> deviceRecordList = equipmentFragment.getRecordList();
+
+        List<TestMaterialEntity> testMaterialList = materialFragment.getTestMaterialList();
+        List<TestMaterialEntity> materialRecordList = materialFragment.getRecordList();
+
+
+        String equipmentDelete = equipmentFragment.getDeleteList();
+        String materialDelete = materialFragment.getDeleteList();
+        sampleId = activity.getSampleId();
+        sampleTestId = activity.getSampleTesId();
+        SampleRecordResultSubmitEntity entity = new SampleRecordResultSubmitEntity("save",
+                sampleId,sampleTestId,inspectionSubList,testDeviceList,testMaterialList,equipmentDelete,materialDelete);
+        controller.recordResultSubmit(activity,2,entity,TemporaryData.temporaryFileId);
     }
 
     @Override

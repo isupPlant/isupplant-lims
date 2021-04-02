@@ -4,6 +4,7 @@ import com.supcon.mes.middleware.model.bean.BaseIntIdNameEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Created by wanghaidong on 2020/7/17
@@ -15,6 +16,7 @@ public class StdJudgeEntity extends InspectReportDetailEntity {
     public String maxValue;
     public String minValue;
     public String resultValue;
+    String code= UUID.randomUUID().toString();
 
 
     public SystemCodeEntity standardGrade;
@@ -29,8 +31,8 @@ public class StdJudgeEntity extends InspectReportDetailEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || !(o instanceof StdJudgeEntity) ) return false;
-        StdJudgeEntity that = (StdJudgeEntity) o;
-        return id.longValue()==that.id.longValue();
+        StdJudgeEntity that= (StdJudgeEntity) o;
+        return code.equals(that.code);
     }
 
     @Override

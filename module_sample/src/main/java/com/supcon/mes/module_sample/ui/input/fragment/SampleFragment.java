@@ -254,6 +254,7 @@ public class SampleFragment extends BaseRefreshRecyclerFragment<SampleEntity> im
                 }else if (activity instanceof SampleResultInputActivity){
                     Bundle bundle = new Bundle();
                     bundle.putLong("sampleId",list.get(position).getId());
+                    bundle.putString("sampleCode",list.get(position).getCode());
                     if (!StringUtil.isEmpty(list.get(position).getName()) && !StringUtil.isEmpty(list.get(position).getCode())){
                         bundle.putString("title", list.get(position).getName()+"(" + list.get(position).getCode() + ")");
                     }else {

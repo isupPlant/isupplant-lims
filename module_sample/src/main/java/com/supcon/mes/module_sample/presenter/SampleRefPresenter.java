@@ -49,13 +49,14 @@ public class SampleRefPresenter extends SampleRefContract.Presenter {
                 fastQueryCondEntity.modelAlias = modelAlias;
                 map.put("fastQueryCond",fastQueryCondEntity.toString());
             }
-            JSONObject customCondition=new JSONObject();
-            customCondition.put("type","retain");
-            map.put("customCondition",customCondition);
+            Map<String,Object> customConditionMap = new HashMap<>();
+            customConditionMap.put("type","retain");
+            map.put("customCondition",customConditionMap);
             map.put("permissionCode","LIMSSample_5.0.0.0_sample_sampleInfoRef");
             map.put("pageNo",pageNo);
             map.put("pageSize",20);
             map.put("paging",true);
+            map.put("crossCompanyFlag","false");
 
             mCompositeSubscription.add(
                     SampleHttpClient.getSampleRefInfo(map)

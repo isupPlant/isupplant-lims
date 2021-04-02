@@ -9,6 +9,7 @@ import com.supcon.common.view.util.NetWorkUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.SupPlantApplication;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 
 import java.util.HashMap;
 import java.util.List;
@@ -152,6 +153,7 @@ public class WebSocketUtils {
             super.onOpen(webSocket, response);
             status = ConnectStatus.Open;
             reConnectCount = 0;
+            autoConnectEnd=false;
             Log.i("WebSocketListener", "onOpen");
             if (null != mWebSocketCallBack) {
                 mWebSocketCallBack.onOpen(webSocket, response);
@@ -188,10 +190,20 @@ public class WebSocketUtils {
             if (status == ConnectStatus.Canceled && !TextUtils.isEmpty(url) && url.equals(disConnectUrl) && reConnectCount < 3) {
                 reconnect();
                 reConnectCount++;
+            }else if (reConnectCount>=3 && !autoConnectEnd){
+                autoConnectEnd=true;
+                if (onSuccessListener!=null){
+                    onSuccessListener.onSuccess(false);
+                }
             }
         }
     }
+    boolean autoConnectEnd;
+    OnSuccessListener<Boolean> onSuccessListener;
 
+    public void setOnSuccessListener(OnSuccessListener<Boolean> onSuccessListener) {
+        this.onSuccessListener = onSuccessListener;
+    }
     public interface WebSocketCallBack {
         void onOpen(WebSocket webSocket, Response response);
 

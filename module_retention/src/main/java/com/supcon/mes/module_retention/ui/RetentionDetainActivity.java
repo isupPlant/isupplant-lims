@@ -201,7 +201,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
         RxView.clicks(ll_record_view)
                 .throttleFirst(2000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (pendingEntity!=null && !TextUtils.isEmpty(pendingEntity.openUrl) && pendingEntity.openUrl.contains("retentionEdit")) {
+                    if (pendingEntity != null && !TextUtils.isEmpty(pendingEntity.openUrl) && pendingEntity.openUrl.contains("retentionEdit")) {
                         return;
                     }
                     if (adapter.selectPosition < 0)
@@ -234,6 +234,7 @@ public class RetentionDetainActivity extends BaseRefreshActivity implements Rete
                     case 2:
                         operate = 2;
                         doSubmit(workFlowVar);
+
                         break;
                 }
             }

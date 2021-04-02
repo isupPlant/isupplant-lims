@@ -24,6 +24,7 @@ public class StdJudgeSpecEntity extends InspectReportDetailEntity {
     public boolean isExpand=false;
     public SampleComeEntity sampleComId;
     private String showValuesBak;
+    public int position;
     public List<StdJudgeEntity> getSpec(){
 
         List<StdJudgeEntity> list=new ArrayList<>();

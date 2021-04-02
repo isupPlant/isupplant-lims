@@ -453,6 +453,32 @@ public class TestReportEditController extends BaseViewController implements Qual
                     specLimitList = GsonUtil.jsonToList(specLimitListStr, SpecLimitEntity.class);
                 }
                 if (!StringUtil.isEmpty(value) && specLimitList != null && specLimitList.size()>0){
+//                    Object[] specListsArr = null;
+//
+//                    if (null != columnRangeList && columnRangeList.size() > 0){
+//                        for (int a = 0; a < columnRangeList.size(); a++) {
+//                            if (columnRangeList.get(a).getColumnKey().split("_")[0].equals(specLimits.get(0).getResultKey().split("_")[0]) &&
+//                                    columnRangeList.get(a).getColumnType().equals("grade")){
+//                                boolean flag = false;
+//                                SpecLimitEntity specLimitObj = null;
+//                                for (int b = 0; b < specLimits.size(); b++) {
+//                                    if (columnRangeList.get(a).getResult().equals(specLimits.get(b).getResultValue())){
+//                                        specLimitObj = specLimits.get(b);
+//                                        flag = true;
+//                                    }
+//                                }
+//                                if (!flag){
+//                                    if (null == specLimitObj){
+//                                        specLimitObj = new SpecLimitEntity();
+//                                    }
+//                                    specLimitObj.setJudgeCond(null);
+//                                    specLimitObj.setResultValue(columnRangeList.get(a).getResult());
+//                                }
+//                                specLimitsIndex.add(specLimitObj);
+//                                specListsArr = specLimitsIndex.toArray();
+//                            }
+//                        }
+//                    }
                     Object[] specListsArr = specLimitList.toArray();
                     try {
                         Invocable invoke = (Invocable) engine;
@@ -524,9 +550,11 @@ public class TestReportEditController extends BaseViewController implements Qual
                             setToast(context.getResources().getString(R.string.lims_inspection_request_no_cannot_be_blank));
                             return;
                         }
+                        setAdapterClose();
                         doSave(workFlowVar);
                         break;
                     case 1:
+                        setAdapterClose();
                         workFlowType = 1;
                         if ("cancel".equals(workFlowVar.outcomeMapJson.get(0).type)){
                             new CustomDialog(context)
@@ -542,6 +570,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                         }
                         break;
                     case 2:
+                        setAdapterClose();
                         workFlowType = 1;
                         if (checkSubmit()){
                             doSubmit(workFlowVar);
@@ -550,6 +579,22 @@ public class TestReportEditController extends BaseViewController implements Qual
                 }
             }
         });
+    }
+
+    public void setAdapterClose(){
+        for (int i = 0; i < adapter.getList().size(); i++) {
+            StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity)adapter.getList().get(i);
+            if (detailEntity.getTypeView() == 1){
+                List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getStdJudgeSpecEntities();
+                if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()){
+                    if (detailEntity.isExpand){
+                        adapter.getList().removeAll(stdJudgeSpecEntities);
+                        detailEntity.isExpand = false;
+                    }
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void setIsFrom(String from){
@@ -641,7 +686,8 @@ public class TestReportEditController extends BaseViewController implements Qual
             }
         }
         entity.dgDeletedIds.addProperty(getDg(),sb.length() > 0 ? sb.toString() : null);
-        entity.dgList.addProperty(getDg(),GsonUtil.gsonString(ptList));
+        Gson gson = new Gson();
+        entity.dgList.addProperty(getDg(),gson.toJson(ptList));
         String viewCode=getViewCode();
         entity.viewCode = "QCS_5.0.0.0_inspectReport_"+viewCode;
         String path = viewCode;
@@ -651,7 +697,7 @@ public class TestReportEditController extends BaseViewController implements Qual
             params.put("id", this.entity.getId());
         }
         params.put("__pc__", _pc_);
-        Gson gson = new Gson();
+
         String s = gson.toJson(entity);
         Log.i("ReportEntity", "->" + s);
         presenterRouter.create(TestReportEditSubmitAPI.class).submitInspectReport(path, params, entity);

@@ -1,5 +1,6 @@
 package com.supcon.mes.module_lims.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -74,6 +75,7 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
 
         }
 
+        @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
@@ -83,7 +85,12 @@ public class InspectReportDetailAdapter extends BaseListDataRecyclerViewAdapter 
                         int position = getAdapterPosition();
                         StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity) getItem(position);
                         if (detailEntity.getTypeView() == 1) {
-                            List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getSpec();
+                            List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getStdJudgeSpecEntities();
+                            for (int i = stdJudgeSpecEntities.size()-1; i >= 0; i--) {
+                                if (stdJudgeSpecEntities.get(i).resultValue.equals(context.getResources().getString(R.string.lims_unqualified))){
+                                    stdJudgeSpecEntities.remove(i);
+                                }
+                            }
                             if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()) {
                                 int size = stdJudgeSpecEntities.size();
                                 if (!detailEntity.isExpand) {

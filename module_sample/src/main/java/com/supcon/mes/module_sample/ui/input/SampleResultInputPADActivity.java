@@ -257,6 +257,10 @@ public class SampleResultInputPADActivity extends BaseFragmentActivity {
 
     }
 
+    public void goSave(){
+        ((InspectionItemsFragment)inspectionSubItemFragment).goSave();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

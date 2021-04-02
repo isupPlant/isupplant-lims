@@ -50,7 +50,7 @@
             android:background="@drawable/sl_press_no_stroke"
             android:id="@+id/cancelTv"
             android:tag="cancelTv"
-            android:text="@string/cancel"
+            android:text="@string/lims_cancel"
             android:textColor="@color/black"
             android:gravity="center"/>
         <View
@@ -66,7 +66,7 @@
             android:background="@drawable/sl_press_no_stroke"
             android:id="@+id/confirmTv"
             android:tag="confirmTv"
-            android:text="@string/confirm"
+            android:text="@string/save"
             android:textColor="@color/themeColor"
             android:gravity="center"/>
     </LinearLayout>
