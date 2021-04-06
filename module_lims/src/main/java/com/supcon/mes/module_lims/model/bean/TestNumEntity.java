@@ -1,6 +1,7 @@
 package com.supcon.mes.module_lims.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
 import java.math.BigDecimal;
 
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  */
 public class TestNumEntity extends BaseEntity {
     private BigDecimal quantity;
-    private String sourceType;
+    private SystemCodeEntity sourceType;
 
     public BigDecimal getQuantity() {
         return quantity == null ? new BigDecimal(0) : quantity;
@@ -21,11 +22,11 @@ public class TestNumEntity extends BaseEntity {
         this.quantity = quantity;
     }
 
-    public String getSourceType() {
+    public SystemCodeEntity getSourceType() {
         return sourceType;
     }
 
-    public void setSourceType(String sourceType) {
+    public void setSourceType(SystemCodeEntity sourceType) {
         this.sourceType = sourceType;
     }
 }
