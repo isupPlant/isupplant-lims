@@ -404,19 +404,20 @@ public class CalculationController extends BaseViewController {
 
             StringBuffer script = new StringBuffer("function executeFunc(){");
             String calcParamInfo = sampleComs.get(i).getCalcParamInfo();
-            List<CalcParamInfoEntity> calcParamInfoList = GsonUtil.jsonToList(calcParamInfo, CalcParamInfoEntity.class);
-            for (int j = 0; j < calcParamInfoList.size(); j++) {
-                String calculateParamValue = getCalculateParamValue(adapterList, calcParamInfoList.get(j).getParamType().getId(),
-                        calcParamInfoList.get(j).getTestItemName(), calcParamInfoList.get(j).getTestComName(),
-                        calcParamInfoList.get(j).getIncomeType().getId(), calcParamInfoList.get(j).getOutcomeType().getId(),
-                        calcParamInfoList.get(j).getDealFunc().getId());
 
-                calculateParamValue = checkValue(calculateParamValue);
-                script.append("var " + calcParamInfoList.get(j).getParamName() + "=" + calculateParamValue + ";");
-            }
-            script.append(sampleComs.get(i).getCalculFormula() + "}");
 
             try {
+                List<CalcParamInfoEntity> calcParamInfoList = GsonUtil.jsonToList(calcParamInfo, CalcParamInfoEntity.class);
+                for (int j = 0; j < calcParamInfoList.size(); j++) {
+                    String calculateParamValue = getCalculateParamValue(adapterList, calcParamInfoList.get(j).getParamType().getId(),
+                            calcParamInfoList.get(j).getTestItemName(), calcParamInfoList.get(j).getTestComName(),
+                            calcParamInfoList.get(j).getIncomeType().getId(), calcParamInfoList.get(j).getOutcomeType().getId(),
+                            calcParamInfoList.get(j).getDealFunc().getId());
+
+                    calculateParamValue = checkValue(calculateParamValue);
+                    script.append("var " + calcParamInfoList.get(j).getParamName() + "=" + calculateParamValue + ";");
+                }
+                script.append(sampleComs.get(i).getCalculFormula() + "}");
                 engine.eval(script.toString());
                 Invocable inv2 = (Invocable) engine;
                 Object res = inv2.invokeFunction("executeFunc");//执行计算公式
@@ -439,6 +440,7 @@ public class CalculationController extends BaseViewController {
 
                 }
             } catch (Exception e) {
+                ToastUtils.show(context,"计算异常：" + e.toString());
                 for (int k = 0; k < adapterList.size(); k++) {
                     if (adapterList.get(k).getId().equals(sampleComs.get(i).getId())) {
                         originValChange(null, k, adapterList);
