@@ -708,7 +708,7 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         retainDateTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         retainDaysTv.setContent(retentionEntity.retainDays != null ? retentionEntity.retainDays.toString() : "");
         if (retentionEntity.retainUnit == null || TextUtils.isEmpty(retentionEntity.retainUnit.getId())) {
-            retentionEntity.retainUnit = remainDaysBaseIdValueEntities.get(0);
+            retentionEntity.retainUnit = remainDaysBaseIdValueEntities.get(1);
         }
         remainDaysUnitTv.setText(retentionEntity.retainUnit != null ? retentionEntity.retainUnit.getValue() : "");
 
