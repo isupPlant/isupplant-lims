@@ -76,7 +76,7 @@ public class SampleMaterialPresenter extends SampleMaterialListContract.Presente
         Map<String, Object> customConditionMap = new HashMap<>();
         customConditionMap.put("matInfoCodeList",matInfoCodeList);
         customConditionMap.put("currentDate",currentDate);
-        customConditionMap.put("dataBaseType","ORACLE");
+        customConditionMap.put("dataBaseType","sqlserver");
         map.put("customCondition",customConditionMap);
 
         map.put("permissionCode","LIMSMaterial_5.1.0.1_mATInfo_matInfoRef");
