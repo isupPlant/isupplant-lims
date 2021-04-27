@@ -50,7 +50,7 @@ public class WareStoreRefPresenter extends WareStoreRefContract.Presenter {
                 map.put("fastQueryCond",fastQueryCondEntity.toString());
             }
             Map<String, Object> customCondition=new HashMap();
-            customCondition.put("wareClassCode","LIMSCK");
+            customCondition.put("wareClassCode","Lims_WMS");
             map.put("customCondition",customCondition);
             map.put("permissionCode","BaseSet_1.0.0_warehouse_storeSetFilterRef");
             map.put("pageNo",pageNo);
