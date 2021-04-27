@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -347,6 +348,15 @@ public class SingleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
         @Override
         protected void update(InspectionSubEntity data) {
+
+            //在这里判断输入类型
+            String value_kind = getList().get(getAdapterPosition()).getValueKind().getId();
+            if (value_kind.equals("LIMSBasic_valueKind/number")) {
+                ceOriginalValue.editText().setInputType(InputType.TYPE_CLASS_NUMBER| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            }
+
+
+
             if (data.getValueSource()==null || TextUtils.isEmpty(data.getValueSource().getId())) {
                 BaseIdValueEntity valueSource = new BaseIdValueEntity();
                 valueSource.setId("LIMSSample_valueSource/enter");

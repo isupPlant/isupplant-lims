@@ -418,27 +418,38 @@ public class CalculationController extends BaseViewController {
                     script.append("var " + calcParamInfoList.get(j).getParamName() + "=" + calculateParamValue + ";");
                 }
                 script.append(sampleComs.get(i).getCalculFormula() + "}");
-                engine.eval(script.toString());
-                Invocable inv2 = (Invocable) engine;
-                Object res = inv2.invokeFunction("executeFunc");//执行计算公式
-                String result = checkValue(String.valueOf(res));
-                if (Util.isNumeric(result)) {
-                    for (int k = 0; k < adapterList.size(); k++) {
-                        if (adapterList.get(k).getId().equals(sampleComs.get(i).getId())) {
-                            originValChange(result, k, adapterList);
-                            break;
-                        }
-                    }
-                } else {
-                    for (int k = 0; k < adapterList.size(); k++) {
-                        if (adapterList.get(k).getId().equals(sampleComs.get(i).getId())) {
-                            if (!StringUtil.isEmpty(sampleComs.get(i).getOriginValue())) {
-                                originValChange(null, k, adapterList);
+
+                //针对重复号进行适配
+                String script_string = script.toString();
+                if (script_string.contains("repeatNo")) {
+                    script_string = script_string.replace("repeatNo",i + "");
+                }
+
+                //说明参数没有全部输入，不走计算流程
+                if (!script_string.contains("=;")) {
+                    engine.eval(script_string);
+                    Invocable inv2 = (Invocable) engine;
+                    Object res = inv2.invokeFunction("executeFunc");//执行计算公式
+                    String result = checkValue(String.valueOf(res));
+                    if (Util.isNumeric(result)) {
+                        for (int k = 0; k < adapterList.size(); k++) {
+                            if (adapterList.get(k).getId().equals(sampleComs.get(i).getId())) {
+                                originValChange(result, k, adapterList);
+                                break;
                             }
                         }
-                    }
+                    } else {
+                        for (int k = 0; k < adapterList.size(); k++) {
+                            if (adapterList.get(k).getId().equals(sampleComs.get(i).getId())) {
+                                if (!StringUtil.isEmpty(sampleComs.get(i).getOriginValue())) {
+                                    originValChange(null, k, adapterList);
+                                }
+                            }
+                        }
 
+                    }
                 }
+
             } catch (Exception e) {
                 ToastUtils.show(context,"计算异常：" + e.toString());
                 for (int k = 0; k < adapterList.size(); k++) {
@@ -520,27 +531,19 @@ public class CalculationController extends BaseViewController {
                 //输出类型为处理值
                     Object res = null;
                 if (dealFunc.equals("LIMSBasic_dealFunc/avg")) {
-                        list.clear();
-                    try {
-                        for (int i = 0; i < valueArr.size(); i++) {
-                            list.add(Double.valueOf(valueArr.get(i)));
-                        }
-                        res = Util.getAvg(list);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                    list.clear();
+                    list = Util.getDoubleArrFromStringArr(valueArr);
+                    res = Util.getAvg(list);
                     //平均值
                     return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/sum")) {
                     //求和
                     try {
-                        Invocable invoke = (Invocable) engine;
-                        res = invoke.invokeFunction("sum", valueArr.toArray());
-                    }catch (Exception e) {
+                        list = Util.getDoubleArrFromStringArr(valueArr);
+                        res = Util.sum(list);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                     return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/count")) {
                     //个数
@@ -548,43 +551,35 @@ public class CalculationController extends BaseViewController {
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/max")) {
                     //最大值
                     list.clear();
-                    try {
-                        for (int i = 0; i < valueArr.size(); i++) {
-                            list.add(Double.valueOf(valueArr.get(i)));
-                        }
-                        res = Util.getMax(list);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                    list = Util.getDoubleArrFromStringArr(valueArr);
+                    res = Util.getMax(list);
                     return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/min")) {
                     //最小值
                     list.clear();
-                    try {
-                        for (int i = 0; i < valueArr.size(); i++) {
-                            list.add(Double.valueOf(valueArr.get(i)));
-                        }
-                        res = Util.getMin(list);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                    list = Util.getDoubleArrFromStringArr(valueArr);
+                    res = Util.getMin(list);
                     return res + "";
                 } else if (dealFunc.equals("LIMSBasic_dealFunc/stdev")) {
                     //标准方差
                     try {
+                        list = Util.getDoubleArrFromStringArr(valueArr);
+                        Object data = list.toArray();
                         Invocable invoke = (Invocable) engine;
-                        res = invoke.invokeFunction("stdev", valueArr.toArray());
-                    }catch (Exception e) {
+                        res = invoke.invokeFunction("stdev", data);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                     return res + "";
                 }
             } else if (outcomeType.equals("LIMSBasic_outcomeType/arr")) {
+                ArrayList<Double> valueDouble = new ArrayList<>();
+                for (int i = 0; i < valueArr.size(); i++) {
+                    valueDouble.add(Double.parseDouble(valueArr.get(i)));
+                }
                 //输出类型为数组
-                return "[" + valueArr.toString() + "]";
+                String aa = valueDouble.toString();
+                return valueDouble.toString();
             }
 
 
