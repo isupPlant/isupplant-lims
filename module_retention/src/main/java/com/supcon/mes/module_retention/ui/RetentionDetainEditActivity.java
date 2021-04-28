@@ -766,6 +766,12 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
             return false;
         }
 
+        //样品编码与物料编码不能同是为空
+        if ((retentionEntity.sampleId ==null || retentionEntity.sampleId.getCode() == null) && (retentionEntity.productId == null || retentionEntity.productId.getCode() == null)) {
+            ToastUtils.show(context, getString(R.string.lims_retention_sample_product_tip));
+            return false;
+        }
+
         return true;
     }
 
