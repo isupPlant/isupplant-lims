@@ -27,12 +27,21 @@ public class StdJudgeEntity extends InspectReportDetailEntity {
         return 2;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || !(o instanceof StdJudgeEntity) ) return false;
+//        StdJudgeEntity that= (StdJudgeEntity) o;
+//        return code.equals(that.code);
+//    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof StdJudgeEntity) ) return false;
-        StdJudgeEntity that= (StdJudgeEntity) o;
-        return code.equals(that.code);
+        if (!(o instanceof StdJudgeEntity)) return false;
+        StdJudgeEntity that = (StdJudgeEntity) o;
+        return id.longValue()==that.id.longValue();
     }
 
     @Override
