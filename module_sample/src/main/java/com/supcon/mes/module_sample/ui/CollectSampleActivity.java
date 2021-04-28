@@ -268,6 +268,8 @@ public class CollectSampleActivity extends BaseRefreshRecyclerActivity<SampleInq
         onLoadSuccessAndExit(context.getResources().getString(R.string.lims_submit_succeed), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
+                //刷新之前要清除params，否则搜不到data
+                params.clear();
                 goRefresh();
             }
         });
