@@ -570,11 +570,11 @@ public class TestReportEditController extends BaseViewController implements Qual
                         }
                         break;
                     case 2:
-                        setAdapterClose();
                         workFlowType = 1;
                         if (checkSubmit()){
                             doSubmit(workFlowVar);
                         }
+                        setAdapterClose();
                         break;
                 }
             }
