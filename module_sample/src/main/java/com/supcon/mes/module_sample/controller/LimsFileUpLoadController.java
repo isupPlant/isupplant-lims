@@ -2,24 +2,18 @@ package com.supcon.mes.module_sample.controller;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -28,39 +22,35 @@ import com.app.annotation.Presenter;
 import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.controller.BasePresenterController;
-import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.base.fragment.BaseFragment;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.middleware.model.api.AttachmentAPI;
+import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
+import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.contract.AttachmentContract;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
+import com.supcon.mes.middleware.presenter.AttachmentPresenter;
 import com.supcon.mes.middleware.ui.view.AddFileListView;
 import com.supcon.mes.module_lims.model.api.FileUpAPI;
 import com.supcon.mes.module_lims.model.bean.AttachmentSampleInputEntity;
 import com.supcon.mes.module_lims.model.contract.FileUpContract;
-import com.supcon.mes.module_lims.utils.Util;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.FileDataEntity;
 import com.supcon.mes.module_sample.presenter.FileUpLoadPresenter;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
-
-import utilcode.util.FileUtils;
-
-import static utilcode.util.ActivityUtils.startActivity;
-import static utilcode.util.StringUtils.isSpace;
 
 /**
  * Created by wanghaidong on 2020/8/25
  * Email:wanghaidong1@supcon.com
  */
-@Presenter(value = FileUpLoadPresenter.class)
-public class LimsFileUpLoadController extends BasePresenterController implements FileUpContract.View {
+@Presenter(value = {FileUpLoadPresenter.class, AttachmentPresenter.class})
+public class LimsFileUpLoadController extends BasePresenterController implements FileUpContract.View, AttachmentContract.View {
 
     PopupWindow popupWindow;
     private View contentViewSign;
@@ -213,7 +203,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
 
                 filePath = AddFileListView.getPath(context, imageUri);
                 File file = new File(filePath);
-                presenterRouter.create(FileUpAPI.class).upFile(file);
+                presenterRouter.create(AttachmentAPI.class).bapUploadAttachment(file);
             } catch (Exception e) {
                 if (context instanceof BaseActivity) {
                     ((BaseActivity) context).closeLoader();
@@ -237,7 +227,7 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                 if (context instanceof BaseFragmentActivity) {
                     ((BaseFragmentActivity) context).onLoading(context.getResources().getString(R.string.lims_upload_file));
                 }
-                presenterRouter.create(FileUpAPI.class).upFile(file);
+                presenterRouter.create(AttachmentAPI.class).bapUploadAttachment(file);
             } catch (Exception e) {
                 if (context instanceof BaseActivity) {
                     ((BaseActivity) context).closeLoader();
@@ -249,36 +239,6 @@ public class LimsFileUpLoadController extends BasePresenterController implements
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void upFileSuccess(BAP5CommonEntity entity) {
-        if (context instanceof BaseActivity) {
-            ((BaseActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
-                @Override
-                public void onLoaderFinished() {
-                    if (onSuccessListener != null) {
-                        FileDataEntity fileDataEntity = (FileDataEntity) entity.data;
-                        fileDataEntity.setLocalPath(filePath);
-                        onSuccessListener.onSuccess(fileDataEntity);
-                    }
-                }
-            });
-        }
-
-        if (context instanceof BaseFragmentActivity) {
-            ((BaseFragmentActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
-                @Override
-                public void onLoaderFinished() {
-                    if (onSuccessListener != null) {
-                        FileDataEntity fileDataEntity = (FileDataEntity) entity.data;
-                        fileDataEntity.setLocalPath(filePath);
-                        onSuccessListener.onSuccess(fileDataEntity);
-                    }
-                }
-            });
-        }
-
     }
 
     public OnSuccessListener<List<AttachmentSampleInputEntity>> getFileOnSuccessListener() {
@@ -297,8 +257,68 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         this.onSuccessListener = onSuccessListener;
     }
 
+
+    public LimsFileUpLoadController loadFile(List<String> id, List<String> fileName) {
+        presenterRouter.create(FileUpAPI.class).downloadFile(id, fileName);
+        return this;
+    }
+
     @Override
-    public void upFileFailed(String errorMsg) {
+    public void downloadFileSuccess(List entity) {
+        if (fileOnSuccessListener != null) {
+            fileOnSuccessListener.onSuccess(entity);
+        }
+    }
+
+    @Override
+    public void downloadFileFailed(String errorMsg) {
+
+    }
+
+    @Override
+    public void uploadAttachmentSuccess(String entity) {
+
+    }
+
+    @Override
+    public void uploadAttachmentFailed(String errorMsg) {
+
+    }
+
+    @Override
+    public void deleteAttachmentSuccess(BapResultEntity entity) {
+
+    }
+
+    @Override
+    public void deleteAttachmentFailed(String errorMsg) {
+
+    }
+
+    @Override
+    public void bapUploadAttachmentSuccess(BAP5CommonEntity entity) {
+        if (context instanceof BaseActivity) {
+            ((BaseActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
+                @Override
+                public void onLoaderFinished() {
+                    loaderFinishListener(entity);
+                }
+            });
+        }
+
+        if (context instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_upload_succeed), new OnLoaderFinishListener() {
+                @Override
+                public void onLoaderFinished() {
+                    loaderFinishListener(entity);
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void bapUploadAttachmentFailed(String errorMsg) {
         if (context instanceof BaseActivity) {
             ((BaseActivity) context).onLoadFailed(errorMsg);
         }
@@ -308,21 +328,17 @@ public class LimsFileUpLoadController extends BasePresenterController implements
         }
     }
 
-    public LimsFileUpLoadController loadFile(List<String> id, List<String> fileName) {
-        presenterRouter.create(FileUpAPI.class).loadFile(id, fileName);
-        return this;
-    }
-
-    @Override
-    public void loadFileSuccess(List entity) {
-        if (fileOnSuccessListener != null) {
-            fileOnSuccessListener.onSuccess(entity);
+    private void loaderFinishListener(BAP5CommonEntity entity){
+        if (onSuccessListener != null) {
+            AttachmentEntity attachmentEntity = (AttachmentEntity) entity.data;
+            if (attachmentEntity == null) {
+                return;
+            }
+            FileDataEntity fileDataEntity = new FileDataEntity();
+            fileDataEntity.setFileIcon(attachmentEntity.fileIcon);
+            fileDataEntity.setPath(attachmentEntity.path);
+            fileDataEntity.setLocalPath(filePath);
+            onSuccessListener.onSuccess(fileDataEntity);
         }
     }
-
-    @Override
-    public void loadFileFailed(String errorMsg) {
-
-    }
-
 }
