@@ -142,7 +142,7 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
 
         @Override
         protected void update(StdJudgeEntity data) {
-            judgeRangeTv.setKey(data.resultValue + context.getResources().getString(R.string.lims_range));
+            judgeRangeTv.setKey(data.standardGrade.value + context.getResources().getString(R.string.lims_range));
             judgeRangeTv.setValue(data.dispValue);
         }
     }
