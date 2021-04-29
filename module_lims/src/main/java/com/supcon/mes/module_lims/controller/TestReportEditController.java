@@ -698,7 +698,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         if (this.entity.getId() != null) {
             params.put("id", this.entity.getId());
         }
-        params.put("__pc__", _pc_);
+        params.put("__pc__","");
 
         String s = gson.toJson(entity);
         Log.i("ReportEntity", "->" + s);
