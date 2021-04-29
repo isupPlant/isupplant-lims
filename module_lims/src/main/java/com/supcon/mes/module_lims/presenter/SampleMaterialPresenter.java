@@ -2,7 +2,9 @@ package com.supcon.mes.module_lims.presenter;
 
 import android.provider.ContactsContract;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
@@ -73,19 +75,55 @@ public class SampleMaterialPresenter extends SampleMaterialListContract.Presente
         if (codeParam.size()>0){
             map.put("fastQueryCond",fastQuery.toString());
         }
-        Map<String, Object> customConditionMap = new HashMap<>();
-        customConditionMap.put("matInfoCodeList",matInfoCodeList);
-        customConditionMap.put("currentDate",currentDate);
-        customConditionMap.put("dataBaseType","SQLSERVER");
-        map.put("customCondition",customConditionMap);
 
-        map.put("permissionCode","LIMSMaterial_5.1.0.1_mATInfo_matInfoRef");
-        map.put("pageNo",pageNo);
-        map.put("paging",true);
-        map.put("pageSize",20);
-        map.put("classifyCodes","");
-        map.put("crossCompanyFlag","true");
 
+
+
+
+
+        mCompositeSubscription.add(BaseLimsHttpClient.getDBType().onErrorReturn(new Function<Throwable, BAP5CommonEntity>() {
+            @Override
+            public BAP5CommonEntity apply(Throwable throwable) throws Exception {
+                BAP5CommonEntity entity = new BAP5CommonEntity();
+                entity.msg = HttpErrorReturnUtil.getErrorInfo(throwable);
+                entity.success = false;
+                return entity;
+            }
+        }).subscribe(new Consumer<BAP5CommonEntity>() {
+            @Override
+            public void accept(BAP5CommonEntity entity) throws Exception {
+                if (entity.success){
+                    LinkedTreeMap<String,String> dataa = (LinkedTreeMap<String, String>) entity.data;
+
+                    Map<String, Object> customConditionMap = new HashMap<>();
+                    customConditionMap.put("matInfoCodeList",matInfoCodeList);
+                    customConditionMap.put("currentDate",currentDate);
+                    if (null == dataa.get("dbType")) {
+                        customConditionMap.put("dataBaseType","SQLSERVER");
+                    }else {
+                        customConditionMap.put("dataBaseType",dataa.get("dbType"));
+                    }
+                    map.put("customCondition",customConditionMap);
+
+                    map.put("permissionCode","LIMSMaterial_5.1.0.1_mATInfo_matInfoRef");
+                    map.put("pageNo",pageNo);
+                    map.put("paging",true);
+                    map.put("pageSize",20);
+                    map.put("classifyCodes","");
+                    map.put("crossCompanyFlag","true");
+
+                    getData(map);
+
+                }else {
+                    getView().getSampleMaterialReferenceFailed(entity.msg);
+                }
+            }
+        }));
+        
+
+    }
+
+    private void getData(Map<String, Object> map) {
         mCompositeSubscription.add(BaseLimsHttpClient.getSampleMaterialReference(map).onErrorReturn(new Function<Throwable, BAP5CommonEntity<CommonListEntity<SampleMaterialEntity>>>() {
             @Override
             public BAP5CommonEntity<CommonListEntity<SampleMaterialEntity>> apply(Throwable throwable) throws Exception {
@@ -104,6 +142,5 @@ public class SampleMaterialPresenter extends SampleMaterialListContract.Presente
                 }
             }
         }));
-
     }
 }
