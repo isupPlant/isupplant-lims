@@ -446,7 +446,7 @@ public class SurverReportDetailController extends BaseViewController implements 
         if (reportEntity.id != null) {
             params.put("id", reportEntity.id);
         }
-        params.put("__pc__", _pc_);
+        params.put("__pc__", "");
         Gson gson = new Gson();
         String s = gson.toJson(entity);
         Log.i("ReportEntity", "->" + s);
