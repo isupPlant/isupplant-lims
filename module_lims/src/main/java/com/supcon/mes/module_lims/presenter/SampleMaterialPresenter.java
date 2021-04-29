@@ -76,13 +76,15 @@ public class SampleMaterialPresenter extends SampleMaterialListContract.Presente
         Map<String, Object> customConditionMap = new HashMap<>();
         customConditionMap.put("matInfoCodeList",matInfoCodeList);
         customConditionMap.put("currentDate",currentDate);
-        customConditionMap.put("dataBaseType","sqlserver");
+        customConditionMap.put("dataBaseType","SQLSERVER");
         map.put("customCondition",customConditionMap);
 
         map.put("permissionCode","LIMSMaterial_5.1.0.1_mATInfo_matInfoRef");
         map.put("pageNo",pageNo);
         map.put("paging",true);
-        map.put("pageSize",10);
+        map.put("pageSize",20);
+        map.put("classifyCodes","");
+        map.put("crossCompanyFlag","true");
 
         mCompositeSubscription.add(BaseLimsHttpClient.getSampleMaterialReference(map).onErrorReturn(new Function<Throwable, BAP5CommonEntity<CommonListEntity<SampleMaterialEntity>>>() {
             @Override
