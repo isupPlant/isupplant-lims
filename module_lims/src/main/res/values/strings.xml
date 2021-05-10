@@ -249,6 +249,7 @@
     <string name="lims_retention_dept_tip">留样部门不允许为空！</string>
     <string name="lims_retention_keeper_tip">保管员不允许为空！</string>
     <string name="lims_retention_storage_location_tip">存放位置不允许为空！</string>
+    <string name="lims_retention_sample_product_tip">样品编码或物料编码至少填写一个！</string>
 
     <string name="lims_serial_ref_eam">设备参照</string>
     <string name="lims_file_name">文件名</string>

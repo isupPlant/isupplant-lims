@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -117,7 +118,7 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity{
     private LIMSPopupWindow mCustomPopupWindow;
     private List<PopupWindowEntity> popupWindowEntityList = new ArrayList<>();
     private SystemConfigController mSystemConfigController;
-    private String specialResultStr = "";
+    private String specialResultStr = SupPlantApplication.getIpAndPost();
     @Override
     protected int getLayoutID() {
         return R.layout.activity_project_inspection_items;
@@ -190,7 +191,9 @@ public class ProjectInspectionItemsActivity extends BaseFragmentActivity{
                 if (null != result){
                     try {
                         ModuleConfigEntity bean = (ModuleConfigEntity)result;
-                        specialResultStr = bean.getLimsDCUrl();
+                        if (!TextUtils.isEmpty(bean.getLimsDCUrl())) {
+                            specialResultStr = bean.getLimsDCUrl();
+                        }
                     }catch (Exception e){
                         e.printStackTrace();
                     }

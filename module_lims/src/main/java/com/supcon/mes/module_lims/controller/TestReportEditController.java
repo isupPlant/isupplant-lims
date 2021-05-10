@@ -129,8 +129,8 @@ import io.reactivex.functions.Consumer;
  */
 
 @Presenter(value = {QualityStdIdByConclusionPresenter.class, TestReportEditSubmitPresenter.class,
-        FirstStdVerPresenter.class,QualityStdIdByConclusionPresenter.class, TestNumPresenter.class,
-         AvailableStdPresenter.class, StdVerByInspectIdPresenter.class})
+        FirstStdVerPresenter.class, QualityStdIdByConclusionPresenter.class, TestNumPresenter.class,
+        AvailableStdPresenter.class, StdVerByInspectIdPresenter.class})
 public class TestReportEditController extends BaseViewController implements QualityStdIdByConclusionContract.View,
         TestReportEditSubmitContract.View, FirstStdVerContract.View, TestNumContract.View, AvailableStdIdContract.View, StdVerByInspectIdContract.View {
     // DeploymentContract.View,DeploymentPresenter.class,
@@ -207,7 +207,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private List<String> myDeleteList = new ArrayList<>();
     private List<FirstStdVerEntity> stdVerList;
     private TestReportEditPtAdapter adapter;
-    private boolean expand=false;
+    private boolean expand = false;
 
     GetPowerCodeController powerCodeController;
     WorkFlowViewController workFlowViewController;
@@ -231,6 +231,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private boolean isNeedSetHead = false; //是否需求回调完成表头数据装载
 
     SurveyReportEntity surveyReport;
+
     public TestReportEditController(View rootView) {
         super(rootView);
     }
@@ -239,9 +240,9 @@ public class TestReportEditController extends BaseViewController implements Qual
     public void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        Intent intent=getIntent();
-        if (intent.hasExtra("resportEntity")){
-            surveyReport= (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
+        Intent intent = getIntent();
+        if (intent.hasExtra("resportEntity")) {
+            surveyReport = (SurveyReportEntity) intent.getSerializableExtra("resportEntity");
         }
         if (intent.hasExtra(Constant.IntentKey.PENDING_ENTITY)) {
             pendingEntity = (PendingEntity) intent.getSerializableExtra(Constant.IntentKey.PENDING_ENTITY);
@@ -262,8 +263,8 @@ public class TestReportEditController extends BaseViewController implements Qual
         stdVerList = new ArrayList<>();
         initRecycler();
 
-        powerCodeController=new GetPowerCodeController(context);
-        workFlowViewController=new WorkFlowViewController();
+        powerCodeController = new GetPowerCodeController(context);
+        workFlowViewController = new WorkFlowViewController();
 
         datePickController = new DatePickController((Activity) context);
         datePickController.setCycleDisable(false);
@@ -274,7 +275,6 @@ public class TestReportEditController extends BaseViewController implements Qual
         mSinglePickController = new SinglePickController((Activity) context);
         mSinglePickController.setCanceledOnTouchOutside(true);
         mSinglePickController.setDividerVisible(true);
-
 
 
         try {
@@ -299,8 +299,8 @@ public class TestReportEditController extends BaseViewController implements Qual
             engine.eval(reader3);
             engine.eval(reader4);
             engine.eval(reader5);
-            adapter.engine=engine;
-            adapter.testReportEditController=this;
+            adapter.engine = engine;
+            adapter.testReportEditController = this;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -313,13 +313,13 @@ public class TestReportEditController extends BaseViewController implements Qual
 
         RxView.clicks(imageUpDown)
                 .throttleFirst(1000, TimeUnit.MICROSECONDS)
-                .subscribe(o->{
-                    expand=!expand;
-                    if (expand){
+                .subscribe(o -> {
+                    expand = !expand;
+                    if (expand) {
                         expandTv.setText(R.string.lims_shrink);
                         ll_other_info.setVisibility(View.VISIBLE);
                         imageUpDown.setImageResource(R.drawable.ic_drop_up);
-                    }else {
+                    } else {
                         ll_other_info.setVisibility(View.GONE);
                         imageUpDown.setImageResource(R.drawable.ic_drop_down);
                         expandTv.setText(R.string.lims_expand);
@@ -329,14 +329,14 @@ public class TestReportEditController extends BaseViewController implements Qual
         ctTestRequestNo.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1){
+                if (action == -1) {
                     setCleanTestRequestNo();
                     return;
                 }
                 Bundle bundle = new Bundle();
-                bundle.putInt("type",type);
-                bundle.putString("selectTag",ctTestRequestNo.getTag()+"");
-                IntentRouter.go(context,Constant.AppCode.LIMS_TestRequestNoRef,bundle);
+                bundle.putInt("type", type);
+                bundle.putString("selectTag", ctTestRequestNo.getTag() + "");
+                IntentRouter.go(context, Constant.AppCode.LIMS_TestRequestNoRef, bundle);
             }
         });
 
@@ -363,7 +363,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         ctTestDepartment.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1){
+                if (action == -1) {
                     BaseLongIdNameEntity department = new BaseLongIdNameEntity();
                     department.setId(null);
                     department.setName("");
@@ -380,7 +380,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         cdTestTime.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1){
+                if (action == -1) {
                     entity.setCheckTime(null);
                     return;
                 }
@@ -390,7 +390,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                         String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                         cdTestTime.setContent(dateStr);
                         //更换表头中请检时间的值
-                        entity.setCheckTime(DateUtil.dateFormat(dateStr,"yyyy-MM-dd HH:mm:ss"));
+                        entity.setCheckTime(DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss"));
                     }
                 }).show(new Date().getTime());
             }
@@ -400,13 +400,13 @@ public class TestReportEditController extends BaseViewController implements Qual
         ctQualityStd.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1){
+                if (action == -1) {
                     qualityStdClean();
-                }else {
+                } else {
                     //跳转请求质量标准的页面
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean("isReport",true);
-                    bundle.putString("id", asId == null ? 0+"" : asId+"");
+                    bundle.putBoolean("isReport", true);
+                    bundle.putString("id", asId == null ? 0 + "" : asId + "");
                     bundle.putSerializable("existItem", new ArrayList<>());
                     bundle.putString(Constant.IntentKey.SELECT_TAG, ctQualityStd.getTag() + "");
                     IntentRouter.go(context, Constant.AppCode.LIMS_QualityStdVerRef, bundle);
@@ -419,26 +419,26 @@ public class TestReportEditController extends BaseViewController implements Qual
         csTestConclusion.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1){
+                if (action == -1) {
                     entity.setCheckResult("");
-                }else {
+                } else {
                     stringConclusionList.clear();
                     for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
                         stringConclusionList.add(conclusionEntity.getName());
                     }
-                    if (stringConclusionList.size() > 0){
+                    if (stringConclusionList.size() > 0) {
                         mSinglePickController.list(stringConclusionList)
                                 .listener(new SinglePicker.OnItemPickListener() {
                                     @Override
                                     public void onItemPicked(int index, Object item) {
                                         entity.setCheckResult(stringConclusionList.get(index));
-                                        setConclusionColor(entity.getCheckResult(),false);
+                                        setConclusionColor(entity.getCheckResult(), false);
                                     }
                                 }).show();
                     }
 
-                 }
                 }
+            }
 
         });
 
@@ -446,13 +446,13 @@ public class TestReportEditController extends BaseViewController implements Qual
             @Override
             public void dispValueChange(String value, int position) {
                 List<SpecLimitEntity> specLimitList = null;
-                ((StdJudgeSpecEntity)ptList.get(position)).dispValue = value;
+                ((StdJudgeSpecEntity) ptList.get(position)).dispValue = value;
                 String resultGrade = "";
-                String specLimitListStr = ((StdJudgeSpecEntity)ptList.get(position)).specLimitListStr;
-                if (!StringUtil.isEmpty(specLimitListStr) && !specLimitListStr.equals("[]")){
+                String specLimitListStr = ((StdJudgeSpecEntity) ptList.get(position)).specLimitListStr;
+                if (!StringUtil.isEmpty(specLimitListStr) && !specLimitListStr.equals("[]")) {
                     specLimitList = GsonUtil.jsonToList(specLimitListStr, SpecLimitEntity.class);
                 }
-                if (!StringUtil.isEmpty(value) && specLimitList != null && specLimitList.size()>0){
+                if (!StringUtil.isEmpty(value) && specLimitList != null && specLimitList.size() > 0) {
 //                    Object[] specListsArr = null;
 //
 //                    if (null != columnRangeList && columnRangeList.size() > 0){
@@ -484,9 +484,9 @@ public class TestReportEditController extends BaseViewController implements Qual
                         Invocable invoke = (Invocable) engine;
                         Object gradeDetermine = invoke.invokeFunction("gradeDetermine", value, specListsArr, specLimitListStr, null);
                         resultGrade = (String) gradeDetermine;
-                        ((StdJudgeSpecEntity)ptList.get(position)).checkResult = resultGrade;
+                        ((StdJudgeSpecEntity) ptList.get(position)).checkResult = resultGrade;
                         adapter.notifyDataSetChanged();
-                        setConclusionColor("auto",true);
+                        setConclusionColor("auto", true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -497,16 +497,16 @@ public class TestReportEditController extends BaseViewController implements Qual
         adapter.setConclusionChangeListener(new TestReportEditPtAdapter.ConclusionChangeListener() {
             @Override
             public void conclusionChangeClick() {
-                setConclusionColor("auto",true);
+                setConclusionColor("auto", true);
             }
         });
 
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (action == 2){
-                    if (((StdJudgeSpecEntity)adapter.getList().get(position)).id != null){
-                        deletePtIds.add(((StdJudgeSpecEntity)adapter.getList().get(position)).id+"");
+                if (action == 2) {
+                    if (((StdJudgeSpecEntity) adapter.getList().get(position)).id != null) {
+                        deletePtIds.add(((StdJudgeSpecEntity) adapter.getList().get(position)).id + "");
                     }
 
                     adapter.remove(position);
@@ -516,26 +516,26 @@ public class TestReportEditController extends BaseViewController implements Qual
         });
 
         RxView.clicks(llReference)
-                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < ptList.size(); i++) {
-                            if (i != ptList.size()-1){
-                                sb.append(((StdJudgeSpecEntity)ptList.get(i)).reportName+",");
-                            }else {
-                                sb.append(((StdJudgeSpecEntity)ptList.get(i)).reportName);
+                            if (i != ptList.size() - 1) {
+                                sb.append(((StdJudgeSpecEntity) ptList.get(i)).reportName + ",");
+                            } else {
+                                sb.append(((StdJudgeSpecEntity) ptList.get(i)).reportName);
                             }
 
                         }
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean("isRadio",false);
-                        bundle.putString("stdVerId",entity.getStdVerId().getId()+"");
-                        bundle.putString("reportNames",sb.toString());
-                        bundle.putString("selectTag",llReference.getTag()+"");
-                        bundle.putString("title",context.getResources().getString(R.string.lims_inspection_items_reference));
-                        IntentRouter.go(context,Constant.AppCode.LIMS_StdVerComRef,bundle);
+                        bundle.putBoolean("isRadio", false);
+                        bundle.putString("stdVerId", entity.getStdVerId().getId() + "");
+                        bundle.putString("reportNames", sb.toString());
+                        bundle.putString("selectTag", llReference.getTag() + "");
+                        bundle.putString("title", context.getResources().getString(R.string.lims_inspection_items_reference));
+                        IntentRouter.go(context, Constant.AppCode.LIMS_StdVerComRef, bundle);
                     }
                 });
 
@@ -543,10 +543,10 @@ public class TestReportEditController extends BaseViewController implements Qual
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 WorkFlowVar workFlowVar = (WorkFlowVar) obj;
-                switch (action){
+                switch (action) {
                     case 0:
                         workFlowType = 0;
-                        if (StringUtil.isEmpty(ctTestRequestNo.getContent().trim())){
+                        if (StringUtil.isEmpty(ctTestRequestNo.getContent().trim())) {
                             setToast(context.getResources().getString(R.string.lims_inspection_request_no_cannot_be_blank));
                             return;
                         }
@@ -556,7 +556,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                     case 1:
                         setAdapterClose();
                         workFlowType = 1;
-                        if ("cancel".equals(workFlowVar.outcomeMapJson.get(0).type)){
+                        if ("cancel".equals(workFlowVar.outcomeMapJson.get(0).type)) {
                             new CustomDialog(context)
                                     .twoButtonAlertDialog(context.getResources().getString(R.string.lims_to_void_bill))
                                     .bindView(R.id.grayBtn, context.getResources().getString(com.supcon.mes.middleware.R.string.common_cancel))
@@ -565,50 +565,52 @@ public class TestReportEditController extends BaseViewController implements Qual
                                     }, true)
                                     .bindClickListener(R.id.redBtn, v -> doSubmit(workFlowVar), true)
                                     .show();
-                        }else {
+                        } else {
                             doSubmit(workFlowVar);
                         }
                         break;
                     case 2:
-                        setAdapterClose();
                         workFlowType = 1;
-                        if (checkSubmit()){
+                        if (checkSubmit()) {
                             doSubmit(workFlowVar);
                         }
+                        setAdapterClose();
                         break;
                 }
             }
         });
     }
 
-    public void setAdapterClose(){
-        for (int i = 0; i < adapter.getList().size(); i++) {
-            StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity)adapter.getList().get(i);
-            if (detailEntity.getTypeView() == 1){
-                List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getStdJudgeSpecEntities();
-                if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()){
-                    if (detailEntity.isExpand){
-                        adapter.getList().removeAll(stdJudgeSpecEntities);
-                        detailEntity.isExpand = false;
+    public void setAdapterClose() {
+        if (null != adapter.getList()) {
+            for (int i = 0; i < adapter.getList().size(); i++) {
+                StdJudgeSpecEntity detailEntity = (StdJudgeSpecEntity) adapter.getList().get(i);
+                if (detailEntity.getTypeView() == 1) {
+                    List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getStdJudgeSpecEntities();
+                    if (stdJudgeSpecEntities != null && !stdJudgeSpecEntities.isEmpty()) {
+                        if (detailEntity.isExpand) {
+                            adapter.getList().removeAll(stdJudgeSpecEntities);
+                            detailEntity.isExpand = false;
+                        }
                     }
                 }
             }
+            adapter.notifyDataSetChanged();
         }
-        adapter.notifyDataSetChanged();
     }
 
-    public void setIsFrom(String from){
+    public void setIsFrom(String from) {
         this.from = from;
     }
 
-    public void setTableType(TableTypeIdEntity tableType){
+    public void setTableType(TableTypeIdEntity tableType) {
         this.tableType = tableType;
     }
 
     //工作流--保存
-    private void doSave(WorkFlowVar workFlowVar){
-        String view=getView();
-        ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_saving));
+    private void doSave(WorkFlowVar workFlowVar) {
+        String view = getView();
+        ((BaseActivity) context).onLoading(view + context.getResources().getString(R.string.lims_saving));
         TestReportSubmitEntity entity = new TestReportSubmitEntity();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("comment", !TextUtils.isEmpty(workFlowVar.comment) ? workFlowVar.comment : "");
@@ -631,46 +633,46 @@ public class TestReportEditController extends BaseViewController implements Qual
             jsonObject.addProperty("idsMap", workFlowVar.idsMap.toString());
         }
 
-        String view=getView();
+        String view = getView();
         if (context.getResources().getString(R.string.reject).equals(workFlowVar.dec)) {
-            ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_reject));
+            ((BaseActivity) context).onLoading(view + context.getResources().getString(R.string.lims_reject));
             jsonObject.addProperty("outcomeType", "cancel");
-        }else if (context.getResources().getString(R.string.lims_to_void).equals(workFlowVar.dec)){
-            ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_cancellation));
+        } else if (context.getResources().getString(R.string.lims_to_void).equals(workFlowVar.dec)) {
+            ((BaseActivity) context).onLoading(view + context.getResources().getString(R.string.lims_cancellation));
             jsonObject.addProperty("outcomeType", "cancel");
-        }else {
-            ((BaseActivity)context).onLoading(view+context.getResources().getString(R.string.lims_submitting));
+        } else {
+            ((BaseActivity) context).onLoading(view + context.getResources().getString(R.string.lims_submitting));
         }
         entity.operateType = Constant.Transition.SUBMIT;
         entity.workFlowVar = jsonObject;
         generateSaveOrSubmit(entity);
     }
 
-    private void generateSaveOrSubmit(TestReportSubmitEntity entity){
-        if (from.equals("add")){
-            entity.deploymentId = mDeploymentId+"";
+    private void generateSaveOrSubmit(TestReportSubmitEntity entity) {
+        if (from.equals("add")) {
+            entity.deploymentId = mDeploymentId + "";
             entity.activityName = activityName;
             entity.taskDescription = context.getResources().getString(R.string.lims_edit);
             this.entity.setTableTypeId(tableType);
-        }else {
-            entity.deploymentId = pendingEntity.deploymentId+"";
+        } else {
+            entity.deploymentId = pendingEntity.deploymentId + "";
             entity.taskDescription = pendingEntity.taskDescription;
             entity.activityName = pendingEntity.activityName;
             entity.pendingId = pendingEntity.id.toString();
         }
-        entity.inspectReport=this.entity;
+        entity.inspectReport = this.entity;
         entity.inspectReport.setBusiTypeId(entity.inspectReport.getInspectId().busiTypeId);
         entity.inspectReport.setProdId(entity.inspectReport.getInspectId().prodId);
         myDeleteList.clear();
         for (int i = 0; i < deletePtIds.size(); i++) {
-            if (!deletePtIds.get(i).equals("null") ){
+            if (!deletePtIds.get(i).equals("null")) {
                 myDeleteList.add(deletePtIds.get(i));
             }
         }
 
         for (int i = myDeleteList.size(); i >= 1; i--) {
             for (int j = 0; j < ptList.size(); j++) {
-                if (myDeleteList.get(i).equals(((StdJudgeSpecEntity)ptList.get(j)).id+"")){
+                if (myDeleteList.get(i).equals(((StdJudgeSpecEntity) ptList.get(j)).id + "")) {
                     myDeleteList.remove(i);
                     break;
                 }
@@ -685,96 +687,96 @@ public class TestReportEditController extends BaseViewController implements Qual
                 sb.append(myDeleteList.get(i));
             }
         }
-        entity.dgDeletedIds.addProperty(getDg(),sb.length() > 0 ? sb.toString() : null);
+        entity.dgDeletedIds.addProperty(getDg(), sb.length() > 0 ? sb.toString() : null);
         Gson gson = new Gson();
-        entity.dgList.addProperty(getDg(),gson.toJson(ptList));
-        String viewCode=getViewCode();
-        entity.viewCode = "QCS_5.0.0.0_inspectReport_"+viewCode;
+        entity.dgList.addProperty(getDg(), gson.toJson(ptList));
+        String viewCode = getViewCode();
+        entity.viewCode = "QCS_5.0.0.0_inspectReport_" + viewCode;
         String path = viewCode;
         String _pc_ = powerCodeController.getPowerCodeResult();
         Map<String, Object> params = new HashMap<>();
         if (this.entity.getId() != null) {
             params.put("id", this.entity.getId());
         }
-        params.put("__pc__", _pc_);
+        params.put("__pc__","");
 
         String s = gson.toJson(entity);
         Log.i("ReportEntity", "->" + s);
         presenterRouter.create(TestReportEditSubmitAPI.class).submitInspectReport(path, params, entity);
     }
 
-    String getView(){
-        String view="";
-        if (type==1){
-            view=context.getResources().getString(R.string.lims_product_test_report);
-        }else if (type==2){
-            view=context.getResources().getString(R.string.lims_incoming_test_report);
-        }else if (type==3){
-            view=context.getResources().getString(R.string.lims_other_test_report);
+    String getView() {
+        String view = "";
+        if (type == 1) {
+            view = context.getResources().getString(R.string.lims_product_test_report);
+        } else if (type == 2) {
+            view = context.getResources().getString(R.string.lims_incoming_test_report);
+        } else if (type == 3) {
+            view = context.getResources().getString(R.string.lims_other_test_report);
         }
         return view;
     }
 
-    String getViewCode(){
-        String viewCode="";
-        if (type==1){
-            viewCode="manuInspReportEdit";
-        }else if (type==2){
-            viewCode="purchInspReportEdit";
-        }else if (type==3){
-            viewCode="otherInspReportEdit";
+    String getViewCode() {
+        String viewCode = "";
+        if (type == 1) {
+            viewCode = "manuInspReportEdit";
+        } else if (type == 2) {
+            viewCode = "purchInspReportEdit";
+        } else if (type == 3) {
+            viewCode = "otherInspReportEdit";
         }
         return viewCode;
     }
 
-     String getDg(){
+    String getDg() {
         String dg = "";
-        if (type == 1){
+        if (type == 1) {
             dg = "dg1591145511105";
-        }else if (type == 2){
+        } else if (type == 2) {
             dg = "dg1589174214149";
-        }else if (type == 3){
+        } else if (type == 3) {
             dg = "dg1591949908424";
         }
         return dg;
     }
 
-    private void setToast(String content){
-        ToastUtils.show(context,content);
+    private void setToast(String content) {
+        ToastUtils.show(context, content);
     }
 
-    private boolean checkSubmit(){
+    private boolean checkSubmit() {
 
-        if (StringUtil.isEmpty(ctTestRequestNo.getContent().trim())){
+        if (StringUtil.isEmpty(ctTestRequestNo.getContent().trim())) {
             setToast(context.getResources().getString(R.string.lims_inspection_request_no_cannot_be_blank));
             return false;
         }
-        if (StringUtil.isEmpty(ctTestPeople.getContent().trim())){
+        if (StringUtil.isEmpty(ctTestPeople.getContent().trim())) {
             setToast(context.getResources().getString(R.string.lims_inspection_report_inspector_cannot_be_empty));
             return false;
         }
 
-        if (StringUtil.isEmpty(ctTestDepartment.getContent().trim())){
+        if (StringUtil.isEmpty(ctTestDepartment.getContent().trim())) {
             setToast(context.getResources().getString(R.string.lims_inspection_report_inspection_department_cannot_be_empty));
             return false;
         }
 
-        if (StringUtil.isEmpty(cdTestTime.getContent().trim())){
+        if (StringUtil.isEmpty(cdTestTime.getContent().trim())) {
             setToast(context.getResources().getString(R.string.lims_inspection_report_inspection_time_cannot_be_empty));
             return false;
         }
 
-        if (StringUtil.isEmpty(ctQualityStd.getContent().trim())){
+        if (StringUtil.isEmpty(ctQualityStd.getContent().trim())) {
             setToast(context.getResources().getString(R.string.lims_inspection_application_detail_tips_6));
             return false;
         }
 
-        if (StringUtil.isEmpty(csTestConclusion.getContent().trim())){
+        if (StringUtil.isEmpty(csTestConclusion.getContent().trim())) {
             setToast(context.getResources().getString(R.string.lims_test_conclusion_cannot_be_empty));
             return false;
         }
 
-        if (ptList.size() < 1){
+        if (ptList.size() < 1) {
             setToast(context.getResources().getString(R.string.lims_Inspection_item_data_of_inspection_report_cannot_be_empty));
             return false;
         }
@@ -782,18 +784,18 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     }
 
-    public void setTableHead(int type, TestReportEditHeadEntity entity,TableHeadDataOverListener mTableHeadDataOverListener){
+    public void setTableHead(int type, TestReportEditHeadEntity entity, TableHeadDataOverListener mTableHeadDataOverListener) {
         this.mTableHeadDataOverListener = mTableHeadDataOverListener;
         this.entity = entity;
         this.type = type;
-        if (null != entity){
-            if (surveyReport!=null){
-                pendingEntity=surveyReport.pending;
-            }else
+        if (null != entity) {
+            if (surveyReport != null) {
+                pendingEntity = surveyReport.pending;
+            } else
                 pendingEntity = entity.getPending();
 
             entity.setPending(pendingEntity);
-            if (entity.getInspectId() != null){
+            if (entity.getInspectId() != null) {
                 //检验申请单号
                 ctTestRequestNo.setContent(entity.getInspectId().getTableNo() == null ?
                         "" : entity.getInspectId().getTableNo());
@@ -820,24 +822,24 @@ public class TestReportEditController extends BaseViewController implements Qual
                         "" : StringUtil.isEmpty(entity.getInspectId().vendorId.getName()) ?
                         "" : entity.getInspectId().vendorId.getName());
                 //物料
-                if (null != entity.getInspectId().getProdId()){
-                    if (!StringUtil.isEmpty(entity.getInspectId().getProdId().getName()) && !StringUtil.isEmpty(entity.getInspectId().getProdId().getCode())){
-                        ctMateriel.setContent(entity.getInspectId().getProdId().getName()+"("+entity.getInspectId().getProdId().getCode()+")");
-                    }else {
-                        if (StringUtil.isEmpty(entity.getInspectId().getProdId().getName()) && StringUtil.isEmpty(entity.getInspectId().getProdId().getCode())){
+                if (null != entity.getInspectId().getProdId()) {
+                    if (!StringUtil.isEmpty(entity.getInspectId().getProdId().getName()) && !StringUtil.isEmpty(entity.getInspectId().getProdId().getCode())) {
+                        ctMateriel.setContent(entity.getInspectId().getProdId().getName() + "(" + entity.getInspectId().getProdId().getCode() + ")");
+                    } else {
+                        if (StringUtil.isEmpty(entity.getInspectId().getProdId().getName()) && StringUtil.isEmpty(entity.getInspectId().getProdId().getCode())) {
                             ctMateriel.setContent("");
-                        }else {
-                            if (StringUtil.isEmpty(entity.getInspectId().getProdId().getName())){
+                        } else {
+                            if (StringUtil.isEmpty(entity.getInspectId().getProdId().getName())) {
                                 ctMateriel.setContent(entity.getInspectId().getProdId().getCode());
-                            }else {
+                            } else {
                                 ctMateriel.setContent(entity.getInspectId().getProdId().getName());
                             }
                         }
                     }
-                }else {
+                } else {
                     ctMateriel.setContent("");
                 }
-            }else {
+            } else {
                 ctTestRequestNo.setContent("");
                 ctBusinessType.setContent("");
                 ctGetPoint.setContent("");
@@ -853,7 +855,7 @@ public class TestReportEditController extends BaseViewController implements Qual
             //批号
             ctBatchNumber.setContent(entity.getBatchCode() == null ? "" : entity.getBatchCode());
             //请检时间
-            cdTestTime.setContent(entity.getCheckTime() == null ? "" : DateUtil.dateFormat(entity.getCheckTime(),"yyyy-MM-dd HH:mm:ss"));
+            cdTestTime.setContent(entity.getCheckTime() == null ? "" : DateUtil.dateFormat(entity.getCheckTime(), "yyyy-MM-dd HH:mm:ss"));
             //质量标准
             ctQualityStd.setContent(entity.getStdVerId() == null ?
                     "" : entity.getStdVerId().getStdId() == null ?
@@ -874,12 +876,12 @@ public class TestReportEditController extends BaseViewController implements Qual
             setWorkFlow(entity.getPending());
         }
         isNeedSetHead = true;
-        presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(this.entity.getStdVerId().getId()+"");
-        presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(this.entity.getProdId().getId()+"");
+        presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(this.entity.getStdVerId().getId() + "");
+        presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(this.entity.getProdId().getId() + "");
 
     }
 
-    public void setTablePt(StdJudgeSpecListEntity entity){
+    public void setTablePt(StdJudgeSpecListEntity entity) {
         llReference.setVisibility(View.VISIBLE);
         ptList.clear();
         ptList.addAll(entity.data.result);
@@ -890,19 +892,19 @@ public class TestReportEditController extends BaseViewController implements Qual
         adapter.notifyDataSetChanged();
 
         //当前选择的质量标准是否为检验申请中关联质量标准中的一条  如果是  则检验分项结论直接带过来就行   如果否 需要重新判定
-        if (!judgeTestApplyQSIsContainCurrentQS(stdVerId)){
+        if (!judgeTestApplyQSIsContainCurrentQS(stdVerId)) {
             setConclusionColor(this.entity.getCheckResult() == null ? "" : this.entity.getCheckResult(), StringUtil.isEmpty(this.entity.getCheckResult()));
         }
     }
 
-    public void setStartTabHead(int type,TableHeadDataOverListener mTableHeadDataOverListener){
+    public void setStartTabHead(int type, TableHeadDataOverListener mTableHeadDataOverListener) {
         this.type = type;
         this.mTableHeadDataOverListener = mTableHeadDataOverListener;
         this.entity = new TestReportEditHeadEntity();
 
         ctTestPeople.setContent(SupPlantApplication.getAccountInfo().staffName);
         ctTestDepartment.setContent(SupPlantApplication.getAccountInfo().getDepartmentName());
-        cdTestTime.setContent(DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"));
+        cdTestTime.setContent(DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
         ctQualityStd.setEditable(false);
         ctTestRequestNo.setEditable(true);
         csTestConclusion.setEditable(false);
@@ -918,15 +920,15 @@ public class TestReportEditController extends BaseViewController implements Qual
 //        }
 //        presenterRouter.create(DeploymentAPI.class).getCurrentDeployment(processKey);
 
-        setStartWorkFlow(mDeploymentId,activityName);
+        setStartWorkFlow(mDeploymentId, activityName);
     }
 
-    public void setDeploymentId(Long deploymentId, String menuName){
+    public void setDeploymentId(Long deploymentId, String menuName) {
         this.mDeploymentId = deploymentId;
         this.activityName = menuName;
     }
 
-    private void initRecycler(){
+    private void initRecycler() {
         ptList.clear();
         adapter = new TestReportEditPtAdapter(context);
         contentView.setLayoutManager(new LinearLayoutManager(context));
@@ -935,31 +937,30 @@ public class TestReportEditController extends BaseViewController implements Qual
         contentView.setAdapter(adapter);
     }
 
-    private void setStartWorkFlow(Long id, String menuName){
+    private void setStartWorkFlow(Long id, String menuName) {
         powerCodeController.initPowerCode(type == 3 ? "start_xrl1zg5" : type == 2 ? "start_wcguvzx" : type == 1 ? "start_f4jgu4z" : "");
-        workFlowViewController.initStartWorkFlowView(customWorkFlowView,id);
+        workFlowViewController.initStartWorkFlowView(customWorkFlowView, id);
     }
 
     //设置工作流
-    private void setWorkFlow(PendingEntity pendingEntity){
-        if (pendingEntity!=null && pendingEntity.id!=null){
+    private void setWorkFlow(PendingEntity pendingEntity) {
+        if (pendingEntity != null && pendingEntity.id != null) {
             powerCodeController.initPowerCode(pendingEntity.activityName);
             workFlowViewController.initPendingWorkFlowView(customWorkFlowView, pendingEntity.id);
             customWorkFlowView.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             customWorkFlowView.setVisibility(View.GONE);
         }
     }
 
 
-    public void setQualityChangeListener(QualityChangeListener mQualityChangeListener){
+    public void setQualityChangeListener(QualityChangeListener mQualityChangeListener) {
         this.mQualityChangeListener = mQualityChangeListener;
     }
 
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void selectDataEvent(SelectDataEvent selectDataEvent){
+    public void selectDataEvent(SelectDataEvent selectDataEvent) {
         if (selectDataEvent.getEntity() instanceof ContactEntity) {  //请检人 eventBus 回调
             ContactEntity contactEntity = (ContactEntity) selectDataEvent.getEntity();
             if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())) {
@@ -972,7 +973,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                     entity.setCheckStaffId(checkStaffIdEntity);
                 }
             }
-        }else if (selectDataEvent.getEntity() instanceof DepartmentEntity) {
+        } else if (selectDataEvent.getEntity() instanceof DepartmentEntity) {
             DepartmentEntity departmentEntity = (DepartmentEntity) selectDataEvent.getEntity();
             if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())) {
                 if (selectDataEvent.getSelectTag().equals(ctTestDepartment.getTag() + "")) {
@@ -984,12 +985,12 @@ public class TestReportEditController extends BaseViewController implements Qual
                     entity.setCheckDeptId(department);
                 }
             }
-        }else if (selectDataEvent.getEntity() instanceof QualityStandardEvent) {  // 质量标准 eventBus 回调
+        } else if (selectDataEvent.getEntity() instanceof QualityStandardEvent) {  // 质量标准 eventBus 回调
             QualityStandardEvent qualityStandardEvent = (QualityStandardEvent) selectDataEvent.getEntity();
             if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())) {
                 if (selectDataEvent.getSelectTag().equals(ctQualityStd.getTag() + "")) {
                     List<QualityStandardReferenceEntity> list = qualityStandardEvent.getList();
-                    if (list.size() == 1){
+                    if (list.size() == 1) {
                         StdVerIdEntity stdVerIdEntity = new StdVerIdEntity();
                         stdVerIdEntity.setBusiVersion(list.get(0).getBusiVersion());//版本号
                         stdVerIdEntity.setId(list.get(0).getId()); //质量标准外层ID
@@ -1004,54 +1005,54 @@ public class TestReportEditController extends BaseViewController implements Qual
                                 "" : entity.getStdVerId().getStdId().getName() == null ?
                                 "" : entity.getStdVerId().getStdId().getName());
                         isNeedSetHead = false;
-                        presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId()+""); //获取范围标准
-                        if (null != mQualityChangeListener){
-                            mQualityChangeListener.qualityChangeClick(entity.getInspectId().getId()+"", entity.getStdVerId().getId()+"");
+                        presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId() + ""); //获取范围标准
+                        if (null != mQualityChangeListener) {
+                            mQualityChangeListener.qualityChangeClick(entity.getInspectId().getId() + "", entity.getStdVerId().getId() + "");
                         }
                     }
                 }
             }
 
-        }else if (selectDataEvent.getEntity() instanceof StdVerComEvent){   //检验项目重新参照
-            StdVerComEvent stdVerComEvent =  (StdVerComEvent)selectDataEvent.getEntity();
-            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())){
-                if (selectDataEvent.getSelectTag().equals(llReference.getTag() + "")){
+        } else if (selectDataEvent.getEntity() instanceof StdVerComEvent) {   //检验项目重新参照
+            StdVerComEvent stdVerComEvent = (StdVerComEvent) selectDataEvent.getEntity();
+            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())) {
+                if (selectDataEvent.getSelectTag().equals(llReference.getTag() + "")) {
                     List<StdVerComIdEntity> list = stdVerComEvent.getList();
-                    if (list.size() > 0){
+                    if (list.size() > 0) {
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < ptList.size(); i++) {
-                            sb.append(((StdJudgeSpecEntity)ptList.get(i)).reportName).append(",");
+                            sb.append(((StdJudgeSpecEntity) ptList.get(i)).reportName).append(",");
                         }
                         for (int i = 0; i < list.size(); i++) {
-                            if (i != list.size() -1){
+                            if (i != list.size() - 1) {
                                 sb.append(list.get(i).getReportName()).append(",");
-                            }else {
+                            } else {
                                 sb.append(list.get(i).getReportName());
                             }
                         }
-                        if (null != mTestProjectChangeListener){
-                            mTestProjectChangeListener.testProjectChangeClick(this.entity.getInspectId().getId()+"",
-                                    this.entity.getStdVerId().getId()+"",sb.toString());
+                        if (null != mTestProjectChangeListener) {
+                            mTestProjectChangeListener.testProjectChangeClick(this.entity.getInspectId().getId() + "",
+                                    this.entity.getStdVerId().getId() + "", sb.toString());
                         }
                     }
                 }
             }
-        }else if (selectDataEvent.getEntity() instanceof TestRequestNoEvent){
-            TestRequestNoEvent event = (TestRequestNoEvent)selectDataEvent.getEntity();
-            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())){
-                if (selectDataEvent.getSelectTag().equals(ctTestRequestNo.getTag()+"")){
+        } else if (selectDataEvent.getEntity() instanceof TestRequestNoEvent) {
+            TestRequestNoEvent event = (TestRequestNoEvent) selectDataEvent.getEntity();
+            if (!TextUtils.isEmpty(selectDataEvent.getSelectTag())) {
+                if (selectDataEvent.getSelectTag().equals(ctTestRequestNo.getTag() + "")) {
                     List<TestRequestNoEntity> list = event.getList();
-                    if (list.size() == 1){
+                    if (list.size() == 1) {
                         testRequestNoEntity = list.get(0);
                         ctTestRequestNo.setContent(testRequestNoEntity.getTableNo());
                         ctBusinessType.setContent(testRequestNoEntity.getBusiTypeId() == null ? "" : testRequestNoEntity.getBusiTypeId().getName());
                         ctGetPoint.setContent(testRequestNoEntity.getPsId() == null ? "" : testRequestNoEntity.getPsId().getName());
-                        ctMateriel.setContent(testRequestNoEntity.getProdId() == null ? "" : testRequestNoEntity.getProdId().getName()+"("+testRequestNoEntity.getProdId().getCode()+")");
+                        ctMateriel.setContent(testRequestNoEntity.getProdId() == null ? "" : testRequestNoEntity.getProdId().getName() + "(" + testRequestNoEntity.getProdId().getCode() + ")");
                         ctUnit.setContent(testRequestNoEntity.getProdId() == null ? "" : testRequestNoEntity.getProdId().getMainUnit() == null ? "" : testRequestNoEntity.getProdId().getMainUnit().getName());
                         ctBatchNumber.setContent(StringUtil.isEmpty(testRequestNoEntity.getBatchCode()) ? "" : testRequestNoEntity.getBatchCode());
                         ctTestPeople.setContent(testRequestNoEntity.getApplyStaffId() == null ? "" : testRequestNoEntity.getApplyStaffId().getName());
                         ctTestDepartment.setContent(testRequestNoEntity.getApplyDeptId() == null ? "" : testRequestNoEntity.getApplyDeptId().getName());
-                        cdTestTime.setContent(testRequestNoEntity.getApplyTime() == null ? "" : DateUtil.dateFormat(testRequestNoEntity.getApplyTime(),"yyyy-MM-dd HH:mm:ss"));
+                        cdTestTime.setContent(testRequestNoEntity.getApplyTime() == null ? "" : DateUtil.dateFormat(testRequestNoEntity.getApplyTime(), "yyyy-MM-dd HH:mm:ss"));
                         ctRequestTestDepartment.setContent(testRequestNoEntity.getApplyDeptId() == null ? "" : testRequestNoEntity.getApplyDeptId().getName());
                         ctSupplier.setContent(testRequestNoEntity.getVendorId() == null ? "" : testRequestNoEntity.getVendorId().getName());
 
@@ -1070,13 +1071,13 @@ public class TestReportEditController extends BaseViewController implements Qual
                         this.entity.setCheckStaffId(testRequestNoEntity.getApplyStaffId());
                         this.entity.setCheckDeptId(testRequestNoEntity.getApplyDeptId());
 
-                        inspectId = testRequestNoEntity.getId()+"";
+                        inspectId = testRequestNoEntity.getId() + "";
 
-                        presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(inspectIdEntity.prodId.getId()+"");
+                        presenterRouter.create(AvailableStdIdAPI.class).getAvailableStdId(inspectIdEntity.prodId.getId() + "");
 
-                        presenterRouter.create(TestNumAPI.class).getTestNum(testRequestNoEntity.getId()+""); //获取数量
+                        presenterRouter.create(TestNumAPI.class).getTestNum(testRequestNoEntity.getId() + ""); //获取数量
 
-                        presenterRouter.create(StdVerByInspectIdAPI.class).getStdVerByInspectId(testRequestNoEntity.getId()+"");
+                        presenterRouter.create(StdVerByInspectIdAPI.class).getStdVerByInspectId(testRequestNoEntity.getId() + "");
 
                     }
                 }
@@ -1084,7 +1085,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         }
     }
 
-    private void setCleanTestRequestNo(){
+    private void setCleanTestRequestNo() {
         inspectIdEntity = null;
         this.entity.setBatchCode("");
         this.entity.setCheckTime(null);
@@ -1105,7 +1106,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         ctRequestTestDepartment.setContent("");
         ctTestPeople.setContent(SupPlantApplication.getAccountInfo().staffName);
         ctTestDepartment.setContent(SupPlantApplication.getAccountInfo().getDepartmentName());
-        cdTestTime.setContent(DateUtil.dateFormat(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"));
+        cdTestTime.setContent(DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
         ctTestNumber.setContent("");
         ctQualityStd.setContent("");
         ctQualityStd.setEditable(false);
@@ -1119,32 +1120,32 @@ public class TestReportEditController extends BaseViewController implements Qual
     public void getStdVerGradesByStdVerIdSuccess(BAP5CommonListEntity entity) {
         conclusionList.clear();
         conclusionList.addAll(entity.data);
-        if (isNeedSetHead){
-            this.mTableHeadDataOverListener.tableHeadOver(inspectId,stdVerId+"");
+        if (isNeedSetHead) {
+            this.mTableHeadDataOverListener.tableHeadOver(inspectId, stdVerId + "");
         }
 
     }
 
     @Override
     public void getStdVerGradesByStdVerIdFailed(String errorMsg) {
-        ToastUtils.show(context,errorMsg);
+        ToastUtils.show(context, errorMsg);
     }
 
     @Override
     public void submitInspectReportSuccess(SubmitResultEntity entity) {
-        ((BaseActivity)context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_deal), new OnLoaderFinishListener() {
+        ((BaseActivity) context).onLoadSuccessAndExit(context.getResources().getString(R.string.lims_deal), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 deletePtIds.clear();
-                if (workFlowType == 1){
+                if (workFlowType == 1) {
                     EventBus.getDefault().post(new RefreshEvent());
-                    ((BaseActivity)context).back();
-                }else {
-                    if (from.equals("add")){
+                    ((BaseActivity) context).back();
+                } else {
+                    if (from.equals("add")) {
                         EventBus.getDefault().post(new RefreshEvent());
-                        ((BaseActivity)context).back();
-                    }else {
-                        if (null != mOnRequestHeadListener){
+                        ((BaseActivity) context).back();
+                    } else {
+                        if (null != mOnRequestHeadListener) {
                             mOnRequestHeadListener.requestHeadClick();
                         }
                     }
@@ -1157,16 +1158,16 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     @Override
     public void submitInspectReportFailed(String errorMsg) {
-        ((BaseActivity)context).onLoadFailed(errorMsg);
+        ((BaseActivity) context).onLoadFailed(errorMsg);
     }
 
-    public void setOnRequestHeadListener(OnRequestHeadListener mOnRequestHeadListener){
+    public void setOnRequestHeadListener(OnRequestHeadListener mOnRequestHeadListener) {
         this.mOnRequestHeadListener = mOnRequestHeadListener;
     }
 
     @Override
     public void getFirstStdVerSuccess(FirstStdVerEntity entity) {
-        if (null != entity){
+        if (null != entity) {
             stdVerId = entity.getStdVerId().getId();
 
             ctQualityStd.setEditable(true);
@@ -1176,31 +1177,31 @@ public class TestReportEditController extends BaseViewController implements Qual
             this.entity.setInspectId(inspectIdEntity);
 
             isNeedSetHead = true;
-            presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId()+""); //获取范围标准
-        }else {
-            ToastUtils.show(context,context.getResources().getString(R.string.lims_inspection_application_detail_tips_3));
+            presenterRouter.create(QualityStdIdByConclusionAPI.class).getStdVerGradesByStdVerId(entity.getStdVerId().getId() + ""); //获取范围标准
+        } else {
+            ToastUtils.show(context, context.getResources().getString(R.string.lims_inspection_application_detail_tips_3));
         }
 
     }
 
     @Override
     public void getFirstStdVerFailed(String errorMsg) {
-        ToastUtils.show(context,errorMsg);
+        ToastUtils.show(context, errorMsg);
     }
 
     @Override
     public void getTestNumSuccess(TestNumEntity entity) {
-        if (null != entity){
-            ctTestNumber.setContent(entity.getQuantity() == null ? "" : entity.getQuantity().setScale(2)+"");
+        if (null != entity) {
+            ctTestNumber.setContent(entity.getQuantity() == null ? "" : entity.getQuantity().setScale(2) + "");
             inspectIdEntity.quantity = entity.getQuantity() != null ? entity.getQuantity().floatValue() : 0.0f;
-            presenterRouter.create(FirstStdVerAPI.class).getFirstStdVer( testRequestNoEntity.getId()+""); //获取默认质量标准
+            presenterRouter.create(FirstStdVerAPI.class).getFirstStdVer(testRequestNoEntity.getId() + ""); //获取默认质量标准
         }
 
     }
 
     @Override
     public void getTestNumFailed(String errorMsg) {
-        ToastUtils.show(context,errorMsg);
+        ToastUtils.show(context, errorMsg);
     }
 
 //    @Override
@@ -1272,25 +1273,25 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     }
 
-    public interface OnRequestHeadListener{
+    public interface OnRequestHeadListener {
         void requestHeadClick();
     }
 
 
-    public interface TableHeadDataOverListener{
+    public interface TableHeadDataOverListener {
         void tableHeadOver(String inspectId, String stdVerId);
     }
 
-    public interface QualityChangeListener{
+    public interface QualityChangeListener {
         void qualityChangeClick(String inspectId, String stdVerId);
     }
 
-    public void setTestProjectChangeListener(TestProjectChangeListener mTestProjectChangeListener){
+    public void setTestProjectChangeListener(TestProjectChangeListener mTestProjectChangeListener) {
         this.mTestProjectChangeListener = mTestProjectChangeListener;
     }
 
-    public interface TestProjectChangeListener{
-        void testProjectChangeClick(String inspectId, String stdVerId,String reportName);
+    public interface TestProjectChangeListener {
+        void testProjectChangeClick(String inspectId, String stdVerId, String reportName);
     }
 
     //获取文件缓存位置
@@ -1318,7 +1319,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         return cacheFile.getAbsolutePath();
     }
 
-    private void qualityStdClean(){
+    private void qualityStdClean() {
         /*1.清除质量标准控件的文字 2.清除质量标准对应实体字段 3.清除检验结论控件文字 4.清除检验结论对应实体字段 5.清除表体数据并刷新 6.隐藏参照检验项目按钮*/
         entity.getStdVerId().setStdId(null);
 
@@ -1333,82 +1334,82 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     }
 
-    public void setConclusionColor(String checkResult,boolean isAuto){
-        if (isAuto){
+    public void setConclusionColor(String checkResult, boolean isAuto) {
+        if (isAuto) {
             int unQualified = 0;
             int qualified = 0;
             int firstGrade = 0;
             int highGrade = 0;
             //int ptCheckResult = 0;
-            if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size() > 0){
+            if (null != conclusionList && conclusionList.size() > 0 && null != ptList && ptList.size() > 0) {
                 for (int i = 0; i < ptList.size(); i++) {
                     if (ptList.get(i) instanceof StdJudgeEntity)
                         continue;
                     StdJudgeSpecEntity stdJudgeSpec = (StdJudgeSpecEntity) ptList.get(i);
 
                     for (int j = 0; j < conclusionList.size(); j++) {
-                        if (conclusionList.get(j)!=null && ptList.get(i)!=null && !StringUtil.isEmpty(stdJudgeSpec.checkResult)){
-                            if (stdJudgeSpec.checkResult.equals(conclusionList.get(j).getName())){
-                                if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
+                        if (conclusionList.get(j) != null && ptList.get(i) != null && !StringUtil.isEmpty(stdJudgeSpec.checkResult)) {
+                            if (stdJudgeSpec.checkResult.equals(conclusionList.get(j).getName())) {
+                                if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)) {
                                     unQualified++;
                                     break;
-                                }else if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)){
+                                } else if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)) {
                                     qualified++;
                                     break;
-                                }else if(conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)){
+                                } else if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)) {
                                     firstGrade++;
                                     break;
-                                }else if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
+                                } else if (conclusionList.get(j).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)) {
                                     highGrade++;
                                     break;
                                 }
                             }
-                        }else {
+                        } else {
                             //ptCheckResult++;
                             break;
                         }
                     }
 
                 }
-                if (unQualified > 0){  //不合格为最高优先级 只要有不合格的  表头检验结论必为不合格
+                if (unQualified > 0) {  //不合格为最高优先级 只要有不合格的  表头检验结论必为不合格
                     csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.warningRed));
                     for (int i = 0; i < conclusionList.size(); i++) {
-                        if (conclusionList.get(i)!=null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
+                        if (conclusionList.get(i) != null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)) {
                             csTestConclusion.setContent(conclusionList.get(i).getName());
                             this.entity.setCheckResult(conclusionList.get(i).getName());
                             break;
                         }
                     }
-                }else {
+                } else {
                     csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.lightGreen));
-                    if (qualified > 0){  //合格优先级排第二，如果在没有不合格的前提下  只要存在一个合格  表头检验结论必为合格
+                    if (qualified > 0) {  //合格优先级排第二，如果在没有不合格的前提下  只要存在一个合格  表头检验结论必为合格
                         for (int i = 0; i < conclusionList.size(); i++) {
-                            if (conclusionList.get(i)!=null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)){
+                            if (conclusionList.get(i) != null && conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.QUALIFIED)) {
                                 csTestConclusion.setContent(conclusionList.get(i).getName());
                                 this.entity.setCheckResult(conclusionList.get(i).getName());
                                 break;
                             }
                         }
-                    }else { //剩余 一等品和优等品 一等品优先级高于优等品
-                        if (firstGrade > 0){
+                    } else { //剩余 一等品和优等品 一等品优先级高于优等品
+                        if (firstGrade > 0) {
                             for (int i = 0; i < conclusionList.size(); i++) {
-                                if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)){
-                                        csTestConclusion.setContent(conclusionList.get(i).getName());
-                                        this.entity.setCheckResult(conclusionList.get(i).getName());
-                                        break;
+                                if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.FIRST_GRADE)) {
+                                    csTestConclusion.setContent(conclusionList.get(i).getName());
+                                    this.entity.setCheckResult(conclusionList.get(i).getName());
+                                    break;
                                 }
                             }
-                        }else {
+                        } else {
                             //只有优等品或者什么都没选择会进入此逻辑
-                            if (highGrade > 0){
+                            if (highGrade > 0) {
                                 for (int i = 0; i < conclusionList.size(); i++) {
-                                    if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)){
+                                    if (conclusionList.get(i).getStdGrade().getId().equals(LimsConstant.ConclusionType.HIGH_GRADE)) {
                                         csTestConclusion.setContent(conclusionList.get(i).getName());
                                         this.entity.setCheckResult(conclusionList.get(i).getName());
                                         break;
                                     }
                                 }
-                            }else {
+                            } else {
                                 csTestConclusion.setContent("");
                                 this.entity.setCheckResult("");
                             }
@@ -1420,12 +1421,12 @@ public class TestReportEditController extends BaseViewController implements Qual
                 }
 
             }
-        }else {
+        } else {
             for (QualityStdConclusionEntity conclusionEntity : conclusionList) {
-                if (checkResult.equals(conclusionEntity.getName())){
-                    if (conclusionEntity.getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)){
+                if (checkResult.equals(conclusionEntity.getName())) {
+                    if (conclusionEntity.getStdGrade().getId().equals(LimsConstant.ConclusionType.UN_QUALIFIED)) {
                         csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.warningRed));
-                    }else {
+                    } else {
                         csTestConclusion.setContentTextColor(context.getResources().getColor(R.color.lightGreen));
                     }
                 }
@@ -1436,13 +1437,13 @@ public class TestReportEditController extends BaseViewController implements Qual
         }
     }
 
-    private boolean judgeTestApplyQSIsContainCurrentQS(Long qsId){
-        if (null == qsId){
+    private boolean judgeTestApplyQSIsContainCurrentQS(Long qsId) {
+        if (null == qsId) {
             return false;
         }
         boolean isContain = false;
         for (int i = 0; i < stdVerList.size(); i++) {
-            if (stdVerList.get(i).getId().equals(qsId)){
+            if (stdVerList.get(i).getId().equals(qsId)) {
                 isContain = true;
                 break;
             }

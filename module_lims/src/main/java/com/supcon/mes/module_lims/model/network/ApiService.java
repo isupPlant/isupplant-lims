@@ -431,4 +431,10 @@ public interface ApiService {
      */
     @POST("/msService/QCS/inspect/inspectStd/getStdVerByInspectId")
     Flowable<BAP5CommonListEntity<FirstStdVerEntity>> getStdVerByInspectId(@Query("inspectId") String inspectId);
+    /**
+     * 根据检验申请的id获取质量标准
+     * @return
+     */
+    @GET("/msService/LIMSSample/sample/sampleInfo/getDBType")
+    Flowable<BAP5CommonEntity> getDBType();
 }

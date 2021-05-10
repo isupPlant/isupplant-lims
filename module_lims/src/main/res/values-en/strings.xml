@@ -281,6 +281,8 @@
     <string name="lims_file_analysis">File analysis</string>
     <string name="lims_serial_port_acquisition">Serial port acquisition</string>
     <string name="lims_retention_storage_location_tip">Storage location cannot be empty！</string>
+    <string name="lims_retention_sample_product_tip">Storage sample code or product code cannot be empty！</string>
+
     <string name="lims_cancel">Cancel</string>
     <string name="lims_sample_retention_date_or_due_date_is_empty">Sample retention date or due date is empty, observation plan cannot be generated!</string>
     <string name="lims_location_reference">Location reference</string>

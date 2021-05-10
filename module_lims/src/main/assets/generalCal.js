@@ -20,7 +20,7 @@ function dataCarry(dData,dPrecision,carryRule) {
 	if(carryRule == undefined) {
 		carryRule = 'LIMSBasicCarryRule/1';
 	}
-	
+
 	var tempData;
 	var tempstr;
 	var pos = 0;
@@ -31,15 +31,15 @@ function dataCarry(dData,dPrecision,carryRule) {
 	tmpFlag = (dData >= 0);
 	dData = Math.abs(dData);
 	if (dData == null || dData.length==0) return '';
-	
+
 	tempData = accDiv(dData,dPrecision);
 	tempstr = String(tempData);
 	pos = tempstr.indexOf(".");
-	
+
 	if(pos != -1) {
 		intPart = Number(tempstr.substr(0,pos));
 		decPart = Number(tempstr.substr(pos));
-		
+
 		if(carryRule == 'LIMSBasicCarryRule/3') {
 			tempData = intPart;
 		} else if(carryRule == 'LIMSBasicCarryRule/4') {
@@ -48,7 +48,7 @@ function dataCarry(dData,dPrecision,carryRule) {
 			if(decPart > 0.5) {
 				tempData = intPart + 1;
 			}
-			
+
 			if(decPart == 0.5) {
 				if(carryRule == 'LIMSBasicCarryRule/1') {
 					tempData = intPart + 1;
@@ -60,18 +60,18 @@ function dataCarry(dData,dPrecision,carryRule) {
 					}
 				}
 			}
-			
+
 			if(decPart < 0.5) {
 				tempData = intPart;
 			}
 		}
 	}
-	
+
 	res = accMul(tempData, dPrecision);
 	if(!tmpFlag) {
 		res = res * -1;
 	}
-	
+
 	return res;
 }
 //根据修约规则获取修约值
@@ -87,18 +87,18 @@ function getCarryRuleValue(originValue,carrySpace,carryRule,digitType){
 	}else if(digitType=='LIMSBasicDigitType/significanceDigit'){ //有效数字
 		var decLength = 0;
 		var originValueNew  = originValue;
-		do{  //循环乘，直到没小数      			
+		do{  //循环乘，直到没小数
 			decLength--;
 		} while((originValueNew = accMul(originValueNew,10)).toString().indexOf('.')!=-1);
 		decLength += originValueNew.toString().length;//最高位数
-		var fixed = parseInt(decLength)-parseInt(carrySpace); 
-		carrySpaceNew = Math.pow(10,fixed);   //计算修约间隔       			         				
+		var fixed = parseInt(decLength)-parseInt(carrySpace);
+		carrySpaceNew = Math.pow(10,fixed);   //计算修约间隔
 		newValueResult=dataCarry(originValue,carrySpaceNew,carryRule);  //计算修约值
 		return parseFloat(newValueResult).toFixed(fixed<0?-fixed:0);
 	}else if(digitType=='LIMSBasicDigitType/decLength'){ //小数位数
 		var carrySpaceNew = Math.pow(10,-1*parseInt(carrySpace));         //小数位数转化为修约间隔，如小数位数为2就转化为0.01
 		newValueResult=dataCarry(originValue,carrySpaceNew,carryRule);  //计算修约值
-		return parseFloat(newValueResult).toFixed(carrySpace); //修约值赋值       		                   	               	
+		return parseFloat(newValueResult).toFixed(carrySpace); //修约值赋值
 	}
 }
 
@@ -244,7 +244,7 @@ function rstdev(range){
 function linearRegression(data){
     var xsum=new Array();//x的多项和
     var ysum=new Array();//y的多项和
-	
+
     for(var i=0;i<data.length;i++){
         xsum[i]=data[i].x;
         ysum[i]=data[i].y;
@@ -299,7 +299,7 @@ function linearRegression_b(xArray,yArray){
 //自然对数
 function ln(arg1){
 	return formulajs.LN(arg1);
-} 
+}
 //以指定数为底的对数
 //说明：第二个参数为底
 function log(arg1,arg2){
@@ -402,7 +402,7 @@ function rounddown(arg1,digit){
 function subparam(arg1){
 	var t1=0;
 	try{t1=arg1.toString().split(".")[1].length}catch(e){}
-	
+
   	//hfq 2020-12-09 从7位改为16位
 	if(t1 > 16){
 		arg1=arg1.toString().substr(0,arg1.toString().indexOf('.')+17);
@@ -410,13 +410,13 @@ function subparam(arg1){
 	return arg1;
 }
 
- function linearRegression_r2(xArray, yArray) {     
+ function linearRegression_r2(xArray, yArray) {
 	if (xArray.length != yArray.length) {
 		return false;
 	}
 	var xmean=ave(xArray);//x的平均数
     var ymean=ave(yArray);//y的平均数
-	var n = xArray.length;	
+	var n = xArray.length;
 	// 第二次计算，求出方差
 	var xxbar = 0;
 	var yybar = 0;
@@ -441,15 +441,15 @@ function subparam(arg1){
 	return r2;
 	//var svar  = rss / degreesOfFreedom;
 	//svar1 = svar / xxbar;
-	//svar0 = svar/n + xmean*xmean*svar1;        
+	//svar0 = svar/n + xmean*xmean*svar1;
 }
 //判断是否在最大最小范围内
 function inMaxAndMin(selectRow, originValue,widget) {
 	var maxValue = widget.getCellValue(selectRow, "maxValue");
 	var minValue = widget.getCellValue(selectRow, "minValue");
   	var limitType = widget.getCellValue(selectRow, "limitType.id");//检出限类别
-  	
-  	if(limitType=="LIMSBasic_LIMSBasicLimitType/add"){//检出限为添加    
+
+  	if(limitType=="LIMSBasic_LIMSBasicLimitType/add"){//检出限为添加
         if (maxValue != null && maxValue.length != 0) {
             if (parseFloat(maxValue) < parseFloat(originValue)) {
                 widget.setCellValue(selectRow, "dispValue", ">" + maxValue);
@@ -480,9 +480,9 @@ function inMaxAndMin(selectRow, originValue,widget) {
     }else if(limitType=="LIMSBasic_LIMSBasicLimitType/reject"){//检出限为拒绝
 		if (maxValue != null && maxValue.length != 0) {
             if (parseFloat(maxValue) < parseFloat(originValue)) {
-              
+
               	//errorBarWidget.showMessage("${getText('LIMSBasic.custom.inmaxminerror070101')}","f");
-              
+
                 widget.setCellValue(selectRow, "dispValue", "");
               	widget.setCellValue(selectRow, "roundValue", "");
               	widget.setCellValue(selectRow, "originalValue", "");
@@ -499,13 +499,13 @@ function inMaxAndMin(selectRow, originValue,widget) {
             }
         }
     }
-  	return "pass";             
+  	return "pass";
 }
 //根据检出限进行原始值判断（后台调用）
 function autoCastDispValue(originValue,carrySpace,carryRule,digitType,limitType,maxValue,minValue){
   	var newDispValue = originValue;
     if(limitType!=null && limitType!="" ){
-         if(limitType=="LIMSBasic_LIMSBasicLimitType/add"){//检出限为添加    
+         if(limitType=="LIMSBasic_LIMSBasicLimitType/add"){//检出限为添加
             if (maxValue != null && maxValue.length != 0) {
                 if (parseFloat(maxValue) < parseFloat(originValue)) {
                     newDispValue = ">" + maxValue;
@@ -540,22 +540,22 @@ function autoCastDispValue(originValue,carrySpace,carryRule,digitType,limitType,
                 }
             }
             if (minValue != null && minValue.length != 0) {
-                if (parseFloat(minValue) > parseFloat(originValue)) {          	
+                if (parseFloat(minValue) > parseFloat(originValue)) {
                     return "reject";
                 }
-            }           
+            }
         }
     }
   	//结果正常，输出修约值
 	newDispValue = getCarryRuleValue(originValue,carrySpace,carryRule,digitType);
-  	 return newDispValue;  
+  	 return newDispValue;
 }
 
 //======================================================== 以上是旧版本的函数，部分函数无效，需要重新写================
 
 //======================================================== 以下是5.0版本新增的函数==========================================
 
-/** 
+/**
 *	修约函数 dData 要修约的数， dPrecision 修约间隔，add by zhengyongli on 2014/2/20
 * 	添加 carryRule 修约规则：1四舍五入2四舍六入五成双3去尾法4进一法
 *	rounding:四舍五入;
@@ -586,15 +586,15 @@ function carrySpaceData(dData,dPrecision,carryRule) {
 	tmpFlag = (dData >= 0);
 	dData = Math.abs(dData);//绝对值
 	if (dData == null || dData.length==0) return '';
-	
+
 	tempData = accDiv(dData,dPrecision);//除法
 	tempstr = String(tempData);
 	pos = tempstr.indexOf(".");
-	
+
 	if(pos != -1) {
 		intPart = Number(tempstr.substr(0,pos));
 		decPart = Number(tempstr.substr(pos));
-		
+
 		if(carryRule == 'roundingDown') {
 			tempData = intPart;
 		} else if(carryRule == 'roundingUp') {
@@ -603,7 +603,7 @@ function carrySpaceData(dData,dPrecision,carryRule) {
 			if(decPart > 0.5) {
 				tempData = intPart + 1;
 			}
-			
+
 			if(decPart == 0.5) {
 				if(carryRule == 'rounding') {
 					tempData = intPart + 1;
@@ -615,22 +615,22 @@ function carrySpaceData(dData,dPrecision,carryRule) {
 					}
 				}
 			}
-			
+
 			if(decPart < 0.5) {
 				tempData = intPart;
 			}
 		}
 	}
-	
+
 	res = accMul(tempData, dPrecision);
 	if(!tmpFlag) {
 		res = res * -1;
 	}
-	
+
 	return res;
 }
 
-/** 
+/**
 *	修约函数 dData 要修约的数， decimalDigit 小数位数，add by huangrui on 2014/2/20
 * 	添加 carryRule 修约规则：
 *	rounding:	四舍五入;
@@ -646,7 +646,7 @@ function decLengthDataCarry(dData, decimalDigit, carryRule){
 	return parseFloat(newValueResult).toFixed(parseInt(decimalDigit));
 }
 
-/** 
+/**
 *	修约函数 dData 要修约的数， significanceDigit 有效数字，add by huangrui on 2020/03/12
 * 	添加 carryRule 修约规则：
 *	rounding:	四舍五入;
@@ -657,11 +657,11 @@ function decLengthDataCarry(dData, decimalDigit, carryRule){
 function significanceDigitDataCarry(dData, significanceDigit, carryRule){
 	var decLength = 0;
 	var originValueNew  = dData;
-	do{  //循环乘，直到没小数      			
+	do{  //循环乘，直到没小数
 		decLength--;
 	} while((originValueNew = accMul(originValueNew,10)).toString().indexOf('.')!=-1);
 	decLength += originValueNew.toString().length;//最高位数
-	var fixed = parseInt(decLength)-parseInt(significanceDigit);   
+	var fixed = parseInt(decLength)-parseInt(significanceDigit);
 	var carrySpaceNew = Math.pow(10, fixed); //计算修约间隔
 	carrySpaceNew = parseFloat(carrySpaceNew.toFixed(abs(fixed)));
 	var newValueResult = carrySpaceData(dData, carrySpaceNew, carryRule);
@@ -682,7 +682,7 @@ function roundingValue(originValue, digitType, carrySpace, carryType, carryFormu
 	if((digitType == null || carrySpace === null || carryType === null) && (carryFormula === null || carryFormula === "")){
 		return originValue;
 	}
-	
+
 	//如果修约规则公式不为空，表示自定义修约
 	if(carryFormula != null && carryFormula != ""){
 		var evalStr = "function impleRound(){ var result = " + originValue + ";" + carryFormula + "}";
@@ -698,14 +698,14 @@ function roundingValue(originValue, digitType, carrySpace, carryType, carryFormu
         }
 	}else{
 		//修约规则为空，使用修约规则修约
-		
+
 		if(digitType.id == "LIMSBasic_digitType/decLength"){
           	var carrySpaceNew = Math.pow(10, -1 * parseInt(carrySpace));
           	carrySpaceNew = parseFloat(carrySpaceNew.toFixed(abs(carrySpace)));
 			//定位方式为小数位数
           	var newValueResult = carrySpaceDataCarry(originValue, carrySpaceNew, carryType.id.split("/")[1]);
           	return parseFloat(newValueResult).toFixed(parseInt(carrySpace));
-			
+
 		}else if(digitType.id == "LIMSBasic_digitType/carrySpace"){
 			//定位方式为修约间隔
 			var newValueResult = carrySpaceDataCarry(originValue, parseFloat(carrySpace), carryType.id.split("/")[1]);
@@ -717,11 +717,11 @@ function roundingValue(originValue, digitType, carrySpace, carryType, carryFormu
 		}else if(digitType.id == "LIMSBasic_digitType/significanceDigit"){
           	var decLength = 0;
             var originValueNew  = originValue;
-            do{  //循环乘，直到没小数      			
+            do{  //循环乘，直到没小数
                 decLength--;
             } while((originValueNew = accMul(originValueNew,10)).toString().indexOf('.')!=-1);
             decLength += originValueNew.toString().length;//最高位数
-            var fixed = parseInt(decLength)-parseInt(carrySpace);   
+            var fixed = parseInt(decLength)-parseInt(carrySpace);
 			var carrySpaceNew = Math.pow(10, fixed); //计算修约间隔
           	carrySpaceNew = parseFloat(carrySpaceNew.toFixed(abs(fixed)));
 			var newValueResult = carrySpaceDataCarry(originValue, carrySpaceNew, carryType.id.split("/")[1]);
@@ -745,7 +745,7 @@ function sectionJudgment(originValue, limitType, maxVal, minVal){
 			//原始值大于检出高限
 			return ">" + maxVal;
 		}
-		
+
 		if(minVal != null && originValue < parseFloat(minVal)){
 			//原始值小于检出低限
 			return "<" + minVal;
@@ -768,7 +768,7 @@ function sectionJudgment(originValue, limitType, maxVal, minVal){
 			if(originValue < min){
 				//原始值小于检出低限
 				return minVal.substring(index + 1);
-			}			
+			}
 		}
 
 	}else if(limitType == "LIMSBasic_limitType/reject"){
@@ -777,7 +777,7 @@ function sectionJudgment(originValue, limitType, maxVal, minVal){
 			//原始值大于检出高限
 			return "reject";
 		}
-		
+
 		if(minVal != null && originValue < parseFloat(minVal)){
 			//原始值小于检出低限
 			return "reject";
@@ -794,7 +794,7 @@ function sectionJudgment(originValue, limitType, maxVal, minVal){
 *
 **/
 function gradeDetermine(value, limits, specialResultStr, limitType){
-	
+
 	//对特殊结果判断的处理
 	if(specialResultStr != null && specialResultStr != ""){
 		var specialResultArr = specialResultStr.split(",");
@@ -803,12 +803,12 @@ function gradeDetermine(value, limits, specialResultStr, limitType){
 			return null;
 		}
 	}
-  
+
   	if(limitType !== null && limitType === "LIMSBasic_limitType/add"){
        value = value + "";
        value = value.replace(/[<>]/g, '');
     }
-  
+
 	//是否符合等级标记，判等结束如果为false,表示不合格
 	var gradeFlag = false;
 	var otherRes = null;
@@ -830,7 +830,7 @@ function gradeDetermine(value, limits, specialResultStr, limitType){
             }
 			if(eval(judgeCond)){
 				otherRes = limits[i].resultValue;
-				gradeFlag = true;				
+				gradeFlag = true;
               	break;
 			}
 		}

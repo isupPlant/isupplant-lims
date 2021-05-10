@@ -3,6 +3,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.app.annotation.BindByTag;
@@ -92,7 +93,9 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
                                 int size = stdJudgeSpecEntities.size();
                                 if (!detailEntity.isExpand) {
                                     for (int i = 0; i < size; i++) {
-                                        getList().add(position + i + 1, stdJudgeSpecEntities.get(i));
+                                        if (!"LIMSBasic_standardGrade/Unqualified".equals(stdJudgeSpecEntities.get(i).standardGrade.id)) {
+                                            getList().add(position + i + 1, stdJudgeSpecEntities.get(i));
+                                        }
                                     }
                                 } else {
                                     getList().removeAll(stdJudgeSpecEntities);
@@ -142,8 +145,9 @@ public class SampleReportDetailAdapter extends BaseListDataRecyclerViewAdapter {
 
         @Override
         protected void update(StdJudgeEntity data) {
-            judgeRangeTv.setKey(data.resultValue + context.getResources().getString(R.string.lims_range));
+            judgeRangeTv.setKey(data.standardGrade.value + context.getResources().getString(R.string.lims_range));
             judgeRangeTv.setValue(data.dispValue);
+
         }
     }
 }

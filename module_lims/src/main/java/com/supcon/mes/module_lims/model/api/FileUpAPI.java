@@ -10,9 +10,8 @@ import java.util.List;
  * Created by wanghaidong on 2020/8/25
  * Email:wanghaidong1@supcon.com
  */
-@ContractFactory(entites = {BAP5CommonEntity.class,List.class})
+@ContractFactory(entites = {List.class})
 public interface FileUpAPI {
-    void upFile(File file);
-    void loadFile(List<String> id, List<String> fileName);
+    void downloadFile(List<String> id, List<String> fileName);
 
 }

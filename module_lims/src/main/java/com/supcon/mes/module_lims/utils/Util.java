@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -460,6 +461,20 @@ public class Util implements LimsConstant.SampleState{
         }
         return sum / n;
     }
+    /**
+     * 传入一个数列x计算平均值
+     *
+     * @param x
+     * @return 平均值
+     */
+    public static double sum(List<Double> x) {
+        int n = x.size();            //数列元素个数
+        double sum = 0;
+        for (double i : x) {        //求和
+            sum += i;
+        }
+        return sum;
+    }
 
     /**
      * 传入一个数列x计算方差
@@ -584,5 +599,13 @@ public class Util implements LimsConstant.SampleState{
             return REPORTED;
         }
         return "";
+    }
+
+    public static ArrayList<Double> getDoubleArrFromStringArr(List<String> strings) {
+        ArrayList<Double> doubles = new ArrayList<>();
+        for (int i = 0; i < strings.size(); i++) {
+            doubles.add(Double.valueOf(strings.get(i)));
+        }
+        return doubles;
     }
 }

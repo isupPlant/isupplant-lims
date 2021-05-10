@@ -957,7 +957,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
             if (mHeadEntity.getId()!= null) {
                 params.put("id", mHeadEntity.getId());
             }
-            params.put("__pc__", _pc_);
+            params.put("__pc__", "");
             presenterRouter.create(AddTestRequestAPI.class).addTestRequestSave(path,params,entity);
         }else {
             Map<String, Object> params = new HashMap<>();
@@ -967,7 +967,7 @@ public class InspectionApplicationDetailController extends BaseViewController im
             if (TextUtils.isEmpty(_pc_)){
                 _pc_="111";
             }
-            params.put("__pc__", _pc_);
+            params.put("__pc__", "");
             presenterRouter.create(InspectApplicationSubmitAPI.class).submitInspectApplication(path, params, entity);
         }
 

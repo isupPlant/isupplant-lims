@@ -708,7 +708,7 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         retainDateTv.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
         retainDaysTv.setContent(retentionEntity.retainDays != null ? retentionEntity.retainDays.toString() : "");
         if (retentionEntity.retainUnit == null || TextUtils.isEmpty(retentionEntity.retainUnit.getId())) {
-            retentionEntity.retainUnit = remainDaysBaseIdValueEntities.get(0);
+            retentionEntity.retainUnit = remainDaysBaseIdValueEntities.get(1);
         }
         remainDaysUnitTv.setText(retentionEntity.retainUnit != null ? retentionEntity.retainUnit.getValue() : "");
 
@@ -763,6 +763,12 @@ public class RetentionDetainEditActivity extends BaseRefreshActivity implements 
         }
         if (retentionEntity.storeSetId == null || retentionEntity.storeSetId.getId() == null) {
             ToastUtils.show(context, getString(R.string.lims_retention_storage_location_tip));
+            return false;
+        }
+
+        //样品编码与物料编码不能同是为空
+        if ((retentionEntity.sampleId ==null || retentionEntity.sampleId.getCode() == null) && (retentionEntity.productId == null || retentionEntity.productId.getCode() == null)) {
+            ToastUtils.show(context, getString(R.string.lims_retention_sample_product_tip));
             return false;
         }
 

@@ -270,6 +270,8 @@ public class SamplingActivity extends BaseRefreshRecyclerActivity<SampleInquiryE
         onLoadSuccessAndExit(getResources().getString(R.string.lims_submit_succeed), new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
+                //刷新之前要清除params，否则搜不到data
+                params.clear();
                 goRefresh();
             }
         });

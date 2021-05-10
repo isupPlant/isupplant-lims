@@ -37,41 +37,10 @@ import okhttp3.ResponseBody;
  * Email:wanghaidong1@supcon.com
  */
 public class FileUpLoadPresenter extends FileUpContract.Presenter {
-    @Override
-    public void upFile(File file) {
-        List<MultipartBody.Part> parts = FormDataHelper.createFileForm(file);
-        mCompositeSubscription.add(
-                SampleHttpClient.bapUploadFile(parts)
-                        .onErrorReturn(new Function<Throwable, BAP5CommonEntity<FileDataEntity>>() {
-                            @Override
-                            public BAP5CommonEntity apply(Throwable throwable) throws Exception {
-                                BAP5CommonEntity<FileDataEntity> bap5CommonEntity = new BAP5CommonEntity<FileDataEntity>();
-                                bap5CommonEntity.success = false;
-                                bap5CommonEntity.msg = HttpErrorReturnUtil.getErrorInfo(throwable);
-                                return bap5CommonEntity;
-                            }
-                        })
-                        .subscribe(new Consumer<BAP5CommonEntity<FileDataEntity>>() {
-                            @Override
-                            public void accept(BAP5CommonEntity<FileDataEntity> result) throws Exception {
-                                if (result.success) {
-                                    getView().upFileSuccess(result);
-                                } else {
-                                    getView().upFileFailed(SupPlantApplication.getAppContext().getString(R.string.lims_upload_fail));
-                                }
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                getView().upFileFailed(SupPlantApplication.getAppContext().getString(R.string.lims_upload_fail));
-                            }
-                        })
-        );
-    }
 
     @SuppressLint("CheckResult")
     @Override
-    public void loadFile(List<String> ids, List<String> fileNames) {
+    public void downloadFile(List<String> ids, List<String> fileNames) {
         List<AttachmentSampleInputEntity> localFilePaths = new ArrayList<>();
         Flowable.fromIterable(ids)
                 .subscribe(new Consumer<String>() {
@@ -83,7 +52,7 @@ public class FileUpLoadPresenter extends FileUpContract.Presenter {
                                 SampleHttpClient
                                         .getSampleInspectItemFile(id)
                                         .onErrorReturn(throwable -> {
-                                            getView().loadFileFailed(throwable.getMessage());
+                                            getView().downloadFileFailed(throwable.getMessage());
                                             return null;
                                         })
                                         .observeOn(Schedulers.io())
@@ -129,13 +98,13 @@ public class FileUpLoadPresenter extends FileUpContract.Presenter {
                                                 entity.setFile(file);
                                                 localFilePaths.add(entity);
                                                 if (localFilePaths.size() == ids.size() && FileUpLoadPresenter.this.getView() != null) {
-                                                    getView().loadFileSuccess(localFilePaths);
+                                                    getView().downloadFileSuccess(localFilePaths);
                                                 }
                                             }
                                         }, new Consumer<Throwable>() {
                                             @Override
                                             public void accept(Throwable throwable) throws Exception {
-                                                getView().loadFileFailed(throwable.getMessage());
+                                                getView().downloadFileFailed(throwable.getMessage());
                                             }
                                         })
                         );
