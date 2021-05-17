@@ -1143,7 +1143,7 @@ public class TestReportEditController extends BaseViewController implements Qual
                 } else {
                     if (from.equals("add")) {
                         EventBus.getDefault().post(new RefreshEvent());
-                        ((BaseActivity) context).back();
+//                        ((BaseActivity) context).back();
                     } else {
                         if (null != mOnRequestHeadListener) {
                             mOnRequestHeadListener.requestHeadClick();
