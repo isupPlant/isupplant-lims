@@ -201,6 +201,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     private OnRequestHeadListener mOnRequestHeadListener;
     private TestReportEditHeadEntity entity;
     private List ptList;
+    private List ptListA;
     private List<QualityStdConclusionEntity> conclusionList;
     private List<String> stringConclusionList;
     private List<String> deletePtIds;
@@ -258,6 +259,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         myDeleteList.clear();
 
         ptList = new ArrayList<>();
+        ptListA = new ArrayList<>();
         conclusionList = new ArrayList<>();
         stringConclusionList = new ArrayList<>();
         stdVerList = new ArrayList<>();
@@ -689,7 +691,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         }
         entity.dgDeletedIds.addProperty(getDg(), sb.length() > 0 ? sb.toString() : null);
         Gson gson = new Gson();
-        entity.dgList.addProperty(getDg(), gson.toJson(ptList));
+        entity.dgList.addProperty(getDg(), gson.toJson(ptListA));
         String viewCode = getViewCode();
         entity.viewCode = "QCS_5.0.0.0_inspectReport_" + viewCode;
         String path = viewCode;
@@ -885,6 +887,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         llReference.setVisibility(View.VISIBLE);
         ptList.clear();
         ptList.addAll(entity.data.result);
+        ptListA.addAll(entity.data.result);
         adapter.setList(ptList);
         adapter.setNeedLab(this.entity.getInspectId() != null && (this.entity.getInspectId().getNeedLab() == null ? false :
                 this.entity.getInspectId().getNeedLab()));
