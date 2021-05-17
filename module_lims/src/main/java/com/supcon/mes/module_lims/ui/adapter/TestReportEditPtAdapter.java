@@ -155,7 +155,8 @@ public class TestReportEditPtAdapter extends BaseListDataRecyclerViewAdapter {
                         if (detailEntity.getTypeView() == 1) {
                             List<StdJudgeEntity> stdJudgeSpecEntities = detailEntity.getStdJudgeSpecEntities();
                             for (int i = stdJudgeSpecEntities.size()-1; i >= 0; i--) {
-                                if (stdJudgeSpecEntities.get(i).resultValue.equals(context.getResources().getString(R.string.lims_unqualified))){
+                                String resultValue = stdJudgeSpecEntities.get(i).resultValue;
+                                if (resultValue.contains(context.getResources().getString(R.string.lims_unqualified))){
                                     stdJudgeSpecEntities.remove(i);
                                 }
                             }

@@ -41,7 +41,8 @@ public class StdJudgeEntity extends InspectReportDetailEntity {
         if (this == o) return true;
         if (!(o instanceof StdJudgeEntity)) return false;
         StdJudgeEntity that = (StdJudgeEntity) o;
-        return id.longValue()==that.id.longValue();
+//        return id.longValue()==that.id.longValue();
+        return resultValue.equals(that.resultValue);
     }
 
     @Override
