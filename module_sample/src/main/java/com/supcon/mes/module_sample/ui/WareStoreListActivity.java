@@ -56,7 +56,9 @@ public class WareStoreListActivity extends BaseRefreshRecyclerActivity<WareStore
     @BindByTag("scanRightBtn")
     CustomImageButton scanRightBtn;
 
+    int pos = -1;
     private WareStoreAdapter adapter;
+    public static String type = "";
     Map<String, Object> queryParam = new HashMap<>();
     @Override
     protected IListAdapter<WareStoreEntity> createAdapter() {
@@ -101,7 +103,8 @@ public class WareStoreListActivity extends BaseRefreshRecyclerActivity<WareStore
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(WareStoreRefAPI.class).getWareStoreRefInfo(pageIndex,queryParam);
+                pos = pageIndex;
+                presenterRouter.create(WareStoreRefAPI.class).getLIMSWareType();
             }
         });
         adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
@@ -130,6 +133,16 @@ public class WareStoreListActivity extends BaseRefreshRecyclerActivity<WareStore
     public void getWareStoreRefInfoFailed(String errorMsg) {
         refreshListController.refreshComplete();
         ToastUtils.show(context,errorMsg);
+    }
+
+    @Override
+    public void getLIMSWareTypeSuccess() {
+        presenterRouter.create(WareStoreRefAPI.class).getWareStoreRefInfo(pos,queryParam);
+    }
+
+    @Override
+    public void getLIMSWareTypeFailed(String errorMsg) {
+
     }
 
 }

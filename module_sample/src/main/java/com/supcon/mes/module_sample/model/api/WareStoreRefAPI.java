@@ -13,4 +13,5 @@ import java.util.Map;
 @ContractFactory(entites = List.class)
 public interface WareStoreRefAPI {
     void getWareStoreRefInfo(int pageNo,Map<String,Object> params);
+    void getLIMSWareType();
 }

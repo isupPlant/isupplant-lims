@@ -220,5 +220,11 @@ public interface ApiService {
      */
     @POST("/msService/BaseSet/warehouse/storeSet/storeSetFilterRef-query")
     Flowable<BAP5CommonEntity<CommonListEntity<WareStoreEntity>>> getWareStoreRefInfo(@Body Map<String,Object> params);
+    /**
+     * 获取上一个接口所需的一个参数，本来是写死的，这是偷懒滴行为
+     * @return
+     */
+    @GET("inter-api/systemconfig/v1/config/catalog/by/module?moduleCode=LIMSBasic&key=LIMSBasic.LIMSWareType&profilescAtive=")
+    Flowable<BAP5CommonEntity> getLIMSWareType();
 
 }

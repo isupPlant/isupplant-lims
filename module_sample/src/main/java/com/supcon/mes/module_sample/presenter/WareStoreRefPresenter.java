@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sample.presenter;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
@@ -10,6 +11,7 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_lims.model.bean.WareStoreEntity;
 import com.supcon.mes.module_sample.model.contract.WareStoreRefContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
+import com.supcon.mes.module_sample.ui.WareStoreListActivity;
 
 import org.json.JSONObject;
 
@@ -29,6 +31,7 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
  * desc:
  */
 public class WareStoreRefPresenter extends WareStoreRefContract.Presenter {
+    String type = "";
     @Override
     public void getWareStoreRefInfo(int pageNo,Map<String, Object> params) {
 
@@ -50,7 +53,7 @@ public class WareStoreRefPresenter extends WareStoreRefContract.Presenter {
                 map.put("fastQueryCond",fastQueryCondEntity.toString());
             }
             Map<String, Object> customCondition=new HashMap();
-            customCondition.put("wareClassCode","Lims_WMS");
+            customCondition.put("wareClassCode",type);
             map.put("customCondition",customCondition);
             map.put("permissionCode","BaseSet_1.0.0_warehouse_storeSetFilterRef");
             map.put("pageNo",pageNo);
@@ -83,6 +86,34 @@ public class WareStoreRefPresenter extends WareStoreRefContract.Presenter {
         }
 
     }
+
+    @Override
+    public void getLIMSWareType() {
+        mCompositeSubscription.add(
+                SampleHttpClient.getLIMSWareType()
+                        .onErrorReturn(throwable -> {
+                            BAP5CommonEntity<BAP5CommonEntity> entity=new BAP5CommonEntity<>();
+                            entity.success=false;
+                            entity.msg= ErrorMsgHelper.msgParse(throwable.getMessage());
+                            return entity;
+                        })
+                        .subscribe(new Consumer<BAP5CommonEntity>() {
+                            @Override
+                            public void accept(BAP5CommonEntity entity) throws Exception {
+                                if (entity.success){
+                                    LinkedTreeMap<String,String> data_hp = (LinkedTreeMap<String, String>) entity.data;
+                                    type = data_hp.get("LIMSBasic.LIMSWareType");
+                                    getView().getLIMSWareTypeSuccess();
+
+                                }else {
+                                    getView().getWareStoreRefInfoFailed(entity.msg);
+                                }
+                            }
+                        })
+
+        );
+    }
+
     private  BaseSubcondEntity parseKey(String key, Object value) {
         SubcondEntity subcondEntity = null;
         switch (key) {
