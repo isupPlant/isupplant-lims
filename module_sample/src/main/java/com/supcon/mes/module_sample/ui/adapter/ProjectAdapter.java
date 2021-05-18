@@ -457,6 +457,9 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                     }
                 }
                 originValChange(data, ceOriginalValue, ctRoundOffValue, ceReportedValue, cpOriginalValue);
+            }else {
+                //原来的判断是
+                originValChange(data, ceOriginalValue, ctRoundOffValue, ceReportedValue, cpOriginalValue);
             }
         }
 
@@ -499,11 +502,13 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
                         Invocable invoke = (Invocable) engine;
                         Object dispValue = invoke.invokeFunction("sectionJudgment", inspectionSubEntity.getOriginValue(), inspectionSubEntity.getLimitType().getId(), inspectionSubEntity.getMaxValue(), inspectionSubEntity.getMinValue());
                         if (dispValue != "reject") {
-                            if ((dispValue + "").equals(inspectionSubEntity.getOriginValue())) {
-                                inspectionSubEntity.setDispValue(dispValue + "");
-                            } else {
-                                inspectionSubEntity.setDispValue(roundValue + "");
-                            }
+//                            if ((dispValue + "").equals(inspectionSubEntity.getOriginValue())) {
+//                                inspectionSubEntity.setDispValue(dispValue + "");
+//                            } else {
+//                                inspectionSubEntity.setDispValue(roundValue + "");
+//                            }
+                            //测试要求报出值和修约值应该一致
+                            inspectionSubEntity.setDispValue(roundValue + "");
                         } else {
                             clearFalg = true;
                         }
@@ -528,7 +533,7 @@ public class ProjectAdapter extends BaseListDataRecyclerViewAdapter<InspectionSu
         }
         ceOriginalValue.setContent(inspectionSubEntity.getOriginValue());
         ctRoundOffValue.setContent(inspectionSubEntity.getRoundValue());
-        ceReportedValue.setContent(inspectionSubEntity.getOriginValue());
+        ceReportedValue.setContent(inspectionSubEntity.getDispValue());
         if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)) {
             cpOriginalValue.setContent(inspectionSubEntity.getOriginValue());
             cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
