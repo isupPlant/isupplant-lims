@@ -2,6 +2,7 @@ package com.supcon.mes.module_product.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.WorkFlowButtonInfo;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.module_lims.controller.TestReportEditController;
 import com.supcon.mes.module_lims.model.api.StdJudgeSpecAPI;
 import com.supcon.mes.module_lims.model.api.TableTypeAPI;
@@ -33,6 +35,10 @@ import com.supcon.mes.module_lims.presenter.StdJudgeSpecPresenter;
 import com.supcon.mes.module_lims.presenter.TableTypePresenter;
 import com.supcon.mes.module_lims.presenter.TestReportEditPresenter;
 import com.supcon.mes.module_product.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +80,8 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
+
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
 
         refreshController.setAutoPullDownRefresh(false);
@@ -221,5 +229,18 @@ public class ProductTestReportEditActivity extends BaseRefreshActivity implement
     @Override
     public void getTableTypeByCodeFailed(String errorMsg) {
         ToastUtils.show(context, errorMsg);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RefreshEvent event) {
+        String aa = String.valueOf(event.delId);
+        if (!("null".equals(aa))) {
+            presenterRouter.create(TestReportEditAPI.class).getTestReportEdit(event.delId.toString(), event.tag);
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

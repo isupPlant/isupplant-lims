@@ -62,6 +62,7 @@ import com.supcon.mes.module_lims.model.api.FirstStdVerAPI;
 import com.supcon.mes.module_lims.model.api.QualityStdIdByConclusionAPI;
 import com.supcon.mes.module_lims.model.api.StdVerByInspectIdAPI;
 import com.supcon.mes.module_lims.model.api.TestNumAPI;
+import com.supcon.mes.module_lims.model.api.TestReportEditAPI;
 import com.supcon.mes.module_lims.model.api.TestReportEditSubmitAPI;
 import com.supcon.mes.module_lims.model.bean.AvailableStdEntity;
 import com.supcon.mes.module_lims.model.bean.BaseLongIdNameEntity;
@@ -886,6 +887,7 @@ public class TestReportEditController extends BaseViewController implements Qual
     public void setTablePt(StdJudgeSpecListEntity entity) {
         llReference.setVisibility(View.VISIBLE);
         ptList.clear();
+        ptListA.clear();
         ptList.addAll(entity.data.result);
         ptListA.addAll(entity.data.result);
         adapter.setList(ptList);
@@ -933,6 +935,7 @@ public class TestReportEditController extends BaseViewController implements Qual
 
     private void initRecycler() {
         ptList.clear();
+        ptListA.clear();
         adapter = new TestReportEditPtAdapter(context);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.setNestedScrollingEnabled(false);
@@ -1099,6 +1102,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         this.entity.setCheckResult(null);
         conclusionList.clear();
         ptList.clear();
+        ptListA.clear();
 
         ctTestRequestNo.setContent("");
         ctBusinessType.setContent("");
@@ -1145,8 +1149,13 @@ public class TestReportEditController extends BaseViewController implements Qual
                     ((BaseActivity) context).back();
                 } else {
                     if (from.equals("add")) {
-                        EventBus.getDefault().post(new RefreshEvent());
-//                        ((BaseActivity) context).back();
+                        //要求不关闭，且要刷新页面
+                        from = "";//添加成功后，如果再有提交操作，from就不是add了。如果还是add，提交后会造成单据重复的bug
+                        TestReportEditController.this.entity.setId(entity.data.id);
+                        RefreshEvent event = new RefreshEvent();
+                        event.delId = entity.data.id;
+                        event.tag = entity.data.pendingId + "";
+                        EventBus.getDefault().post(event);
                     } else {
                         if (null != mOnRequestHeadListener) {
                             mOnRequestHeadListener.requestHeadClick();
@@ -1331,6 +1340,7 @@ public class TestReportEditController extends BaseViewController implements Qual
         conclusionList.clear();
 
         ptList.clear();
+        ptListA.clear();
         adapter.notifyDataSetChanged();
 
         llReference.setVisibility(View.GONE);
