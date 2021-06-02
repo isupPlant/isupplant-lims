@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -11,8 +12,12 @@ import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
+
+import utilcode.util.ToastUtils;
 
 /**
  * @author : yaobing
@@ -81,6 +86,11 @@ public class SampleResultCheckAdapter extends BaseListDataRecyclerViewAdapter<Sa
             tvSampleType.setContent(entity.getSampleType().getValue());
             tvSampleStatus.setContent(entity.getSampleState().getValue());
             tvRegistrationTime.setContent(entity.getRegisterTime());
+
+            itemView.setOnClickListener(v -> {
+                ToastUtils.showLong("pos" + getLayoutPosition() + entity.toString());
+
+            });
         }
     }
 

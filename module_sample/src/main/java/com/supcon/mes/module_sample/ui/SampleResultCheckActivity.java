@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -15,10 +16,12 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_lims.model.api.MaterialReferenceAPI;
@@ -43,6 +46,10 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity imple
     ImageButton leftBtn;
     @BindByTag("contentView")
     RecyclerView contentView;
+    @BindByTag("ivSearchBtn")
+    ImageView ivSearchBtn;
+    @BindByTag("scanRightBtn")
+    CustomImageButton scanRightBtn;
 
     private SampleResultCheckAdapter adapter;
 
@@ -76,6 +83,8 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity imple
     @Override
     protected void initView() {
         super.initView();
+        ivSearchBtn.setVisibility(View.GONE);
+        scanRightBtn.setVisibility(View.GONE);
         titleText.setText(getResources().getString(R.string.sample_result_check));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
