@@ -227,4 +227,11 @@ public interface ApiService {
     @GET("inter-api/systemconfig/v1/config/catalog/by/module?moduleCode=LIMSBasic&key=LIMSBasic.LIMSWareType&profilescAtive=")
     Flowable<BAP5CommonEntity> getLIMSWareType();
 
+    /**
+     * 获取样品结果复核中的样品列表
+     * @param params
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleInfo/getPendingSample")
+    Flowable<BAP5CommonEntity<CommonListEntity<WareStoreEntity>>> getSampleResultCheckList(@Query("pageType") String pageType,@Body Map<String,Object> params);
 }

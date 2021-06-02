@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">module_sample</string>
-    <string name="sample_result_check">按样品结果</string>
+    <string name="sample_result_check">sample result check</string>
 </resources>
