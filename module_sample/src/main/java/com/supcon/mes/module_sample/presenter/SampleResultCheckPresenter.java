@@ -8,7 +8,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.SubcondEntity;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
-import com.supcon.mes.module_lims.model.bean.WareStoreEntity;
+import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
 import com.supcon.mes.module_sample.model.contract.SampleResultCheckContract;
 import com.supcon.mes.module_sample.model.contract.WareStoreRefContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
@@ -44,14 +44,14 @@ public class SampleResultCheckPresenter extends SampleResultCheckContract.Presen
             mCompositeSubscription.add(
                     SampleHttpClient.getSampleResultCheckList("recordCheckBySample",map)
                                     .onErrorReturn(throwable -> {
-                                        BAP5CommonEntity<CommonListEntity<WareStoreEntity>> entity=new BAP5CommonEntity<>();
+                                        BAP5CommonEntity<CommonListEntity<SanpleResultCheckItemEntity>> entity=new BAP5CommonEntity<>();
                                         entity.success=false;
                                         entity.msg= ErrorMsgHelper.msgParse(throwable.getMessage());
                                         return entity;
                                     })
-                                    .subscribe(new Consumer<BAP5CommonEntity<CommonListEntity<WareStoreEntity>>>() {
+                                    .subscribe(new Consumer<BAP5CommonEntity<CommonListEntity<SanpleResultCheckItemEntity>>>() {
                                         @Override
-                                        public void accept(BAP5CommonEntity<CommonListEntity<WareStoreEntity>> entity) throws Exception {
+                                        public void accept(BAP5CommonEntity<CommonListEntity<SanpleResultCheckItemEntity>> entity) throws Exception {
                                             if (entity.success){
                                                 getView().getPendingSampleSuccess(entity.data.result);
                                             }else {
@@ -99,14 +99,14 @@ public class SampleResultCheckPresenter extends SampleResultCheckContract.Presen
 //            mCompositeSubscription.add(
 //                    SampleHttpClient.getWareStoreRefInfo(map)
 //                                    .onErrorReturn(throwable -> {
-//                                        BAP5CommonEntity<CommonListEntity<WareStoreEntity>> entity=new BAP5CommonEntity<>();
+//                                        BAP5CommonEntity<CommonListEntity<SanpleResultCheckItemEntity>> entity=new BAP5CommonEntity<>();
 //                                        entity.success=false;
 //                                        entity.msg= ErrorMsgHelper.msgParse(throwable.getMessage());
 //                                        return entity;
 //                                    })
-//                                    .subscribe(new Consumer<BAP5CommonEntity<CommonListEntity<WareStoreEntity>>>() {
+//                                    .subscribe(new Consumer<BAP5CommonEntity<CommonListEntity<SanpleResultCheckItemEntity>>>() {
 //                                        @Override
-//                                        public void accept(BAP5CommonEntity<CommonListEntity<WareStoreEntity>> entity) throws Exception {
+//                                        public void accept(BAP5CommonEntity<CommonListEntity<SanpleResultCheckItemEntity>> entity) throws Exception {
 //                                            if (entity.success){
 //                                                getView().getWareStoreRefInfoSuccess(entity.data.result);
 //                                            }else {

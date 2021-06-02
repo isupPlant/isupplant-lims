@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">module_sample</string>
-    <string name="sample_result_check">按样品结果</string>
+    <string name="sample_result_check">按样品结果复核</string>
+    <string name="index">序号:</string>
+    <string name="sample_name">样品名称</string>
+    <string name="sample_code">样品编码</string>
+    <string name="sample_separation_type">分样类型</string>
+    <string name="sample_point">采样点</string>
+    <string name="material_code">物料编码</string>
+    <string name="material_name">物料名称</string>
+    <string name="quality_standard">质量标准</string>
+    <string name="sample_type">样品类型</string>
+    <string name="sample_status">状态</string>
+    <string name="register_time">登记时间</string>
+
 </resources>

@@ -18,13 +18,13 @@
 
 
         <TextView
-            android:id="@+id/tvOddNumbers"
+            android:id="@+id/tvOrderNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxEms="13"
             android:singleLine="true"
-            android:tag="tvOddNumbers"
+            android:tag="tvOrderNumber"
             android:textColor="@color/blue"
             android:textSize="15sp"
             tools:text="chanpinqingjiajndan_20200606_2477777" />
@@ -45,7 +45,7 @@
                 android:paddingRight="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_3"
                 android:tag="tvEdit"
-                android:text="编辑" />
+                android:text="审核" />
 
 
         </RelativeLayout>
@@ -57,7 +57,32 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/bgGray2" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_goods" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/tvCode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvCode"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/sample_code"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_35"
@@ -80,12 +105,13 @@
             app:content_color="@color/fontBlack333"
             app:content_size="15"
             app:gravity="right|center_vertical"
-            app:key="@string/lims_sample"
+            app:key="@string/sample_name"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
 
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,26 +120,27 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_goods" />
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:src="@drawable/ic_check_result2"
+            android:scaleType="centerInside"
+            />
 
         <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/tvMateriel"
+            android:id="@+id/tvSeparationType"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_9"
-            android:tag="tvMateriel"
+            android:tag="tvSeparationType"
             app:content_color="@color/fontBlack333"
             app:content_size="15"
             app:gravity="right|center_vertical"
-            app:key="@string/lims_materiel"
+            app:key="@string/sample_separation_type"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
 
 
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_35"
@@ -155,15 +182,15 @@
             />
 
         <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/checkResultTv"
+            android:id="@+id/tvCheckPoint"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_9"
-            android:tag="checkResultTv"
+            android:tag="tvCheckPoint"
             app:content_color="@color/fontBlack333"
             app:content_size="15"
             app:gravity="right|center_vertical"
-            app:key="@string/lims_test_conclusion"
+            app:key="@string/sample_point"
             app:key_color="@color/c_scan_666"
             app:key_size="13" />
 
@@ -196,15 +223,71 @@
                     />
 
                 <com.supcon.mes.mbap.view.CustomTextView
-                    android:id="@+id/tvSamplingPoint"
+                    android:id="@+id/tvMaterialCode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_9"
-                    android:tag="tvSamplingPoint"
+                    android:tag="tvMaterialCode"
                     app:content_color="@color/fontBlack333"
                     app:content_size="15"
                     app:gravity="right|center_vertical"
-                    app:key="@string/lims_sampling_point"
+                    app:key="@string/material_code"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_12"
+                    android:layout_height="@dimen/dp_12"
+                    android:src="@drawable/ic_picksite"
+                    android:scaleType="centerInside"
+                    />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvMaterialName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvMaterialName"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/material_name"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_examiner" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvQualityStandard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvQualityStandard"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/quality_standard"
                     app:key_color="@color/c_scan_666"
                     app:key_size="13" />
 
@@ -223,15 +306,42 @@
                     android:src="@drawable/ic_examiner" />
 
                 <com.supcon.mes.mbap.view.CustomTextView
-                    android:id="@+id/tvCreator"
+                    android:id="@+id/tvSampleType"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_9"
-                    android:tag="tvCreator"
+                    android:tag="tvSampleType"
                     app:content_color="@color/fontBlack333"
                     app:content_size="15"
                     app:gravity="right|center_vertical"
-                    app:key="@string/lims_creator"
+                    app:key="@string/sample_type"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_examiner" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvSampleStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvSampleStatus"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/sample_status"
                     app:key_color="@color/c_scan_666"
                     app:key_size="13" />
 

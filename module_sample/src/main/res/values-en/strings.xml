@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">module_sample</string>
     <string name="sample_result_check">sample result check</string>
+    <string name="index">order number</string>
+    <string name="sample_name">sample name</string>
+    <string name="sample_code">sample code</string>
+    <string name="sample_separation_type">sample separation type</string>
+    <string name="sample_point">sample point</string>
+    <string name="material_code">material code</string>
+    <string name="material_name">material name</string>
+    <string name="quality_standard">quality standard</string>
+    <string name="sample_type">sample type</string>
+    <string name="sample_status">sample status</string>
+    <string name="register_time">register time</string>
 </resources>

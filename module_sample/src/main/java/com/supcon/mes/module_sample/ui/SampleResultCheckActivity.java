@@ -15,6 +15,7 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
@@ -58,12 +59,12 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity imple
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(com.supcon.mes.module_lims.R.string.middleware_no_data)));
-
-        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
+        refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh(int pageIndex) {
+            public void onRefresh() {
                 doFilter();
             }
+
         });
     }
 
@@ -117,6 +118,6 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity imple
     @Override
     public void getPendingSampleFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
-        Log.d("zxcv",errorMsg);
+        Log.d("zxcv", errorMsg);
     }
 }
