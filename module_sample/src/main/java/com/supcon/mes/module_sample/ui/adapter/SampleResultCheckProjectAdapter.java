@@ -2,12 +2,15 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_lims.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
 import com.yaobing.module_middleware.Utils.MyDateUtils;
@@ -71,6 +74,12 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
             check_person.setContent(null == ((SampleResultCheckProjectEntity) data).getTestStaffId() ? "" : ((SampleResultCheckProjectEntity) data).getTestStaffId().getName());
             check_time.setContent(null == ((SampleResultCheckProjectEntity) data).getTestTime() ? "" : MyDateUtils.getDateFromLong(((SampleResultCheckProjectEntity) data).getTestTime(), MyDateUtils.date_Format));
             memo.setContent(null == ((SampleResultCheckProjectEntity) data).getMemoField() ? "" : ((SampleResultCheckProjectEntity) data).getMemoField().toString());
+
+            itemView.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, data.getId());
+                IntentRouter.go(context, Constant.AppCode.LIMS_SampleResultCheckProjectDetail, bundle);
+            });
         }
     }
 
