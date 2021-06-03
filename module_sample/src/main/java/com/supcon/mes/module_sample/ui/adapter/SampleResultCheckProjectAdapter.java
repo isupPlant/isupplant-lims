@@ -2,36 +2,31 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
-import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.module_lims.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
-import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
 import com.yaobing.module_middleware.Utils.MyDateUtils;
 
 /**
  * @author : yaobing
  * @date : 2021/6/2 13:40
- * @desc :
  */
-public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAdapter<SanpleResultCheckItemEntity> {
+public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAdapter<SampleResultCheckProjectEntity> {
     public SampleResultCheckProjectAdapter(Context context) {
         super(context);
     }
 
     @Override
-    protected BaseRecyclerViewHolder getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<SampleResultCheckProjectEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder {
+    class ViewHolder extends BaseRecyclerViewHolder<SampleResultCheckProjectEntity> {
         @BindByTag("tvOrderNumber")
         TextView tvOrderNumber;
         @BindByTag("tvCheckProject")
@@ -64,19 +59,18 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
 
         @SuppressLint("SetTextI18n")
         @Override
-        protected void update(Object data) {
-                SampleResultCheckProjectEntity entity = (SampleResultCheckProjectEntity) data;
-                int order = getLayoutPosition()+1;
-                tvOrderNumber.setText(context.getResources().getString(R.string.index)+ order);
-                tvCheckProject.setContent(entity.getTestId().getName());
-                repeat_number.setContent(String.valueOf(entity.getParallelNo()));
-                vision_number.setContent(null == entity.getTestId() ? "" : String.valueOf(entity.getTestId().getBusiVersion()));
-                check_method.setContent(null == entity.getTestMethodId() ? "" : entity.getTestMethodId().getMethod());
-                operating_procedures.setContent(null == entity.getTestMethodId() ? "" : entity.getTestMethodId().getProcedureNo());
-                sample_status.setContent(null == entity.getTestState() ? "" : entity.getTestState().getValue());
-                check_person.setContent(null == entity.getTestStaffId() ? "" : entity.getTestStaffId().getName());
-                check_time.setContent(null == entity.getTestTime() ? "" : MyDateUtils.getDateFromLong(entity.getTestTime(),MyDateUtils.date_Format));
-                memo.setContent(null == entity.getMemoField() ? "" : entity.getMemoField().toString());
+        protected void update(SampleResultCheckProjectEntity data) {
+            int order = getLayoutPosition() + 1;
+            tvOrderNumber.setText(context.getResources().getString(R.string.index) + order);
+            tvCheckProject.setContent(((SampleResultCheckProjectEntity) data).getTestId().getName());
+            repeat_number.setContent(String.valueOf(((SampleResultCheckProjectEntity) data).getParallelNo()));
+            vision_number.setContent(null == ((SampleResultCheckProjectEntity) data).getTestId() ? "" : String.valueOf(((SampleResultCheckProjectEntity) data).getTestId().getBusiVersion()));
+            check_method.setContent(null == ((SampleResultCheckProjectEntity) data).getTestMethodId() ? "" : ((SampleResultCheckProjectEntity) data).getTestMethodId().getMethod());
+            operating_procedures.setContent(null == ((SampleResultCheckProjectEntity) data).getTestMethodId() ? "" : ((SampleResultCheckProjectEntity) data).getTestMethodId().getProcedureNo());
+            sample_status.setContent(null == ((SampleResultCheckProjectEntity) data).getTestState() ? "" : ((SampleResultCheckProjectEntity) data).getTestState().getValue());
+            check_person.setContent(null == ((SampleResultCheckProjectEntity) data).getTestStaffId() ? "" : ((SampleResultCheckProjectEntity) data).getTestStaffId().getName());
+            check_time.setContent(null == ((SampleResultCheckProjectEntity) data).getTestTime() ? "" : MyDateUtils.getDateFromLong(((SampleResultCheckProjectEntity) data).getTestTime(), MyDateUtils.date_Format));
+            memo.setContent(null == ((SampleResultCheckProjectEntity) data).getMemoField() ? "" : ((SampleResultCheckProjectEntity) data).getMemoField().toString());
         }
     }
 

@@ -4,8 +4,6 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
-import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
-import com.supcon.mes.module_sample.model.contract.SampleResultCheckContract;
 import com.supcon.mes.module_sample.model.contract.SampleResultCheckProjectContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
@@ -24,7 +22,7 @@ public class SampleResultCheckProjectPresenter extends SampleResultCheckProjectC
     public void getSampleResultCheckProject(long pageType, Map<String, Object> params) {
         Map<String, Object> map = new HashMap<>();
         try {
-            Map<String, Object> customCondition=new HashMap();
+            Map<String, Object> customCondition=new HashMap<>();
             map.put("customCondition",customCondition);
             map.put("pageNo",0);
             map.put("pageSize",65535);
@@ -39,14 +37,11 @@ public class SampleResultCheckProjectPresenter extends SampleResultCheckProjectC
                                 entity.msg= ErrorMsgHelper.msgParse(throwable.getMessage());
                                 return entity;
                             })
-                            .subscribe(new Consumer<BAP5CommonEntity<CommonListEntity<SampleResultCheckProjectEntity>>>() {
-                                @Override
-                                public void accept(BAP5CommonEntity<CommonListEntity<SampleResultCheckProjectEntity>> entity) throws Exception {
-                                    if (entity.success){
-                                        getView().getSampleResultCheckProjectSuccess(entity.data.result);
-                                    }else {
-                                        getView().getSampleResultCheckProjectFailed(entity.msg);
-                                    }
+                            .subscribe(entity -> {
+                                if (entity.success){
+                                    getView().getSampleResultCheckProjectSuccess(entity.data.result);
+                                }else {
+                                    getView().getSampleResultCheckProjectFailed(entity.msg);
                                 }
                             })
 

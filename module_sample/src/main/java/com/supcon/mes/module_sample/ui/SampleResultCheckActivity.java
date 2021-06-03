@@ -16,18 +16,14 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnItemChildViewClickListener;
-import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
-import com.supcon.mes.module_lims.model.api.MaterialReferenceAPI;
-import com.supcon.mes.module_lims.presenter.MaterialReferencePresenter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.api.SampleResultCheckAPI;
+import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
 import com.supcon.mes.module_sample.model.contract.SampleResultCheckContract;
 import com.supcon.mes.module_sample.presenter.SampleResultCheckPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleResultCheckAdapter;
@@ -35,11 +31,9 @@ import com.supcon.mes.module_sample.ui.adapter.SampleResultCheckAdapter;
 import java.util.HashMap;
 import java.util.List;
 
-import utilcode.util.ToastUtils;
-
 @Router(Constant.AppCode.LIMS_SampleResultCheck)
 @Presenter(value = {SampleResultCheckPresenter.class})
-public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity implements SampleResultCheckContract.View {
+public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity<SanpleResultCheckItemEntity> implements SampleResultCheckContract.View {
     @BindByTag("titleText")
     TextView titleText;
     @BindByTag("leftBtn")
@@ -50,8 +44,6 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity imple
     ImageView ivSearchBtn;
     @BindByTag("scanRightBtn")
     CustomImageButton scanRightBtn;
-
-    private SampleResultCheckAdapter adapter;
 
 
     @Override
@@ -66,17 +58,11 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity imple
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(com.supcon.mes.module_lims.R.string.middleware_no_data)));
-        refreshListController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                doFilter();
-            }
-
-        });
+        refreshListController.setOnRefreshListener(this::doFilter);
     }
 
     private void doFilter() {
-        presenterRouter.create(SampleResultCheckAPI.class).getPendingSample("", new HashMap());
+        presenterRouter.create(SampleResultCheckAPI.class).getPendingSample("", new HashMap<>());
 
     }
 
@@ -114,9 +100,8 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity imple
     }
 
     @Override
-    protected IListAdapter createAdapter() {
-        adapter = new SampleResultCheckAdapter(this);
-        return adapter;
+    protected IListAdapter<SanpleResultCheckItemEntity> createAdapter() {
+        return new SampleResultCheckAdapter(this);
     }
 
     @Override
