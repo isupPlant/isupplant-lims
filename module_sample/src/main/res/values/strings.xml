@@ -13,4 +13,12 @@
     <string name="sample_status">状态</string>
     <string name="register_time">登记时间</string>
 
+    <string name="check_project">检测项目</string>
+    <string name="repeat_number">重复号</string>
+    <string name="vision_number">版本号</string>
+    <string name="check_method">检测方法</string>
+    <string name="operating_procedures">操作规程</string>
+    <string name="check_person">检验员</string>
+    <string name="check_time">检测时间</string>
+    <string name="memo">备注</string>
 </resources>

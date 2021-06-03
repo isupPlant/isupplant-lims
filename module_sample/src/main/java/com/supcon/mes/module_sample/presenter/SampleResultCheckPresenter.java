@@ -27,7 +27,7 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
  * Created by yaobing on 2021/2/2
  * desc:
  */
-public class SampleResultCheckPresenter extends SampleResultCheckContract.Presenter {
+public class  SampleResultCheckPresenter extends SampleResultCheckContract.Presenter {
     @Override
     public void getPendingSample(String pageType, Map<String, Object> params) {
         String viewCode = "LIMSSample_5.0.0.0_sample_recordCheckBySample";

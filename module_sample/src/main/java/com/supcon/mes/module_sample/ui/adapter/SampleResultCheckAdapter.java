@@ -2,6 +2,7 @@ package com.supcon.mes.module_sample.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +13,8 @@ import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
-import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_lims.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
 
@@ -88,8 +89,9 @@ public class SampleResultCheckAdapter extends BaseListDataRecyclerViewAdapter<Sa
             tvRegistrationTime.setContent(entity.getRegisterTime());
 
             itemView.setOnClickListener(v -> {
-                ToastUtils.showLong("pos" + getLayoutPosition() + entity.toString());
-
+                Bundle bundle = new Bundle();
+                bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, entity.getId());
+                IntentRouter.go(context,Constant.AppCode.LIMS_SampleResultCheckProject, bundle);
             });
         }
     }

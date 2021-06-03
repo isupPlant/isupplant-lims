@@ -12,4 +12,13 @@
     <string name="sample_type">sample type</string>
     <string name="sample_status">sample status</string>
     <string name="register_time">register time</string>
+
+    <string name="check_project">check project</string>
+    <string name="repeat_number">repeat number</string>
+    <string name="vision_number">vision number</string>
+    <string name="check_method">check method</string>
+    <string name="operating_procedures">operating procedures</string>
+    <string name="check_person">check person</string>
+    <string name="check_time">check time</string>
+    <string name="memo">memo</string>
 </resources>

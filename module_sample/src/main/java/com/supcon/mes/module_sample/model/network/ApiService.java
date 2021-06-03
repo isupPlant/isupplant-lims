@@ -9,6 +9,7 @@ import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
+import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
 import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
@@ -235,4 +236,11 @@ public interface ApiService {
      */
     @POST("/msService/LIMSSample/sample/sampleInfo/getPendingSample")
     Flowable<BAP5CommonEntity<CommonListEntity<SanpleResultCheckItemEntity>>> getSampleResultCheckList(@Query("pageType") String pageType, @Body Map<String,Object> params);
+    /**
+     * 获取样品结果复核中的样品检测项目列表
+     * @param params
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleTest/findSampleTest")
+    Flowable<BAP5CommonEntity<CommonListEntity<SampleResultCheckProjectEntity>>> getSampleResultCheckList(@Query("dealMode") String dealMode, @Query("sampleId") long sampleId, @Body Map<String,Object> params);
 }
