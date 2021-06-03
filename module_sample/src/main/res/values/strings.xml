@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">module_sample</string>
     <string name="sample_result_check">按样品结果复核</string>
+    <string name="sample">样品</string>
     <string name="index">序号:</string>
     <string name="sample_name">样品名称</string>
     <string name="sample_code">样品编码</string>

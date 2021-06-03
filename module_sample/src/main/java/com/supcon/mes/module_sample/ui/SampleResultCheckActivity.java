@@ -18,6 +18,7 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -71,7 +72,7 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity<Sanpl
         super.initView();
         ivSearchBtn.setVisibility(View.GONE);
         scanRightBtn.setVisibility(View.GONE);
-        titleText.setText(getResources().getString(R.string.sample_result_check));
+        titleText.setText(getResources().getString(R.string.sample));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -112,6 +113,6 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity<Sanpl
     @Override
     public void getPendingSampleFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
-        Log.d("zxcv", errorMsg);
+        ToastUtils.show(this,errorMsg);
     }
 }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">module_sample</string>
     <string name="sample_result_check">sample result check</string>
+    <string name="sample">sample</string>
     <string name="index">order number</string>
     <string name="sample_name">sample name</string>
     <string name="sample_code">sample code</string>
