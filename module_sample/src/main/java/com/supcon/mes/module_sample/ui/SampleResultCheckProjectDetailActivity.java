@@ -1,11 +1,15 @@
 package com.supcon.mes.module_sample.ui;
 
 
-import android.graphics.Rect;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
+import android.annotation.SuppressLint;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.text.TextUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,32 +17,38 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
-import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.util.DisplayUtil;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
-import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.controller.SystemConfigController;
+import com.supcon.mes.middleware.model.bean.ModuleConfigEntity;
+import com.supcon.mes.middleware.model.bean.PopupWindowEntity;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
+import com.supcon.mes.module_lims.constant.LimsConstant;
+import com.supcon.mes.module_lims.constant.TemporaryData;
+import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
+import com.supcon.mes.module_lims.ui.popu.LIMSPopupWindow;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.model.api.SampleResultCheckProjectAPI;
-import com.supcon.mes.module_sample.model.api.SampleResultCheckProjectDetailAPI;
-import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectDetailEntity;
-import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
-import com.supcon.mes.module_sample.model.contract.SampleResultCheckProjectContract;
-import com.supcon.mes.module_sample.model.contract.SampleResultCheckProjectDetailContract;
+import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
+import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
+import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
+import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 import com.supcon.mes.module_sample.presenter.SampleResultCheckProjectDetailPresenter;
-import com.supcon.mes.module_sample.presenter.SampleResultCheckProjectPresenter;
-import com.supcon.mes.module_sample.ui.adapter.SampleResultCheckProjectAdapter;
+import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
+import com.supcon.mes.module_sample.ui.input.fragment.EquipmentFragment;
+import com.supcon.mes.module_sample.ui.input.fragment.MaterialFragment;
+import com.supcon.mes.module_sample.ui.input.fragment.ProjectFragment;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Router(Constant.AppCode.LIMS_SampleResultCheckProjectDetail)
 @Presenter(value = {SampleResultCheckProjectDetailPresenter.class})
-public class SampleResultCheckProjectDetailActivity extends BaseRefreshRecyclerActivity<SampleResultCheckProjectDetailEntity> implements SampleResultCheckProjectDetailContract.View {
+public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity {
     @BindByTag("titleText")
     TextView titleText;
     @BindByTag("leftBtn")
@@ -49,83 +59,189 @@ public class SampleResultCheckProjectDetailActivity extends BaseRefreshRecyclerA
     ImageView ivSearchBtn;
     @BindByTag("scanRightBtn")
     CustomImageButton scanRightBtn;
+    @BindByTag("tabLayout")
+    TabLayout tabLayout;
+    @BindByTag("viewPage")
+    ViewPager viewPage;
 
-    private long sampleId;
+    private String[] title = new String[]{SupPlantApplication.getAppContext().getResources().getString(R.string.lims_project), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_equipment), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_material)};
+    private List<Fragment> fragmentList = new ArrayList<>();
+    private ProjectFragment projectFragment;
+    private EquipmentFragment equipmentFragment;
+    private MaterialFragment materialFragment;
+    private Long sampleId ;
+    private Long sampleIdTestId;
+    private String mTitle;
+    private String sampleCode;
 
-
+    private ImageView ivProject;
+    private SampleRecordResultSubmitController controller;
+    List<InspectionSubEntity> inspectionSubList;
+    List<TestDeviceEntity> testDeviceList ;
+    List<TestMaterialEntity> testMaterialList ;
+    String equipmentDelete;
+    String materialDelete ;
+    private LIMSPopupWindow mCustomPopupWindow;
+    private List<PopupWindowEntity> popupWindowEntityList = new ArrayList<>();
+    private SystemConfigController mSystemConfigController;
+    private String specialResultStr = SupPlantApplication.getIpAndPost();
     @Override
     protected int getLayoutID() {
-        return R.layout.activity_sample_result_check_project;
+        return R.layout.activity_sample_result_check_project_detail;
     }
+
 
     @Override
     protected void onInit() {
         super.onInit();
-        sampleId = getIntent().getLongExtra(Constant.IntentKey.LIMS_SAMPLE_ID,0);
+
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        refreshListController.setAutoPullDownRefresh(true);
-        refreshListController.setPullDownRefreshEnabled(true);
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(com.supcon.mes.module_lims.R.string.middleware_no_data)));
-        refreshListController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                doFilter();
-            }
-
-        });
-    }
-
-    private void doFilter() {
-        presenterRouter.create(SampleResultCheckProjectDetailAPI.class).getSampleResultCheckProjectDetail(sampleId, new HashMap());
-
+        sampleCode = getIntent().getStringExtra("sampleCode");
+        sampleId = getIntent().getLongExtra("sampleId",0);
+        mTitle = getIntent().getStringExtra("title");
     }
 
     @Override
     protected void initView() {
         super.initView();
-        ivSearchBtn.setVisibility(View.GONE);
-        scanRightBtn.setVisibility(View.GONE);
-        titleText.setText(getResources().getString(R.string.check_project));
-        contentView.setLayoutManager(new LinearLayoutManager(context));
-        contentView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+//        searchTitle.showScan(true);
+//        ivProject = searchTitle.findViewById(R.id.ivSearchBtn);
+//        ivProject.setImageResource(R.drawable.ic_lims_template);
+//        searchTitle.setTitle("");
+
+//        searchBtn = searchTitle.findViewById(R.id.scanRightBtn);
+        leftBtn.setOnClickListener(v -> onBackPressed());
+
+        projectFragment = new ProjectFragment();
+        fragmentList.add(projectFragment);
+
+        equipmentFragment = new EquipmentFragment();
+        fragmentList.add(equipmentFragment);
+
+        materialFragment = new MaterialFragment();
+        fragmentList.add(materialFragment);
+
+        //使用适配器将ViewPager与Fragment绑定在一起
+        viewPage.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
+        viewPage.setOffscreenPageLimit(3);
+        //将TabLayout与ViewPager绑定
+        tabLayout.setupWithViewPager(viewPage);
+
+//        inspectionProjectFragment = new InspectionProjectFragment(sampleId,mTitle);
+//        fragmentManager.beginTransaction()
+//                .add(R.id.fragment_inspection_items,inspectionProjectFragment)
+//                .commit();
+
+        controller = new SampleRecordResultSubmitController();
+
+        PopupWindowEntity entity = new PopupWindowEntity();
+        entity.setText(getString(R.string.lims_automatic_acquisition));
+
+        PopupWindowEntity entity1 = new PopupWindowEntity();
+        entity1.setText(getString(R.string.lims_file_analysis));
+
+        PopupWindowEntity entity2 = new PopupWindowEntity();
+        entity2.setText(getString(R.string.lims_serial_port_acquisition));
+
+        popupWindowEntityList.clear();
+        popupWindowEntityList.add(entity);
+        popupWindowEntityList.add(entity1);
+        popupWindowEntityList.add(entity2);
+        mCustomPopupWindow = new LIMSPopupWindow(context,popupWindowEntityList);
+
+        mSystemConfigController = new SystemConfigController(context);
+        mSystemConfigController.getModuleConfig(LimsConstant.ModuleCode.LIMS_FILE_ANALYSIS_MENU_CODE, LimsConstant.Keys.LIMSDC_OCD_LIMSDCUrl, new OnSuccessListener() {
             @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                int childLayoutPosition = parent.getChildAdapterPosition(view);
-                if (childLayoutPosition == 0) {
-                    outRect.set(DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context), DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
-                } else {
-                    outRect.set(DisplayUtil.dip2px(12, context), 0, DisplayUtil.dip2px(12, context), DisplayUtil.dip2px(10, context));
+            public void onSuccess(Object result) {
+                if (null != result){
+                    try {
+                        ModuleConfigEntity bean = (ModuleConfigEntity)result;
+                        if (!TextUtils.isEmpty(bean.getLimsDCUrl())) {
+                            specialResultStr = bean.getLimsDCUrl();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }
             }
         });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
-        leftBtn.setOnClickListener(v -> back());
+//        RxView.clicks(ivProject)
+//                .throttleFirst(300, TimeUnit.MILLISECONDS)
+//                .subscribe(o -> openDrawLayout());
+
+
+        viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                Fragment fragment = fragmentList.get(i);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+
+
+    public void openDrawLayout() {
+//        if (dl.isDrawerOpen(rightDrawer)) {
+//            dl.closeDrawer(rightDrawer);
+//        } else {
+//            dl.openDrawer(rightDrawer);
+//        }
     }
 
-    @Override
-    protected IListAdapter createAdapter() {
-        return new SampleResultCheckProjectAdapter(this);
+    public void notifyInspectionItemsRefresh(Long sampleIdTestId, String name){
+        this.sampleIdTestId = sampleIdTestId;
+        //设置标题为 当前选中的检验项目
+//        searchTitle.setTitle(name);
+        //如果当前抽屉是打开的状态 就让他关闭
+//        if (dl.isDrawerOpen(rightDrawer)){
+//            dl.closeDrawer(rightDrawer);
+//        }
+        //通知检验分项 刷新数据
+        projectFragment.setSampleTesId(sampleIdTestId);
+        equipmentFragment.setSampleTesId(sampleIdTestId);
+        materialFragment.setSampleTesId(sampleIdTestId);
     }
 
-    @Override
-    public void getSampleResultCheckProjectDetailSuccess(List entity) {
-//        refreshListController.refreshComplete(entity);
-    }
+    public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    @Override
-    public void getSampleResultCheckProjectDetailFailed(String errorMsg) {
-        refreshListController.refreshComplete(null);
-        ToastUtils.show(this,errorMsg);
+        public MyFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return fragmentList.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return title.length;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return title[position];
+        }
     }
 }
