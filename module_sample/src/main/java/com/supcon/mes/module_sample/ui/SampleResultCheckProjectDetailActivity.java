@@ -41,6 +41,8 @@ import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.fragment.EquipmentFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.MaterialFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.ProjectFragment;
+import com.supcon.mes.module_sample.ui.input.fragment.SampleEquipmentFragment;
+import com.supcon.mes.module_sample.ui.input.fragment.SampleMaterialFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.SampleResultCheckProjectFragment;
 
 import java.util.ArrayList;
@@ -68,8 +70,8 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
     private String[] title = new String[]{SupPlantApplication.getAppContext().getResources().getString(R.string.lims_project), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_equipment), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_material)};
     private List<Fragment> fragmentList = new ArrayList<>();
     private SampleResultCheckProjectFragment projectFragment;
-    private EquipmentFragment equipmentFragment;
-    private MaterialFragment materialFragment;
+    private SampleEquipmentFragment equipmentFragment;
+    private SampleMaterialFragment materialFragment;
     private Long sampleId ;
     private Long sampleIdTestId;
     private String mTitle;
@@ -116,10 +118,10 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
         projectFragment = new SampleResultCheckProjectFragment();
         fragmentList.add(projectFragment);
 
-        equipmentFragment = new EquipmentFragment();
+        equipmentFragment = new SampleEquipmentFragment();
         fragmentList.add(equipmentFragment);
 
-        materialFragment = new MaterialFragment();
+        materialFragment = new SampleMaterialFragment();
         fragmentList.add(materialFragment);
 
         //使用适配器将ViewPager与Fragment绑定在一起

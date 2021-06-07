@@ -7,7 +7,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/llInspectionItems"
         android:tag="llInspectionItems"
@@ -90,10 +92,13 @@
             <com.supcon.mes.mbap.view.CustomEditText
                 android:id="@+id/ceOriginalValue"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_35"
+                android:layout_height="wrap_content"
+
                 android:layout_marginLeft="@dimen/dp_9"
                 android:tag="ceOriginalValue"
                 app:content_size="15"
+                android:minHeight="@dimen/dp_35"
+                app:edit_maxLine="999"
                 app:edit_hint="@string/lims_input_original_value"
                 app:edit_hint_color="#A9A9A9"
                 app:gravity="right|center_vertical"
@@ -149,7 +154,9 @@
             <com.supcon.mes.mbap.view.CustomTextView
                 android:id="@+id/ctRoundOffValue"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_35"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_35"
+                app:max_lines="999"
                 android:layout_marginLeft="@dimen/dp_9"
                 android:tag="ctRoundOffValue"
                 app:content_color="@color/font_333333"
@@ -180,8 +187,9 @@
                 android:id="@+id/ceReportedValue"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="@dimen/dp_9"
-                android:layout_height="@dimen/dp_35"
-                android:tag="ceReportedValue"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_35"
+                app:max_lines="999"                android:tag="ceReportedValue"
                 app:content_size="15"
                 app:edit_hint="@string/lims_input_reported_value"
                 app:edit_hint_color="#A9A9A9"
@@ -262,6 +270,9 @@
         </LinearLayout>
 
     </LinearLayout>
+
+</ScrollView>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvConclusion"

@@ -11,6 +11,7 @@ import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectDetailEntity;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
+import com.supcon.mes.module_sample.model.bean.SampleTestMaterialEntity;
 import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
 import com.supcon.mes.module_lims.model.bean.StdJudgeSpecListEntity;
 import com.supcon.mes.module_lims.model.bean.SurveyReportEntity;
@@ -135,6 +136,15 @@ public interface ApiService {
      */
     @GET("/msService/LIMSSample/sample/testMaterial/getTestMaterial")
     Flowable<BAP5CommonEntity<CommonListEntity<TestMaterialEntity>>> getTestMaterial(@Query("sampleTestId") String sampleTestId);
+
+
+    /**
+     * 获取检验分项关联材料列表(按样品结果复核接口中，返回的bean类格式变了)
+     * @param sampleTestId
+     * @return
+     */
+    @GET("/msService/LIMSSample/sample/testMaterial/getTestMaterial")
+    Flowable<BAP5CommonEntity<CommonListEntity<SampleTestMaterialEntity>>> getSampleTestMaterial(@Query("sampleTestId") String sampleTestId);
 
 
     /**
