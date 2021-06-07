@@ -56,7 +56,7 @@ public class MaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEn
     LinearLayout llReference;
     @BindByTag("contentView")
     RecyclerView contentView;
-    private Long sampleTesId;
+    public Long sampleTesId;
 
     private TestMaterialAdapter adapter;
 

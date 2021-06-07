@@ -41,6 +41,7 @@ import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
 import com.supcon.mes.module_sample.ui.input.fragment.EquipmentFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.MaterialFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.ProjectFragment;
+import com.supcon.mes.module_sample.ui.input.fragment.SampleResultCheckProjectFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
 
     private String[] title = new String[]{SupPlantApplication.getAppContext().getResources().getString(R.string.lims_project), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_equipment), SupPlantApplication.getAppContext().getResources().getString(R.string.lims_material)};
     private List<Fragment> fragmentList = new ArrayList<>();
-    private ProjectFragment projectFragment;
+    private SampleResultCheckProjectFragment projectFragment;
     private EquipmentFragment equipmentFragment;
     private MaterialFragment materialFragment;
     private Long sampleId ;
@@ -81,8 +82,6 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
     List<TestMaterialEntity> testMaterialList ;
     String equipmentDelete;
     String materialDelete ;
-    private LIMSPopupWindow mCustomPopupWindow;
-    private List<PopupWindowEntity> popupWindowEntityList = new ArrayList<>();
     private SystemConfigController mSystemConfigController;
     private String specialResultStr = SupPlantApplication.getIpAndPost();
     @Override
@@ -97,8 +96,9 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
 
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         sampleCode = getIntent().getStringExtra("sampleCode");
-        sampleId = getIntent().getLongExtra("sampleId",0);
+        sampleId = getIntent().getLongExtra(Constant.IntentKey.LIMS_SAMPLE_ID,0);
         mTitle = getIntent().getStringExtra("title");
+
     }
 
     @Override
@@ -113,7 +113,7 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
 //        searchBtn = searchTitle.findViewById(R.id.scanRightBtn);
         leftBtn.setOnClickListener(v -> onBackPressed());
 
-        projectFragment = new ProjectFragment();
+        projectFragment = new SampleResultCheckProjectFragment();
         fragmentList.add(projectFragment);
 
         equipmentFragment = new EquipmentFragment();
@@ -128,28 +128,11 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
         //将TabLayout与ViewPager绑定
         tabLayout.setupWithViewPager(viewPage);
 
-//        inspectionProjectFragment = new InspectionProjectFragment(sampleId,mTitle);
-//        fragmentManager.beginTransaction()
-//                .add(R.id.fragment_inspection_items,inspectionProjectFragment)
-//                .commit();
+        projectFragment.sampleTesId = sampleId;
+        equipmentFragment.sampleTesId = sampleId;
+        materialFragment.sampleTesId = sampleId;
 
         controller = new SampleRecordResultSubmitController();
-
-        PopupWindowEntity entity = new PopupWindowEntity();
-        entity.setText(getString(R.string.lims_automatic_acquisition));
-
-        PopupWindowEntity entity1 = new PopupWindowEntity();
-        entity1.setText(getString(R.string.lims_file_analysis));
-
-        PopupWindowEntity entity2 = new PopupWindowEntity();
-        entity2.setText(getString(R.string.lims_serial_port_acquisition));
-
-        popupWindowEntityList.clear();
-        popupWindowEntityList.add(entity);
-        popupWindowEntityList.add(entity1);
-        popupWindowEntityList.add(entity2);
-        mCustomPopupWindow = new LIMSPopupWindow(context,popupWindowEntityList);
-
         mSystemConfigController = new SystemConfigController(context);
         mSystemConfigController.getModuleConfig(LimsConstant.ModuleCode.LIMS_FILE_ANALYSIS_MENU_CODE, LimsConstant.Keys.LIMSDC_OCD_LIMSDCUrl, new OnSuccessListener() {
             @Override
@@ -206,20 +189,6 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
 //        } else {
 //            dl.openDrawer(rightDrawer);
 //        }
-    }
-
-    public void notifyInspectionItemsRefresh(Long sampleIdTestId, String name){
-        this.sampleIdTestId = sampleIdTestId;
-        //设置标题为 当前选中的检验项目
-//        searchTitle.setTitle(name);
-        //如果当前抽屉是打开的状态 就让他关闭
-//        if (dl.isDrawerOpen(rightDrawer)){
-//            dl.closeDrawer(rightDrawer);
-//        }
-        //通知检验分项 刷新数据
-        projectFragment.setSampleTesId(sampleIdTestId);
-        equipmentFragment.setSampleTesId(sampleIdTestId);
-        materialFragment.setSampleTesId(sampleIdTestId);
     }
 
     public class MyFragmentPagerAdapter extends FragmentPagerAdapter {

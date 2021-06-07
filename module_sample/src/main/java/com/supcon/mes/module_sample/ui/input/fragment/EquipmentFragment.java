@@ -63,7 +63,7 @@ public class EquipmentFragment extends BaseRefreshRecyclerFragment<TestDeviceEnt
     @BindByTag("llDelete")
     LinearLayout llDelete;
 
-    private Long sampleTesId;
+    public Long sampleTesId;
 
     private TestDeviceAdapter adapter;
     private int mPosition = -1;
