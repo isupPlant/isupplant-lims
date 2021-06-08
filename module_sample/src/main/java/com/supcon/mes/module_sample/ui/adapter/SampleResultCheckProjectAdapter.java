@@ -3,9 +3,12 @@ package com.supcon.mes.module_sample.ui.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -15,11 +18,17 @@ import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
 import com.yaobing.module_middleware.Utils.MyDateUtils;
 
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
+
 /**
  * @author : yaobing
  * @date : 2021/6/2 13:40
  */
 public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAdapter<SampleResultCheckProjectEntity> {
+    public ArrayList<Long> id_selected = new ArrayList<>();
     public SampleResultCheckProjectAdapter(Context context) {
         super(context);
     }
@@ -50,6 +59,8 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
         CustomTextView check_time;
         @BindByTag("memo")
         CustomTextView memo;
+        @BindByTag("cb_select")
+        CheckBox cb_select;
 
         public ViewHolder(Context context) {
             super(context);
@@ -74,13 +85,44 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
             check_person.setContent(null == ((SampleResultCheckProjectEntity) data).getTestStaffId() ? "" : ((SampleResultCheckProjectEntity) data).getTestStaffId().getName());
             check_time.setContent(null == ((SampleResultCheckProjectEntity) data).getTestTime() ? "" : MyDateUtils.getDateFromLong(((SampleResultCheckProjectEntity) data).getTestTime(), MyDateUtils.date_Format));
             memo.setContent(null == ((SampleResultCheckProjectEntity) data).getMemoField() ? "" : ((SampleResultCheckProjectEntity) data).getMemoField().toString());
+            cb_select.setChecked(data.isSelect());
 
-            itemView.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
-                bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, data.getId());
-                bundle.putString(Constant.IntentKey.LIMS_SAMPLE_PROJECT_NAME, tvCheckProject.getContent());
-                IntentRouter.go(context, Constant.AppCode.LIMS_SampleResultCheckProjectDetail, bundle);
+            if (data.isSelect()) {
+                id_selected.add(data.getId());
+                itemView.setBackground(context.getResources().getDrawable(R.drawable.shape_line_blue));
+            }else {
+                id_selected.remove(data.getId());
+                itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
+            }
+            cb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                    if (isChecked) {
+                        id_selected.add(data.getId());
+                        itemView.setBackground(context.getResources().getDrawable(R.drawable.shape_line_blue));
+                    }else {
+                        id_selected.remove(data.getId());
+                        itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
+                    }
+                    list.get(getLayoutPosition()).setSelect(isChecked);
+//                    notifyDataSetChanged();
+
+                }
             });
+            RxView.clicks(itemView)
+                    .throttleFirst(2, TimeUnit.SECONDS)
+                    .subscribe(new Consumer<Object>() {
+                        @Override
+                        public void accept(Object o) throws Exception {
+                            Bundle bundle = new Bundle();
+                            bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, data.getId());
+                            bundle.putString(Constant.IntentKey.LIMS_SAMPLE_PROJECT_NAME, tvCheckProject.getContent());
+                            IntentRouter.go(context, Constant.AppCode.LIMS_SampleResultCheckProjectDetail, bundle);
+                        }
+                    });
+
         }
     }
 

@@ -1,7 +1,9 @@
 package com.supcon.mes.module_sample.ui;
 
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshListener;
@@ -23,6 +27,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.module_lims.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.api.SampleResultCheckAPI;
 import com.supcon.mes.module_sample.model.api.SampleResultCheckProjectAPI;
@@ -35,6 +40,9 @@ import com.supcon.mes.module_sample.ui.adapter.SampleResultCheckProjectAdapter;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 @Router(Constant.AppCode.LIMS_SampleResultCheckProject)
 @Presenter(value = {SampleResultCheckProjectPresenter.class})
@@ -49,6 +57,12 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
     ImageView ivSearchBtn;
     @BindByTag("scanRightBtn")
     CustomImageButton scanRightBtn;
+    @BindByTag("rl_review")
+    RelativeLayout rl_review;
+    @BindByTag("rl_reject")
+    RelativeLayout rl_reject;
+    @BindByTag("rl_refuse")
+    RelativeLayout rl_refuse;
 
     private SampleResultCheckProjectAdapter adapter;
     private long sampleId;
@@ -81,6 +95,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
 
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initView() {
         super.initView();
@@ -100,6 +115,31 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
                 }
             }
         });
+        RxView.clicks(rl_review)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        ToastUtils.show(SampleResultCheckProjectActivity.this,"sdf" + adapter.id_selected.size());
+                    }
+                });
+        RxView.clicks(rl_reject)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        ToastUtils.show(SampleResultCheckProjectActivity.this,"sdf" + adapter.id_selected.size());
+                    }
+                });
+        RxView.clicks(rl_refuse)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        ToastUtils.show(SampleResultCheckProjectActivity.this,"sdf" + adapter.id_selected.size());
+                    }
+                });
+
     }
 
     @Override

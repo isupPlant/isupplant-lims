@@ -26,6 +26,7 @@ public class SampleResultCheckProjectEntity extends BaseEntity {
     private TestStateBean testState;
     private Long testTime;
     private Integer version;
+    private boolean select = false;
 
     public AnalystGroupIdBean getAnalystGroupId() {
         return analystGroupId;
@@ -153,6 +154,14 @@ public class SampleResultCheckProjectEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public boolean isSelect() {
+        return select;
+    }
+
+    public void setSelect(boolean select) {
+        this.select = select;
     }
 
     public static class AnalystGroupIdBean {

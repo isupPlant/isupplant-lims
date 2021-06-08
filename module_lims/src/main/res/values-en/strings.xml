@@ -161,6 +161,10 @@
     <string name="lims_to_void_bill">Are you sure you want to void the document？</string>
     <string name="lims_adopt">Adopt</string>
     <string name="reject">Reject</string>
+    <string name="review">review</string>
+    <string name="refuse">refuse</string>
+    <string name="reviewing">reviewing...</string>
+    <string name="refusing">refusing...</string>
     <string name="lims_product_test_request_bill">Product inspection application form</string>
     <string name="lims_incoming_test_request_bill">Application form for incoming inspection</string>
     <string name="lims_other_test_request_bill">Other inspection application form</string>

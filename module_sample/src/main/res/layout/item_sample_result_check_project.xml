@@ -29,6 +29,16 @@
             android:textSize="15sp"
             tools:text="chanpinqingjiajndan_20200606_2477777" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cb_select"
+            android:tag="cb_select"/>
+
 <!--        <RelativeLayout-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent"-->
