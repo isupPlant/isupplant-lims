@@ -10,5 +10,5 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
  */
 @ContractFactory(entites = {CommonListEntity.class})
 public interface SampleTestMaterialListAPI {
-    void getTestMaterial(String sampleTestIds);
+    void getSampleTestMaterial(String sampleTestIds);
 }

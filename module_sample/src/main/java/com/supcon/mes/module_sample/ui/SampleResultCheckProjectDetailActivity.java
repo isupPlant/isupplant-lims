@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -99,14 +100,16 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         sampleCode = getIntent().getStringExtra("sampleCode");
         sampleId = getIntent().getLongExtra(Constant.IntentKey.LIMS_SAMPLE_ID,0);
-        mTitle = getIntent().getStringExtra("title");
+        mTitle = getIntent().getStringExtra(Constant.IntentKey.LIMS_SAMPLE_PROJECT_NAME);
 
     }
 
     @Override
     protected void initView() {
         super.initView();
-
+        titleText.setText(mTitle);
+        ivSearchBtn.setVisibility(View.GONE);
+        scanRightBtn.setVisibility(View.GONE);
 //        searchTitle.showScan(true);
 //        ivProject = searchTitle.findViewById(R.id.ivSearchBtn);
 //        ivProject.setImageResource(R.drawable.ic_lims_template);

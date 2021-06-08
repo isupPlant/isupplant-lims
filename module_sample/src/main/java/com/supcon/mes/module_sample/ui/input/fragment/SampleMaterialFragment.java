@@ -29,12 +29,12 @@ import com.supcon.mes.module_lims.model.bean.SampleMaterialEntity;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.api.SampleTestMaterialListAPI;
 import com.supcon.mes.module_sample.model.api.TestMaterialListAPI;
-import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
+import com.supcon.mes.module_sample.model.bean.SampleTestMaterialEntity;
 import com.supcon.mes.module_sample.model.contract.SampleTestMaterialListContract;
 import com.supcon.mes.module_sample.model.contract.TestMaterialListContract;
 import com.supcon.mes.module_sample.presenter.SampleTestMaterialPresenter;
 import com.supcon.mes.module_sample.presenter.TestMaterialPresenter;
-import com.supcon.mes.module_sample.ui.adapter.TestMaterialAdapter;
+import com.supcon.mes.module_sample.ui.adapter.SampleTestMaterialAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,7 +52,7 @@ import io.reactivex.functions.Consumer;
  * class name
  */
 @Presenter(value = {SampleTestMaterialPresenter.class})
-public class SampleMaterialFragment extends BaseRefreshRecyclerFragment<TestMaterialEntity> implements SampleTestMaterialListContract.View {
+public class SampleMaterialFragment extends BaseRefreshRecyclerFragment<SampleTestMaterialEntity> implements SampleTestMaterialListContract.View {
     @BindByTag("llDelete")
     LinearLayout llDelete;
     @BindByTag("llReference")
@@ -61,13 +61,13 @@ public class SampleMaterialFragment extends BaseRefreshRecyclerFragment<TestMate
     RecyclerView contentView;
     public Long sampleTesId;
 
-    private TestMaterialAdapter adapter;
+    private SampleTestMaterialAdapter adapter;
 
     private List<String> deleteList = new ArrayList<>();
-    private List<TestMaterialEntity> materialList = new ArrayList<>();
+    private List<SampleTestMaterialEntity> materialList = new ArrayList<>();
     @Override
-    protected IListAdapter<TestMaterialEntity> createAdapter() {
-        adapter = new TestMaterialAdapter(context);
+    protected IListAdapter<SampleTestMaterialEntity> createAdapter() {
+        adapter = new SampleTestMaterialAdapter(context);
         return adapter;
     }
 
@@ -119,7 +119,7 @@ public class SampleMaterialFragment extends BaseRefreshRecyclerFragment<TestMate
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(SampleTestMaterialListAPI.class).getTestMaterial(sampleTesId+"");
+                presenterRouter.create(SampleTestMaterialListAPI.class).getSampleTestMaterial(sampleTesId+"");
             }
         });
 
@@ -145,42 +145,42 @@ public class SampleMaterialFragment extends BaseRefreshRecyclerFragment<TestMate
                 });
 
         //删除按钮
-        RxView.clicks(llDelete)
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        int a = 0;
-                        for (int i = 0; i < adapter.getList().size(); i++) {
-                            if (adapter.getList().get(i).isSelect()){
-                                if (null != adapter.getList().get(i).getId()){
-                                    deleteList.add(adapter.getList().get(i).getId()+"");
-                                }
-                                adapter.remove(i);
-                                adapter.notifyDataSetChanged();
-                                a++;
-                            }
-                        }
-                        if (a == 0){
-                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_one_operate));
-                        }
-                    }
-                });
+//        RxView.clicks(llDelete)
+//                .throttleFirst(300, TimeUnit.MILLISECONDS)
+//                .subscribe(new Consumer<Object>() {
+//                    @Override
+//                    public void accept(Object o) throws Exception {
+//                        int a = 0;
+//                        for (int i = 0; i < adapter.getList().size(); i++) {
+//                            if (adapter.getList().get(i).isSelect()){
+//                                if (null != adapter.getList().get(i).getId()){
+//                                    deleteList.add(adapter.getList().get(i).getId()+"");
+//                                }
+//                                adapter.remove(i);
+//                                adapter.notifyDataSetChanged();
+//                                a++;
+//                            }
+//                        }
+//                        if (a == 0){
+//                            ToastUtils.show(context,context.getResources().getString(R.string.lims_select_one_operate));
+//                        }
+//                    }
+//                });
 
-        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-            @Override
-            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (action == 0){
-                    adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
-                    for (int i = 0; i < adapter.getList().size(); i++) {
-                        if (i != position){
-                            adapter.getList().get(i).setSelect(false);
-                        }
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
+//        adapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+//            @Override
+//            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+//                if (action == 0){
+//                    adapter.getList().get(position).setSelect(!adapter.getList().get(position).isSelect());
+//                    for (int i = 0; i < adapter.getList().size(); i++) {
+//                        if (i != position){
+//                            adapter.getList().get(i).setSelect(false);
+//                        }
+//                    }
+//                    adapter.notifyDataSetChanged();
+//                }
+//            }
+//        });
     }
 
     public void setSampleTesId(Long sampleTesId){
@@ -194,43 +194,35 @@ public class SampleMaterialFragment extends BaseRefreshRecyclerFragment<TestMate
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void selectMaterial(SampleMaterialDataEvent event){
-        if (!event.isRadio()){
-            if (null != event.getList()){
-                List<SampleMaterialEntity> list = event.getList();
-                for (int i = 0; i < list.size(); i++) {
-                    TestMaterialEntity testMaterialEntity = new TestMaterialEntity();
-                    testMaterialEntity.setBatchCode(list.get(i).getBatchCode());
-                    testMaterialEntity.setMatCode(list.get(i).getCode());
-                    list.get(i).getProductId().setMainUnit(list.get(i).getUnitId());
-                    testMaterialEntity.setProductId(list.get(i).getProductId());
-                    adapter.getList().add(testMaterialEntity);
-                }
-                refreshListController.refreshComplete(adapter.getList());
-            }
-        }
+//        if (!event.isRadio()){
+//            if (null != event.getList()){
+//                List<SampleTestMaterialEntity> list = event.getList();
+//                for (int i = 0; i < list.size(); i++) {
+//                    SampleTestMaterialEntity testMaterialEntity = new SampleTestMaterialEntity();
+//                    testMaterialEntity.setBatchCode(list.get(i).getBatchCode());
+//                    testMaterialEntity.setMatCode(list.get(i).getCode());
+//                    list.get(i).getProductId().setMainUnit(list.get(i).getUnitId());
+//                    testMaterialEntity.setProductId(list.get(i).getProductId());
+//                    adapter.getList().add(testMaterialEntity);
+//                }
+//                refreshListController.refreshComplete(adapter.getList());
+//            }
+//        }
     }
 
     @Override
-    public void getTestMaterialSuccess(CommonListEntity entity) {
+    public void getSampleTestMaterialSuccess(CommonListEntity entity) {
         materialList.clear();
-        List<TestMaterialEntity> list = entity.result;
+        List<SampleTestMaterialEntity> list = entity.result;
         String string = GsonUtil.gsonString(list);
-        materialList = GsonUtil.jsonToList(string,TestMaterialEntity.class);
+        materialList = GsonUtil.jsonToList(string, SampleTestMaterialEntity.class);
         refreshListController.refreshComplete(entity.result);
     }
 
     @Override
-    public void getTestMaterialFailed(String errorMsg) {
+    public void getSampleTestMaterialFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
-    }
-
-    public List<TestMaterialEntity> getTestMaterialList(){
-        return adapter.getList();
-    }
-
-    public List<TestMaterialEntity> getRecordList(){
-        return materialList;
     }
 
     public String getDeleteList() {

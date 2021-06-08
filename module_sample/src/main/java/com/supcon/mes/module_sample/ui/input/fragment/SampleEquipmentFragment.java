@@ -33,7 +33,7 @@ import com.supcon.mes.module_sample.model.bean.EamIdEntity;
 import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
 import com.supcon.mes.module_sample.model.contract.TestDeviceListContract;
 import com.supcon.mes.module_sample.presenter.TestDevicePresenter;
-import com.supcon.mes.module_sample.ui.adapter.TestDeviceAdapter;
+import com.supcon.mes.module_sample.ui.adapter.SampleTestDeviceAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,14 +65,14 @@ public class SampleEquipmentFragment extends BaseRefreshRecyclerFragment<TestDev
 
     public Long sampleTesId;
 
-    private TestDeviceAdapter adapter;
+    private SampleTestDeviceAdapter adapter;
     private int mPosition = -1;
 
     private List<String> deleteList = new ArrayList<>();
     private List<TestDeviceEntity> deviceList = new ArrayList<>();
     @Override
     protected IListAdapter<TestDeviceEntity> createAdapter() {
-        adapter = new TestDeviceAdapter(context);
+        adapter = new SampleTestDeviceAdapter(context);
         return adapter;
     }
 

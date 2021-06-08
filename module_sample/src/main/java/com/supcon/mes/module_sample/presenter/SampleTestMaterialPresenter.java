@@ -4,6 +4,7 @@ import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_sample.model.bean.SampleTestMaterialEntity;
+import com.supcon.mes.module_sample.model.contract.SampleTestMaterialListContract;
 import com.supcon.mes.module_sample.model.contract.TestMaterialListContract;
 import com.supcon.mes.module_sample.model.network.SampleHttpClient;
 
@@ -15,10 +16,10 @@ import io.reactivex.functions.Function;
  * on 2020/8/12
  * class name
  */
-public class SampleTestMaterialPresenter extends TestMaterialListContract.Presenter {
+public class SampleTestMaterialPresenter extends SampleTestMaterialListContract.Presenter {
 
     @Override
-    public void getTestMaterial(String sampleTestIds) {
+    public void getSampleTestMaterial(String sampleTestIds) {
         mCompositeSubscription.add(SampleHttpClient.getSampleTestMaterial(sampleTestIds).onErrorReturn(new Function<Throwable, BAP5CommonEntity<CommonListEntity<SampleTestMaterialEntity>>>() {
             @Override
             public BAP5CommonEntity<CommonListEntity<SampleTestMaterialEntity>> apply(Throwable throwable) throws Exception {
@@ -31,9 +32,9 @@ public class SampleTestMaterialPresenter extends TestMaterialListContract.Presen
             @Override
             public void accept(BAP5CommonEntity<CommonListEntity<SampleTestMaterialEntity>> entity) throws Exception {
                 if (entity.success){
-                    getView().getTestMaterialSuccess(entity.data);
+                    getView().getSampleTestMaterialSuccess(entity.data);
                 }else {
-                    getView().getTestMaterialFailed(entity.msg);
+                    getView().getSampleTestMaterialFailed(entity.msg);
                 }
             }
         }));

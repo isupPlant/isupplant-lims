@@ -78,6 +78,7 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
             itemView.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
                 bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, data.getId());
+                bundle.putString(Constant.IntentKey.LIMS_SAMPLE_PROJECT_NAME, tvCheckProject.getContent());
                 IntentRouter.go(context, Constant.AppCode.LIMS_SampleResultCheckProjectDetail, bundle);
             });
         }

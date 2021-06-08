@@ -2,6 +2,8 @@ package com.supcon.mes.module_sample.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * author huodongsheng
  * on 2020/8/12
@@ -19,7 +21,7 @@ public class SampleTestMaterialEntity extends BaseEntity {
     private SampleIdBean sampleId;
     private SampleTestIdBean sampleTestId;
     private Object sort;
-    private Object useQty;
+    private BigDecimal useQty;
     private Integer version;
 
     public Object getAttrMap() {
@@ -102,11 +104,11 @@ public class SampleTestMaterialEntity extends BaseEntity {
         this.sort = sort;
     }
 
-    public Object getUseQty() {
+    public BigDecimal getUseQty() {
         return useQty;
     }
 
-    public void setUseQty(Object useQty) {
+    public void setUseQty(BigDecimal useQty) {
         this.useQty = useQty;
     }
 
