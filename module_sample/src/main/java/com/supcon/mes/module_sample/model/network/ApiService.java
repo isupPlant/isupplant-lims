@@ -262,4 +262,11 @@ public interface ApiService {
      */
     @GET("/msService/LIMSSample/sample/sampleCom/getSampleCom")
     Flowable<BAP5CommonEntity<CommonListEntity<SampleResultCheckProjectDetailEntity>>> getSampleResultCheckList(@Query("sampleTestIds") long pageType);
+
+    /**
+     * 样品复核接口
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleTest/batchDealSampleTest")
+    Flowable<BAP5CommonEntity> SampleReview(@QueryMap Map<String,Object> params);
 }

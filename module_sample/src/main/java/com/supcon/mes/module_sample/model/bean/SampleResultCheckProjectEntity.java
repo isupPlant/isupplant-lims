@@ -28,6 +28,13 @@ public class SampleResultCheckProjectEntity extends BaseEntity {
     private Integer version;
     private boolean select = false;
 
+    //以下属性为自己加的，用于走流程使用，正常返回数据不包含
+    private boolean needCheck = false;
+    private Integer rowIndex = 0;
+    private String currClickColKey = "555";
+    private Long key = 0l;
+    private boolean isChecked = false;
+
     public AnalystGroupIdBean getAnalystGroupId() {
         return analystGroupId;
     }
@@ -162,6 +169,46 @@ public class SampleResultCheckProjectEntity extends BaseEntity {
 
     public void setSelect(boolean select) {
         this.select = select;
+    }
+
+    public boolean isNeedCheck() {
+        return needCheck;
+    }
+
+    public void setNeedCheck(boolean needCheck) {
+        this.needCheck = needCheck;
+    }
+
+    public Integer getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(Integer rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    public String getCurrClickColKey() {
+        return currClickColKey;
+    }
+
+    public void setCurrClickColKey(String currClickColKey) {
+        this.currClickColKey = currClickColKey;
+    }
+
+    public Long getKey() {
+        return key;
+    }
+
+    public void setKey(Long key) {
+        this.key = key;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public static class AnalystGroupIdBean {

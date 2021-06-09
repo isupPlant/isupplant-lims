@@ -29,6 +29,7 @@ import io.reactivex.functions.Consumer;
  */
 public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAdapter<SampleResultCheckProjectEntity> {
     public ArrayList<Long> id_selected = new ArrayList<>();
+    public ArrayList<SampleResultCheckProjectEntity> selected_data = new ArrayList<>();
     public SampleResultCheckProjectAdapter(Context context) {
         super(context);
     }
@@ -74,6 +75,12 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
         @SuppressLint("SetTextI18n")
         @Override
         protected void update(SampleResultCheckProjectEntity data) {
+
+            data.setRowIndex(getLayoutPosition());
+            data.setNeedCheck(true);
+            data.setKey(data.getId());
+            data.setChecked(true);
+
             int order = getLayoutPosition() + 1;
             tvOrderNumber.setText(context.getResources().getString(R.string.index) + order);
             tvCheckProject.setContent(((SampleResultCheckProjectEntity) data).getTestId().getName());
@@ -101,9 +108,11 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
 
                     if (isChecked) {
                         id_selected.add(data.getId());
+                        selected_data.add(data);
                         itemView.setBackground(context.getResources().getDrawable(R.drawable.shape_line_blue));
                     }else {
                         id_selected.remove(data.getId());
+                        selected_data.remove(data);
                         itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
                     }
                     list.get(getLayoutPosition()).setSelect(isChecked);
@@ -124,6 +133,7 @@ public class SampleResultCheckProjectAdapter extends BaseListDataRecyclerViewAda
                     });
 
         }
+
     }
 
 }
