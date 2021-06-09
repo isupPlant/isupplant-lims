@@ -22,4 +22,6 @@
     <string name="check_person">检验员</string>
     <string name="check_time">检测时间</string>
     <string name="memo">备注</string>
+    <string name="sample_refuse">检测项目拒绝</string>
+    <string name="sample_dealer">处理人</string>
 </resources>

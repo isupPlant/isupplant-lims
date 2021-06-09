@@ -22,4 +22,6 @@
     <string name="check_person">check person</string>
     <string name="check_time">check time</string>
     <string name="memo">memo</string>
+    <string name="sample_refuse">project refuse</string>
+    <string name="sample_dealer">sample dealer</string>
 </resources>
