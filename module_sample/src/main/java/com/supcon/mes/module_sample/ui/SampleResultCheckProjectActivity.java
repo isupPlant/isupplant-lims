@@ -2,7 +2,6 @@ package com.supcon.mes.module_sample.ui;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -22,22 +21,20 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.common.view.view.picker.DatePicker;
-import com.supcon.common.view.view.picker.DateTimePicker;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
-import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.IntentRouter;
+import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.MyPickerController;
+import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.bean.DealInfoEntity;
@@ -58,9 +55,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -86,16 +80,13 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
     @BindByTag("rl_refuse")
     RelativeLayout rl_refuse;
     private MyPickerController mDatePickController;
-    private SinglePickController mSinglePickController;
 
     private SampleResultCheckProjectAdapter adapter;
     private long sampleId;
-    private String dealerName;
     private long dealerId;
     private CustomTextView dealer;
     private CustomEditWithCount memo;
     private CustomDateView planStartTime;
-    private DateTimePicker.OnYearMonthDayTimePickListener mListener;
     private long longTime;
 
     @Override
@@ -119,22 +110,6 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
         mDatePickController.setCycleDisable(false);
         mDatePickController.setSecondVisible(true);
         mDatePickController.setCanceledOnTouchOutside(true);
-        Date today = null;
-        try {
-            today = DateUtil.getToday();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int year = DateUtil.getYear(today);
-        int month = DateUtil.getMonth(today);
-        int day = DateUtil.getDay(today);
-//        mDatePickController.setSelectedItem(year, month + 1, day, Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE),Calendar.getInstance().get(Calendar.SECOND));
-
-
-        mSinglePickController = new SinglePickController((Activity) context);
-        mSinglePickController.setDividerVisible(false);
-        mSinglePickController.setCanceledOnTouchOutside(true);
-        mSinglePickController.textSize(18);
     }
 
     private void doFilter() {
@@ -191,65 +166,52 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
                     cancel.setText(context.getResources().getString(R.string.cancel));
 
                     //提交
-                    confirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DealInfoEntity dealInfoEntity = new DealInfoEntity();
-                            dealInfoEntity.setDealMemo(memo.getValue());
-                            dealInfoEntity.setDealDate(longTime);
-                            dealInfoEntity.setDealerId(dealerId);
-                            HashMap<String, Object> data = new HashMap<>();
-                            data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
-                            data.put("samplesJson", GsonUtil.gsonString(adapter.selected_data));
-                            data.put("dealMode", "refuse");
-                            data.put("signatureInfo", "");
-                            presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
-                        }
+                    confirm.setOnClickListener(v -> {
+                        DealInfoEntity dealInfoEntity = new DealInfoEntity();
+                        dealInfoEntity.setDealMemo(memo.getValue());
+                        dealInfoEntity.setDealDate(longTime);
+                        dealInfoEntity.setDealerId(dealerId);
+                        HashMap<String, Object> data = new HashMap<>();
+                        data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
+                        data.put("samplesJson", GsonUtil.gsonString(adapter.selected_data));
+                        data.put("dealInfo", GsonUtil.gsonString(dealInfoEntity));
+                        data.put("dealMode", "refuse");
+                        data.put("signatureInfo", "");
+                        presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
                     });
 
                     //取消
-                    cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
+                    cancel.setOnClickListener(v -> dialog.dismiss());
                     planStartTime = dialog.findViewById(R.id.planStartTime);
 
                     //时间
-                    planStartTime.setOnChildViewClickListener(new OnChildViewClickListener() {
-                        @Override
-                        public void onChildViewClick(View childView, int action, Object obj) {
-                            mDatePickController
-                                    .listener((year, month, day, hour, minute, second) -> {
-                                        String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-                                        longTime = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
-                                        planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
-                                    })
-                                    .show(System.currentTimeMillis());
-                        }
-                    });
+                    planStartTime.setOnChildViewClickListener((childView, action, obj) -> mDatePickController
+                            .listener((year, month, day, hour, minute, second) -> {
+                                String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                                longTime = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
+                                planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
+                            })
+                            .show(System.currentTimeMillis()));
 
                     //人
                     dealer = dialog.findViewById(R.id.people);
-                    dealer.setOnChildViewClickListener(new OnChildViewClickListener() {
-
-                        @Override
-                        public void onChildViewClick(View childView, int action, Object obj) {
-                            if (action != -1) {
-                                Bundle bundle = new Bundle();
-                                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
-                                bundle.putBoolean(Constant.IntentKey.IS_SELECT, true);
-                                bundle.putString(Constant.IntentKey.SELECT_TAG, "selectPeople");
-                                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
-                            } else {
-                                dealer.setValue("");
-                                dealerName = "";
-                                dealerId = 0;
-                            }
+                    dealer.setOnChildViewClickListener((childView, action, obj) -> {
+                        if (action != -1) {
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                            bundle.putBoolean(Constant.IntentKey.IS_SELECT, true);
+                            bundle.putString(Constant.IntentKey.SELECT_TAG, "selectPeople");
+                            IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+                        } else {
+                            dealer.setValue("");
+                            dealerId = 0;
                         }
                     });
-
+                    longTime = System.currentTimeMillis();
+                    planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
+                    AccountInfo accountInfo = SupPlantApplication.getAccountInfo();
+                    dealerId = accountInfo.staffId;
+                    dealer.setValue(accountInfo.staffName);
                     //备注
                     memo = dialog.findViewById(R.id.memo);
                     dialog.show();
@@ -264,7 +226,6 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
             if ("selectPeople".equals(selectDataEvent.getSelectTag())) {
                 ContactEntity contactEntity = (ContactEntity) selectDataEvent.getEntity();
                 dealerId = contactEntity.staffId;
-                dealerName = contactEntity.name;
                 dealer.setValue(contactEntity.name);
             }
         }
