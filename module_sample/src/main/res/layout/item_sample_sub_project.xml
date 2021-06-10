@@ -94,6 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/dp_35"
+                app:content_value="aaaaaaaaaa"
                 app:max_lines="999"
                 android:layout_marginLeft="@dimen/dp_9"
                 android:tag="ceOriginalValue"
@@ -103,7 +104,7 @@
                 app:gravity="right|center_vertical"
                 app:key="@string/lims_originValue"
                 app:key_size="13"
-                app:text_color="@color/font_333333" />
+                app:content_color="@color/font_333333" />
         </LinearLayout>
 
 
@@ -155,6 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/dp_35"
+                app:content_value="aaaaaaaaaa"
                 app:max_lines="999"
                 android:layout_marginLeft="@dimen/dp_9"
                 android:tag="ctRoundOffValue"
@@ -188,6 +190,7 @@
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/dp_35"
                 app:max_lines="999"
+                app:content_value="aaaaaaaaaa"
                 android:layout_marginLeft="@dimen/dp_9"
                 android:tag="ceReportedValue"
                 app:content_size="15"
@@ -196,6 +199,7 @@
                 app:gravity="right|center_vertical"
                 app:key="@string/lims_dispValue"
                 app:key_size="13"
+                app:content_color="@color/font_333333"
                 app:text_color="@color/font_333333" />
 
         </LinearLayout>

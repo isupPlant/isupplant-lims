@@ -12,10 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -68,7 +70,8 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
     private SinglePickController mSinglePickController;
 
-    public int selectPosition=-1;
+    public int selectPosition = -1;
+
     public SampleProjectAdapter(Context context, RecyclerView recyclerView) {
         super(context);
         this.recyclerView = recyclerView;
@@ -114,6 +117,9 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         CustomTextView tvRepeatNumber;
         @BindByTag("llInspectionItems")
         LinearLayout llInspectionItems;
+        @BindByTag("customTextRl")
+        RelativeLayout customTextRl;
+
         public ViewHolder(Context context) {
             super(context);
         }
@@ -128,6 +134,24 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             super.initView();
             ceOriginalValue.setEditable(false);
             ceReportedValue.setEditable(false);
+
+            //属性框设置key文字居中
+            TextView textView = ceOriginalValue.findViewById(R.id.customKey);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            textView.setLayoutParams(params);
+            textView = ctRoundOffValue.findViewById(R.id.customKey);
+            params = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            textView.setLayoutParams(params);
+            textView = ceReportedValue.findViewById(R.id.customKey);
+            params = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+            params.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            textView.setLayoutParams(params);
+
             imageUpDown.setVisibility(View.GONE);
             linearLayoutManager = new LinearLayoutManager(context);
             rvConclusion.setLayoutManager(linearLayoutManager);
@@ -167,12 +191,12 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
 
             RxView.clicks(llInspectionItems)
-                    .throttleFirst(1,TimeUnit.SECONDS)
+                    .throttleFirst(1, TimeUnit.SECONDS)
                     .subscribe(o -> {
-                        if (selectPosition==getAdapterPosition())
+                        if (selectPosition == getAdapterPosition())
                             return;
-                        selectPosition=getAdapterPosition();
-                        onItemChildViewClick(itemView,3);
+                        selectPosition = getAdapterPosition();
+                        onItemChildViewClick(itemView, 3);
                         notifyDataSetChanged();
                     });
             RxView.clicks(imageUpDown)
@@ -290,15 +314,15 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
         @Override
         protected void update(InspectionSubEntity data) {
-            if (data.getValueSource()==null || TextUtils.isEmpty(data.getValueSource().getId())) {
+            if (data.getValueSource() == null || TextUtils.isEmpty(data.getValueSource().getId())) {
                 BaseIdValueEntity valueSource = new BaseIdValueEntity();
                 valueSource.setId("LIMSSample_valueSource/enter");
                 data.setValueSource(valueSource);
             }
 
-            if (selectPosition==getAdapterPosition()){
+            if (selectPosition == getAdapterPosition()) {
                 llInspectionItems.setBackground(context.getResources().getDrawable(R.drawable.shape_line_blue));
-            }else {
+            } else {
                 llInspectionItems.setBackgroundColor(context.getResources().getColor(R.color.white));
             }
             //检验项目
@@ -383,13 +407,13 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 //                }
             }
 
-            if (data.isConclusionState()) {
-                ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
-                ceReportedValue.setContentTextColor(Color.parseColor("#333333"));
-            } else {
-                ceReportedValue.setKeyTextColor(Color.parseColor("#B20404"));
-                ceReportedValue.setContentTextColor(Color.parseColor("#B20404"));
-            }
+//            if (data.isConclusionState()) {
+//                ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
+//                ceReportedValue.setContentTextColor(Color.parseColor("#333333"));
+//            } else {
+//                ceReportedValue.setKeyTextColor(Color.parseColor("#B20404"));
+//                ceReportedValue.setContentTextColor(Color.parseColor("#B20404"));
+//            }
 
             if (data.isOpen()) {
                 rvConclusion.setVisibility(View.VISIBLE);
@@ -443,24 +467,24 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
                 //originValChange(data,ceOriginalValue,ctRoundOffValue,ceReportedValue,cpOriginalValue);//设置其他修约报出值
 
-                if (recyclerView.isComputingLayout()){
+                if (recyclerView.isComputingLayout()) {
                     recyclerView.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
                                 originalValue = data.getDefaultValue();
-                                mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                                mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
                             }
                         }
                     });
-                }else {
-                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0){ //调用监听事件 去执行计算
+                } else {
+                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
                         originalValue = data.getDefaultValue();
-                        mOriginalValueChangeListener.originalValueChange(originalValue,getAdapterPosition());
+                        mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
                     }
                 }
                 originValChange(data, ceOriginalValue, ctRoundOffValue, ceReportedValue, cpOriginalValue);
-            }else {
+            } else {
                 //原来的判断是
                 originValChange(data, ceOriginalValue, ctRoundOffValue, ceReportedValue, cpOriginalValue);
             }
