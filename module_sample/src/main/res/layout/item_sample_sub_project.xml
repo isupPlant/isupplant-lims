@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/llInspectionItems"
+        android:tag="llInspectionItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_testing" />
+
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctInspectionItems"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="ctInspectionItems"
+                app:content_color="@color/font_333333"
+                app:content_size="15"
+                app:gravity="right|center_vertical"
+                app:key="@string/lims_inspection_item"
+                app:key_color="@color/font_666666"
+                app:key_size="13" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16"
+            >
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:layout_width="@dimen/dp_14"
+                android:layout_height="@dimen/dp_15"
+                android:src="@drawable/ic_lims_duplicate_number"/>
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/tvRepeatNumber"
+                android:tag="tvRepeatNumber"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_9"
+                app:content_color="@color/font_333333"
+                app:key_color="@color/font_666666"
+                app:key_size="13"
+                app:content_size="15"
+                app:gravity="right|center_vertical"
+                app:key="@string/lims_parallelNo"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCeOriginalValue"
+            android:tag="llCeOriginalValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_original" />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ceOriginalValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_35"
+                app:max_lines="999"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="ceOriginalValue"
+                app:content_size="15"
+                app:edit_hint="@string/lims_input_original_value"
+                app:edit_hint_color="#A9A9A9"
+                app:gravity="right|center_vertical"
+                app:key="@string/lims_originValue"
+                app:key_size="13"
+                app:text_color="@color/font_333333" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llCpOriginalValue"
+            android:tag="llCpOriginalValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_original" />
+
+
+            <com.supcon.mes.mbap.view.CustomSpinner
+                android:id="@+id/cpOriginalValue"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="cpOriginalValue"
+                app:gravity="right|center_vertical"
+                app:key="@string/lims_originValue"
+                app:key_size="13"
+                app:text_color="@color/font_333333" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_modify" />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ctRoundOffValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_35"
+                app:max_lines="999"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="ctRoundOffValue"
+                app:content_color="@color/font_333333"
+                app:editable="false"
+                app:gravity="right|center_vertical"
+                app:key="@string/lims_roundValue"
+                app:key_size="13"
+                app:content_size="15"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_16">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lims_report" />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/ceReportedValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_35"
+                app:max_lines="999"
+                android:layout_marginLeft="@dimen/dp_9"
+                android:tag="ceReportedValue"
+                app:content_size="15"
+                app:edit_hint="@string/lims_input_reported_value"
+                app:edit_hint_color="#A9A9A9"
+                app:gravity="right|center_vertical"
+                app:key="@string/lims_dispValue"
+                app:key_size="13"
+                app:text_color="@color/font_333333" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/llQualityStandard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:tag="llQualityStandard">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lims_quality_standard"/>
+
+                <ImageView
+                    android:id="@+id/ivExpand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:src="@drawable/ic_drop_down"
+                    android:tag="ivExpand" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llEnclosure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:tag="llEnclosure">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lims_enclosure"/>
+
+                <ImageView
+                    android:id="@+id/imageUpDown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:src="@drawable/ic_up_file"
+                    android:tag="imageUpDown" />
+                <ImageView
+                    android:id="@+id/imageFileView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:src="@drawable/ic_view_file"
+                    android:tag="imageFileView" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvConclusion"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:tag="rvConclusion" />
+
+</LinearLayout>

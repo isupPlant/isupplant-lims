@@ -87,13 +87,13 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         @BindByTag("ctInspectionItems")
         CustomTextView ctInspectionItems;
         @BindByTag("ceOriginalValue")
-        CustomEditText ceOriginalValue;
+        CustomTextView ceOriginalValue;
         @BindByTag("cpOriginalValue")
         CustomSpinner cpOriginalValue;
         @BindByTag("ctRoundOffValue")
         CustomTextView ctRoundOffValue;
         @BindByTag("ceReportedValue")
-        CustomEditText ceReportedValue;
+        CustomTextView ceReportedValue;
         @BindByTag("ivExpand")
         ImageView ivExpand;
         @BindByTag("llQualityStandard")
@@ -120,7 +120,7 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
 
         @Override
         protected int layoutId() {
-            return R.layout.item_inspection_sub_project;
+            return R.layout.item_sample_sub_project;
         }
 
         @Override
@@ -197,26 +197,26 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                     });
 
 
-            ceOriginalValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        originalValue = ceOriginalValue.editText().getText().toString();
-                        getList().get(getAdapterPosition()).setOriginValue(originalValue); //将输入的值设置为原始值
-
-                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if (imm.isActive()){
-                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
-                        }
-
-                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
-                            mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
-                        }
-                        return false;
-                    }
-                    return false;
-                }
-            });
+//            ceOriginalValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                        originalValue = ceOriginalValue.editText().getText().toString();
+//                        getList().get(getAdapterPosition()).setOriginValue(originalValue); //将输入的值设置为原始值
+//
+//                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        if (imm.isActive()){
+//                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
+//                        }
+//
+//                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
+//                            mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
+//                        }
+//                        return false;
+//                    }
+//                    return false;
+//                }
+//            });
 
             ceOriginalValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -241,28 +241,28 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             });
 
 
-            ceReportedValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                        dispValue = ceReportedValue.editText().getText().toString();
-                        getList().get(getAdapterPosition()).setDispValue(dispValue);
-
-                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if (imm.isActive()) {
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);      //隐藏软键盘
-                        }
-
-                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
-                            mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
-                        }
-                        return true;
-                    }
-
-                    return false;
-                }
-            });
+//            ceReportedValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+//
+//                        dispValue = ceReportedValue.editText().getText().toString();
+//                        getList().get(getAdapterPosition()).setDispValue(dispValue);
+//
+//                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        if (imm.isActive()) {
+//                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);      //隐藏软键盘
+//                        }
+//
+//                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
+//                            mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
+//                        }
+//                        return true;
+//                    }
+//
+//                    return false;
+//                }
+//            });
 
             //枚举原始值改变时的监听
             cpOriginalValue.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -303,11 +303,11 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             }
             //检验项目
             ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "" : data.getComName());
-            ceOriginalValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
-            ceOriginalValue.editText().setSingleLine();
-
-            ceReportedValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
-            ceReportedValue.editText().setSingleLine();
+//            ceOriginalValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
+//            ceOriginalValue.editText().setSingleLine();
+//
+//            ceReportedValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
+//            ceReportedValue.editText().setSingleLine();
             //原始值
             if (null != data.getValueKind()) { // 值类型
                 if (!StringUtil.isEmpty(data.getValueKind().getId())) { // 值类型不为空
@@ -317,14 +317,14 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                     } else if (data.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
                         setVisible(true);
                         ceOriginalValue.setEditable(false);
-                        ceOriginalValue.setHint("");
+//                        ceOriginalValue.setHint("");
                         ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
                     } else {
                         setVisible(true);
 //                        ceOriginalValue.setEditable(true);
                         if (StringUtil.isEmpty(data.getDefaultValue())) {
                             ceOriginalValue.setContent(StringUtil.isEmpty(data.getOriginValue()) ? "" : data.getOriginValue());
-                            ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
+//                            ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
                         } else {
                             if (StringUtil.isEmpty(data.getOriginValue())) {  //原始值为空 并且默认值不为空  赋默认给原始 并去计算修约与报出
                                 ceOriginalValue.setContent(data.getDefaultValue());
@@ -346,7 +346,7 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                                 }
                             } else {
                                 ceOriginalValue.setContent(data.getOriginValue());
-                                ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
+//                                ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
                             }
                         }
 
@@ -483,7 +483,7 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         this.engine = engine;
     }
 
-    public void originValChange(InspectionSubEntity inspectionSubEntity, CustomEditText ceOriginalValue, CustomTextView ctRoundOffValue, CustomEditText ceReportedValue, CustomSpinner cpOriginalValue) {
+    public void originValChange(InspectionSubEntity inspectionSubEntity, CustomTextView ceOriginalValue, CustomTextView ctRoundOffValue, CustomTextView ceReportedValue, CustomSpinner cpOriginalValue) {
         boolean clearFalg = false;
         if (!StringUtil.isEmpty(inspectionSubEntity.getOriginValue())) {
             if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.NUMBER) || inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {

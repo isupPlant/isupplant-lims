@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="color" name="bg_color"/>
+    <attr format="boolean" name="bold"/>
+    <attr format="color" name="content_color"/>
+    <attr format="string|reference" name="content_hint"/>
+    <attr format="integer" name="content_size"/>
+    <attr format="string|reference" name="content_value"/>
+    <attr format="reference" name="edit_delete"/>
+    <attr format="string" name="edit_hint"/>
+    <attr format="color" name="edit_hint_color"/>
+    <attr format="integer" name="edit_maxLength"/>
+    <attr format="integer" name="edit_maxLine"/>
+    <attr format="boolean" name="editable"/>
+    <attr format="boolean" name="enable"/>
+    <attr format="dimension" name="gap"/>
+    <attr format="string" name="gravity"/>
+    <attr format="reference" name="icon_res"/>
+    <attr format="boolean" name="icon_visible"/>
+    <attr format="boolean" name="isIntercept"/>
+    <attr format="boolean" name="is_float"/>
+    <attr format="color" name="item_bg_color"/>
+    <attr format="color" name="item_text_color"/>
+    <attr format="integer" name="item_text_size"/>
+    <attr format="string|reference" name="key"/>
+    <attr format="color" name="key_color"/>
+    <attr format="dimension" name="key_height"/>
+    <attr format="integer" name="key_size"/>
+    <attr format="dimension" name="key_width"/>
+    <attr format="integer" name="max"/>
+    <attr format="integer" name="max_lines"/>
+    <attr format="boolean" name="necessary"/>
+    <attr format="integer" name="num"/>
+    <attr format="boolean" name="online"/>
+    <attr format="string" name="orientation"/>
+    <attr format="dimension" name="padding"/>
+    <attr format="integer" name="position"/>
+    <attr format="integer" name="precision"/>
+    <attr format="integer" name="span_num"/>
+    <attr format="string|reference" name="text"/>
+    <attr format="color" name="text_color"/>
+    <attr format="boolean" name="text_editable"/>
+    <attr format="dimension" name="text_height"/>
+    <attr format="string|reference" name="text_key"/>
+    <attr format="color" name="text_key_color"/>
+    <attr format="dimension" name="text_key_width"/>
+    <attr format="integer" name="text_size"/>
+    <attr format="float|dimension" name="text_size_float"/>
+    <attr format="integer" name="text_style"/>
+    <attr format="string|reference" name="text_value"/>
+    <attr format="color" name="text_value_color"/>
+    <attr format="dimension" name="text_width"/>
+    <attr format="boolean" name="vertical"/>
+    <color name="azure">#f0ffff</color>
+    <color name="bgBtnGray">#c3c3c3</color>
+    <color name="bgComp">#f9f9f9</color>
+    <color name="bgGray">#e7e7e7</color>
+    <color name="bgGray2">#ececec</color>
+    <color name="bgGray3">#f5f5f5</color>
+    <color name="bgGrayAlpha">#80ececec</color>
+    <color name="bgLightWhite">#efefef</color>
+    <color name="bgSwitchGray">#c5c5c5</color>
+    <color name="bgSwitchOff">#c5c5c5</color>
+    <color name="bgSwitchOn">#EF8742</color>
+    <color name="bgSwitchOrange">#EF8742</color>
+    <color name="black">#000000</color>
+    <color name="black99">#10000000</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="customBlue">#58bef3</color>
+    <color name="customBlue2">#5692f5</color>
+    <color name="customBlue3">#5677FC</color>
+    <color name="customBlue4">#2799c9</color>
+    <color name="customGreen">#74B501</color>
+    <color name="customGreen2">#43c992</color>
+    <color name="customOrange">#EF8742</color>
+    <color name="customOrange2">#E05543</color>
+    <color name="customRed">#c82529</color>
+    <color name="customTitleBlueColor">#3c5569</color>
+    <color name="customYellow">#f3a600</color>
+    <color name="deviceBlack">#000000</color>
+    <color name="deviceWhite">#FFFFFF</color>
+    <color name="device_off">#99c82529</color>
+    <color name="device_on">#9974B501</color>
+    <color name="editableTextColor">#8f8f8f</color>
+    <color name="equipmentThemeColor">#356cbc</color>
+    <color name="filterBlue">#C3eddF</color>
+    <color name="filterLightBlue">#F0F4FC</color>
+    <color name="filterTextBlue">#2799c9</color>
+    <color name="gray">#808080</color>
+    <color name="hintColor">#a1a1a1</color>
+    <color name="line">#bbbbbb</color>
+    <color name="lineColor">#dedede</color>
+    <color name="lineComp">#dedede</color>
+    <color name="line_blue_light">#802799c9</color>
+    <color name="line_color">#d6d6d6</color>
+    <color name="line_gray">#ebebeb</color>
+    <color name="line_gray_light">#80ebebeb</color>
+    <color name="notEditableTextColor">#a1a1a1</color>
+    <color name="table_check">#2799C9</color>
+    <color name="table_edit">#8bc34a</color>
+    <color name="table_local">#EF8742</color>
+    <color name="table_undo">#626262</color>
+    <color name="textColorGray">#8b8b8b</color>
+    <color name="textColorblack">#222222</color>
+    <color name="textColorlight">#8f8f8f</color>
+    <color name="textColorlightblack">#626262</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="white">#ffffff</color>
+    <dimen name="custom_view_key_length">6</dimen>
+    <dimen name="custom_view_width">80dp</dimen>
+    <dimen name="fontSize_14sp">14sp</dimen>
+    <dimen name="fontSize_16sp">16sp</dimen>
+    <dimen name="fontSize_18sp">18sp</dimen>
+    <dimen name="item_gap">5dp</dimen>
+    <dimen name="item_height">100dp</dimen>
+    <dimen name="item_width">80dp</dimen>
+    <dimen name="tabhost_height">60dp</dimen>
+    <dimen name="titlebar_height">50dp</dimen>
+    <dimen name="work_gap">1dp</dimen>
+    <string name="DEV_OPEN_ERR">Device open failed！Software will quit！</string>
+    <string name="DIA_ALERT">Warning！</string>
+    <string name="DIA_CHECK">Confirm</string>
+    <string name="app_name">mbap</string>
+    <string name="barcode_name">Barcode Scan</string>
+    <string name="but_clear">Clear</string>
+    <string name="but_close">Close</string>
+    <string name="but_repeat">Repeat Scan</string>
+    <string name="but_start">Single Scan</string>
+    <string name="but_stop">Stop Scan</string>
+    <string name="but_test">Test</string>
+    <string name="cancel">作废</string>
+    <string name="cancel2">取消</string>
+    <string name="close">关</string>
+    <string name="commentInput">填写意见</string>
+    <string name="default_value">默认</string>
+    <string name="delete_warning">确定要删除吗？</string>
+    <string name="dialog_title">Content</string>
+    <string name="do_refresh">刷新一下</string>
+    <string name="list_empty">列表空空如也...</string>
+    <string name="open">开</string>
+    <string name="required">必填</string>
+    <string name="save">保存</string>
+    <string name="save_local">保存本地</string>
+    <string name="search_t">搜 索</string>
+    <string name="selectPeopleInput">处理人(可多选)</string>
+    <string name="select_people_warning">处理人不能为空！</string>
+    <string name="spinner">Scan key choose</string>
+    <string name="submit">提交</string>
+    <string name="submit_warning">确定要提交吗？</string>
+    <string name="sure">确定</string>
+    <string name="take_pick">请选择一项操作</string>
+    <string name="title">标题</string>
+    <string name="warning">警告</string>
+    <style name="AppBottomInTheme" parent="AppNoTitleBarTheme">
+        <item name="android:windowAnimationStyle">@style/settingAnimation</item>
+    </style>
+    <style name="AppLeftInTheme" parent="AppNoTitleBarTheme">
+        <item name="android:windowAnimationStyle">@style/leftInStyle</item>
+    </style>
+    <style name="AppNoTitleBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="android:windowBackground">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+    </style>
+    <style name="AppRightInTheme" parent="AppNoTitleBarTheme">
+        <item name="android:windowAnimationStyle">@style/rightInStyle</item>
+    </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="BaseFont">
+
+        <!--<item name="android:typeface">serif</item>-->
+    </style>
+    <style name="BlueButton" parent="BaseFont">
+        <item name="android:background">@drawable/sl_blue_btn</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="BlueButtonRadius" parent="BaseFont">
+        <item name="android:background">@drawable/sh_blue_radius_btn</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="ContentText" parent="BaseFont">
+        <item name="android:textColor">@color/editableTextColor</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="CustomDialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">220dp</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+    <style name="CustomEditText" parent="BaseFont">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@null</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:hint">扫码或手动输入</item>
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+    </style>
+    <style name="CustomEditTextLeft" parent="BaseFont">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+        <item name="android:background">@null</item>
+    </style>
+    <style name="CustomProgressBar" parent="@android:style/Widget.ProgressBar">
+        <item name="android:progressDrawable">@drawable/layer_progressbar</item>
+    </style>
+    <style name="DetailText" parent="BaseFont">
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="DetailText14" parent="BaseFont">
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">start</item>
+    </style>
+    <style name="DetailText2Line" parent="BaseFont">
+        <item name="android:textColor">@color/textColorblack</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="DetailTextC" parent="BaseFont">
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">start</item>
+    </style>
+    <style name="DetailTextSingle" parent="BaseFont">
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="GrayButton" parent="BaseFont">
+        <item name="android:background">@drawable/sl_gray_btn</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="GrayButtonRadius" parent="BaseFont">
+        <item name="android:background">@drawable/sl_gray_radius_btn</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="GrayTransitionButton" parent="BaseFont">
+        <item name="android:background">@drawable/sh_transition_router_gray</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/textColorlightblack</item>
+    </style>
+    <style name="HintTextColor" parent="BaseFont">
+        <item name="android:textColor">@color/hintColor</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+    <style name="KeyText" parent="BaseFont">
+        <item name="android:textColor">@color/textColorblack</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="OrangeButton" parent="BaseFont">
+        <item name="android:background">@drawable/sl_orange_btn</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="OrangeButtonRadius" parent="BaseFont">
+        <item name="android:background">@drawable/sl_orange_radius_btn</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="OrangeTransitionButton" parent="BaseFont">
+        <item name="android:background">@drawable/sh_transition_router_orange</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="RedButton" parent="BaseFont">
+        <item name="android:background">@drawable/sl_red_btn</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="ScanEditText" parent="BaseFont">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:background">@null</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:hint">扫码或手动输入</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+    </style>
+    <style name="SearchEditText" parent="BaseFont">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:hint">输入搜索内容</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+    </style>
+    <style name="StatusText" parent="BaseFont">
+        <item name="android:textColor">@color/table_edit</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:background">@drawable/sh_table_status_edit</item>
+    </style>
+    <style name="StatusTextSolid" parent="BaseFont">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:background">@drawable/sh_status_yes_solid</item>
+    </style>
+    <style name="TagTextColor" parent="BaseFont">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="TextColorBlue" parent="BaseFont">
+        <item name="android:textColor">@color/customBlue</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="TextColorGray" parent="BaseFont">
+        <item name="android:textColor">@color/textColorGray</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">marquee</item>
+    </style>
+    <style name="TextColorGreen" parent="BaseFont">
+        <item name="android:textColor">@color/customGreen</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="TextColorRed" parent="BaseFont">
+        <item name="android:textColor">@color/customRed</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="TextColorYellow" parent="BaseFont">
+        <item name="android:textColor">@color/customYellow</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="TitleTextColor" parent="BaseFont">
+        <item name="android:textColor">@color/textColorlightblack</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="TranslucentTheme" parent="AppTheme">
+        <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
+        <item name="android:windowBackground">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+    </style>
+    <style name="Transparent" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/fadeStyle</item>
+    </style>
+    <style name="activityAnimation" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/right_out</item>
+    </style>
+    <style name="bottomInStyle" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dock_bottom_enter</item>
+        <item name="android:windowExitAnimation">@anim/dock_bottom_exit</item>
+    </style>
+    <style name="bottomSheet">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">300dp</item>
+        <item name="android:windowSoftInputMode">adjustPan</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+    <style name="contentDialog" parent="@android:style/Theme.Dialog">
+        <!-- 有无边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@color/white</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--无标题 -->
+        <item name="android:windowNoTitle">true</item>
+
+        <item name="android:windowEnterAnimation">@anim/content_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/content_dialog_out</item>
+    </style>
+    <style name="dialogStyle" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+    <style mce_bogus="1" name="dialogWindowAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/content_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/content_dialog_out</item>
+    </style>
+    <style name="fadeStyle" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+    <style name="leftInStyle" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dock_left_enter</item>
+        <item name="android:windowExitAnimation">@anim/dock_left_exit</item>
+    </style>
+    <style name="rightDialogStyle" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_right_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_right_exit</item>
+    </style>
+    <style name="rightInStyle" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dock_right_enter</item>
+        <item name="android:windowExitAnimation">@anim/dock_right_exit</item>
+    </style>
+    <style name="settingAnimation" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/dock_bottom_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/dock_top_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/dock_top_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/dock_bottom_exit</item>
+    </style>
+    <declare-styleable name="CustomArrowView">
+        <attr format="reference" name="arrow_icon"/>
+        <attr format="string" name="arrow_text"/>
+    </declare-styleable>
+    <declare-styleable name="CustomCheckBox">
+        <attr name="text"/>
+        <attr name="text_width"/>
+        <attr name="necessary"/>
+        <attr format="boolean" name="checkbox_checked"/>
+        <attr format="reference" name="checkbox_icon"/>
+        <attr format="boolean" name="checkbox_enable"/>
+        <attr name="enable"/>
+    </declare-styleable>
+    <declare-styleable name="CustomCircleTextImageView">
+        <attr format="dimension" name="citv_border_width"/>
+        <attr format="color" name="citv_border_color"/>
+        <attr format="boolean" name="citv_border_overlay"/>
+        <attr format="color" name="citv_fill_color"/>
+        <attr format="string" name="citv_text_text"/>
+        <attr format="color" name="citv_text_color"/>
+        <attr format="dimension" name="citv_text_size"/>
+        <attr format="dimension" name="citv_text_padding"/>
+        <attr format="dimension" name="citv_border_radius"/>
+    </declare-styleable>
+    <declare-styleable name="CustomDateView">
+        <attr name="text"/>
+        <attr name="key"/>
+        <attr name="content_value"/>
+        <attr name="text_size"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="text_width"/>
+        <attr name="gravity"/>
+        <attr name="padding"/>
+        <attr name="text_color"/>
+        <attr name="necessary"/>
+        <attr name="editable"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr name="icon_res"/>
+    </declare-styleable>
+    <declare-styleable name="CustomDownloadView">
+        <attr name="text"/>
+        <attr name="text_color"/>
+        <attr name="text_size"/>
+        <attr format="integer" name="info_text_size"/>
+        <attr format="color" name="info_success_color"/>
+        <attr format="color" name="info_failed_color"/>
+
+        <attr format="dimension" name="loader_height"/>
+    </declare-styleable>
+    <declare-styleable name="CustomEditText">
+        <attr name="edit_hint"/>
+        <attr name="edit_hint_color"/>
+        <attr name="edit_delete"/>
+        <attr name="edit_maxLength"/>
+        <attr name="edit_maxLine"/>
+        <attr name="text_size"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="gravity"/>
+        <attr name="text"/>
+        <attr name="key"/>
+        <attr name="content_value"/>
+        <attr name="text_width"/>
+        <attr name="text_height"/>
+        <attr name="text_color"/>
+        <attr name="padding"/>
+        <attr name="necessary"/>
+        <attr name="editable"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr name="icon_visible"/>
+        <attr name="icon_res"/>
+    </declare-styleable>
+    <declare-styleable name="CustomExpandableTextView">
+        <attr name="text"/>
+        <attr name="text_color"/>
+        <attr name="text_size"/>
+        <attr name="text_style"/>
+        <attr name="max_lines"/>
+        <attr format="integer" name="expand_times"/>
+    </declare-styleable>
+    <declare-styleable name="CustomFilterView">
+        <attr name="text"/>
+        <attr name="text_color"/>
+        <attr name="text_size"/>
+        <attr name="position"/>
+        <attr name="icon_res"/>
+        <attr name="item_text_color"/>
+        <attr name="item_bg_color"/>
+        <attr name="item_text_size"/>
+        <attr name="num"/>
+    </declare-styleable>
+    <declare-styleable name="CustomGalleryView">
+        <attr name="text_color"/>
+        <attr name="text"/>
+        <attr name="text_width"/>
+        <attr name="text_height"/>
+        <attr name="text_size"/>
+        <attr name="necessary"/>
+        <attr name="bg_color"/>
+        <attr format="integer" name="columns"/>
+        <attr format="integer" name="lines"/>
+        <attr name="editable"/>
+        <attr name="icon_visible"/>
+        <attr format="boolean" name="gallery_icon_visible"/>
+        <attr format="reference" name="gallery_icon_res"/>
+        <attr format="reference" name="camera_icon_res"/>
+        <attr name="enable"/>
+        <attr format="boolean" name="horizontal"/>
+    </declare-styleable>
+    <declare-styleable name="CustomHorizontalSearchTitleBar">
+        <attr format="color" name="title_background_color"/>
+        <attr format="string|reference" name="title_text"/>
+        <attr format="dimension" name="title_length"/>
+        <attr format="boolean" name="title_right_btn_need"/>
+        <attr format="color|reference" name="start_color"/>
+        <attr format="color|reference" name="end_color"/>
+        <attr format="integer|reference" name="right_btn_res"/>
+
+        <attr format="boolean" name="enable_multi_func"/>
+        <attr format="dimension" name="right_btn_padding"/>
+    </declare-styleable>
+    <declare-styleable name="CustomImageButton">
+        <attr name="text"/>
+        <attr name="text_size_float"/>
+        <attr name="text_color"/>
+    </declare-styleable>
+    <declare-styleable name="CustomInfiniteListView">
+        <attr format="boolean" name="enable_add"/>
+        <attr format="boolean" name="enable_save"/>
+    </declare-styleable>
+    <declare-styleable name="CustomInputView">
+        <attr name="text"/>
+        <attr format="string" name="type"/>
+        <attr name="text_size"/>
+        <attr name="necessary"/>
+        <attr name="text_width"/>
+    </declare-styleable>
+    <declare-styleable name="CustomListWidget">
+        <attr name="text_size"/>
+        <attr name="icon_res"/>
+        <attr format="color|reference" name="title_bg_color"/>
+        <attr format="integer" name="total"/>
+        <attr format="string|reference" name="widget_name"/>
+        <attr format="integer" name="widget_num"/>
+        <attr format="boolean" name="is_editable"/>
+        <attr format="boolean" name="is_addable"/>
+    </declare-styleable>
+    <declare-styleable name="CustomMultiCheckBox">
+        <attr name="span_num"/>
+        <attr name="key"/>
+        <attr name="key_size"/>
+        <attr name="key_color"/>
+        <attr name="content_size"/>
+        <attr name="content_color"/>
+        <attr name="necessary"/>
+        <attr name="vertical"/>
+    </declare-styleable>
+    <declare-styleable name="CustomNumView">
+        <attr name="text"/>
+        <attr name="num"/>
+        <attr name="max"/>
+        <attr name="text_size"/>
+        <attr name="text_color"/>
+        <attr name="text_width"/>
+        <attr name="necessary"/>
+        <attr name="editable"/>
+        <attr format="reference" name="add_icon_res"/>
+        <attr format="reference" name="minus_icon_res"/>
+        <attr name="is_float"/>
+        <attr name="precision"/>
+    </declare-styleable>
+    <declare-styleable name="CustomPopTransation">
+        <attr name="text_size"/>
+        <attr name="position"/>
+    </declare-styleable>
+    <declare-styleable name="CustomPotraitView">
+        <attr format="reference" name="potrait_icon"/>
+        <attr format="string" name="potrait_username"/>
+        <attr format="string" name="potrait_text"/>
+    </declare-styleable>
+    <declare-styleable name="CustomRadioButton">
+        <attr name="span_num"/>
+        <attr name="key"/>
+        <attr name="key_size"/>
+        <attr name="key_color"/>
+        <attr name="content_size"/>
+        <attr name="content_color"/>
+        <attr name="necessary"/>
+        <attr name="vertical"/>
+    </declare-styleable>
+    <declare-styleable name="CustomRoundTextImageView">
+        <attr format="dimension" name="round_width"/>
+        <attr format="dimension" name="round_height"/>
+        <attr name="text"/>
+        <attr name="text_color"/>
+        <attr format="dimension" name="round_text_size"/>
+        <attr name="padding"/>
+    </declare-styleable>
+    <declare-styleable name="CustomSearchView">
+        <attr format="string" name="search_hint"/>
+        <attr format="integer" name="search_text_size"/>
+        <attr format="color" name="search_text_color"/>
+        <attr format="color" name="search_text_bg_color"/>
+        <attr format="color" name="search_bg_color"/>
+    </declare-styleable>
+    <declare-styleable name="CustomSpinner">
+        <attr name="text_width"/>
+        <attr name="text"/>
+        <attr name="key"/>
+        <attr name="content_hint"/>
+        <attr name="content_value"/>
+        <attr name="text_size"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="gravity"/>
+        <attr name="padding"/>
+        <attr name="necessary"/>
+        <attr name="text_color"/>
+        <attr name="editable"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr name="icon_res"/>
+    </declare-styleable>
+    <declare-styleable name="CustomSwitchButton">
+        <attr format="string" name="switch_status"/>
+        <attr format="boolean" name="switch_enable"/>
+        <attr format="string" name="switch_value"/>
+    </declare-styleable>
+    <declare-styleable name="CustomTab">
+        <attr name="bg_color"/>
+        <attr name="gap"/>
+        <attr format="color" name="select_text_color"/>
+        <attr format="color" name="unselect_text_color"/>
+        <attr format="color" name="select_bg_color"/>
+        <attr format="color" name="unselect_bg_color"/>
+        <attr format="boolean" name="indicator_visible"/>
+        <attr format="color" name="indicator_color"/>
+        <attr format="boolean" name="tab_num_visible"/>
+    </declare-styleable>
+    <declare-styleable name="CustomText1View">
+        <attr name="key"/>
+        <attr name="text"/>
+        <attr name="content_hint"/>
+        <attr name="content_value"/>
+        <attr name="key_color"/>
+        <attr name="content_color"/>
+        <attr name="text_width"/>
+        <attr name="text_height"/>
+        <attr name="key_width"/>
+        <attr name="key_height"/>
+        <attr name="text_size"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="gravity"/>
+        <attr name="editable"/>
+        <attr name="necessary"/>
+        <attr name="icon_res"/>
+        <attr name="max_lines"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr name="isIntercept"/>
+    </declare-styleable>
+    <declare-styleable name="CustomTitleBar">
+        <attr format="boolean" name="titlebar_right_visible"/>
+        <attr format="reference" name="titlebar_right_icon"/>
+        <attr format="color" name="titlebar_bg_color"/>
+        <attr format="string" name="titlebar_title_text"/>
+    </declare-styleable>
+    <declare-styleable name="CustomTodoView">
+        <attr name="text_size"/>
+        <attr name="icon_res"/>
+        <attr format="string|reference" name="todo_text"/>
+        <attr format="string|reference" name="todo_time"/>
+        <attr format="string|reference" name="todo_status"/>
+    </declare-styleable>
+    <declare-styleable name="CustomVerticalDateView">
+        <attr name="text"/>
+        <attr name="key"/>
+        <attr name="content_value"/>
+        <attr name="text_size"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="text_height"/>
+        <attr name="gravity"/>
+        <attr name="padding"/>
+        <attr name="text_color"/>
+        <attr name="necessary"/>
+        <attr name="editable"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr name="icon_res"/>
+    </declare-styleable>
+    <declare-styleable name="CustomVerticalEditText">
+        <attr name="edit_hint"/>
+        <attr name="edit_hint_color"/>
+        <attr name="edit_delete"/>
+        <attr name="edit_maxLength"/>
+        <attr name="edit_maxLine"/>
+        <attr name="text_size"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="gravity"/>
+        <attr name="text"/>
+        <attr name="key"/>
+        <attr name="content_value"/>
+        <attr name="text_width"/>
+        <attr name="text_height"/>
+        <attr name="text_color"/>
+        <attr name="padding"/>
+        <attr name="necessary"/>
+        <attr name="editable"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr name="icon_visible"/>
+        <attr name="icon_res"/>
+    </declare-styleable>
+    <declare-styleable name="CustomVerticalSpinner">
+        <attr name="text_width"/>
+        <attr name="text_height"/>
+        <attr name="text"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="key"/>
+        <attr name="content_hint"/>
+        <attr name="content_value"/>
+        <attr name="text_size"/>
+        <attr name="gravity"/>
+        <attr name="padding"/>
+        <attr name="necessary"/>
+        <attr name="text_color"/>
+        <attr name="editable"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr name="icon_res"/>
+    </declare-styleable>
+    <declare-styleable name="CustomVerticalTextView">
+        <attr name="key"/>
+        <attr name="text"/>
+        <attr name="content_hint"/>
+        <attr name="content_value"/>
+        <attr name="key_color"/>
+        <attr name="content_color"/>
+        <attr name="text_width"/>
+        <attr name="text_height"/>
+        <attr name="key_width"/>
+        <attr name="key_height"/>
+        <attr name="text_size"/>
+        <attr name="key_size"/>
+        <attr name="content_size"/>
+        <attr name="gravity"/>
+        <attr name="editable"/>
+        <attr name="necessary"/>
+        <attr name="icon_res"/>
+        <attr name="max_lines"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+    </declare-styleable>
+    <declare-styleable name="CustomWaveView">
+        <attr format="string" name="wave_text"/>
+        <attr format="dimension" name="wave_text_size"/>
+        <attr name="text_color"/>
+        <attr format="color" name="wave_color"/>
+        <attr format="integer" name="wave_height"/>
+        <attr format="integer" name="wave_duration"/>
+    </declare-styleable>
+    <declare-styleable name="CustomWorkFlowView">
+        <attr format="boolean" name="commentable"/>
+        <attr format="string" name="comment"/>
+        <attr name="enable"/>
+        <attr name="online"/>
+        <attr name="editable"/>
+    </declare-styleable>
+    <declare-styleable name="XEditText">
+        <attr name="edit_hint"/>
+        <attr name="edit_hint_color"/>
+        <attr name="edit_delete"/>
+        <attr name="edit_maxLength"/>
+        <attr name="edit_maxLine"/>
+        <attr name="text_size"/>
+        <attr name="gravity"/>
+        <attr name="text"/>
+        <attr name="text_width"/>
+        <attr name="text_height"/>
+        <attr name="text_color"/>
+        <attr name="padding"/>
+        <attr name="necessary"/>
+        <attr name="editable"/>
+        <attr name="bold"/>
+        <attr name="enable"/>
+        <attr format="boolean" name="line_visible"/>
+        <attr format="string" name="error_msg"/>
+    </declare-styleable>
+</resources>
