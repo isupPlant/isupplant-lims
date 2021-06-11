@@ -221,7 +221,6 @@ public class SampleResultCheckProjectFragment extends BaseRefreshRecyclerFragmen
     @Override
     protected void initListener() {
         super.initListener();
-        adapter.setEngine(getController(CalculationController.class).getEngine());
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {

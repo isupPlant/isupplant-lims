@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
@@ -26,29 +25,16 @@ import com.supcon.mes.middleware.SupPlantApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.SystemConfigController;
 import com.supcon.mes.middleware.model.bean.ModuleConfigEntity;
-import com.supcon.mes.middleware.model.bean.PopupWindowEntity;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_lims.constant.LimsConstant;
-import com.supcon.mes.module_lims.constant.TemporaryData;
-import com.supcon.mes.module_lims.model.bean.InspectionSubEntity;
-import com.supcon.mes.module_lims.ui.popu.LIMSPopupWindow;
 import com.supcon.mes.module_sample.R;
-import com.supcon.mes.module_sample.controller.SampleRecordResultSubmitController;
-import com.supcon.mes.module_sample.model.bean.SampleRecordResultSubmitEntity;
-import com.supcon.mes.module_sample.model.bean.TestDeviceEntity;
-import com.supcon.mes.module_sample.model.bean.TestMaterialEntity;
 import com.supcon.mes.module_sample.presenter.SampleResultCheckProjectDetailPresenter;
-import com.supcon.mes.module_sample.ui.input.ProjectInspectionItemsActivity;
-import com.supcon.mes.module_sample.ui.input.fragment.EquipmentFragment;
-import com.supcon.mes.module_sample.ui.input.fragment.MaterialFragment;
-import com.supcon.mes.module_sample.ui.input.fragment.ProjectFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.SampleEquipmentFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.SampleMaterialFragment;
 import com.supcon.mes.module_sample.ui.input.fragment.SampleResultCheckProjectFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Router(Constant.AppCode.LIMS_SampleResultCheckProjectDetail)
 @Presenter(value = {SampleResultCheckProjectDetailPresenter.class})
@@ -74,19 +60,9 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
     private SampleEquipmentFragment equipmentFragment;
     private SampleMaterialFragment materialFragment;
     private Long sampleId ;
-    private Long sampleIdTestId;
     private String mTitle;
-    private String sampleCode;
 
-    private ImageView ivProject;
-    private SampleRecordResultSubmitController controller;
-    List<InspectionSubEntity> inspectionSubList;
-    List<TestDeviceEntity> testDeviceList ;
-    List<TestMaterialEntity> testMaterialList ;
-    String equipmentDelete;
-    String materialDelete ;
     private SystemConfigController mSystemConfigController;
-    private String specialResultStr = SupPlantApplication.getIpAndPost();
     @Override
     protected int getLayoutID() {
         return R.layout.activity_sample_result_check_project_detail;
@@ -98,7 +74,6 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
         super.onInit();
 
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        sampleCode = getIntent().getStringExtra("sampleCode");
         sampleId = getIntent().getLongExtra(Constant.IntentKey.LIMS_SAMPLE_ID,0);
         mTitle = getIntent().getStringExtra(Constant.IntentKey.LIMS_SAMPLE_PROJECT_NAME);
 
@@ -137,7 +112,6 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
         equipmentFragment.sampleTesId = sampleId;
         materialFragment.sampleTesId = sampleId;
 
-        controller = new SampleRecordResultSubmitController();
         mSystemConfigController = new SystemConfigController(context);
         mSystemConfigController.getModuleConfig(LimsConstant.ModuleCode.LIMS_FILE_ANALYSIS_MENU_CODE, LimsConstant.Keys.LIMSDC_OCD_LIMSDCUrl, new OnSuccessListener() {
             @Override
@@ -146,7 +120,6 @@ public class SampleResultCheckProjectDetailActivity extends BaseFragmentActivity
                     try {
                         ModuleConfigEntity bean = (ModuleConfigEntity)result;
                         if (!TextUtils.isEmpty(bean.getLimsDCUrl())) {
-                            specialResultStr = bean.getLimsDCUrl();
                         }
                     }catch (Exception e){
                         e.printStackTrace();

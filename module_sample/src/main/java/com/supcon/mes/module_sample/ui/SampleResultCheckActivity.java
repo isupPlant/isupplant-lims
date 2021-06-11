@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,6 +22,7 @@ import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.api.SampleResultCheckAPI;
@@ -28,6 +30,11 @@ import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
 import com.supcon.mes.module_sample.model.contract.SampleResultCheckContract;
 import com.supcon.mes.module_sample.presenter.SampleResultCheckPresenter;
 import com.supcon.mes.module_sample.ui.adapter.SampleResultCheckAdapter;
+import com.supcon.mes.module_scan.model.event.CodeResultEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +52,7 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity<Sanpl
     ImageView ivSearchBtn;
     @BindByTag("scanRightBtn")
     CustomImageButton scanRightBtn;
+    private SampleResultCheckAdapter adapter;
 
 
     @Override
@@ -55,6 +63,7 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity<Sanpl
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -98,16 +107,32 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity<Sanpl
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().register(this);
+    }
+
+    //获取UHF扫描结果
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshEvent(EventInfo EventInfo) {
+        doFilter();
     }
 
     @Override
     protected IListAdapter<SanpleResultCheckItemEntity> createAdapter() {
-        return new SampleResultCheckAdapter(this);
+        adapter = new SampleResultCheckAdapter(this);
+        return adapter;
     }
 
     @Override
     public void getPendingSampleSuccess(List entity) {
         refreshListController.refreshComplete(entity);
+        if (adapter.clickPosition > 0) {
+            if (adapter.clickPosition < entity.size()) {
+                contentView.scrollToPosition(adapter.clickPosition);
+            }else {
+                contentView.scrollToPosition(entity.size()-1);
+            }
+
+        }
     }
 
     @Override

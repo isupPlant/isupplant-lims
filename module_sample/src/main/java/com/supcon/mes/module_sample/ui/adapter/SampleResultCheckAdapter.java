@@ -13,12 +13,14 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_lims.IntentRouter;
 import com.supcon.mes.module_sample.R;
 import com.supcon.mes.module_sample.model.bean.SanpleResultCheckItemEntity;
+import com.supcon.mes.module_sample.ui.SampleResultCheckActivity;
 
 /**
  * @author : yaobing
  * @date : 2021/6/2 13:40
  */
 public class SampleResultCheckAdapter extends BaseListDataRecyclerViewAdapter<SanpleResultCheckItemEntity> {
+    public int clickPosition = -1;
     public SampleResultCheckAdapter(Context context) {
         super(context);
     }
@@ -82,6 +84,7 @@ public class SampleResultCheckAdapter extends BaseListDataRecyclerViewAdapter<Sa
 
             itemView.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
+                clickPosition = getLayoutPosition();
                 bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, ((SanpleResultCheckItemEntity) data).getId());
                 IntentRouter.go(context, Constant.AppCode.LIMS_SampleResultCheckProject, bundle);
             });

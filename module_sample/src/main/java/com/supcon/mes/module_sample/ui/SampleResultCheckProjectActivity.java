@@ -38,6 +38,7 @@ import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.BAP5CommonEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.bean.DealInfoEntity;
+import com.supcon.mes.middleware.model.event.EventInfo;
 import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.ui.view.CustomEditWithCount;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -139,82 +140,96 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
         RxView.clicks(rl_review)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    HashMap<String, Object> data = new HashMap<>();
-                    data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
-                    data.put("dealMode", "submit");
-                    data.put("signatureInfo", "");
-                    presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
+                    if (adapter.selected_data.size() > 0) {
+                        HashMap<String, Object> data = new HashMap<>();
+                        data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
+                        data.put("dealMode", "submit");
+                        data.put("signatureInfo", "");
+                        presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
+                    }else {
+                        ToastUtils.show(context,getResources().getString(R.string.lims_select_one_operate));
+                    }
+
                 });
         RxView.clicks(rl_reject)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    HashMap<String, Object> data = new HashMap<>();
-                    data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
-                    data.put("dealMode", "reject");
-                    data.put("signatureInfo", "");
-                    presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
+                    if (adapter.selected_data.size() > 0) {
+                        HashMap<String, Object> data = new HashMap<>();
+                        data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
+                        data.put("dealMode", "reject");
+                        data.put("signatureInfo", "");
+                        presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
+                    }else {
+                        ToastUtils.show(context,getResources().getString(R.string.lims_select_one_operate));
+                    }
+
                 });
         RxView.clicks(rl_refuse)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
+                    if (adapter.selected_data.size() > 0) {
+                        Dialog dialog = new CustomDialog(context)
+                                .layout(R.layout.dialog_sample_refuse_dialog).getDialog();
+                        Button confirm = dialog.findViewById(R.id.redBtn);
+                        confirm.setText(context.getResources().getString(R.string.confirm));
+                        Button cancel = dialog.findViewById(R.id.grayBtn);
+                        cancel.setText(context.getResources().getString(R.string.cancel));
 
-                    Dialog dialog = new CustomDialog(context)
-                            .layout(R.layout.dialog_sample_refuse_dialog).getDialog();
-                    Button confirm = dialog.findViewById(R.id.redBtn);
-                    confirm.setText(context.getResources().getString(R.string.confirm));
-                    Button cancel = dialog.findViewById(R.id.grayBtn);
-                    cancel.setText(context.getResources().getString(R.string.cancel));
+                        //提交
+                        confirm.setOnClickListener(v -> {
+                            DealInfoEntity dealInfoEntity = new DealInfoEntity();
+                            dealInfoEntity.setDealMemo(memo.getValue());
+                            dealInfoEntity.setDealDate(longTime);
+                            dealInfoEntity.setDealerId(dealerId);
+                            HashMap<String, Object> data = new HashMap<>();
+                            data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
+                            data.put("samplesJson", GsonUtil.gsonString(adapter.selected_data));
+                            data.put("dealInfo", GsonUtil.gsonString(dealInfoEntity));
+                            data.put("dealMode", "refuse");
+                            data.put("signatureInfo", "");
+                            presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
+                        });
 
-                    //提交
-                    confirm.setOnClickListener(v -> {
-                        DealInfoEntity dealInfoEntity = new DealInfoEntity();
-                        dealInfoEntity.setDealMemo(memo.getValue());
-                        dealInfoEntity.setDealDate(longTime);
-                        dealInfoEntity.setDealerId(dealerId);
-                        HashMap<String, Object> data = new HashMap<>();
-                        data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
-                        data.put("samplesJson", GsonUtil.gsonString(adapter.selected_data));
-                        data.put("dealInfo", GsonUtil.gsonString(dealInfoEntity));
-                        data.put("dealMode", "refuse");
-                        data.put("signatureInfo", "");
-                        presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
-                    });
+                        //取消
+                        cancel.setOnClickListener(v -> dialog.dismiss());
+                        planStartTime = dialog.findViewById(R.id.planStartTime);
 
-                    //取消
-                    cancel.setOnClickListener(v -> dialog.dismiss());
-                    planStartTime = dialog.findViewById(R.id.planStartTime);
+                        //时间
+                        planStartTime.setOnChildViewClickListener((childView, action, obj) -> mDatePickController
+                                .listener((year, month, day, hour, minute, second) -> {
+                                    String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                                    longTime = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
+                                    planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
+                                })
+                                .show(System.currentTimeMillis()));
 
-                    //时间
-                    planStartTime.setOnChildViewClickListener((childView, action, obj) -> mDatePickController
-                            .listener((year, month, day, hour, minute, second) -> {
-                                String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-                                longTime = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
-                                planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
-                            })
-                            .show(System.currentTimeMillis()));
+                        //人
+                        dealer = dialog.findViewById(R.id.people);
+                        dealer.setOnChildViewClickListener((childView, action, obj) -> {
+                            if (action != -1) {
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                                bundle.putBoolean(Constant.IntentKey.IS_SELECT, true);
+                                bundle.putString(Constant.IntentKey.SELECT_TAG, "selectPeople");
+                                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+                            } else {
+                                dealer.setValue("");
+                                dealerId = 0;
+                            }
+                        });
+                        longTime = System.currentTimeMillis();
+                        planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
+                        AccountInfo accountInfo = SupPlantApplication.getAccountInfo();
+                        dealerId = accountInfo.staffId;
+                        dealer.setValue(accountInfo.staffName);
+                        //备注
+                        memo = dialog.findViewById(R.id.memo);
+                        dialog.show();
+                    }else {
+                        ToastUtils.show(context,getResources().getString(R.string.lims_select_one_operate));
+                    }
 
-                    //人
-                    dealer = dialog.findViewById(R.id.people);
-                    dealer.setOnChildViewClickListener((childView, action, obj) -> {
-                        if (action != -1) {
-                            Bundle bundle = new Bundle();
-                            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
-                            bundle.putBoolean(Constant.IntentKey.IS_SELECT, true);
-                            bundle.putString(Constant.IntentKey.SELECT_TAG, "selectPeople");
-                            IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
-                        } else {
-                            dealer.setValue("");
-                            dealerId = 0;
-                        }
-                    });
-                    longTime = System.currentTimeMillis();
-                    planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
-                    AccountInfo accountInfo = SupPlantApplication.getAccountInfo();
-                    dealerId = accountInfo.staffId;
-                    dealer.setValue(accountInfo.staffName);
-                    //备注
-                    memo = dialog.findViewById(R.id.memo);
-                    dialog.show();
 
                 });
 
@@ -266,6 +281,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
     @Override
     public void recordResultReviewSuccess(BAP5CommonEntity entity) {
         ToastUtils.show(this, entity.message);
+        EventInfo.postEvent(EventInfo.refreshSampleList,0);
         back();
     }
 
@@ -277,6 +293,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
     @Override
     public void recordResultRejectSuccess(BAP5CommonEntity entity) {
         ToastUtils.show(this, entity.message);
+        EventInfo.postEvent(EventInfo.refreshSampleList,0);
         back();
     }
 
@@ -288,6 +305,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
     @Override
     public void recordResultRefuseSuccess(BAP5CommonEntity entity) {
         ToastUtils.show(this, entity.message);
+        EventInfo.postEvent(EventInfo.refreshSampleList,0);
         back();
     }
 

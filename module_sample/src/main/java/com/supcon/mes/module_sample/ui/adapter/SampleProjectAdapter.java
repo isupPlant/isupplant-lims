@@ -10,11 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,11 +20,8 @@ import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
-import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
-import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
-import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.model.bean.BaseIdValueEntity;
@@ -46,9 +39,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-
 import io.reactivex.functions.Consumer;
 
 /**
@@ -62,10 +52,7 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     private LinearLayoutManager linearLayoutManager;
 
     private OriginalValueChangeListener mOriginalValueChangeListener;
-    private DispValueChangeListener mDispValueChangeListener;
     private String originalValue;
-    private String dispValue;
-    private boolean dispValueFocus;
     private RecyclerView recyclerView;
 
     private SinglePickController mSinglePickController;
@@ -117,8 +104,6 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         CustomTextView tvRepeatNumber;
         @BindByTag("llInspectionItems")
         LinearLayout llInspectionItems;
-        @BindByTag("customTextRl")
-        RelativeLayout customTextRl;
 
         public ViewHolder(Context context) {
             super(context);
@@ -178,6 +163,7 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             });
 
             ceOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
+            ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
             ctRoundOffValue.setKeyColor(Color.parseColor("#666666"));
             cpOriginalValue.setKeyTextColor(Color.parseColor("#666666"));
             tvRepeatNumber.setKeyColor(Color.parseColor("#666666"));
@@ -220,94 +206,20 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         }
                     });
 
-
-//            ceOriginalValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                        originalValue = ceOriginalValue.editText().getText().toString();
-//                        getList().get(getAdapterPosition()).setOriginValue(originalValue); //将输入的值设置为原始值
-//
-//                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        if (imm.isActive()){
-//                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);      //隐藏软键盘
-//                        }
-//
-//                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
-//                            mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
-//                        }
-//                        return false;
-//                    }
-//                    return false;
-//                }
-//            });
-
-            ceOriginalValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ceOriginalValue.setContent(null);
-                    ctRoundOffValue.setValue(null);
-                    ceReportedValue.setContent(null);
-                    InspectionSubEntity subEntity = getItem(getAdapterPosition());
-                    subEntity.setOriginValue(null);
-                    subEntity.setRoundValue(null);
-                    subEntity.setDispValue(null);
-                }
-            });
-
-
-            ceReportedValue.findViewById(R.id.customDeleteIcon).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ceReportedValue.setContent("");
-                    getItem(getAdapterPosition()).setDispValue("");
-                }
-            });
-
-
-//            ceReportedValue.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-//
-//                        dispValue = ceReportedValue.editText().getText().toString();
-//                        getList().get(getAdapterPosition()).setDispValue(dispValue);
-//
-//                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        if (imm.isActive()) {
-//                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);      //隐藏软键盘
-//                        }
-//
-//                        if (null != mDispValueChangeListener && getAdapterPosition() >= 0) {
-//                            mDispValueChangeListener.dispValueChange(dispValue, getAdapterPosition());
-//                        }
-//                        return true;
-//                    }
-//
-//                    return false;
-//                }
-//            });
-
             //枚举原始值改变时的监听
-            cpOriginalValue.setOnChildViewClickListener(new OnChildViewClickListener() {
-                @Override
-                public void onChildViewClick(View childView, int action, Object obj) {
-                    String[] split = getList().get(getAdapterPosition()).getOptionNames().split(",");
-                    List<String> list = Arrays.asList(split);
-                    List<String> arrList = new ArrayList<>(list);
-                    arrList.add(0, "");
-                    mSinglePickController.list(arrList)
-                            .listener(new SinglePicker.OnItemPickListener() {
-                                @Override
-                                public void onItemPicked(int index, Object item) {
-                                    getItem(getAdapterPosition()).setOriginValue(arrList.get(index));
-                                    notifyItemChanged(getAdapterPosition());
-                                    if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) {
-                                        mOriginalValueChangeListener.originalValueChange(getItem(getAdapterPosition()).getOriginValue(), getAdapterPosition());
-                                    }
-                                }
-                            }).show();
-                }
+            cpOriginalValue.setOnChildViewClickListener((childView, action, obj) -> {
+                String[] split = getList().get(getAdapterPosition()).getOptionNames().split(",");
+                List<String> list = Arrays.asList(split);
+                List<String> arrList = new ArrayList<>(list);
+                arrList.add(0, "");
+                mSinglePickController.list(arrList)
+                        .listener((index, item) -> {
+                            getItem(getAdapterPosition()).setOriginValue(arrList.get(index));
+                            notifyItemChanged(getAdapterPosition());
+                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) {
+                                mOriginalValueChangeListener.originalValueChange(getItem(getAdapterPosition()).getOriginValue(), getAdapterPosition());
+                            }
+                        }).show();
             });
 
         }
@@ -327,11 +239,7 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             }
             //检验项目
             ctInspectionItems.setContent(StringUtil.isEmpty(data.getComName()) ? "" : data.getComName());
-//            ceOriginalValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
-//            ceOriginalValue.editText().setSingleLine();
-//
-//            ceReportedValue.editText().setImeOptions(EditorInfo.IME_ACTION_DONE);
-//            ceReportedValue.editText().setSingleLine();
+
             //原始值
             if (null != data.getValueKind()) { // 值类型
                 if (!StringUtil.isEmpty(data.getValueKind().getId())) { // 值类型不为空
@@ -353,13 +261,10 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                             if (StringUtil.isEmpty(data.getOriginValue())) {  //原始值为空 并且默认值不为空  赋默认给原始 并去计算修约与报出
                                 ceOriginalValue.setContent(data.getDefaultValue());
                                 if (recyclerView.isComputingLayout()) {
-                                    recyclerView.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
-                                                originalValue = data.getDefaultValue();
-                                                mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
-                                            }
+                                    recyclerView.post(() -> {
+                                        if (null != mOriginalValueChangeListener && getAdapterPosition() >= 0) { //调用监听事件 去执行计算
+                                            originalValue = data.getDefaultValue();
+                                            mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
                                         }
                                     });
                                 } else {
@@ -370,7 +275,6 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                                 }
                             } else {
                                 ceOriginalValue.setContent(data.getOriginValue());
-//                                ceOriginalValue.setHint(context.getResources().getString(R.string.lims_input_original_value));
                             }
                         }
 
@@ -390,30 +294,13 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
             List<ConclusionEntity> conclusionList = data.getConclusionList();
             for (int i = 0; i < conclusionList.size(); i++) {
                 if (null != conclusionList.get(i).getFinalResult()) {
-                    if (conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(conclusionList.get(i).getColumnList().size() - 1).getResult())) {
-                        data.setConclusionState(false);
-                    } else {
-                        data.setConclusionState(true);
-                    }
+                    data.setConclusionState(!conclusionList.get(i).getFinalResult().equals(conclusionList.get(i).getColumnList().get(conclusionList.get(i).getColumnList().size() - 1).getResult()));
                     break;
                 } else {
                     data.setConclusionState(true);
                 }
-
-//                for (String key : dispMap.keySet()){
-//                    if (key.equals(conclusionList.get(i).getColumnKey())){
-//
-//                    }
-//                }
             }
 
-//            if (data.isConclusionState()) {
-//                ceReportedValue.setKeyTextColor(Color.parseColor("#666666"));
-//                ceReportedValue.setContentTextColor(Color.parseColor("#333333"));
-//            } else {
-//                ceReportedValue.setKeyTextColor(Color.parseColor("#B20404"));
-//                ceReportedValue.setContentTextColor(Color.parseColor("#B20404"));
-//            }
 
             if (data.isOpen()) {
                 rvConclusion.setVisibility(View.VISIBLE);
@@ -483,10 +370,6 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
                         mOriginalValueChangeListener.originalValueChange(originalValue, getAdapterPosition());
                     }
                 }
-                originValChange(data, ceOriginalValue, ctRoundOffValue, ceReportedValue, cpOriginalValue);
-            } else {
-                //原来的判断是
-                originValChange(data, ceOriginalValue, ctRoundOffValue, ceReportedValue, cpOriginalValue);
             }
         }
 
@@ -501,74 +384,6 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         }
     }
 
-    ScriptEngine engine;
-
-    public void setEngine(ScriptEngine engine) {
-        this.engine = engine;
-    }
-
-    public void originValChange(InspectionSubEntity inspectionSubEntity, CustomTextView ceOriginalValue, CustomTextView ctRoundOffValue, CustomTextView ceReportedValue, CustomSpinner cpOriginalValue) {
-        boolean clearFalg = false;
-        if (!StringUtil.isEmpty(inspectionSubEntity.getOriginValue())) {
-            if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.NUMBER) || inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.CALCULATE)) {
-                //数值、计算类型
-                //获取修约值
-                Object roundValue = null;
-                try {
-                    Invocable invoke = (Invocable) engine;
-                    roundValue = invoke.invokeFunction("roundingValue", inspectionSubEntity.getOriginValue(), inspectionSubEntity.getDigitType(), inspectionSubEntity.getCarrySpace(), inspectionSubEntity.getCarryType(), inspectionSubEntity.getCarryFormula());
-                    roundValue = checkValue(roundValue + "");
-                    inspectionSubEntity.setRoundValue(roundValue + "");
-                    inspectionSubEntity.setDispValue(roundValue + "");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //高低限判断
-                if (inspectionSubEntity.getLimitType() != null) {
-                    try {
-                        Invocable invoke = (Invocable) engine;
-                        Object dispValue = invoke.invokeFunction("sectionJudgment", inspectionSubEntity.getOriginValue(), inspectionSubEntity.getLimitType().getId(), inspectionSubEntity.getMaxValue(), inspectionSubEntity.getMinValue());
-                        if (dispValue != "reject") {
-//                            if ((dispValue + "").equals(inspectionSubEntity.getOriginValue())) {
-//                                inspectionSubEntity.setDispValue(dispValue + "");
-//                            } else {
-//                                inspectionSubEntity.setDispValue(roundValue + "");
-//                            }
-                            //测试要求报出值和修约值应该一致
-                            inspectionSubEntity.setDispValue(roundValue + "");
-                        } else {
-                            clearFalg = true;
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                inspectionSubEntity.setOriginValue(inspectionSubEntity.getOriginValue());
-                inspectionSubEntity.setRoundValue(inspectionSubEntity.getOriginValue());
-                inspectionSubEntity.setDispValue(inspectionSubEntity.getOriginValue());
-            }
-        } else {
-            clearFalg = true;
-        }
-
-        if (clearFalg) {
-            inspectionSubEntity.setOriginValue(null);
-            inspectionSubEntity.setRoundValue(null);
-            inspectionSubEntity.setDispValue(null);
-        }
-        ceOriginalValue.setContent(inspectionSubEntity.getOriginValue());
-        ctRoundOffValue.setContent(inspectionSubEntity.getRoundValue());
-        ceReportedValue.setContent(inspectionSubEntity.getDispValue());
-        if (inspectionSubEntity.getValueKind().getId().equals(LimsConstant.ValueType.ENUM)) {
-            cpOriginalValue.setContent(inspectionSubEntity.getOriginValue());
-            cpOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-        }
-        ceOriginalValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-        ceReportedValue.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-    }
-
     public void setOriginalValueChangeListener(int position, String originValue) {
         getList().get(position).setOriginValue(originValue); //将输入的值设置为原始值
         if (null != mOriginalValueChangeListener && position >= 0) { //调用监听事件 去执行计算
@@ -576,21 +391,6 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
         }
     }
 
-    public String checkValue(String str) {
-        if (StringUtil.isEmpty(str)) {
-            return "";
-        }
-        if (com.supcon.mes.middleware.util.Util.isNumeric(str)) {
-            if (com.supcon.mes.middleware.util.Util.isContainPoint(str)) {
-                return com.supcon.mes.middleware.util.Util.removePoint(str);
-            } else {
-                return str;
-            }
-        } else {
-            return str;
-        }
-
-    }
 
     public void setOriginalValueChangeListener(OriginalValueChangeListener mOriginalValueChangeListener) {
         this.mOriginalValueChangeListener = mOriginalValueChangeListener;
@@ -601,7 +401,6 @@ public class SampleProjectAdapter extends BaseListDataRecyclerViewAdapter<Inspec
     }
 
     public void setDispValueChangeListener(DispValueChangeListener mDispValueChangeListener) {
-        this.mDispValueChangeListener = mDispValueChangeListener;
     }
 
     public interface DispValueChangeListener {
