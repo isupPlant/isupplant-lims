@@ -12,6 +12,4 @@ import java.util.Map;
 @ContractFactory(entites = {BAP5CommonEntity.class, BAP5CommonEntity.class, BAP5CommonEntity.class})
 public interface SampleExamineReviewAPI {
     void recordResultReview(Map<String,Object> paramsMap);
-    void recordResultReject(Map<String,Object> paramsMap);
-    void recordResultRefuse(Map<String,Object> paramsMap);
 }

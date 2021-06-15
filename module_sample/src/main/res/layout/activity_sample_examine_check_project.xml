@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.supcon.mes.module_search.ui.view.SearchTitleBar
+        android:id="@+id/searchTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitle" />
+
+    <include
+        layout="@layout/ly_recyclerview_with_scrollbar"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/wts_bg_color" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_review"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:tag="rl_review">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:background="#1E82D2"
+                android:gravity="center"
+                android:text="@string/active"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/rl_reject"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:tag="rl_reject">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center"
+                android:background="@color/red"
+                android:text="@string/reject"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/rl_refuse"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:tag="rl_refuse">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:background="@color/red"
+                android:gravity="center"
+                android:text="@string/refuse"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

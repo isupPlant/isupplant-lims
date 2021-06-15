@@ -43,14 +43,16 @@ import com.supcon.mes.middleware.model.event.SelectDataEvent;
 import com.supcon.mes.middleware.ui.view.CustomEditWithCount;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_sample.R;
+import com.supcon.mes.module_sample.model.api.SampleExamineCheckProjectAPI;
 import com.supcon.mes.module_sample.model.api.SampleRecordResultReviewAPI;
-import com.supcon.mes.module_sample.model.api.SampleResultCheckProjectAPI;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
+import com.supcon.mes.module_sample.model.contract.SampleExamineCheckProjectContract;
 import com.supcon.mes.module_sample.model.contract.SampleRecordResultReviewContract;
 import com.supcon.mes.module_sample.model.contract.SampleResultCheckProjectContract;
+import com.supcon.mes.module_sample.presenter.SampleExamineCheckProjectPresenter;
 import com.supcon.mes.module_sample.presenter.SampleResultCheckProjectPresenter;
 import com.supcon.mes.module_sample.presenter.SampleResultCheckWorkflowPresenter;
-import com.supcon.mes.module_sample.ui.adapter.SampleResultCheckProjectAdapter;
+import com.supcon.mes.module_sample.ui.adapter.SampleExamineCheckProjectAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,9 +63,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @SuppressLint("CheckResult")
-@Router(Constant.AppCode.LIMS_SampleResultCheckProject)
-@Presenter(value = {SampleResultCheckProjectPresenter.class, SampleResultCheckWorkflowPresenter.class})
-public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivity<SampleResultCheckProjectEntity> implements SampleResultCheckProjectContract.View, SampleRecordResultReviewContract.View {
+@Router(Constant.AppCode.LIMS_SampleExamineCheckProject)
+@Presenter(value = {SampleExamineCheckProjectPresenter.class, SampleResultCheckWorkflowPresenter.class})
+public class SampleExamineCheckProjectActivity extends BaseRefreshRecyclerActivity<SampleResultCheckProjectEntity> implements SampleExamineCheckProjectContract.View, SampleRecordResultReviewContract.View {
     @BindByTag("titleText")
     TextView titleText;
     @BindByTag("leftBtn")
@@ -76,13 +78,9 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
     CustomImageButton scanRightBtn;
     @BindByTag("rl_review")
     RelativeLayout rl_review;
-    @BindByTag("rl_reject")
-    RelativeLayout rl_reject;
-    @BindByTag("rl_refuse")
-    RelativeLayout rl_refuse;
     private MyPickerController mDatePickController;
 
-    private SampleResultCheckProjectAdapter adapter;
+    private SampleExamineCheckProjectAdapter adapter;
     private long sampleId;
     private long dealerId;
     private CustomTextView dealer;
@@ -92,7 +90,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
 
     @Override
     protected int getLayoutID() {
-        return R.layout.activity_sample_result_check_project;
+        return R.layout.activity_sample_examine_check_project;
     }
 
     @Override
@@ -114,7 +112,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
     }
 
     private void doFilter() {
-        presenterRouter.create(SampleResultCheckProjectAPI.class).getSampleResultCheckProject(sampleId, new HashMap<>());
+        presenterRouter.create(SampleExamineCheckProjectAPI.class).getSampleResultCheckProject(sampleId, new HashMap<>());
 
     }
 
@@ -143,7 +141,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
                     if (adapter.selected_data.size() > 0) {
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
-                        data.put("dealMode", "submit");
+                        data.put("dealMode", "active");
                         data.put("signatureInfo", "");
                         presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
                     }else {
@@ -151,88 +149,6 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
                     }
 
                 });
-        RxView.clicks(rl_reject)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(o -> {
-                    if (adapter.selected_data.size() > 0) {
-                        HashMap<String, Object> data = new HashMap<>();
-                        data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
-                        data.put("dealMode", "reject");
-                        data.put("signatureInfo", "");
-                        presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
-                    }else {
-                        ToastUtils.show(context,getResources().getString(R.string.lims_select_one_operate));
-                    }
-
-                });
-        RxView.clicks(rl_refuse)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(o -> {
-                    if (adapter.selected_data.size() > 0) {
-                        Dialog dialog = new CustomDialog(context)
-                                .layout(R.layout.dialog_sample_refuse_dialog).getDialog();
-                        Button confirm = dialog.findViewById(R.id.redBtn);
-                        confirm.setText(context.getResources().getString(R.string.confirm));
-                        Button cancel = dialog.findViewById(R.id.grayBtn);
-                        cancel.setText(context.getResources().getString(R.string.cancel));
-
-                        //提交
-                        confirm.setOnClickListener(v -> {
-                            DealInfoEntity dealInfoEntity = new DealInfoEntity();
-                            dealInfoEntity.setDealMemo(memo.getValue());
-                            dealInfoEntity.setDealDate(longTime);
-                            dealInfoEntity.setDealerId(dealerId);
-                            HashMap<String, Object> data = new HashMap<>();
-                            data.put("sampleTestsJson", GsonUtil.gsonString(adapter.selected_data));
-                            data.put("samplesJson", GsonUtil.gsonString(adapter.selected_data));
-                            data.put("dealInfo", GsonUtil.gsonString(dealInfoEntity));
-                            data.put("dealMode", "refuse");
-                            data.put("signatureInfo", "");
-                            presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
-                        });
-
-                        //取消
-                        cancel.setOnClickListener(v -> dialog.dismiss());
-                        planStartTime = dialog.findViewById(R.id.planStartTime);
-
-                        //时间
-                        planStartTime.setOnChildViewClickListener((childView, action, obj) -> mDatePickController
-                                .listener((year, month, day, hour, minute, second) -> {
-                                    String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-                                    longTime = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
-                                    planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
-                                })
-                                .show(System.currentTimeMillis()));
-
-                        //人
-                        dealer = dialog.findViewById(R.id.people);
-                        dealer.setOnChildViewClickListener((childView, action, obj) -> {
-                            if (action != -1) {
-                                Bundle bundle = new Bundle();
-                                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
-                                bundle.putBoolean(Constant.IntentKey.IS_SELECT, true);
-                                bundle.putString(Constant.IntentKey.SELECT_TAG, "selectPeople");
-                                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
-                            } else {
-                                dealer.setValue("");
-                                dealerId = 0;
-                            }
-                        });
-                        longTime = System.currentTimeMillis();
-                        planStartTime.setContent(DateUtil.dateFormat(longTime, "yyyy-MM-dd HH:mm:ss"));
-                        AccountInfo accountInfo = SupPlantApplication.getAccountInfo();
-                        dealerId = accountInfo.staffId;
-                        dealer.setValue(accountInfo.staffName);
-                        //备注
-                        memo = dialog.findViewById(R.id.memo);
-                        dialog.show();
-                    }else {
-                        ToastUtils.show(context,getResources().getString(R.string.lims_select_one_operate));
-                    }
-
-
-                });
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -263,7 +179,7 @@ public class SampleResultCheckProjectActivity extends BaseRefreshRecyclerActivit
 
     @Override
     protected IListAdapter createAdapter() {
-        adapter = new SampleResultCheckProjectAdapter(this);
+        adapter = new SampleExamineCheckProjectAdapter(this);
         return adapter;
     }
 

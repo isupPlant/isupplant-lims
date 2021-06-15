@@ -29,6 +29,7 @@ public class SampleExamineAdapter extends BaseListDataRecyclerViewAdapter<Sample
     public ArrayList<SampleExamineEntity> selected_data = new ArrayList<>();
 
     public int clickPosition = -1;
+    public int lastClickPosition = -1;
     public SampleExamineAdapter(Context context) {
         super(context);
     }
@@ -103,16 +104,17 @@ public class SampleExamineAdapter extends BaseListDataRecyclerViewAdapter<Sample
             cb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if (isChecked) {
                         id_selected.add(data.getId());
                         selected_data.add(data);
                         itemView.setBackground(context.getResources().getDrawable(R.drawable.shape_line_blue));
+                        clickPosition = getLayoutPosition();
+                        lastClickPosition = getLayoutPosition();
                     }else {
                         id_selected.remove(data.getId());
                         selected_data.remove(data);
                         itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
+                        clickPosition = lastClickPosition;
                     }
                     list.get(getLayoutPosition()).setSelect(isChecked);
 //                    notifyDataSetChanged();
@@ -120,10 +122,10 @@ public class SampleExamineAdapter extends BaseListDataRecyclerViewAdapter<Sample
                 }
             });
             itemView.setOnClickListener(v -> {
-//                Bundle bundle = new Bundle();
-//                clickPosition = getLayoutPosition();
-//                bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, ((SampleExamineEntity) data).getId());
-//                IntentRouter.go(context, Constant.AppCode.LIMS_SampleResultCheckProject, bundle);
+                Bundle bundle = new Bundle();
+                clickPosition = getLayoutPosition();
+                bundle.putLong(Constant.IntentKey.LIMS_SAMPLE_ID, ((SampleExamineEntity) data).getId());
+                IntentRouter.go(context, Constant.AppCode.LIMS_SampleExamineCheckProject, bundle);
             });
         }
     }

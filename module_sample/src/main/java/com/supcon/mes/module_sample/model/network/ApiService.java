@@ -285,4 +285,14 @@ public interface ApiService {
     @POST("/msService/LIMSSample/sample/sampleInfo/sampleCheckSubmit")
     Flowable<BAP5CommonEntity> sampleCheck(@QueryMap Map<String,Object> params);
 
+    /**
+     * 获取样品审核中的样品检测项目列表
+     * @param params
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleTest/findSampleTest")
+    Flowable<BAP5CommonEntity<CommonListEntity<SampleResultCheckProjectEntity>>> getSampleExamineProjectList(@Query("dealMode") String dealMode, @Query("sampleId") long sampleId, @Body Map<String,Object> params);
+
+
+
 }

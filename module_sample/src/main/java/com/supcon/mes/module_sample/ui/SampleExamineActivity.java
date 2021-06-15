@@ -22,6 +22,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseFragmentActivity;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
@@ -71,7 +72,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressLint("CheckResult")
 @Router(Constant.AppCode.LIMS_SampleExamine)
 @Presenter(value = {SampleResultExamineListPresenter.class, SampleExamineWorkflowPresenter.class})
-public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleResultCheckProjectEntity> implements SampleExamineContract.View, SampleExamineReviewContract.View  {
+public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleResultCheckProjectEntity> implements SampleExamineContract.View, SampleExamineReviewContract.View {
 
     @BindByTag("titleText")
     TextView titleText;
@@ -106,13 +107,16 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
     @Override
     protected void onInit() {
         super.onInit();
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
         sampleId = getIntent().getLongExtra(Constant.IntentKey.LIMS_SAMPLE_ID, 0);
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, getString(com.supcon.mes.module_lims.R.string.middleware_no_data)));
-        refreshListController.setOnRefreshListener(this::doFilter);
+        refreshListController.setOnRefreshListener(() -> {
+            adapter.clickPosition = -1;
+            doFilter();
+        });
 
         mDatePickController = new MyPickerController(this);
         mDatePickController.textSize(18);
@@ -154,8 +158,8 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
                         data.put("dealMode", "submit");
                         data.put("signatureInfo", "");
                         presenterRouter.create(SampleExamineReviewAPI.class).recordResultReview(data);
-                    }else {
-                        ToastUtils.show(context,getResources().getString(R.string.lims_select_one_operate));
+                    } else {
+                        ToastUtils.show(context, getResources().getString(R.string.lims_select_one_operate));
                     }
 
                 });
@@ -220,8 +224,8 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
                         //备注
                         memo = dialog.findViewById(R.id.memo);
                         dialog.show();
-                    }else {
-                        ToastUtils.show(context,getResources().getString(R.string.lims_select_one_operate));
+                    } else {
+                        ToastUtils.show(context, getResources().getString(R.string.lims_select_one_operate));
                     }
 
 
@@ -229,17 +233,10 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
 
     }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onEventSelectData(SelectDataEvent selectDataEvent) {
-//        if (selectDataEvent != null) {
-//            if ("selectPeople".equals(selectDataEvent.getSelectTag())) {
-//                ContactEntity contactEntity = (ContactEntity) selectDataEvent.getEntity();
-//                dealerId = contactEntity.staffId;
-//                dealer.setValue(contactEntity.name);
-//            }
-//        }
-//    }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshEvent(EventInfo EventInfo) {
+        doFilter();
+    }
 
     @Override
     protected void initListener() {
@@ -251,7 +248,7 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
 
     }
 
@@ -263,44 +260,32 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
 
     @Override
     public void recordResultReviewSuccess(BAP5CommonEntity entity) {
-        dialog.dismiss();
         ToastUtils.show(this, entity.message);
         doFilter();
+        if (null != dialog) {
+            dialog.dismiss();
+        }
     }
 
     @Override
     public void recordResultReviewFailed(String errorMsg) {
-        dialog.dismiss();
         ToastUtils.show(this, errorMsg);
+        if (null != dialog) {
+            dialog.dismiss();
+        }
     }
 
-    @Override
-    public void recordResultRejectSuccess(BAP5CommonEntity entity) {
-        ToastUtils.show(this, entity.message);
-        EventInfo.postEvent(EventInfo.refreshSampleList,0);
-        back();
-    }
-
-    @Override
-    public void recordResultRejectFailed(String errorMsg) {
-        ToastUtils.show(this, errorMsg);
-    }
-
-    @Override
-    public void recordResultRefuseSuccess(BAP5CommonEntity entity) {
-        ToastUtils.show(this, entity.message);
-        EventInfo.postEvent(EventInfo.refreshSampleList,0);
-        back();
-    }
-
-    @Override
-    public void recordResultRefuseFailed(String errorMsg) {
-        ToastUtils.show(this, errorMsg);
-    }
 
     @Override
     public void getPendingSampleSuccess(List entity) {
         refreshListController.refreshComplete(entity);
+        if (adapter.clickPosition > 0) {
+            if (adapter.clickPosition < entity.size()) {
+                contentView.scrollToPosition(adapter.clickPosition);
+            } else {
+                contentView.scrollToPosition(entity.size() - 1);
+            }
+        }
     }
 
     @Override

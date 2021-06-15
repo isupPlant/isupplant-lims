@@ -110,7 +110,6 @@ public class SampleResultCheckActivity extends BaseRefreshRecyclerActivity<Sanpl
         EventBus.getDefault().register(this);
     }
 
-    //获取UHF扫描结果
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshEvent(EventInfo EventInfo) {
         doFilter();

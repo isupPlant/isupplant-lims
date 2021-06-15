@@ -40,13 +40,4 @@ public class SampleExamineWorkflowPresenter extends SampleExamineReviewContract.
         }
     }
 
-    @Override
-    public void recordResultReject(Map<String, Object> paramsMap) {
-
-    }
-
-    @Override
-    public void recordResultRefuse(Map<String, Object> paramsMap) {
-
-    }
 }

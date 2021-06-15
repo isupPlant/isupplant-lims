@@ -25,4 +25,5 @@
     <string name="sample_refuse">project refuse</string>
     <string name="sample_dealer">sample dealer</string>
     <string name="examine">examine</string>
+    <string name="active">激活</string>
 </resources>
