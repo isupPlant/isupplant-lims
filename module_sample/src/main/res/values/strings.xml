@@ -24,4 +24,5 @@
     <string name="memo">备注</string>
     <string name="sample_refuse">检测项目拒绝</string>
     <string name="sample_dealer">处理人</string>
+    <string name="examine">审核</string>
 </resources>

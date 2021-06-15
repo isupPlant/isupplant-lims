@@ -9,6 +9,7 @@ import com.supcon.mes.middleware.model.bean.SubmitResultEntity;
 import com.supcon.mes.module_lims.model.bean.BaseSystemBackEntity;
 import com.supcon.mes.module_lims.model.bean.InspectionItemColumnEntity;
 import com.supcon.mes.module_lims.model.bean.SampleEntity;
+import com.supcon.mes.module_sample.model.bean.SampleExamineEntity;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectDetailEntity;
 import com.supcon.mes.module_sample.model.bean.SampleResultCheckProjectEntity;
 import com.supcon.mes.module_sample.model.bean.SampleTestMaterialEntity;
@@ -269,4 +270,19 @@ public interface ApiService {
      */
     @POST("/msService/LIMSSample/sample/sampleTest/batchDealSampleTest")
     Flowable<BAP5CommonEntity> SampleReview(@QueryMap Map<String,Object> params);
+    /**
+     * 样品审核-样品列表
+     * @param pageType
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleInfo/getPendingSample")
+    Flowable<BAP5CommonEntity<CommonListEntity<SampleExamineEntity>>> getSampleExamineList(@Query("pageType") String pageType, @Body Map<String,Object> params);
+    /**
+     * 样品审核接口
+     * @param params
+     * @return
+     */
+    @POST("/msService/LIMSSample/sample/sampleInfo/sampleCheckSubmit")
+    Flowable<BAP5CommonEntity> sampleCheck(@QueryMap Map<String,Object> params);
+
 }

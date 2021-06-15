@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingRight="@dimen/dp_15">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/tvOrderNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxEms="13"
+            android:singleLine="true"
+            android:tag="tvOrderNumber"
+            android:textColor="@color/blue"
+            android:textSize="15sp"
+            tools:text="chanpinqingjiajndan_20200606_2477777" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cb_select"
+            android:tag="cb_select"/>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bgGray2" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_goods" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/tvCode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvCode"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/sample_code"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:src="@drawable/ic_sample"
+            android:scaleType="centerInside"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/tvSample"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvSample"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/sample_name"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:src="@drawable/ic_check_result2"
+            android:scaleType="centerInside"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/tvSeparationType"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvSeparationType"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/sample_separation_type"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_batch_number" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/tvBatchNumber"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvBatchNumber"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/lims_batch_number"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:src="@drawable/ic_check_result2"
+            android:scaleType="centerInside"
+            />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/tvCheckPoint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvCheckPoint"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/sample_point"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_12"
+                    android:layout_height="@dimen/dp_12"
+                    android:src="@drawable/ic_picksite"
+                    android:scaleType="centerInside"
+                    />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvMaterialCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvMaterialCode"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/material_code"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_12"
+                    android:layout_height="@dimen/dp_12"
+                    android:src="@drawable/ic_picksite"
+                    android:scaleType="centerInside"
+                    />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvMaterialName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvMaterialName"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/material_name"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_examiner" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvQualityStandard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvQualityStandard"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/quality_standard"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_examiner" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvSampleType"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvSampleType"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/sample_type"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_35"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_examiner" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/tvSampleStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_9"
+                    android:tag="tvSampleStatus"
+                    app:content_color="@color/fontBlack333"
+                    app:content_size="15"
+                    app:gravity="right|center_vertical"
+                    app:key="@string/sample_status"
+                    app:key_color="@color/c_scan_666"
+                    app:key_size="13" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="@dimen/dp_20"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/ivIsQualified"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_36"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_un_qualified"
+                android:tag="ivIsQualified" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_time" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/tvRegistrationTime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_9"
+            android:tag="tvRegistrationTime"
+            app:content_color="@color/fontBlack333"
+            app:content_size="15"
+            app:gravity="right|center_vertical"
+            app:key="@string/lims_registration_time"
+            app:key_color="@color/c_scan_666"
+            app:key_size="13" />
+
+    </LinearLayout>
+</LinearLayout>
