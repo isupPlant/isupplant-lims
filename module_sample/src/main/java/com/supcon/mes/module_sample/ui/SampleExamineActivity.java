@@ -96,6 +96,7 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
     private CustomEditWithCount memo;
     private CustomDateView planStartTime;
     private long longTime;
+    private Dialog dialog;
 
     @Override
     protected int getLayoutID() {
@@ -162,7 +163,7 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     if (adapter.selected_data.size() > 0) {
-                        Dialog dialog = new CustomDialog(context)
+                        dialog = new CustomDialog(context)
                                 .layout(R.layout.dialog_sample_refuse_dialog).getDialog();
                         Button confirm = dialog.findViewById(R.id.redBtn);
                         confirm.setText(context.getResources().getString(R.string.confirm));
@@ -181,7 +182,7 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
                             data.put("dealInfo", GsonUtil.gsonString(dealInfoEntity));
                             data.put("dealMode", "refuse");
                             data.put("signatureInfo", "");
-                            presenterRouter.create(SampleRecordResultReviewAPI.class).recordResultReview(data);
+                            presenterRouter.create(SampleExamineReviewAPI.class).recordResultReview(data);
                         });
 
                         //取消
@@ -262,12 +263,14 @@ public class SampleExamineActivity extends BaseRefreshRecyclerActivity<SampleRes
 
     @Override
     public void recordResultReviewSuccess(BAP5CommonEntity entity) {
+        dialog.dismiss();
         ToastUtils.show(this, entity.message);
         doFilter();
     }
 
     @Override
     public void recordResultReviewFailed(String errorMsg) {
+        dialog.dismiss();
         ToastUtils.show(this, errorMsg);
     }
 
